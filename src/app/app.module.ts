@@ -13,6 +13,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { ArticleListComponent } from './components/article-list/article-list.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import { ArticlePageComponent } from './components/article-page/article-page.component';
 
 
 
@@ -24,7 +28,9 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
     NavbarComponent,
     ButtonComponent,
     SignInComponent,
-    SignUpComponent
+    SignUpComponent,
+    ArticleListComponent,
+    ArticlePageComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +38,9 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
     HttpClientModule,
     NoopAnimationsModule,
     MatButtonModule,
-    MatTabsModule
+    MatTabsModule,
+    MatCardModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

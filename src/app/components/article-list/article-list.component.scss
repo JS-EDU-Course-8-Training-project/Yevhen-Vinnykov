@@ -1,0 +1,42 @@
+header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-secondary{
+    color: rgb(197, 197, 197);
+    font-weight: 300;
+    font-size: .7rem;
+    text-decoration: none;
+}
+
+h3 {
+    margin: 0;
+}
+
+img { 
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    margin: 0 10px 0 0;
+}
+
+.info {
+    display: flex;
+}
+
+button{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-content {
+    h2{
+        margin: 0;
+    }
+    p{
+        color: rgb(144, 144, 144);
+    }
+}

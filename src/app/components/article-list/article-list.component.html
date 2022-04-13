@@ -1,0 +1,24 @@
+<mat-card>
+    <header>
+        <div class="info">
+        <img src="{{article.author.image}}" alt="">
+        <div>
+            <h3>{{article.author.username}}</h3>
+            <p class="text-secondary">{{article.createdAt | date}}</p>
+        </div>
+    </div>
+        <button mat-stroked-button>
+            <mat-icon svgIcon="thumbs-up" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon>
+            {{article.favoritesCount}}
+        </button>
+    </header>
+    <div class="card-content">
+        <h2>
+            {{article.title}}
+        </h2>
+        <p>{{article.description}}</p>
+        <a class="text-secondary" routerLink="/article/{{article.slug}}">Read more...</a>
+    </div>
+</mat-card>
+
+
