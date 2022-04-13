@@ -1,1 +1,15 @@
-<p>home works!</p>
+<section>
+    <mat-tab-group>
+        <mat-tab label="Global Feed">
+            <h4 *ngIf="!articles.length">
+                No articles are here... yet.
+            </h4>
+            <div *ngFor="let article of articles">
+                <p>{{article.title}}</p>
+            </div>
+        </mat-tab>
+        <mat-tab label="Followed">
+            <div>Followed</div>
+        </mat-tab>
+    </mat-tab-group>
+</section>
