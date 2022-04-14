@@ -34,7 +34,7 @@ import {MatDividerModule} from '@angular/material/divider';
     SignUpComponent,
     ArticleListComponent,
     ArticlePageComponent,
-    BannerComponent
+    BannerComponent,
   ],
   imports: [
     BrowserModule,

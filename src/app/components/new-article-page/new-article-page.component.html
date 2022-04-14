@@ -1,0 +1,42 @@
+
+<div>
+    <form [formGroup]="articleForm">
+        <div class="form-group">
+            <input 
+            type="text" 
+            class="form-control" 
+            id="title" 
+            name="title" 
+            required formControlName="title" 
+            placeholder="Article Title">
+            <span *ngIf="!checkIfValid('title', 'touched')">This field is required</span>            <input 
+            type="text" 
+            class="form-control" 
+            id="description" 
+            name="description" 
+            required 
+            formControlName="description"
+            placeholder="What's this article about?">
+            <span *ngIf="!checkIfValid('description', 'touched')">This field is required</span>
+            <textarea 
+            type="text" 
+            class="form-control" 
+            id="body" 
+            name="body" 
+            required 
+            formControlName="body"
+            placeholder="Write your article">
+        </textarea>
+        <span *ngIf="!checkIfValid('body', 'touched')">This field is required</span>
+            <input
+            type="text"
+            class="form-control"
+            id="tagList"
+            name="tagList"
+            required
+            formControlName="tagList"
+            placeholder="Tags">
+            <button align="end" type="button" mat-raised-button color="primary" (click)="createArticle()">Publish</button>
+        </div>
+    </form>
+</div>

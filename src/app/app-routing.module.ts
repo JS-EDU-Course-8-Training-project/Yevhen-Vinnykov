@@ -9,7 +9,11 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
-  { path: 'article/:slug', component: ArticlePageComponent }
+  { path: 'article/:slug', component: ArticlePageComponent },
+  {
+    path: 'create-article',
+    loadChildren: () => import('./components/new-article-page/new-article-page.module').then(m => m.NewArticlePageModule) 
+  }
 ];
 
 @NgModule({

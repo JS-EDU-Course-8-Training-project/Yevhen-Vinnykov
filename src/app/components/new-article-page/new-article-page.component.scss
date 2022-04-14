@@ -1,0 +1,42 @@
+.form-group{
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    margin: 4rem auto; 
+    #title{
+        margin-bottom: 10px;
+        height: 2.5rem;
+        padding: 10px;
+        font-size: 1.3rem;
+        &::placeholder{
+            font-size: 1.3rem;
+        }
+    }
+    #description{
+        margin-bottom: 10px;
+        height: 1.5rem;
+        padding: 10px;
+        font-size: 1rem;
+    }
+    #body{
+        margin-bottom: 10px;
+        height: 8rem;
+        padding: 10px;
+        resize: none;
+        font-size: 1rem;
+    }
+    #tagList{
+        margin-bottom: 10px;
+        height: 1.5rem;
+        padding: 10px;
+        font-size: 1rem;
+    }
+    button{
+        width: 12rem;
+        height: 3rem;
+        align-self: end;
+        font-size: 1rem;
+
+    }
+}
+

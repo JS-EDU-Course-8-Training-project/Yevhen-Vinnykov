@@ -1,8 +1,15 @@
+import { ICreatedArticle } from './../models/ICreatedArticle';
 import { IComment } from './../models/IComment';
 import { IArticle, IArticleResponse } from './../models/IArticle';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, pluck } from 'rxjs';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +27,9 @@ export class ArticlesService {
   }
   fetchArticleComments(slug: string): Observable<IComment[]> {
     return this.http.get<{comments: IComment[]}>(`${this.baseURL}/${slug}/comments`).pipe(pluck('comments'));
+  }
+  createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
+    return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, article, httpOptions);
   }
 }
 
