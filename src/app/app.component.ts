@@ -7,4 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'JS-EDU-Course-8-Training-project';
+  ngOnInit(){
+  }
 }

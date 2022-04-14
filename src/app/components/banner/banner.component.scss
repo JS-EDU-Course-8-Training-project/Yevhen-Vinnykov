@@ -1,0 +1,21 @@
+.banner{
+    height: 10rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.home-banner {
+    background-color: rgb(162, 196, 251);
+    align-items: center;
+    flex-direction: column;
+}
+
+.article-banner {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+}

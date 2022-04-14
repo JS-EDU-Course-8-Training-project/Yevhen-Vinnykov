@@ -1,4 +1,4 @@
-interface IArticleAuthor {
+export interface IArticleAuthor {
     username: string
     bio: string | null;
     image: string;

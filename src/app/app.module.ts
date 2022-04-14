@@ -17,6 +17,9 @@ import { ArticleListComponent } from './components/article-list/article-list.com
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import { ArticlePageComponent } from './components/article-page/article-page.component';
+import { BannerComponent } from './components/banner/banner.component';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 
@@ -30,7 +33,8 @@ import { ArticlePageComponent } from './components/article-page/article-page.com
     SignInComponent,
     SignUpComponent,
     ArticleListComponent,
-    ArticlePageComponent
+    ArticlePageComponent,
+    BannerComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,9 @@ import { ArticlePageComponent } from './components/article-page/article-page.com
     MatButtonModule,
     MatTabsModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatChipsModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

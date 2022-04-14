@@ -7,10 +7,12 @@ import { ArticlesService } from 'src/app/services/articles.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
   articles: any[] = [];
+  constructor(
+    private articlesService: ArticlesService,
+  ) {
 
-  constructor(private articlesService: ArticlesService) { }
+  }
 
   ngOnInit(): void {
     this.articlesService.fetchArticles().subscribe(res => this.articles = res.articles);

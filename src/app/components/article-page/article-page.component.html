@@ -1,6 +1,64 @@
-<p>hello</p>
-<p>{{(article | async)?.title}}</p>
-
-<ng-container *ngIf="isLoaded">
-</ng-container>
-
+<app-banner className="article-banner banner">
+    <div class="container">
+        <mat-card-title class="title">{{article?.title}}</mat-card-title>
+        <div class="card-actions">
+            <div class="card-author">
+                <img src="{{article?.author?.image}}" alt="">
+                <div>
+                    <h3>{{article?.author?.username}}</h3>
+                    <p>{{article?.createdAt | date}}</p>
+                </div>
+            </div>
+            <mat-card-actions align="end">
+                <button mat-raised-button color="primary">Follow {{article?.author?.username}}</button>
+                <button (click)="handleLike()" mat-raised-button color="primary">
+                    <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
+                    Favorite Arcticle ({{likesCount}})
+                </button>
+            </mat-card-actions>
+        </div>
+    </div>
+</app-banner>
+<div class="container">
+    <div class="article-body">
+        <p>{{article?.body}}</p>
+    </div>
+    <mat-chip-list>
+        <mat-chip *ngFor="let tag of article?.tagList" [value]="tag" disabled>
+            {{tag}}
+        </mat-chip>
+    </mat-chip-list>
+    <mat-divider class="devider"></mat-divider>
+</div>
+<div class="card-actions-container">
+    <div class="card-author">
+        <img src="{{article?.author?.image}}" alt="">
+        <div>
+            <h3>{{article?.author?.username}}</h3>
+            <p>{{article?.createdAt | date}}</p>
+        </div>
+    </div>
+    <div class="card-actions">
+        <mat-card-actions>
+            <button mat-raised-button color="primary">Follow {{article?.author?.username}}</button>
+            <button (click)="handleLike()" mat-raised-button color="primary">
+                <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
+                Favorite Arcticle ({{likesCount}})
+            </button>
+        </mat-card-actions>
+    </div>
+</div>
+<section class="article-comments">
+    <mat-card class="comment" *ngFor="let comment of comments">
+        <mat-card-content>
+            <p>{{comment?.body}}</p>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+                <img src="{{article?.author?.image}}" alt="">
+                <div>
+                    <p>{{article?.author?.username}}</p>
+                    <p>{{article?.createdAt | date}}</p>
+                </div>
+        </mat-card-footer>
+    </mat-card>
+</section>
