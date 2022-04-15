@@ -1,3 +1,4 @@
+import { IUserData } from './../models/IUserData';
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { IUser } from './../models/IUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
@@ -6,7 +7,8 @@ import { Injectable } from '@angular/core';
 const httpOptions = {
   headers: new HttpHeaders({
     'accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json',
   })
 };
 
@@ -33,8 +35,20 @@ export class UsersService {
     return of(error.error);
   }
 
-  createUser(user: IUser): Observable<IUser | any>{
-    return this.http.post<IUser | any>(this.baseURL, JSON.stringify({user}), httpOptions).pipe(
+  createUser(user: IUser): Observable<IUser | any> {
+    return this.http.post<IUser | any>(this.baseURL, JSON.stringify({ user }), httpOptions).pipe(
+      catchError((err): any => this.handleError(err))
+    );
+  }
+
+  signIn(user: IUserData): Observable<IUserData | any> {
+    return this.http.post<IUserData>(`${this.baseURL}/login`, JSON.stringify({ user }), httpOptions).pipe(
+      catchError((err): any => this.handleError(err))
+    );
+  }
+
+  fetchAuthUser(): Observable<IUser | any> {
+    return this.http.get<IUser>(this.baseURL.slice(0, this.baseURL.length - 1), httpOptions).pipe(
       catchError((err): any => this.handleError(err))
     );
   }

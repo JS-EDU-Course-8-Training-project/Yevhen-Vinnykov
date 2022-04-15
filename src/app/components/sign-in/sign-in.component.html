@@ -1,1 +1,26 @@
-<p>sign-in works!</p>
+<div>
+    <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
+        <div class="form-group">
+            <h1>Sign In</h1>
+            <a routerLink="/sign-up">Need an account?</a>
+            <div *ngIf="errors.length">
+                <div class="form-error" *ngFor="let error of errors">{{error}}</div>
+            </div>
+            <input type="text" class="form-control" id="email" name="email" required formControlName="email"
+                placeholder="Email">
+            <span *ngIf="!checkIfValid('email')">This field is required</span>
+            <input type="password" class="form-control" id="password" name="password" required
+                formControlName="password" placeholder="Password">
+            <span *ngIf="!checkIfValid('password')">This field is required</span>
+            <button [disabled]="signinForm.status === 'INVALID' || isPending"
+                align="end"
+                type="submit"
+                mat-raised-button
+                color="primary">
+                <span *ngIf="!isPending">Sign In</span>
+                <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
+            </button>
+        </div>
+    </form>
+</div>
+

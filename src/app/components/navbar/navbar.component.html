@@ -1,7 +1,6 @@
 <a mat-button routerLink="/">Home</a>
-<a mat-button routerLink="/sign-in">Sign in</a>
-<a mat-button routerLink="/sign-up">Sign up</a>
-<a mat-button routerLink="/create-article">New Arcticle</a> 
-<!-- New Article link needs conditional rendering -->
+<a *ngIf="!isAuthorized" mat-button routerLink="/sign-in">Sign in</a>
+<a *ngIf="!isAuthorized" mat-button routerLink="/sign-up">Sign up</a>
+<a *ngIf="isAuthorized" mat-button routerLink="/create-article">New Arcticle</a> 
 
 
