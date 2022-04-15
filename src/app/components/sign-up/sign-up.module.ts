@@ -1,5 +1,5 @@
 import { MatButtonModule } from '@angular/material/button';
-import { SignUpRoutingModule } from './sign-app-routing.module';
+import { SignUpRoutingModule } from './sign-up-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SignUpComponent } from './sign-up.component';
