@@ -1,3 +1,4 @@
+import { SignUpModule } from './components/sign-up/sign-up.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,14 +13,13 @@ import { ButtonComponent } from './components/button/button.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SignInComponent } from './components/sign-in/sign-in.component';
-import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ArticleListComponent } from './components/article-list/article-list.component';
-import {MatCardModule} from '@angular/material/card';
-import {MatIconModule} from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { ArticlePageComponent } from './components/article-page/article-page.component';
 import { BannerComponent } from './components/banner/banner.component';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 
@@ -31,7 +31,6 @@ import {MatDividerModule} from '@angular/material/divider';
     NavbarComponent,
     ButtonComponent,
     SignInComponent,
-    SignUpComponent,
     ArticleListComponent,
     ArticlePageComponent,
     BannerComponent,
@@ -46,7 +45,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatCardModule,
     MatIconModule,
     MatChipsModule,
-    MatDividerModule
+    MatDividerModule,
+    SignUpModule
   ],
   providers: [],
   bootstrap: [AppComponent]
