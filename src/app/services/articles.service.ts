@@ -7,7 +7,9 @@ import { Observable, pluck } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json'
+    'accept': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json',
   })
 };
 
@@ -17,19 +19,19 @@ const httpOptions = {
 export class ArticlesService {
   private baseURL: string = 'https://api.realworld.io/api/articles';
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
   fetchArticles(): Observable<IArticleResponse> {
     return this.http.get<IArticleResponse>(this.baseURL);
   }
   fetchArticle(slug: string): Observable<IArticle> {
-   return this.http.get<{article: IArticle}>(`${this.baseURL}/${slug}`).pipe(pluck('article'));
+    return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`).pipe(pluck('article'));
   }
   fetchArticleComments(slug: string): Observable<IComment[]> {
-    return this.http.get<{comments: IComment[]}>(`${this.baseURL}/${slug}/comments`).pipe(pluck('comments'));
+    return this.http.get<{ comments: IComment[] }>(`${this.baseURL}/${slug}/comments`).pipe(pluck('comments'));
   }
   createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
-    return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, article, httpOptions);
+    return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }
 }
 

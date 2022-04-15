@@ -1,8 +1,11 @@
 <div>
-    <form [formGroup]="signupForm">
+    <form [formGroup]="signupForm" (ngSubmit)="handleSignup()">
         <div class="form-group">
             <h1>Sign Up</h1>
             <a routerLink="/sign-in">Already have an account?</a>
+            <div *ngIf="errors.length">
+                <div class="form-error" *ngFor="let error of errors">{{error}}</div>
+            </div>
             <input type="text" class="form-control" id="username" name="username" required formControlName="username"
                 placeholder="Username">
             <span class="" *ngIf="!checkIfValid('username')">This field is required</span>
@@ -12,10 +15,15 @@
             <input type="password" class="form-control" id="password" name="password" required
                 formControlName="password" placeholder="Password">
             <span *ngIf="!checkIfValid('password')">This field is required</span>
-            <button [disabled]="signupForm.status === 'INVALID'" align="end" type="submit" mat-raised-button
-                color="primary">Sign Up</button>
+            <button [disabled]="signupForm.status === 'INVALID' || isPending"
+                align="end"
+                type="submit"
+                mat-raised-button
+                color="primary">
+                <span *ngIf="!isPending">Sign Up</span>
+                <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
+            </button>
         </div>
     </form>
 </div>
 
-<!-- (ngSubmit)="handleSignup()" -->
