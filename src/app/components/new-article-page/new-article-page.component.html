@@ -1,42 +1,20 @@
-
 <div>
-    <form [formGroup]="articleForm">
+    <form [formGroup]="articleForm" (ngSubmit)="createArticle()">
+        <span *ngIf="articleForm.submitted">{{articleForm.submitted}}</span>
         <div class="form-group">
-            <input 
-            type="text" 
-            class="form-control" 
-            id="title" 
-            name="title" 
-            required formControlName="title" 
-            placeholder="Article Title">
-            <span *ngIf="!checkIfValid('title', 'touched')">This field is required</span>            <input 
-            type="text" 
-            class="form-control" 
-            id="description" 
-            name="description" 
-            required 
-            formControlName="description"
-            placeholder="What's this article about?">
-            <span *ngIf="!checkIfValid('description', 'touched')">This field is required</span>
-            <textarea 
-            type="text" 
-            class="form-control" 
-            id="body" 
-            name="body" 
-            required 
-            formControlName="body"
-            placeholder="Write your article">
+            <input type="text" class="form-control" id="title" name="title" required formControlName="title"
+                placeholder="Article Title">
+            <span class="" *ngIf="!checkIfValid('title')">This field is required</span>
+            <input type="text" class="form-control" id="description" name="description" required
+                formControlName="description" placeholder="What's this article about?">
+            <span *ngIf="!checkIfValid('description')">This field is required</span>
+            <textarea type="text" class="form-control" id="body" name="body" required formControlName="body"
+                placeholder="Write your article">
         </textarea>
-        <span *ngIf="!checkIfValid('body', 'touched')">This field is required</span>
-            <input
-            type="text"
-            class="form-control"
-            id="tagList"
-            name="tagList"
-            required
-            formControlName="tagList"
-            placeholder="Tags">
-            <button align="end" type="button" mat-raised-button color="primary" (click)="createArticle()">Publish</button>
+            <span *ngIf="!checkIfValid('body')">This field is required</span>
+            <input type="text" class="form-control" id="tagList" name="tagList" required formControlName="tagList"
+                placeholder="Tags">
+            <button [disabled]="articleForm.status === 'INVALID'" align="end" type="submit" mat-raised-button color="primary">Publish</button>
         </div>
     </form>
 </div>

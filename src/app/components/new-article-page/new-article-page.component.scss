@@ -1,42 +1,42 @@
-.form-group{
+.form-group {
     display: flex;
     flex-direction: column;
     max-width: 50%;
-    margin: 4rem auto; 
-    #title{
-        margin-bottom: 10px;
-        height: 2.5rem;
+    margin: 4rem auto;
+    .form-control {
+        border: 1px solid rgb(175, 175, 175);
+        border-radius: 8px;
+        margin: 5px 0;
+        height: 1.5rem;
         padding: 10px;
+        font-size: 1rem;
+    }
+    #title {
+        height: 2.5rem;
         font-size: 1.3rem;
-        &::placeholder{
+        &::placeholder {
             font-size: 1.3rem;
         }
     }
-    #description{
-        margin-bottom: 10px;
-        height: 1.5rem;
-        padding: 10px;
-        font-size: 1rem;
-    }
-    #body{
-        margin-bottom: 10px;
+    #body {
         height: 8rem;
-        padding: 10px;
         resize: none;
-        font-size: 1rem;
+        font-family: inherit;
     }
-    #tagList{
-        margin-bottom: 10px;
-        height: 1.5rem;
-        padding: 10px;
-        font-size: 1rem;
-    }
-    button{
+    button {
         width: 12rem;
         height: 3rem;
         align-self: end;
         font-size: 1rem;
-
+    }
+    .ng-invalid.ng-touched:not(form) {
+        border-left: 5px solid #ff0400; /* red */
+    }
+    .ng-valid.ng-touched[required],
+    .ng-valid.required {
+        border-left: 5px solid #42a948; /* green */
+    }
+    span {
+        color: red;
     }
 }
-
