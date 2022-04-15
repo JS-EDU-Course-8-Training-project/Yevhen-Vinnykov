@@ -1,1 +1,21 @@
-<p>sign-up works!</p>
+<div>
+    <form [formGroup]="signupForm">
+        <div class="form-group">
+            <h1>Sign Up</h1>
+            <a routerLink="/sign-in">Already have an account?</a>
+            <input type="text" class="form-control" id="username" name="username" required formControlName="username"
+                placeholder="Username">
+            <span class="" *ngIf="!checkIfValid('username')">This field is required</span>
+            <input type="text" class="form-control" id="email" name="email" required formControlName="email"
+                placeholder="Email">
+            <span *ngIf="!checkIfValid('email')">This field is required</span>
+            <input type="password" class="form-control" id="password" name="password" required
+                formControlName="password" placeholder="Password">
+            <span *ngIf="!checkIfValid('password')">This field is required</span>
+            <button [disabled]="signupForm.status === 'INVALID'" align="end" type="submit" mat-raised-button
+                color="primary">Sign Up</button>
+        </div>
+    </form>
+</div>
+
+<!-- (ngSubmit)="handleSignup()" -->

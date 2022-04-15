@@ -1,6 +1,5 @@
 <div>
     <form [formGroup]="articleForm" (ngSubmit)="createArticle()">
-        <span *ngIf="articleForm.submitted">{{articleForm.submitted}}</span>
         <div class="form-group">
             <input type="text" class="form-control" id="title" name="title" required formControlName="title"
                 placeholder="Article Title">
