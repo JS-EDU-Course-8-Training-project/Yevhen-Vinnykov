@@ -7,10 +7,9 @@
                 <p class="text-secondary">{{article.createdAt | date}}</p>
             </div>
         </div>
-        <button mat-stroked-button>
-            <!-- <mat-icon svgIcon="thumbs-up" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon> -->
-            <mat-icon>favorite</mat-icon>
-            {{article.favoritesCount}}
+        <button [disabled]="favoriteInProgress" (click)="handleLike(article.slug)" mat-stroked-button>
+            <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
+            {{likesCount}}
         </button>
     </header>
     <div class="card-content">

@@ -15,10 +15,11 @@ export class ArticlePageComponent implements OnInit {
   article!: IArticle;
   comments!: IComment[];
   isLoaded: boolean = false;
-  likesCount!: number;
   isLiked!: boolean;
+  likesCount!: number;
   isFollowed!: boolean;
   followingInProgress!: boolean;
+  favouriteInProgress!: boolean;
 
   constructor(
     private articlesService: ArticlesService,
@@ -31,19 +32,40 @@ export class ArticlePageComponent implements OnInit {
     this.getArticle();
     this.getComments();
   }
-
-  handleLike(): void {
-    this.likesCount = this.isLiked ? --this.likesCount : ++this.likesCount;
-    this.isLiked = !this.isLiked;
+  
+  handleLike(slug: string): void {
+    if(localStorage.getItem('authorized') !== 'true') {
+      this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
+      return;
+    }
+    
+    this.favouriteInProgress = true;
+    if(this.isLiked){
+      this.articlesService.removeFromFavorites(slug).subscribe(article => {
+        this.isLiked = article.favorited;
+        this.likesCount = article.favoritesCount;
+        console.log(article);
+        this.favouriteInProgress = false;
+        
+      })
+    } else {
+      this.articlesService.addToFavorites(slug).subscribe(article => {
+        this.isLiked = article.favorited;
+        this.favouriteInProgress = false;
+        this.likesCount = article.favoritesCount;
+        console.log(article);
+      })
+    }
   }
 
   getArticle(): void {
     this.isLoaded = false;
     this.articlesService.fetchArticle(this.slug)
       .subscribe(article => {
+        console.log(article);
         this.article = article;
-        this.likesCount = article.favoritesCount;
         this.isLiked = article.favorited;
+        this.likesCount = article.favoritesCount;
         this.isLoaded = true;
         this.isFollowed = article.author.following;
       });
@@ -60,15 +82,21 @@ export class ArticlePageComponent implements OnInit {
   }
 
   handleFollowUnfollow(username: string): void {
+    if(localStorage.getItem('authorized') !== 'true'){
+      this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
+      return;
+    }
     this.followingInProgress = true;
     if(this.isFollowed){
       this.profilesService.unfollow(username).subscribe((profile => {
         this.isFollowed = profile.following;
+        console.log('unfollow',profile);
         this.followingInProgress = false;
       }));
     } else {
       this.profilesService.follow(username).subscribe(profile => {
         this.isFollowed = profile.following;
+        console.log('follow',profile);
         this.followingInProgress = false;
       });
     }

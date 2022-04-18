@@ -6,10 +6,10 @@
     <section>
         <mat-tab-group (focusChange)="handleChange($event.index)" [selectedIndex]="tabIndex">
             <mat-tab *ngIf="isAuthorized" label="Your Feed">
-                <app-your-feed></app-your-feed>
+                <app-your-feed [tabIndex]="tabIndex"></app-your-feed>
             </mat-tab>
             <mat-tab label="Global Feed">
-                <app-global-feed></app-global-feed>
+                <app-global-feed [tabIndex]="tabIndex"></app-global-feed>
             </mat-tab>
             <mat-tab *ngIf="selectedTag" label="#{{selectedTag}}">
                 <app-tagged-articles [selectedTag]="selectedTag"></app-tagged-articles>
