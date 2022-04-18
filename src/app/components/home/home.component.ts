@@ -9,7 +9,8 @@ import { ArticlesService } from 'src/app/services/articles.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  articles: IArticle[] = [];
+  globalArticles: IArticle[] = [];
+  followedArticles: IArticle[] = [];
   isLoading: boolean = false;
   articlesSelectedByTag: IArticle[] = [];
   tags: string[] = [];
@@ -26,8 +27,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     this.articlesService.fetchArticles().subscribe(res => {
-      this.articles = res.articles;
+      this.globalArticles = res.articles;
       this.isLoading = false;
+    });
+    this.articlesService.fetchFollowedArticles().subscribe(res => {
+      this.followedArticles = res.articles;
     });
     this.articlesService.fetchTags().subscribe(tags => this.tags = tags);
     if (localStorage.getItem('authorized') === 'true') {

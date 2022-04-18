@@ -6,14 +6,20 @@
     <section>
         <mat-tab-group (focusChange)="handleChange($event.index)" [selectedIndex]="tabIndex">
             <mat-tab *ngIf="isAuthorized" label="Your Feed">
-                <div>Followed</div>
+                <p *ngIf="isLoading">Loading articles...</p>
+                <h4 *ngIf="!followedArticles.length && !isLoading">
+                    No articles are here... yet.
+                </h4>
+                <div *ngFor="let article of followedArticles">
+                    <app-article-list [article]="article"></app-article-list>
+                </div>
             </mat-tab>
             <mat-tab label="Global Feed">
                 <p *ngIf="isLoading">Loading articles...</p>
-                <h4 *ngIf="!articles.length && !isLoading">
+                <h4 *ngIf="!globalArticles.length && !isLoading">
                     No articles are here... yet.
                 </h4>
-                <div *ngFor="let article of articles">
+                <div *ngFor="let article of globalArticles">
                     <app-article-list [article]="article"></app-article-list>
                 </div>
             </mat-tab>

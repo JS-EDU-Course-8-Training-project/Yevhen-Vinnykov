@@ -24,6 +24,9 @@ export class ArticlesService {
   fetchArticles(): Observable<IArticleResponse> {
     return this.http.get<IArticleResponse>(this.baseURL);
   }
+  fetchFollowedArticles(): Observable<IArticleResponse>{
+    return this.http.get<IArticleResponse>(`${this.baseURL}/feed`, httpOptions);
+  }
   fetchArticle(slug: string): Observable<IArticle> {
     return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`).pipe(pluck('article'));
   }
