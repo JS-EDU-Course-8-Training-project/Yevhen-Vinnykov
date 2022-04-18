@@ -1,5 +1,6 @@
+import { ProfilesService } from 'src/app/services/profiles.service';
 import { ArticlesService } from 'src/app/services/articles.service';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/models/IArticle';
 import { Router } from '@angular/router';
 import { IComment } from 'src/app/models/IComment';
@@ -16,10 +17,12 @@ export class ArticlePageComponent implements OnInit {
   isLoaded: boolean = false;
   likesCount!: number;
   isLiked!: boolean;
+  isFollowed!: boolean;
+
   constructor(
     private articlesService: ArticlesService,
     private router: Router,
-    private ref: ChangeDetectorRef
+    private profilesService: ProfilesService
   ) { }
 
   ngOnInit(): void {
@@ -36,22 +39,37 @@ export class ArticlePageComponent implements OnInit {
   getArticle(): void {
     this.isLoaded = false;
     this.articlesService.fetchArticle(this.slug)
-    .subscribe(article => {
-      this.article = article;
-      this.likesCount = article.favoritesCount;
-      this.isLiked = article.favorited;
-      this.isLoaded = true;
-    });
+      .subscribe(article => {
+        this.article = article;
+        this.likesCount = article.favoritesCount;
+        this.isLiked = article.favorited;
+        this.isLoaded = true;
+        this.isFollowed = article.author.following;
+      });
   }
 
   getComments(): void {
     this.isLoaded = false;
     this.articlesService.fetchArticleComments(this.slug)
-    .subscribe(comments => {
-      this.comments = comments;
-      console.log(this.comments);
-      this.isLoaded = true;
-    });
+      .subscribe(comments => {
+        this.comments = comments;
+        console.log(this.comments);
+        this.isLoaded = true;
+      });
+  }
+
+  handleFollowUnfollow(username: string): void {
+    if(this.isFollowed){
+      this.profilesService.unfollow(username).subscribe((profile => {
+        console.log(profile.following);
+        
+      }));
+    } else {
+      this.profilesService.follow(username).subscribe((profile: any) => {
+        console.log(profile);
+        console.log(profile.following);
+      });
+    }
   }
 
 }

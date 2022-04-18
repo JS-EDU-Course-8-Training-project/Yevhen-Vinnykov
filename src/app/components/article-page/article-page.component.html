@@ -10,7 +10,9 @@
                 </div>
             </div>
             <mat-card-actions align="end">
-                <button mat-raised-button color="primary">Follow {{article?.author?.username}}</button>
+                <button (click)="handleFollowUnfollow(article.author.username)" mat-raised-button color="primary">
+                    {{isFollowed ? 'Follow' : 'Unfollow'}} {{article?.author?.username}}
+                </button>
                 <button (click)="handleLike()" mat-raised-button color="primary">
                     <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
                     Favorite Arcticle ({{likesCount}})
