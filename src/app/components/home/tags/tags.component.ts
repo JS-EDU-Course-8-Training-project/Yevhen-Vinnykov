@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { ArticlesService } from 'src/app/services/articles.service';
 
 @Component({
@@ -6,10 +6,12 @@ import { ArticlesService } from 'src/app/services/articles.service';
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss']
 })
-export class TagsComponent implements OnInit {
+export class TagsComponent implements OnInit, OnChanges {
+  @Input() tabIndex!: number;
   @Output() selectedTagEmmiter: EventEmitter<string> = new EventEmitter();
   tags: string[] = [];
   isLoading: boolean = false;
+  selectedTag!: string | null;
 
   constructor(private articlesService: ArticlesService) { }
 
@@ -23,6 +25,13 @@ export class TagsComponent implements OnInit {
 
   selectTag(tag: string): void {
     this.selectedTagEmmiter.emit(tag);
+    this.selectedTag = tag;
+  }
+
+  ngOnChanges() {
+    if(this.tabIndex !== 2) {
+      this.selectedTag = null;
+    }
   }
 
 

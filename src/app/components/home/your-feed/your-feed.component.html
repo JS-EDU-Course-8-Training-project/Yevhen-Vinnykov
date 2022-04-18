@@ -2,6 +2,8 @@
 <h4 *ngIf="!followedArticles.length && !isLoading">
     No articles are here... yet.
 </h4>
-<div *ngFor="let article of followedArticles">
-    <app-article-list [article]="article"></app-article-list>
-</div>
+<ng-container *ngIf="!isLoading">
+    <div *ngFor="let article of followedArticles">
+        <app-article-list [article]="article"></app-article-list>
+    </div>
+</ng-container>

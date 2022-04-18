@@ -1,42 +1,46 @@
-header{
+header {
     display: flex;
     justify-content: space-between;
-}
-
-.text-secondary{
-    color: rgb(197, 197, 197);
-    font-weight: 300;
-    font-size: .7rem;
-    text-decoration: none;
 }
 
 h3 {
     margin: 0;
 }
 
-img { 
+img {
     border-radius: 50%;
     height: 30px;
     width: 30px;
     margin: 0 10px 0 0;
+    align-self: center;
 }
 
 .info {
     display: flex;
 }
 
-button{
+button {
     height: 50px;
+    width: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .card-content {
-    h2{
+    h2 {
         margin: 0;
     }
-    p{
-        color: rgb(144, 144, 144);
+    a {
+        text-decoration: none;
+        color: inherit;
     }
+}
+.text-secondary {
+    color: rgb(197, 197, 197);
+    font-weight: 300;
+    font-size: 0.7rem;
+    text-decoration: none;
+    margin: 0;
+    color: rgb(144, 144, 144);
 }

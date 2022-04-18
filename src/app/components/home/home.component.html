@@ -16,5 +16,5 @@
             </mat-tab>
         </mat-tab-group>
     </section>
-    <app-tags (selectedTagEmmiter)="handleSelectTag($event)"></app-tags>
+    <app-tags [tabIndex]="tabIndex" (selectedTagEmmiter)="handleSelectTag($event)"></app-tags>
 </div>

@@ -16,7 +16,7 @@ export class ArticlePageComponent implements OnInit {
   comments!: IComment[];
   isLoaded: boolean = false;
   isLiked!: boolean;
-  likesCount!: number;
+  likesCount: number = 0;
   isFollowed!: boolean;
   followingInProgress!: boolean;
   favouriteInProgress!: boolean;

@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-      
+      // TODO: fix the error
     if(localStorage.getItem('authorized') === 'true') {
       this.isAuthorized = true;
       this.ref.markForCheck();
