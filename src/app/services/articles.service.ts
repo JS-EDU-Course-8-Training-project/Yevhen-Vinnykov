@@ -33,6 +33,12 @@ export class ArticlesService {
   createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
     return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }
+  fetchTags(): Observable<string[]> {
+    return this.http.get<{tags: string[]}>(this.baseURL.replace('articles', 'tags')).pipe(pluck('tags'));
+  }
+  fetchArticlesByTag(tag: string): Observable<IArticleResponse> {
+    return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`);
+  }
 }
 
 

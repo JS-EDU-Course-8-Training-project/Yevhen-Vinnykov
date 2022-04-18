@@ -1,4 +1,35 @@
-section { 
-    margin: 0 auto; 
-    max-width: 70%;
+.container {
+    display: flex;
+    justify-content: center;
+    p {
+        padding: 10px;
+    }
+    section {
+        flex: 0 1 60%;
+        margin-right: 30px;
+    }
+    .tags-container {
+        max-width: 250px;
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 15px;
+            background-color: rgb(238, 238, 238);
+            border-radius: 8px;
+            p {
+                width: 100%;
+                font-size: 1rem;
+                margin: 0 0 10px 0;
+            }
+            .tag-item {
+                background-color: rgb(202, 202, 202);
+                border-radius: 999999px;
+                padding: 5px;
+                margin: 5px;
+                flex: 1 1 auto;
+                cursor: pointer;
+            }
+        }
+    }
 }

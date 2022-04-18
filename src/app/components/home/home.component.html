@@ -1,20 +1,36 @@
-
 <app-banner className="home-banner banner">
     <mat-card-title class="title">Real World</mat-card-title>
     <mat-card-content class="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit</mat-card-content>
 </app-banner>
-<section>
-    <mat-tab-group>
-        <mat-tab label="Global Feed">
-            <h4 *ngIf="!articles.length">
-                No articles are here... yet.
-            </h4>
-            <div *ngFor="let article of articles">
-                <app-article-list [article]="article"></app-article-list>
-            </div>
-        </mat-tab>
-        <mat-tab label="Followed">
-            <div>Followed</div>
-        </mat-tab>
-    </mat-tab-group>
-</section>
+<div class="container">
+    <section>
+        <mat-tab-group (focusChange)="handleChange($event.index)" [selectedIndex]="tabIndex">
+            <mat-tab *ngIf="isAuthorized" label="Your Feed">
+                <div>Followed</div>
+            </mat-tab>
+            <mat-tab label="Global Feed">
+                <p *ngIf="isLoading">Loading articles...</p>
+                <h4 *ngIf="!articles.length && !isLoading">
+                    No articles are here... yet.
+                </h4>
+                <div *ngFor="let article of articles">
+                    <app-article-list [article]="article"></app-article-list>
+                </div>
+            </mat-tab>
+            <mat-tab *ngIf="selectedTag" label="#{{selectedTag}}">
+                <p *ngIf="isLoading">Loading articles...</p>
+                <ng-container *ngIf="!isLoading">
+                    <div *ngFor="let article of articlesSelectedByTag">
+                        <app-article-list [article]="article"></app-article-list>
+                    </div>
+                </ng-container>
+            </mat-tab>
+        </mat-tab-group>
+    </section>
+    <div class="tags-container">
+        <div class="tags">
+            <p>Popular Tags</p>
+            <div (click)="selectTag(tag)" class="tag-item" *ngFor="let tag of tags">{{tag}}</div>
+        </div>
+    </div>
+</div>
