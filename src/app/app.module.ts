@@ -20,6 +20,10 @@ import { BannerComponent } from './components/banner/banner.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { SignInModule } from './components/sign-in/sign-in.module';
+import { YourFeedComponent } from './components/home/your-feed/your-feed.component';
+import { GlobalFeedComponent } from './components/home/global-feed/global-feed.component';
+import { TaggedArticlesComponent } from './components/home/tagged-articles/tagged-articles.component';
+import { TagsComponent } from './components/home/tags/tags.component';
 
 
 
@@ -33,6 +37,10 @@ import { SignInModule } from './components/sign-in/sign-in.module';
     ArticleListComponent,
     ArticlePageComponent,
     BannerComponent,
+    YourFeedComponent,
+    GlobalFeedComponent,
+    TaggedArticlesComponent,
+    TagsComponent,
   ],
   imports: [
     BrowserModule,

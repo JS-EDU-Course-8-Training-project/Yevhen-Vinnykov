@@ -1,0 +1,7 @@
+<div class="tags-container">
+    <div class="tags">
+        <p *ngIf="isLoading">Loading...</p>
+        <p *ngIf="!isLoading">Popular Tags</p>
+        <div (click)="selectTag(tag)" class="tag-item" *ngFor="let tag of tags">{{tag}}</div>
+    </div>
+</div>

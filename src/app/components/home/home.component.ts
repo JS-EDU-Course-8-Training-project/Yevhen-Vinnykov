@@ -1,7 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { IArticle } from 'src/app/models/IArticle';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -9,54 +6,27 @@ import { ArticlesService } from 'src/app/services/articles.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  globalArticles: IArticle[] = [];
-  followedArticles: IArticle[] = [];
   isLoading: boolean = false;
-  articlesSelectedByTag: IArticle[] = [];
-  tags: string[] = [];
-  selectedTag!: string | null;
   tabIndex: number = 0;
-
   isAuthorized: boolean = false;
-  constructor(
-    private articlesService: ArticlesService,
-  ) {
-
-  }
+  selectedTag!: string | null;
+  constructor() {}
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.articlesService.fetchArticles().subscribe(res => {
-      this.globalArticles = res.articles;
-      this.isLoading = false;
-    });
-    this.articlesService.fetchFollowedArticles().subscribe(res => {
-      this.followedArticles = res.articles;
-    });
-    this.articlesService.fetchTags().subscribe(tags => this.tags = tags);
     if (localStorage.getItem('authorized') === 'true') {
       this.isAuthorized = true;
     }
   }
 
-  selectTag(tag: string): void {
-    this.isLoading = true;
-    this.selectedTag = tag;
-    this.tabIndex = 2;
-    this.articlesService
-      .fetchArticlesByTag(this.selectedTag)
-      .subscribe(res => {
-        this.articlesSelectedByTag = res.articles;
-        this.isLoading = false;
-      });
+  handleSelectTag(tag: any) {
+    this.selectedTag = tag;  
+    this.tabIndex = 2;  
   }
 
   handleChange(index: number): void {
     this.tabIndex = index;
     if (index !== 2) {
       this.selectedTag = null;
-      this.articlesSelectedByTag = [];
     }
   }
-
 }

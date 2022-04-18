@@ -1,0 +1,6 @@
+<p *ngIf="isLoading">Loading articles...</p>
+<ng-container *ngIf="!isLoading">
+    <div *ngFor="let article of articlesSelectedByTag">
+        <app-article-list [article]="article"></app-article-list>
+    </div>
+</ng-container>

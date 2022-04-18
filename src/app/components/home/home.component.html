@@ -6,37 +6,15 @@
     <section>
         <mat-tab-group (focusChange)="handleChange($event.index)" [selectedIndex]="tabIndex">
             <mat-tab *ngIf="isAuthorized" label="Your Feed">
-                <p *ngIf="isLoading">Loading articles...</p>
-                <h4 *ngIf="!followedArticles.length && !isLoading">
-                    No articles are here... yet.
-                </h4>
-                <div *ngFor="let article of followedArticles">
-                    <app-article-list [article]="article"></app-article-list>
-                </div>
+                <app-your-feed></app-your-feed>
             </mat-tab>
             <mat-tab label="Global Feed">
-                <p *ngIf="isLoading">Loading articles...</p>
-                <h4 *ngIf="!globalArticles.length && !isLoading">
-                    No articles are here... yet.
-                </h4>
-                <div *ngFor="let article of globalArticles">
-                    <app-article-list [article]="article"></app-article-list>
-                </div>
+                <app-global-feed></app-global-feed>
             </mat-tab>
             <mat-tab *ngIf="selectedTag" label="#{{selectedTag}}">
-                <p *ngIf="isLoading">Loading articles...</p>
-                <ng-container *ngIf="!isLoading">
-                    <div *ngFor="let article of articlesSelectedByTag">
-                        <app-article-list [article]="article"></app-article-list>
-                    </div>
-                </ng-container>
+                <app-tagged-articles [selectedTag]="selectedTag"></app-tagged-articles>
             </mat-tab>
         </mat-tab-group>
     </section>
-    <div class="tags-container">
-        <div class="tags">
-            <p>Popular Tags</p>
-            <div (click)="selectTag(tag)" class="tag-item" *ngFor="let tag of tags">{{tag}}</div>
-        </div>
-    </div>
+    <app-tags (selectedTagEmmiter)="handleSelectTag($event)"></app-tags>
 </div>
