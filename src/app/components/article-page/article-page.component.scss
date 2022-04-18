@@ -1,7 +1,12 @@
-
 // TODO: needs lots of fixing
 
 .container {
+   button {
+      min-width: 150px;
+      &[disabled] {
+         background-color: rgba(91, 91, 216, 0.376);
+      }
+   }
    h3 {
       margin: 0;
    }
@@ -74,7 +79,7 @@
    margin-bottom: 40px;
    .card-author {
       display: flex;
-      h3{
+      h3 {
          margin: 0;
       }
       img {

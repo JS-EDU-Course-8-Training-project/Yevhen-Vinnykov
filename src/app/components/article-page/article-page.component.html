@@ -10,8 +10,11 @@
                 </div>
             </div>
             <mat-card-actions align="end">
-                <button (click)="handleFollowUnfollow(article.author.username)" mat-raised-button color="primary">
-                    {{isFollowed ? 'Follow' : 'Unfollow'}} {{article?.author?.username}}
+                <button 
+                [disabled]="followingInProgress" 
+                (click)="handleFollowUnfollow(article.author.username)" 
+                mat-raised-button color="primary">
+                    {{isFollowed ? 'Unfollow' : 'Follow'}} {{article?.author?.username}}
                 </button>
                 <button (click)="handleLike()" mat-raised-button color="primary">
                     <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
@@ -42,7 +45,12 @@
     </div>
     <div class="card-actions">
         <mat-card-actions>
-            <button mat-raised-button color="primary">Follow {{article?.author?.username}}</button>
+            <button 
+                [disabled]="followingInProgress" 
+                (click)="handleFollowUnfollow(article.author.username)" 
+                mat-raised-button color="primary">
+                    {{isFollowed ? 'Unfollow' : 'Follow'}} {{article?.author?.username}}
+                </button>
             <button (click)="handleLike()" mat-raised-button color="primary">
                 <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
                 Favorite Arcticle ({{likesCount}})

@@ -1,12 +1,12 @@
 import { IProfile } from './../models/IProfile';
-import { Observable } from 'rxjs';
+import { Observable, pluck } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'accept': 'application/json',
-    'Authorization':`Bearer ${localStorage.getItem('token')}`,
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
   })
 };
 
@@ -18,9 +18,9 @@ export class ProfilesService {
 
   constructor(private http: HttpClient) { }
   follow(username: string): Observable<IProfile> {
-    return this.http.post<IProfile>(`${this.baseURL}/${username}/follow`, null, httpOptions);
+    return this.http.post<{ profile: IProfile }>(`${this.baseURL}/${username}/follow`, null, httpOptions).pipe(pluck('profile'));
   }
   unfollow(username: string): Observable<IProfile> {
-    return this.http.delete<IProfile>(`${this.baseURL}/${username}/follow`, httpOptions);
+    return this.http.delete<{ profile: IProfile }>(`${this.baseURL}/${username}/follow`, httpOptions).pipe(pluck('profile'));
   }
 }

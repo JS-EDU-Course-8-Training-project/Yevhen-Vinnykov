@@ -18,6 +18,7 @@ export class ArticlePageComponent implements OnInit {
   likesCount!: number;
   isLiked!: boolean;
   isFollowed!: boolean;
+  followingInProgress!: boolean;
 
   constructor(
     private articlesService: ArticlesService,
@@ -59,15 +60,16 @@ export class ArticlePageComponent implements OnInit {
   }
 
   handleFollowUnfollow(username: string): void {
+    this.followingInProgress = true;
     if(this.isFollowed){
       this.profilesService.unfollow(username).subscribe((profile => {
-        console.log(profile.following);
-        
+        this.isFollowed = profile.following;
+        this.followingInProgress = false;
       }));
     } else {
-      this.profilesService.follow(username).subscribe((profile: any) => {
-        console.log(profile);
-        console.log(profile.following);
+      this.profilesService.follow(username).subscribe(profile => {
+        this.isFollowed = profile.following;
+        this.followingInProgress = false;
       });
     }
   }
