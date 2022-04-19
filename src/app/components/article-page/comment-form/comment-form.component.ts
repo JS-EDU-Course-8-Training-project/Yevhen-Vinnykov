@@ -2,7 +2,6 @@ import { EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { CommentsService } from 'src/app/services/comments.service';
-import { IComment } from 'src/app/models/IComment';
 
 @Component({
   selector: 'app-comment-form',
@@ -13,6 +12,7 @@ export class CommentFormComponent implements OnInit {
   @Input() slug!: string;
   @Output() commentEventEmmiter: EventEmitter<any> = new EventEmitter();
   public commentForm: any;
+  public isAuthorized: boolean = localStorage.getItem('authorized') === 'true';
   constructor(
     private commentsService: CommentsService,
     private fb: FormBuilder

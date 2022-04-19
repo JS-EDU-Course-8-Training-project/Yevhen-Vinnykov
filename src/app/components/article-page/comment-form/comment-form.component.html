@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="isAuthorized">
     <form [formGroup]="commentForm" (ngSubmit)="addComment()">
         <div class="form-group">
             <textarea type="text" class="form-control" id="body" name="body" required formControlName="body"
