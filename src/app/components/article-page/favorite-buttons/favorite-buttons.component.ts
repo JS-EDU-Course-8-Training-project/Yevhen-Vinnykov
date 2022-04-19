@@ -9,7 +9,7 @@ import { ProfilesService } from 'src/app/services/profiles.service';
   templateUrl: './favorite-buttons.component.html',
   styleUrls: ['./favorite-buttons.component.scss']
 })
-export class FavoriteButtonsComponent implements OnInit, OnChanges{
+export class FavoriteButtonsComponent implements OnInit, OnChanges {
   @Input() article!: IArticle;
   @Input() slug!: string;
 
@@ -27,20 +27,20 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges{
   ) { }
 
   ngOnInit(): void {
-    this.setData();   
+    this.setData();
   }
 
   ngOnChanges(): void {
     this.setData();
- }
+  }
 
- private setData(): void {
-  this.isLiked = this.article.favorited;
-  this.isFollowed = this.article.author.following;
-  this.likesCount = this.article.favoritesCount;
-  this.username = this.article.author.username; 
- }
- 
+  private setData(): void {
+    this.isLiked = this.article?.favorited;
+    this.isFollowed = this.article?.author?.following;
+    this.likesCount = this.article?.favoritesCount;
+    this.username = this.article?.author?.username;
+  }
+
   handleLike(slug: string): void {
     if (localStorage.getItem('authorized') !== 'true') {
       this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));

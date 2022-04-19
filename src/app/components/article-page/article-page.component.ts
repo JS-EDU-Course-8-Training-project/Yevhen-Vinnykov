@@ -14,7 +14,7 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./article-page.component.scss'],
 })
 export class ArticlePageComponent implements OnInit {
-  slug!: string;
+  slug: string = this.router.url.split('/')[2];
   article!: IArticle;
   comments!: IComment[];
   authUser!: IUser;
@@ -29,7 +29,6 @@ export class ArticlePageComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.slug = this.router.url.split('/')[2];
     this.getArticle();
     this.getComments();
     this.getAuthUser();

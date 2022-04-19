@@ -14,7 +14,7 @@
     </div>
 </app-banner>
 <app-article-body [slug]="slug" [article]="article"></app-article-body>
-<app-comment-form (commentEventEmmiter)="getComments()" [slug]="article.slug"></app-comment-form>
+<app-comment-form (commentEventEmmiter)="getComments()" [slug]="slug"></app-comment-form>
 <section class="article-comments">
     <mat-card class="comment" *ngFor="let comment of comments">
         <mat-card-content>
