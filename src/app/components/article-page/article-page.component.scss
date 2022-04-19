@@ -58,6 +58,7 @@
       flex-direction: row;
       background-color: rgb(238, 238, 238);
       padding: 10px;
+      justify-content: space-between;
       p {
          margin: 0;
       }
@@ -66,6 +67,9 @@
          height: 30px;
          width: 30px;
          margin: 0 10px 0 0;
+      }
+      .delete-icon {
+         align-self: center;
       }
    }
 }

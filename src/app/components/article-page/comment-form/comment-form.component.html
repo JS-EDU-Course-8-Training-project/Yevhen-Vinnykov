@@ -1,0 +1,19 @@
+<div>
+    <form [formGroup]="commentForm" (ngSubmit)="addComment()">
+        <div class="form-group">
+            <textarea type="text" class="form-control" id="body" name="body" required formControlName="body"
+                placeholder="Write a comment...">
+        </textarea>
+            <div class="footer">
+                <img src="https://lowcars.net/wp-content/uploads/2017/02/userpic.png" />
+                <button [disabled]="commentForm.status === 'INVALID'"
+                 align="end" 
+                 type="submit" 
+                 mat-raised-button
+                color="primary">
+                    Add
+            </button>
+            </div>
+        </div>
+    </form>
+</div>

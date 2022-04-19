@@ -25,6 +25,7 @@ import { GlobalFeedComponent } from './components/home/global-feed/global-feed.c
 import { TaggedArticlesComponent } from './components/home/tagged-articles/tagged-articles.component';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { CommentFormComponent } from './components/article-page/comment-form/comment-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -57,7 +58,8 @@ import { CommentFormComponent } from './components/article-page/comment-form/com
     MatDividerModule,
     SignUpModule,
     SignInModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
