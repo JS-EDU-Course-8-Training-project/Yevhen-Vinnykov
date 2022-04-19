@@ -1,6 +1,7 @@
+import { IExistingUser } from './../models/IExistingUser';
 import { IUserData } from './../models/IUserData';
 import { catchError, Observable, of, throwError } from 'rxjs';
-import { IUser } from './../models/IUser';
+import { INewUser } from '../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -35,8 +36,8 @@ export class UsersService {
     return of(error.error);
   }
 
-  createUser(user: IUser): Observable<IUser | any> {
-    return this.http.post<IUser | any>(this.baseURL, JSON.stringify({ user }), httpOptions).pipe(
+  createUser(user: INewUser): Observable<IExistingUser | any> {
+    return this.http.post<IExistingUser | any>(this.baseURL, JSON.stringify({ user }), httpOptions).pipe(
       catchError((err): any => this.handleError(err))
     );
   }
@@ -47,8 +48,8 @@ export class UsersService {
     );
   }
 
-  fetchAuthUser(): Observable<IUser | any> {
-    return this.http.get<IUser>(this.baseURL.slice(0, this.baseURL.length - 1), httpOptions).pipe(
+  fetchAuthUser(): Observable<IExistingUser | any> {
+    return this.http.get<IExistingUser>(this.baseURL.slice(0, this.baseURL.length - 1), httpOptions).pipe(
       catchError((err): any => this.handleError(err))
     );
   }

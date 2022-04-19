@@ -1,12 +1,11 @@
-import { IUser } from './../../models/IUser';
 import { CommentsService } from './../../services/comments.service';
-import { ProfilesService } from 'src/app/services/profiles.service';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Component, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/models/IArticle';
 import { Router } from '@angular/router';
 import { IComment } from 'src/app/models/IComment';
 import { UsersService } from 'src/app/services/users.service';
+import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
   selector: 'app-article-page',
@@ -17,7 +16,7 @@ export class ArticlePageComponent implements OnInit {
   slug: string = this.router.url.split('/')[2];
   article!: IArticle;
   comments!: IComment[];
-  authUser!: IUser;
+  authUser!: IExistingUser;
   isLoaded: boolean = false;
 
   constructor(
@@ -36,7 +35,7 @@ export class ArticlePageComponent implements OnInit {
 
   getAuthUser(): void {
     this.usersService.fetchAuthUser().subscribe(res => {
-      this.authUser = res.user;
+      this.authUser = res.user;      
     });
   }
 

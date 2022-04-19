@@ -14,7 +14,7 @@
     </div>
 </app-banner>
 <app-article-body [slug]="slug" [article]="article"></app-article-body>
-<app-comment-form (commentEventEmmiter)="getComments()" [slug]="slug"></app-comment-form>
+<app-comment-form [image]="authUser?.image || ''" (commentEventEmmiter)="getComments()" [slug]="slug"></app-comment-form>
 <section class="article-comments">
     <mat-card class="comment" *ngFor="let comment of comments">
         <mat-card-content>
@@ -28,7 +28,7 @@
                     <p>{{comment?.createdAt | date}}</p>
                 </div>
             </div>
-            <mat-icon (click)="deleteComment(comment.id)" *ngIf="comment.author.username === authUser.username"
+            <mat-icon (click)="deleteComment(comment.id)" *ngIf="comment.author.username === authUser?.username"
                 class="delete-icon">delete</mat-icon>
         </mat-card-footer>
     </mat-card>

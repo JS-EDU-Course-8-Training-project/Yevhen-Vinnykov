@@ -10,6 +10,7 @@ import { CommentsService } from 'src/app/services/comments.service';
 })
 export class CommentFormComponent implements OnInit {
   @Input() slug!: string;
+  @Input() image!: string;
   @Output() commentEventEmmiter: EventEmitter<any> = new EventEmitter();
   public commentForm: any;
   public isAuthorized: boolean = localStorage.getItem('authorized') === 'true';
@@ -32,6 +33,7 @@ export class CommentFormComponent implements OnInit {
       this.commentsService.createComment(this.slug, newComment).subscribe(comment => {
         console.log(comment);
         this.commentEventEmmiter.emit();
+        this.commentForm.reset();
       });
     }
   }
