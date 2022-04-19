@@ -37,9 +37,6 @@ export class ArticlesService {
     }
     return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`).pipe(pluck('article'));
   }
-  fetchArticleComments(slug: string): Observable<IComment[]> {
-    return this.http.get<{ comments: IComment[] }>(`${this.baseURL}/${slug}/comments`).pipe(pluck('comments'));
-  }
   createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
     return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }

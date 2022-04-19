@@ -1,3 +1,4 @@
+import { CommentsService } from './../../services/comments.service';
 import { ProfilesService } from 'src/app/services/profiles.service';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Component, OnInit } from '@angular/core';
@@ -23,6 +24,7 @@ export class ArticlePageComponent implements OnInit {
 
   constructor(
     private articlesService: ArticlesService,
+    private commentsService: CommentsService,
     private router: Router,
     private profilesService: ProfilesService
   ) { }
@@ -73,7 +75,7 @@ export class ArticlePageComponent implements OnInit {
 
   getComments(): void {
     this.isLoaded = false;
-    this.articlesService.fetchArticleComments(this.slug)
+    this.commentsService.fetchArticleComments(this.slug)
       .subscribe(comments => {
         this.comments = comments;
         console.log(this.comments);

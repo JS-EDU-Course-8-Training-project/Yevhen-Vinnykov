@@ -24,6 +24,7 @@ import { YourFeedComponent } from './components/home/your-feed/your-feed.compone
 import { GlobalFeedComponent } from './components/home/global-feed/global-feed.component';
 import { TaggedArticlesComponent } from './components/home/tagged-articles/tagged-articles.component';
 import { TagsComponent } from './components/home/tags/tags.component';
+import { CommentFormComponent } from './components/article-page/comment-form/comment-form.component';
 
 
 
@@ -41,6 +42,7 @@ import { TagsComponent } from './components/home/tags/tags.component';
     GlobalFeedComponent,
     TaggedArticlesComponent,
     TagsComponent,
+    CommentFormComponent,
   ],
   imports: [
     BrowserModule,
