@@ -1,10 +1,18 @@
 // TODO: needs lots of fixing
 
-.container {
-   button {
-      min-width: 170px;
-      &[disabled] {
-         background-color: rgba(91, 91, 216, 0.376);
+.banner-container {
+   .banner-actions {
+      display: flex;
+      justify-content: start;
+      .banner-author {
+         display: flex;
+         margin: 0 30px 0 0;
+         img {
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            margin: 0 10px 0 0;
+         }
       }
    }
    h3 {
@@ -20,31 +28,12 @@
    .subtitle {
       font-size: 1.2rem;
    }
-   .article-body {
-      p {
-         font-size: 1rem;
-         margin-bottom: 30px;
-      }
-   }
    .devider {
       margin: 30px 0;
    }
 }
 
-.card-actions {
-   display: flex;
-   justify-content: start;
-   .card-author {
-      display: flex;
-      margin: 0 30px 0 0;
-      img {
-         border-radius: 50%;
-         height: 30px;
-         width: 30px;
-         margin: 0 10px 0 0;
-      }
-   }
-}
+
 
 .article-comments {
    margin: 0 auto;
@@ -70,27 +59,6 @@
       }
       .delete-icon {
          align-self: center;
-      }
-   }
-}
-
-.card-actions-container {
-   display: flex;
-   justify-content: space-between;
-   height: 3rem;
-   margin: 0 auto;
-   width: 50%;
-   margin-bottom: 40px;
-   .card-author {
-      display: flex;
-      h3 {
-         margin: 0;
-      }
-      img {
-         border-radius: 50%;
-         height: 30px;
-         width: 30px;
-         margin: 0 10px 0 0;
       }
    }
 }

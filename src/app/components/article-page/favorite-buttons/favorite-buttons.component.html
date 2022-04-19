@@ -1,0 +1,11 @@
+<mat-card-actions align="end">
+    <button class="fave-btn" [disabled]="followingInProgress" (click)="handleFollowUnfollow(username)"
+        mat-raised-button color="primary">
+        {{isFollowed ? 'Unfollow' : 'Follow'}} {{username}}
+    </button>
+    <button class="fave-btn" [disabled]="favoriteInProgress" (click)="handleLike(slug)" mat-raised-button
+        color="primary">
+        <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
+        Favorite Arcticle ({{likesCount}})
+    </button>
+</mat-card-actions>

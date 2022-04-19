@@ -15,17 +15,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { ArticlePageComponent } from './components/article-page/article-page.component';
-import { BannerComponent } from './components/banner/banner.component';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
 import { SignInModule } from './components/sign-in/sign-in.module';
 import { YourFeedComponent } from './components/home/your-feed/your-feed.component';
 import { GlobalFeedComponent } from './components/home/global-feed/global-feed.component';
 import { TaggedArticlesComponent } from './components/home/tagged-articles/tagged-articles.component';
 import { TagsComponent } from './components/home/tags/tags.component';
-import { CommentFormComponent } from './components/article-page/comment-form/comment-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BannerModule } from './components/banner/banner.module';
 
 
 
@@ -37,13 +33,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     NavbarComponent,
     ButtonComponent,
     ArticleListComponent,
-    ArticlePageComponent,
-    BannerComponent,
     YourFeedComponent,
     GlobalFeedComponent,
     TaggedArticlesComponent,
     TagsComponent,
-    CommentFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,12 +47,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatTabsModule,
     MatCardModule,
     MatIconModule,
-    MatChipsModule,
-    MatDividerModule,
     SignUpModule,
     SignInModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    BannerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

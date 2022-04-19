@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'create-article',
     loadChildren: () => import('./components/new-article-page/new-article-page.module').then(m => m.NewArticlePageModule) 
+  },
+  {
+    path: 'article/:slug',
+    loadChildren: () => import('./components/article-page/article-page.module').then(m =>m.ArticlePageModule)
   }
 ];
 

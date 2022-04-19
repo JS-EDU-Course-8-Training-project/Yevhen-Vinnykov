@@ -1,61 +1,19 @@
 <app-banner className="article-banner banner">
-    <div class="container">
+    <div class="banner-container">
         <mat-card-title class="title">{{article?.title}}</mat-card-title>
-        <div class="card-actions">
-            <div class="card-author">
+        <div class="banner-actions">
+            <div class="banner-author">
                 <img src="{{article?.author?.image}}" alt="">
                 <div>
                     <h3>{{article?.author?.username}}</h3>
                     <p>{{article?.createdAt | date}}</p>
                 </div>
             </div>
-            <mat-card-actions align="end">
-                <button [disabled]="followingInProgress" (click)="handleFollowUnfollow(article.author.username)"
-                    mat-raised-button color="primary">
-                    {{isFollowed ? 'Unfollow' : 'Follow'}} {{article?.author?.username}}
-                </button>
-                <button [disabled]="favouriteInProgress" (click)="handleLike(article.slug)" mat-raised-button
-                    color="primary">
-                    <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
-                    Favorite Arcticle ({{likesCount}})
-                </button>
-            </mat-card-actions>
+            <app-favorite-buttons [article]="article" [slug]="slug"></app-favorite-buttons>
         </div>
     </div>
 </app-banner>
-<div class="container">
-    <div class="article-body">
-        <p>{{article?.body}}</p>
-    </div>
-    <mat-chip-list>
-        <mat-chip *ngFor="let tag of article?.tagList" [value]="tag" disabled>
-            {{tag}}
-        </mat-chip>
-    </mat-chip-list>
-    <mat-divider class="devider"></mat-divider>
-</div>
-<div class="card-actions-container">
-    <div class="card-author">
-        <img src="{{article?.author?.image}}" alt="">
-        <div>
-            <h3>{{article?.author?.username}}</h3>
-            <p>{{article?.createdAt | date}}</p>
-        </div>
-    </div>
-    <div class="card-actions">
-        <mat-card-actions>
-            <button [disabled]="followingInProgress" (click)="handleFollowUnfollow(article.author.username)"
-                mat-raised-button color="primary">
-                {{isFollowed ? 'Unfollow' : 'Follow'}} {{article?.author?.username}}
-            </button>
-            <button [disabled]="favouriteInProgress" (click)="handleLike(article.slug)" mat-raised-button
-                color="primary">
-                <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
-                Favorite Arcticle ({{likesCount}})
-            </button>
-        </mat-card-actions>
-    </div>
-</div>
+<app-article-body [slug]="slug" [article]="article"></app-article-body>
 <app-comment-form (commentEventEmmiter)="getComments()" [slug]="article.slug"></app-comment-form>
 <section class="article-comments">
     <mat-card class="comment" *ngFor="let comment of comments">
@@ -70,7 +28,8 @@
                     <p>{{comment?.createdAt | date}}</p>
                 </div>
             </div>
-            <mat-icon (click)="deleteComment(comment.id)" *ngIf="comment.author.username === authUser.username" class="delete-icon">delete</mat-icon>
+            <mat-icon (click)="deleteComment(comment.id)" *ngIf="comment.author.username === authUser.username"
+                class="delete-icon">delete</mat-icon>
         </mat-card-footer>
     </mat-card>
 </section>

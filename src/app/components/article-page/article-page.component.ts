@@ -19,19 +19,14 @@ export class ArticlePageComponent implements OnInit {
   comments!: IComment[];
   authUser!: IUser;
   isLoaded: boolean = false;
-  isLiked!: boolean;
-  likesCount: number = 0;
-  isFollowed!: boolean;
-  followingInProgress!: boolean;
-  favouriteInProgress!: boolean;
 
   constructor(
     private articlesService: ArticlesService,
     private commentsService: CommentsService,
     private usersService: UsersService,
     private router: Router,
-    private profilesService: ProfilesService
   ) { }
+
 
   ngOnInit(): void {
     this.slug = this.router.url.split('/')[2];
@@ -46,41 +41,13 @@ export class ArticlePageComponent implements OnInit {
     });
   }
 
-  handleLike(slug: string): void {
-    if (localStorage.getItem('authorized') !== 'true') {
-      this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
-      return;
-    }
-
-    this.favouriteInProgress = true;
-    if (this.isLiked) {
-      this.articlesService.removeFromFavorites(slug).subscribe(article => {
-        this.isLiked = article.favorited;
-        this.likesCount = article.favoritesCount;
-        console.log(article);
-        this.favouriteInProgress = false;
-
-      })
-    } else {
-      this.articlesService.addToFavorites(slug).subscribe(article => {
-        this.isLiked = article.favorited;
-        this.favouriteInProgress = false;
-        this.likesCount = article.favoritesCount;
-        console.log(article);
-      })
-    }
-  }
-
   getArticle(): void {
     this.isLoaded = false;
     this.articlesService.fetchArticle(this.slug)
       .subscribe(article => {
         console.log(article);
         this.article = article;
-        this.isLiked = article.favorited;
-        this.likesCount = article.favoritesCount;
         this.isLoaded = true;
-        this.isFollowed = article.author.following;
       });
   }
 
@@ -99,27 +66,4 @@ export class ArticlePageComponent implements OnInit {
       this.getComments();
     });
   }
-
-
-  handleFollowUnfollow(username: string): void {
-    if (localStorage.getItem('authorized') !== 'true') {
-      this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
-      return;
-    }
-    this.followingInProgress = true;
-    if (this.isFollowed) {
-      this.profilesService.unfollow(username).subscribe((profile => {
-        this.isFollowed = profile.following;
-        console.log('unfollow', profile);
-        this.followingInProgress = false;
-      }));
-    } else {
-      this.profilesService.follow(username).subscribe(profile => {
-        this.isFollowed = profile.following;
-        console.log('follow', profile);
-        this.followingInProgress = false;
-      });
-    }
-  }
-
 }

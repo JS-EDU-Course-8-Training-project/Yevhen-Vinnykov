@@ -1,0 +1,23 @@
+<div class="article-body-container">
+    <div class="article-body">
+        <p>{{article?.body}}</p>
+    </div>
+    <mat-chip-list>
+        <mat-chip *ngFor="let tag of article?.tagList" [value]="tag" disabled>
+            {{tag}}
+        </mat-chip>
+    </mat-chip-list>
+    <mat-divider class="devider"></mat-divider>
+</div>
+<div class="article-actions-container">
+    <div class="article-author">
+        <img src="{{article?.author?.image}}" alt="">
+        <div>
+            <h3>{{article?.author?.username}}</h3>
+            <p>{{article?.createdAt | date}}</p>
+        </div>
+    </div>
+    <div class="article-actions">
+        <app-favorite-buttons [article]="article" [slug]="slug"></app-favorite-buttons>
+    </div>
+</div>
