@@ -1,5 +1,4 @@
 import { ICreatedArticle } from './../models/ICreatedArticle';
-import { IComment } from './../models/IComment';
 import { IArticle, IArticleResponse } from './../models/IArticle';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -41,6 +40,9 @@ export class ArticlesService {
     return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }
   fetchTags(): Observable<string[]> {
+    if(this.isAuthorized){
+      return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags'), httpOptions).pipe(pluck('tags'));
+    }
     return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags')).pipe(pluck('tags'));
   }
   fetchArticlesByTag(tag: string): Observable<IArticleResponse> {

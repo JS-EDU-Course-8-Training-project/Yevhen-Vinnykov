@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-article-page',
@@ -10,7 +11,11 @@ import { Validators } from '@angular/forms';
 })
 export class NewArticlePageComponent implements OnInit {
   public articleForm: any;
-  constructor(private articlesService: ArticlesService, private fb: FormBuilder) { }
+  constructor(
+    private articlesService: ArticlesService,
+    private fb: FormBuilder,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.articleForm = this.fb.group({
@@ -35,9 +40,9 @@ export class NewArticlePageComponent implements OnInit {
       tagList: this.articleForm.getRawValue().tagList.split(' '),
     };
     if (this.articleForm.status === 'VALID') {
-      this.articlesService.createArticle(newArticle).subscribe(article => {
-        console.log(article);
+      this.articlesService.createArticle(newArticle).subscribe((article: any) => {
+        this.router.navigateByUrl(`article/${article.article.slug}`);
       });
-    } 
+    }
   }
 }
