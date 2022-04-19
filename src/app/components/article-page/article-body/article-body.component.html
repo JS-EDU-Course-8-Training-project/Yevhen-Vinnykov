@@ -3,7 +3,7 @@
         <p>{{article?.body}}</p>
     </div>
     <mat-chip-list>
-        <mat-chip *ngFor="let tag of article?.tagList" [value]="tag" disabled>
+        <mat-chip class="tag" *ngFor="let tag of article?.tagList" [value]="tag" disabled>
             {{tag}}
         </mat-chip>
     </mat-chip-list>

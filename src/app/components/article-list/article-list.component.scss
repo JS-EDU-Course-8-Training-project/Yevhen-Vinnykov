@@ -1,46 +1,69 @@
-header {
-    display: flex;
-    justify-content: space-between;
-}
+.card-container {
+    margin: 10px;
+    header {
+        display: flex;
+        justify-content: space-between;
+    }
 
-h3 {
-    margin: 0;
-}
-
-img {
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
-    margin: 0 10px 0 0;
-    align-self: center;
-}
-
-.info {
-    display: flex;
-}
-
-button {
-    height: 50px;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-content {
-    h2 {
+    h3 {
         margin: 0;
     }
-    a {
-        text-decoration: none;
-        color: inherit;
+
+    img {
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        margin: 0 10px 0 0;
+        align-self: center;
     }
-}
-.text-secondary {
-    color: rgb(197, 197, 197);
-    font-weight: 300;
-    font-size: 0.7rem;
-    text-decoration: none;
-    margin: 0;
-    color: rgb(144, 144, 144);
+
+    .info {
+        display: flex;
+    }
+
+    button {
+        height: 50px;
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-content {
+        h2 {
+            margin: 0;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+    .text-secondary {
+        color: rgb(197, 197, 197);
+        font-weight: 300;
+        font-size: 0.8rem;
+        text-decoration: none;
+        margin: 0;
+        color: rgb(144, 144, 144);
+        align-self: center;
+    }
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        .tags {
+            display: flex;
+            flex: 1 1 auto;
+            justify-content: end;
+            p {
+                border: 1px solid rgb(240, 239, 239);
+                color: rgb(202, 202, 202);
+                border-radius: 999999px;
+                margin: 5px;
+                padding: 3px;
+                font-size: 0.8rem;
+                min-width: 50px;
+                text-align: center;
+            }
+        }
+    }
 }

@@ -1,24 +1,29 @@
-<mat-card>
-    <header>
-        <div class="info">
-            <img src="{{article.author.image}}" alt="">
-            <div>
-                <h3>{{article.author.username}}</h3>
-                <p class="text-secondary">{{article.createdAt | date}}</p>
+<mat-card class="card-container">
+        <header>
+            <div class="info">
+                <img src="{{article.author.image}}" alt="">
+                <div>
+                    <h3>{{article.author.username}}</h3>
+                    <p class="text-secondary">{{article.createdAt | date}}</p>
+                </div>
             </div>
+            <button [disabled]="favoriteInProgress" (click)="handleLike(article.slug)" mat-stroked-button>
+                <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
+                {{likesCount}}
+            </button>
+        </header>
+        <div class="card-content">
+            <a routerLink="/article/{{article.slug}}">
+                <h2>
+                    {{article.title}}
+                </h2>
+                <p>{{article.description}}</p>
+                <div class="card-footer">
+                    <a class="text-secondary" routerLink="/article/{{article.slug}}">Read more...</a>
+                    <div class="tags">
+                        <p *ngFor="let tag of article.tagList">{{tag}}</p>
+                    </div>
+                </div>
+            </a>
         </div>
-        <button [disabled]="favoriteInProgress" (click)="handleLike(article.slug)" mat-stroked-button>
-            <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
-            {{likesCount}}
-        </button>
-    </header>
-    <div class="card-content">
-        <a routerLink="/article/{{article.slug}}">
-            <h2>
-                {{article.title}}
-            </h2>
-            <p>{{article.description}}</p>
-            <a class="text-secondary" routerLink="/article/{{article.slug}}">Read more...</a>
-        </a>  
-    </div>
 </mat-card>
