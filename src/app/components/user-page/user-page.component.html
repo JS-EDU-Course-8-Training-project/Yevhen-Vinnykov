@@ -1,1 +1,22 @@
-<p>user-page works!</p>
+<app-banner className="banner user-banner">
+    <div>
+        <img [src]="authUser?.image" alt="">
+        <mat-card-title class="title">{{authUser?.username}}</mat-card-title>
+        <mat-card-content class="subtitle">{{authUser?.bio}}</mat-card-content>
+    </div>
+    <div class="button-container">
+        <button mat-raised-button color="primary">
+            <a routerLink="/settings">Update Profile Settings</a>
+        </button>
+    </div>
+</app-banner>
+<section>
+    <mat-tab-group>
+        <mat-tab label="My Articles">
+            <app-my-articles></app-my-articles>
+        </mat-tab>
+        <mat-tab label="Favorited Articles">
+            <app-favorited-articles></app-favorited-articles>
+        </mat-tab>
+    </mat-tab-group>
+</section>

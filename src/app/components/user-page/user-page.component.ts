@@ -1,4 +1,6 @@
+import { IExistingUser } from 'src/app/models/IExistingUser';
 import { Component, OnInit } from '@angular/core';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-user-page',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-page.component.scss']
 })
 export class UserPageComponent implements OnInit {
-
-  constructor() { }
+  authUser!: IExistingUser;
+  constructor(
+    private usersService: UsersService
+  ) { }
 
   ngOnInit(): void {
+    this.usersService.fetchAuthUser().subscribe(user => this.authUser = user);
   }
 
 }

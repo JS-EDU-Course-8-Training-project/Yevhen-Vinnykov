@@ -19,7 +19,7 @@ const routes: Routes = [
     loadChildren: () => import('./components/settings-page/settings-page.module').then(m => m.SettingsPageModule)
   },
   {
-    path: ':user-name',
+    path: 'user/:user-name',
     loadChildren: () => import('./components/user-page/user-page.module').then(m => m.UserPageModule)
   }
 ];
