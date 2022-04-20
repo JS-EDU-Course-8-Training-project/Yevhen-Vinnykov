@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'article/:slug',
     loadChildren: () => import('./components/article-page/article-page.module').then(m =>m.ArticlePageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./components/settings-page/settings-page.module').then(m => m.SettingsPageModule)
   }
 ];
 
