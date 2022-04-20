@@ -1,23 +1,15 @@
-import { Component, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, AfterViewChecked {
+export class NavbarComponent implements OnInit, AfterContentChecked {
   isAuthorized: boolean = false;
   constructor(private ref: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
-    if (localStorage.getItem('authorized') === 'true') {
-      this.isAuthorized = true;
-      this.ref.markForCheck();
-    }
-  }
-
-  ngAfterViewChecked(): void {
-    // TODO: fix the error
+  private checkIfAuth(): void {
     if (localStorage.getItem('authorized') === 'true') {
       this.isAuthorized = true;
       this.ref.markForCheck();
@@ -25,5 +17,13 @@ export class NavbarComponent implements OnInit, AfterViewChecked {
       this.isAuthorized = false;
       this.ref.markForCheck();
     }
+  }
+
+  ngOnInit(): void {
+    this.checkIfAuth();
+  }
+
+  ngAfterContentChecked(): void {
+    this.checkIfAuth();
   }
 }
