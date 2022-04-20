@@ -1,6 +1,6 @@
 import { IExistingUser } from './../models/IExistingUser';
 import { IUserData } from './../models/IUserData';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, pluck, throwError } from 'rxjs';
 import { INewUser } from '../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -49,8 +49,13 @@ export class UsersService {
   }
 
   fetchAuthUser(): Observable<IExistingUser | any> {
-    return this.http.get<IExistingUser>(this.baseURL.slice(0, this.baseURL.length - 1), httpOptions).pipe(
+    return this.http.get<{user: IExistingUser}>(this.baseURL.slice(0, this.baseURL.length - 1), httpOptions).pipe(
+      pluck('user'),
       catchError((err): any => this.handleError(err))
     );
+  }
+
+  updateUser(settings: IExistingUser): Observable<IExistingUser> {
+    return this.http.put<IExistingUser>(this.baseURL.slice(0, this.baseURL.length - 1), JSON.stringify({ user: {...settings} }), httpOptions);
   }
 }

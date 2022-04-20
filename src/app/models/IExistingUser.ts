@@ -3,5 +3,6 @@ export interface IExistingUser{
         username: string;
         bio: string | null;
         image: string;
-        token: string;
+        token?: string;
+        password?: string;
 }

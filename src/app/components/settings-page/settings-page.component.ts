@@ -1,4 +1,6 @@
+import { UsersService } from 'src/app/services/users.service';
 import { Component, OnInit } from '@angular/core';
+import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
   selector: 'app-settings-page',
@@ -6,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings-page.component.scss']
 })
 export class SettingsPageComponent implements OnInit {
-
-  constructor() { }
+  public authUser!: IExistingUser;
+  constructor(
+    private usersService: UsersService
+  ) { }
 
   ngOnInit(): void {
+    this.usersService.fetchAuthUser().subscribe(user => {
+      this.authUser = user;
+      console.log(this.authUser);
+    });
   }
-
 }

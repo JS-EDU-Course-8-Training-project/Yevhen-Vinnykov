@@ -1,3 +1,4 @@
+import { MatButtonModule } from '@angular/material/button';
 import { SignInRoutingModule } from './sign-in-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,7 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SignInRoutingModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatButtonModule
   ]
 })
 export class SignInModule { }

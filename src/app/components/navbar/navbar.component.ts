@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -10,18 +10,20 @@ export class NavbarComponent implements OnInit, AfterViewChecked {
   constructor(private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-   if(localStorage.getItem('authorized') === 'true') {
-    this.isAuthorized = true;
-    this.ref.markForCheck();
-   }
+    if (localStorage.getItem('authorized') === 'true') {
+      this.isAuthorized = true;
+      this.ref.markForCheck();
+    }
   }
 
   ngAfterViewChecked(): void {
-      // TODO: fix the error
-    if(localStorage.getItem('authorized') === 'true') {
+    // TODO: fix the error
+    if (localStorage.getItem('authorized') === 'true') {
       this.isAuthorized = true;
       this.ref.markForCheck();
+    } else {
+      this.isAuthorized = false;
+      this.ref.markForCheck();
+    }
   }
-}
-
 }

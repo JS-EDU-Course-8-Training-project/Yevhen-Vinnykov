@@ -1,0 +1,21 @@
+<div>
+    <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()">
+        <div class="form-group">
+            <input type="text" class="form-control" id="imageURL" name="imageURL" required formControlName="imageURL"
+                placeholder="User photo URL">
+            <input type="text" class="form-control" id="username" name="username" required formControlName="username"
+                placeholder="Username">
+            <textarea type="text" class="form-control" id="bio" name="bio" required formControlName="bio"
+                placeholder="Bio">
+        </textarea>
+            <input type="text" class="form-control" id="email" name="email" required formControlName="email"
+                placeholder="Email">
+            <input type="text" class="form-control" id="newPassword" name="newPassword" required
+                formControlName="newPassword" placeholder="New password">
+            <div>
+                <button align="end" type="submit" mat-raised-button color="primary">Update</button>
+                <button (click)="logout()" align="end" type="button" mat-raised-button color="warn">Logout</button>
+            </div>
+        </div>
+    </form>
+</div>
