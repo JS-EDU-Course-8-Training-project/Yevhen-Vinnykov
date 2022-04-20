@@ -1,9 +1,9 @@
-<a mat-button routerLink="/">Home</a>
-<a *ngIf="!isAuthorized" mat-button routerLink="/sign-in">Sign in</a>
-<a *ngIf="!isAuthorized" mat-button routerLink="/sign-up">Sign up</a>
-<a *ngIf="isAuthorized" mat-button routerLink="/create-article">New Arcticle</a> 
-<a *ngIf="isAuthorized" mat-button routerLink="/settings">Settings</a> 
-
-
-
-
+<div class="navbar-container">
+    <a mat-button routerLink="/">Home</a>
+    <a *ngIf="!isAuthorized" mat-button routerLink="/sign-in">Sign in</a>
+    <a *ngIf="!isAuthorized" mat-button routerLink="/sign-up">Sign up</a>
+    <a *ngIf="isAuthorized" mat-button routerLink="/create-article">New Arcticle</a>
+    <a *ngIf="isAuthorized" mat-button routerLink="/settings">Settings</a>
+    <a *ngIf="isAuthorized" mat-button routerLink="/{{authUser?.username}}">{{authUser?.username}} <img
+            [src]="authUser?.image" alt=""></a>
+</div>

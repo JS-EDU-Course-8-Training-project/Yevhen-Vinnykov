@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, AfterContentChecked, Input } from '@angular/core';
+import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
   selector: 'app-navbar',
@@ -7,6 +8,7 @@ import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angu
 })
 export class NavbarComponent implements OnInit, AfterContentChecked {
   isAuthorized: boolean = false;
+  @Input() authUser!: IExistingUser;
   constructor(private ref: ChangeDetectorRef) { }
 
   private checkIfAuth(): void {
