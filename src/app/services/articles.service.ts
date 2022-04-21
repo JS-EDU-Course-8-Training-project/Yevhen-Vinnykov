@@ -1,3 +1,4 @@
+import { IUpdateArticle } from './../models/IUpdateArticle';
 import { ICreatedArticle } from './../models/ICreatedArticle';
 import { IArticle, IArticleResponse } from './../models/IArticle';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
@@ -22,7 +23,7 @@ export class ArticlesService {
   constructor(private http: HttpClient) {
   }
   fetchArticles(): Observable<IArticleResponse> {
-    if(this.isAuthorized){
+    if (this.isAuthorized) {
       return this.http.get<IArticleResponse>(this.baseURL, httpOptions);
     }
     return this.http.get<IArticleResponse>(this.baseURL);
@@ -39,14 +40,20 @@ export class ArticlesService {
   createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
     return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }
+  deleteArticle(slug: string): any { // fix the type
+    return this.http.delete(`${this.baseURL}/${slug}`, httpOptions); // CHECK ONCE THE API IS BACK UP
+  }
+  updateArticle(slug: string, article: IUpdateArticle): Observable<IArticle> {
+    return this.http.put<IArticle>(`${this.baseURL}/${slug}`, JSON.stringify({ article }), httpOptions); // CHECK ONCE THE API IS BACK UP
+  }
   fetchTags(): Observable<string[]> {
-    if(this.isAuthorized){
+    if (this.isAuthorized) {
       return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags'), httpOptions).pipe(pluck('tags'));
     }
     return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags')).pipe(pluck('tags'));
   }
   fetchArticlesByTag(tag: string): Observable<IArticleResponse> {
-    if(this.isAuthorized){
+    if (this.isAuthorized) {
       return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`, httpOptions);
     }
     return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`);

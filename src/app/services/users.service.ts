@@ -33,7 +33,7 @@ export class UsersService {
     }
     // Return an observable with a user-facing error message.
     //return throwError(() => new Error('Something bad happened; please try again later.'));
-    return of(error.error);
+    return of(error);
   }
 
   createUser(user: INewUser): Observable<IExistingUser | any> {

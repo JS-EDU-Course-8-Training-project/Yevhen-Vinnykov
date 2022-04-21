@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class SignUpComponent implements OnInit {
   signupForm: any;
-  errors: string[] = [];
+  error: string = '';
   isPending: boolean = false;
   constructor(
     private fb: FormBuilder,
@@ -31,6 +31,7 @@ export class SignUpComponent implements OnInit {
   }
 
   handleSignup(): void {
+    this.signupForm.disable();
     this.isPending = true;
     const newUser = {
       username: this.signupForm.getRawValue().username,
@@ -39,14 +40,18 @@ export class SignUpComponent implements OnInit {
     };
 
     this.usersService.createUser(newUser).subscribe((res: any) => {
-      console.log('res', res);
-      if (res.errors) {
-        Object.keys(res.errors).forEach(key => {
-          this.errors.push(`${key} ${res.errors[key][0]}`)
-        })
+      console.log('res', res.error);
+      if (res.error) {
+        
+        // Object.keys(res.errors).forEach(key => {
+        //   this.errors.push(`${key} ${res.errors[key][0]}`)
+        // })
+        this.error = res.error;
         // console.log(Object.keys(res.errors));
-        console.log(this.errors);
+        console.log(this.error);
         this.isPending = false;
+        this.signupForm.markAsUntouched();
+        this.signupForm.enable();
         return;
       }      
       localStorage.setItem('token', res.user.token);
