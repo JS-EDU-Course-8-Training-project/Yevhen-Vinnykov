@@ -9,6 +9,7 @@ import { UsersService } from 'src/app/services/users.service';
 })
 export class UserPageComponent implements OnInit {
   authUser!: IExistingUser;
+  tabIndex: number = 0;
   constructor(
     private usersService: UsersService
   ) { }
@@ -16,5 +17,4 @@ export class UserPageComponent implements OnInit {
   ngOnInit(): void {
     this.usersService.fetchAuthUser().subscribe(user => this.authUser = user);
   }
-
 }

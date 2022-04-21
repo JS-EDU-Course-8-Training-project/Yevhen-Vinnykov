@@ -11,12 +11,12 @@
     </div>
 </app-banner>
 <section>
-    <mat-tab-group>
+    <mat-tab-group (focusChange)="this.tabIndex = $event.index" >
         <mat-tab label="My Articles">
-            <app-my-articles></app-my-articles>
+            <app-my-articles [tabIndex]="tabIndex" [username]="authUser.username"></app-my-articles>
         </mat-tab>
         <mat-tab label="Favorited Articles">
-            <app-favorited-articles></app-favorited-articles>
+            <app-favorited-articles [tabIndex]="tabIndex" [username]="authUser.username"></app-favorited-articles>
         </mat-tab>
     </mat-tab-group>
 </section>

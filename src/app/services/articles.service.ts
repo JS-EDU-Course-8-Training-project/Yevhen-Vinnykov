@@ -51,6 +51,15 @@ export class ArticlesService {
     }
     return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`);
   }
+
+  fetchUserArticles(username: string, limit: number = 20, offset: number = 0): Observable<IArticleResponse> {
+    return this.http.get<IArticleResponse>(`${this.baseURL}?author=${username}&limit=${limit}&offset=${offset}`, httpOptions);
+  }
+
+  fetchFavoritedArticles(username: string, limit: number = 20, offset: number = 0): Observable<IArticleResponse> {
+    return this.http.get<IArticleResponse>(`${this.baseURL}?favorited=${username}&limit=${limit}&offset=${offset}`, httpOptions);
+  }
+
   addToFavorites(slug: string): Observable<IArticle> {
     return this.http.post<{ article: IArticle }>(`${this.baseURL}/${slug}/favorite`, null, httpOptions).pipe(pluck('article'));
   }
