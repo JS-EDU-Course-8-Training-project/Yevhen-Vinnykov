@@ -17,7 +17,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ArticlesService {
-  private baseURL: string = 'https://api.realworld.io/api/articles';
+  // private baseURL: string = 'https://api.realworld.io/api/articles';
+  private baseURL: string = 'http://localhost:3000/api/articles';
   isAuthorized: boolean = localStorage.getItem('authorized') === 'true';
 
   constructor(private http: HttpClient) {

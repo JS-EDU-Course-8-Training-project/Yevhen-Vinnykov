@@ -17,7 +17,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class UsersService {
-  private baseURL: string = 'https://api.realworld.io/api/users';
+ // private baseURL: string = 'https://api.realworld.io/api/users';
+ private baseURL: string = 'http://localhost:3000/api/users';
+
 
   constructor(private http: HttpClient) { }
 

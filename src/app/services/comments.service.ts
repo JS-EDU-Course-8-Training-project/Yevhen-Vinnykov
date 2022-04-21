@@ -19,7 +19,9 @@ interface INewComment {
   providedIn: 'root'
 })
 export class CommentsService {
-  private baseURL: string = 'https://api.realworld.io/api/articles';
+  // private baseURL: string = 'https://api.realworld.io/api/articles';
+  private baseURL: string = 'http://localhost:3000/api/articles';
+
 
   constructor(private http: HttpClient) { }
 

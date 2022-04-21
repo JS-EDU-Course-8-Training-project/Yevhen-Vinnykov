@@ -9,11 +9,11 @@
                     <p>{{article?.createdAt | date}}</p>
                 </div>
             </div>
-            <app-favorite-buttons [article]="article" [slug]="slug"></app-favorite-buttons>
+            <app-favorite-buttons [authUser]="authUser" [article]="article" [slug]="slug"></app-favorite-buttons>
         </div>
     </div>
 </app-banner>
-<app-article-body [slug]="slug" [article]="article"></app-article-body>
+<app-article-body [authUser]="authUser" [slug]="slug" [article]="article"></app-article-body>
 <app-comment-form [image]="authUser?.image || ''" (commentEventEmmiter)="getComments()" [slug]="slug"></app-comment-form>
 <section class="article-comments">
     <mat-card class="comment" *ngFor="let comment of comments">

@@ -55,6 +55,7 @@ export class SignUpComponent implements OnInit {
         return;
       }      
       localStorage.setItem('token', res.user.token);
+      localStorage.setItem('authorized', 'true');
       this.router.navigateByUrl('').catch(err => console.log(err));
       this.isPending = false;
     });

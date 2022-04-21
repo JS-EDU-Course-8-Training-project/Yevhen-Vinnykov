@@ -14,7 +14,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ProfilesService {
-  baseURL: string = 'https://api.realworld.io/api/profiles';
+  // baseURL: string = 'https://api.realworld.io/api/profiles';
+  private baseURL: string = 'http://localhost:3000/api/articles';
+
 
   constructor(private http: HttpClient) { }
   follow(username: string): Observable<IProfile> {

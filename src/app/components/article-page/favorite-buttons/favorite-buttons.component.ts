@@ -3,6 +3,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { ProfilesService } from 'src/app/services/profiles.service';
+import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
   selector: 'app-favorite-buttons',
@@ -12,6 +13,7 @@ import { ProfilesService } from 'src/app/services/profiles.service';
 export class FavoriteButtonsComponent implements OnInit, OnChanges {
   @Input() article!: IArticle;
   @Input() slug!: string;
+  @Input() authUser!: IExistingUser;
 
   favoriteInProgress: boolean = false;
   followingInProgress: boolean = false;
@@ -19,6 +21,7 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
   likesCount!: number;
   isFollowed!: boolean;
   username!: string;
+  isAuthor!: boolean;
 
   constructor(
     private router: Router,
@@ -39,6 +42,9 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
     this.isFollowed = this.article?.author?.following;
     this.likesCount = this.article?.favoritesCount;
     this.username = this.article?.author?.username;
+    this.isAuthor = this.article?.author?.username === this.authUser?.username;
+    console.log(this.article?.author?.username === this.authUser?.username);
+
   }
 
   handleLike(slug: string): void {
@@ -84,6 +90,15 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
         this.followingInProgress = false;
       });
     }
+  }
+
+  deleteArticle(slug: string): void {
+    this.articlesService.deleteArticle(slug).subscribe(() => {
+      this.router.navigateByUrl('/').catch(err => console.log(err));
+    });
+  }
+  editArticle(slug: string): void {
+    this.router.navigateByUrl(`/edit-article/${slug}`).catch(err => console.log(err));
   }
 
 }

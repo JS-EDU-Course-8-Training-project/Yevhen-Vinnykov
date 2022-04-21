@@ -27,6 +27,7 @@ export class ArticlePageComponent implements OnInit {
   ) { }
 
 
+
   ngOnInit(): void {
     this.getArticle();
     this.getComments();
@@ -34,8 +35,8 @@ export class ArticlePageComponent implements OnInit {
   }
 
   getAuthUser(): void {
-    this.usersService.fetchAuthUser().subscribe(res => {
-      this.authUser = res.user;      
+    this.usersService.fetchAuthUser().subscribe(user => {
+      this.authUser = user; 
     });
   }
 
