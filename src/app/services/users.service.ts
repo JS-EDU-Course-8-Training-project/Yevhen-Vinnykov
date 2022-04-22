@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { IExistingUser } from './../models/IExistingUser';
 import { IUserData } from './../models/IUserData';
 import { catchError, Observable, of, pluck, throwError } from 'rxjs';
@@ -17,9 +18,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class UsersService {
- private baseURL: string = 'https://api.realworld.io/api/users';
- // private baseURL: string = 'http://localhost:3000/api/users';
-
+  private baseURL: string = environment.apiURL;
 
   constructor(private http: HttpClient) { }
 
@@ -39,25 +38,25 @@ export class UsersService {
   }
 
   createUser(user: INewUser): Observable<IExistingUser | any> {
-    return this.http.post<IExistingUser | any>(this.baseURL, JSON.stringify({ user }), httpOptions).pipe(
+    return this.http.post<IExistingUser | any>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
       catchError((err): any => this.handleError(err))
     );
   }
 
   signIn(user: IUserData): Observable<IUserData | any> {
-    return this.http.post<IUserData>(`${this.baseURL}/login`, JSON.stringify({ user }), httpOptions).pipe(
+    return this.http.post<IUserData>(`${this.baseURL}/users/login`, JSON.stringify({ user }), httpOptions).pipe(
       catchError((err): any => this.handleError(err))
     );
   }
 
   fetchAuthUser(): Observable<IExistingUser | any> {
-    return this.http.get<{user: IExistingUser}>(this.baseURL.slice(0, this.baseURL.length - 1), httpOptions).pipe(
+    return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/user`, httpOptions).pipe(
       pluck('user'),
       catchError((err): any => this.handleError(err))
     );
   }
 
   updateUser(settings: IExistingUser): Observable<IExistingUser> {
-    return this.http.put<IExistingUser>(this.baseURL.slice(0, this.baseURL.length - 1), JSON.stringify({ user: {...settings} }), httpOptions);
+    return this.http.put<IExistingUser>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions);
   }
 }

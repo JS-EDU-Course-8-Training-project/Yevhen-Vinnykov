@@ -2,6 +2,7 @@ import { Observable, pluck } from 'rxjs';
 import { IComment } from '../models/IComment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,19 +20,18 @@ interface INewComment {
   providedIn: 'root'
 })
 export class CommentsService {
-  private baseURL: string = 'https://api.realworld.io/api/articles';
-  // private baseURL: string = 'http://localhost:3000/api/articles';
+  private baseURL: string = environment.apiURL;
 
 
   constructor(private http: HttpClient) { }
 
   fetchArticleComments(slug: string): Observable<IComment[]> {
-    return this.http.get<{ comments: IComment[] }>(`${this.baseURL}/${slug}/comments`, httpOptions).pipe(pluck('comments'));
+    return this.http.get<{ comments: IComment[] }>(`${this.baseURL}/articles/${slug}/comments`, httpOptions).pipe(pluck('comments'));
   }
   createComment(slug: string, comment: INewComment): Observable<IComment> {
-    return this.http.post<IComment>(`${this.baseURL}/${slug}/comments`, JSON.stringify({ comment }), httpOptions);
+    return this.http.post<IComment>(`${this.baseURL}/articles/${slug}/comments`, JSON.stringify({ comment }), httpOptions);
   }
   removeComment(slug: string, id: number): Observable<IComment> {
-    return this.http.delete<IComment>(`${this.baseURL}/${slug}/comments/${id}`, httpOptions);
+    return this.http.delete<IComment>(`${this.baseURL}/articles/${slug}/comments/${id}`, httpOptions);
   }
 }

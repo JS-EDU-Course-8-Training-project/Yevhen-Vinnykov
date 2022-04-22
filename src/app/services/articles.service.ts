@@ -4,6 +4,7 @@ import { IArticle, IArticleResponse } from './../models/IArticle';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, pluck } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -17,9 +18,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ArticlesService {
-  private baseURL: string = 'https://api.realworld.io/api/articles';
-  // private baseURL: string = 'http://localhost:3000/api/articles';
-  isAuthorized: boolean = localStorage.getItem('authorized') === 'true';
+  private baseURL: string = `${environment.apiURL}/articles`;
+  private isAuthorized: boolean = localStorage.getItem('authorized') === 'true';
 
   constructor(private http: HttpClient) {
   }

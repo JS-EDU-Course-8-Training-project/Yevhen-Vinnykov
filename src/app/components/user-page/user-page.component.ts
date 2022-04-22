@@ -1,6 +1,6 @@
 import { ProfilesService } from 'src/app/services/profiles.service';
 import { IExistingUser } from 'src/app/models/IExistingUser';
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, AfterViewInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -30,7 +30,9 @@ export class UserPageComponent implements OnInit, DoCheck {
   ) { }
 
   ngOnInit(): void {
-    this.urlUsername = this.router.url.split('/')[2];
+  //  this.urlUsername = this.router.events//.url.split('/')[2];
+      this.urlUsername = this.router.url.split('/')[2];
+
     forkJoin({
       authUser: this.usersService.fetchAuthUser(),
       user: this.profilesService.fetchUser(this.urlUsername)

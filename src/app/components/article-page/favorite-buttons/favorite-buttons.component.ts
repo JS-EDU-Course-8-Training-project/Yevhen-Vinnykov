@@ -76,13 +76,11 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
     if (this.isFollowed) {
       this.profilesService.unfollow(username).subscribe((profile => {
         this.isFollowed = profile.following;
-        console.log('unfollow', profile);
         this.followingInProgress = false;
       }));
     } else {
       this.profilesService.follow(username).subscribe(profile => {
         this.isFollowed = profile.following;
-        console.log('follow', profile);
         this.followingInProgress = false;
       });
     }
@@ -96,5 +94,4 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
   editArticle(slug: string): void {
     this.router.navigateByUrl(`/edit-article/${slug}`).catch(err => console.log(err));
   }
-
 }
