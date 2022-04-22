@@ -43,8 +43,6 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
     this.likesCount = this.article?.favoritesCount;
     this.username = this.article?.author?.username;
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
-    console.log(this.article?.author?.username === this.authUser?.username);
-
   }
 
   handleLike(slug: string): void {
@@ -57,7 +55,6 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
       this.articlesService.removeFromFavorites(slug).subscribe(article => {
         this.isLiked = article.favorited;
         this.likesCount = article.favoritesCount;
-        console.log(article);
         this.favoriteInProgress = false;
 
       })
@@ -66,7 +63,6 @@ export class FavoriteButtonsComponent implements OnInit, OnChanges {
         this.isLiked = article.favorited;
         this.favoriteInProgress = false;
         this.likesCount = article.favoritesCount;
-        console.log(article);
       })
     }
   }

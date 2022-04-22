@@ -1,5 +1,5 @@
 <div>
-    <form [formGroup]="articleForm" (ngSubmit)="createArticle()">
+    <form [formGroup]="articleForm" (ngSubmit)="handleArticleAction()">
         <div class="form-group">
             <input type="text" class="form-control" id="title" name="title" required formControlName="title"
                 placeholder="Article Title">
@@ -13,7 +13,7 @@
             <span *ngIf="!checkIfValid('body')">This field is required</span>
             <input type="text" class="form-control" id="tagList" name="tagList" required formControlName="tagList"
                 placeholder="Tags">
-            <button [disabled]="articleForm.status === 'INVALID'" align="end" type="submit" mat-raised-button color="primary">Publish</button>
+            <button [disabled]="articleForm.status === 'INVALID' || !this.articleForm.touched" align="end" type="submit" mat-raised-button color="primary">Publish</button>
         </div>
     </form>
 </div>

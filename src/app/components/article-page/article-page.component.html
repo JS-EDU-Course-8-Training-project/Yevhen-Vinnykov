@@ -2,19 +2,20 @@
     <div class="banner-container">
         <mat-card-title class="title">{{article?.title}}</mat-card-title>
         <div class="banner-actions">
-            <div class="banner-author">
-                <img src="{{article?.author?.image}}" alt="">
-                <div>
-                    <h3>{{article?.author?.username}}</h3>
-                    <p>{{article?.createdAt | date}}</p>
-                </div>
-            </div>
+                <a routerLink="/user/{{article.author.username}}">
+                    <img src="{{article?.author?.image}}" alt="">
+                    <div>
+                        <h3>{{article?.author?.username}}</h3>
+                        <p>{{article?.createdAt | date}}</p>
+                    </div>
+                </a>
             <app-favorite-buttons [authUser]="authUser" [article]="article" [slug]="slug"></app-favorite-buttons>
         </div>
     </div>
 </app-banner>
 <app-article-body [authUser]="authUser" [slug]="slug" [article]="article"></app-article-body>
-<app-comment-form [image]="authUser?.image || ''" (commentEventEmmiter)="getComments()" [slug]="slug"></app-comment-form>
+<app-comment-form [image]="authUser?.image || ''" (commentEventEmmiter)="getComments()" [slug]="slug">
+</app-comment-form>
 <section class="article-comments">
     <mat-card class="comment" *ngFor="let comment of comments">
         <mat-card-content>

@@ -1,22 +1,28 @@
 <app-banner className="banner user-banner">
     <div>
-        <img [src]="authUser?.image" alt="">
-        <mat-card-title class="title">{{authUser?.username}}</mat-card-title>
-        <mat-card-content class="subtitle">{{authUser?.bio}}</mat-card-content>
+        <img [src]="user?.image" alt="">
+        <mat-card-title class="title">{{user?.username}}</mat-card-title>
+        <mat-card-content class="subtitle">{{user?.bio}}</mat-card-content>
     </div>
     <div class="button-container">
-        <button mat-raised-button color="primary">
+        <button *ngIf="isMyself" mat-raised-button color="primary">
             <a routerLink="/settings">Update Profile Settings</a>
+        </button>
+        <button [disabled]="followingInProgress" (click)="handleFollowUnfollow(user.username)" *ngIf="!isMyself && !isFollowed" mat-raised-button color="primary">
+            Follow {{user?.username}}
+        </button>
+        <button [disabled]="followingInProgress" (click)="handleFollowUnfollow(user.username)" *ngIf="!isMyself && isFollowed" mat-raised-button color="primary">
+            Unfollow {{user?.username}}
         </button>
     </div>
 </app-banner>
 <section>
     <mat-tab-group (focusChange)="this.tabIndex = $event.index" >
         <mat-tab label="My Articles">
-            <app-my-articles [tabIndex]="tabIndex" [username]="authUser?.username || ''"></app-my-articles>
+            <app-my-articles [tabIndex]="tabIndex" [username]="urlUsername"></app-my-articles>
         </mat-tab>
         <mat-tab label="Favorited Articles">
-            <app-favorited-articles [tabIndex]="tabIndex" [username]="authUser?.username || ''"></app-favorited-articles>
+            <app-favorited-articles [tabIndex]="tabIndex" [username]="urlUsername"></app-favorited-articles>
         </mat-tab>
     </mat-tab-group>
 </section>

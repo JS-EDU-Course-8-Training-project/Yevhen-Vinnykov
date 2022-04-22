@@ -1,5 +1,6 @@
 div {
     text-align: center;
+    height: 250px;
     img {
         border-radius: 50%;
         width: 150px;
@@ -9,8 +10,12 @@ div {
 }
 .button-container {
     width: 60%;
+    height: 40px;
     display: flex;
     justify-content: end;
+    button {
+        width: 190px;
+    }
     a{
         text-decoration: none;
         color: inherit;

@@ -1,7 +1,7 @@
 <p *ngIf="isLoading">Loading articles...</p>
-<h4 *ngIf="!globalArticles.length && !isLoading">
+<p *ngIf="!globalArticles.length && !isLoading">
     No articles are here... yet.
-</h4>
+</p>
 <ng-container *ngIf="!isLoading">
     <div *ngFor="let article of globalArticles">
         <app-article-list [article]="article"></app-article-list>

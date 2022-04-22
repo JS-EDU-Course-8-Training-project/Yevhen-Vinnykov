@@ -14,8 +14,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ProfilesService {
-  // baseURL: string = 'https://api.realworld.io/api/profiles';
-  private baseURL: string = 'http://localhost:3000/api/articles';
+  private baseURL: string = 'https://api.realworld.io/api/profiles';
+  // private baseURL: string = 'http://localhost:3000/api/articles';
 
 
   constructor(private http: HttpClient) { }
@@ -24,5 +24,8 @@ export class ProfilesService {
   }
   unfollow(username: string): Observable<IProfile> {
     return this.http.delete<{ profile: IProfile }>(`${this.baseURL}/${username}/follow`, httpOptions).pipe(pluck('profile'));
+  }
+  fetchUser(username: string): Observable<IProfile> {
+    return this.http.get<{profile: IProfile}>(`${this.baseURL}/${username}`, httpOptions).pipe(pluck('profile'));
   }
 }
