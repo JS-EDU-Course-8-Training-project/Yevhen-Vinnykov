@@ -1,4 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, AfterContentChecked, Input } from '@angular/core';
+import { AuthorizationService } from 'src/app/services/authorization.service';
+import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, Input } from '@angular/core';
 import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
@@ -6,26 +8,14 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, AfterContentChecked {
-  isAuthorized: boolean = false;
+export class NavbarComponent implements OnInit {
+  isAuthorized$: BehaviorSubject<boolean> = this.authorizationService.isAuthorized$;
   @Input() authUser!: IExistingUser;
-  constructor(private ref: ChangeDetectorRef) { }
-
-  private checkIfAuth(): void {
-    if (localStorage.getItem('authorized') === 'true') {
-      this.isAuthorized = true;
-      this.ref.markForCheck();
-    } else {
-      this.isAuthorized = false;
-      this.ref.markForCheck();
-    }
-  }
+  constructor(
+    private authorizationService: AuthorizationService
+  ) { }
 
   ngOnInit(): void {
-    this.checkIfAuth();
-  }
-
-  ngAfterContentChecked(): void {
-    this.checkIfAuth();
+    this.authorizationService.checkIfAuthorized();
   }
 }

@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { IExistingUser } from 'src/app/models/IExistingUser';
 import { Router } from '@angular/router';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class SettingsFormComponent implements OnInit, OnChanges {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private router: Router
+    private router: Router,
+    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -42,14 +44,13 @@ export class SettingsFormComponent implements OnInit, OnChanges {
       email: this.settingsForm.getRawValue().email,
       password: this.settingsForm.getRawValue().newPassword,
     };
-    this.usersService.updateUser(settings).subscribe(() => {
-      this.router.navigateByUrl('/'); // TODO: change redirect to User Page
+    this.usersService.updateUser(settings).subscribe(user => {
+      this.router.navigateByUrl(`user/${user.username}`); // TODO: change redirect to User Page
     });
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('authorized');
+    this.authorizationService.removeAuthorization();
     this.router.navigateByUrl('/');
   }
 }

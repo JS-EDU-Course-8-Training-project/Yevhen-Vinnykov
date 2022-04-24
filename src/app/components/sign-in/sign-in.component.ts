@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,7 +17,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private router: Router
+    private router: Router,
+    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -38,17 +40,16 @@ export class SignInComponent implements OnInit {
     };
 
     this.usersService.signIn(user).subscribe((res: any) => {
-      if (res.errors) {
-        Object.keys(res.errors).forEach(key => {
-          this.errors.push(`${key} ${res.errors[key][0]}`)
-        })
-        console.log(Object.keys(res.errors));
-        console.log(this.errors);
-        this.isPending = false;
-        return;
-      }      
-      localStorage.setItem('token', res.user.token);
-      localStorage.setItem('authorized', 'true');
+      // if (res.errors) {
+      //   Object.keys(res.errors).forEach(key => {
+      //     this.errors.push(`${key} ${res.errors[key][0]}`)
+      //   })
+      //   console.log(Object.keys(res.errors));
+      //   console.log(this.errors);
+      //   this.isPending = false;
+      //   return;
+      // }    
+      this.authorizationService.authorize(res.user.token);
       this.router.navigateByUrl('').catch(err => console.log(err));
       this.isPending = false;
     });

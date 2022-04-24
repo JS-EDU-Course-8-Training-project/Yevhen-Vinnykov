@@ -2,6 +2,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router } from '@angular/router';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,7 +16,8 @@ export class SignUpComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private router: Router
+    private router: Router,
+    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -54,8 +56,7 @@ export class SignUpComponent implements OnInit {
         this.signupForm.enable();
         return;
       }      
-      localStorage.setItem('token', res.user.token);
-      localStorage.setItem('authorized', 'true');
+      this.authorizationService.authorize(res.user.token);
       this.router.navigateByUrl('').catch(err => console.log(err));
       this.isPending = false;
     });

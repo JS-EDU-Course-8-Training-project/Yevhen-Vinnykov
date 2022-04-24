@@ -57,6 +57,8 @@ export class UsersService {
   }
 
   updateUser(settings: IExistingUser): Observable<IExistingUser> {
-    return this.http.put<IExistingUser>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions);
+    return this.http.put<{ user: IExistingUser }>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions).pipe(
+      pluck('user')
+    );
   }
 }
