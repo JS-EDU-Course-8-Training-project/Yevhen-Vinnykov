@@ -13,7 +13,7 @@ import { ArticlePageComponent } from './article-page.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
 import { BannerModule } from '../banner/banner.module';
 import { ArticleBodyComponent } from './article-body/article-body.component';
-import { FavoriteButtonsComponent } from './favorite-buttons/favorite-buttons.component';
+import { ArticlePageButtonsComponent } from './article-page-buttons/article-page-buttons.component';
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import { FavoriteButtonsComponent } from './favorite-buttons/favorite-buttons.co
     ArticlePageComponent,
     CommentFormComponent,
     ArticleBodyComponent,
-    FavoriteButtonsComponent,
+    ArticlePageButtonsComponent,
   ],
   imports: [
     CommonModule,
