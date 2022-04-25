@@ -11,7 +11,7 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
 })
 export class SignUpComponent implements OnInit {
   signupForm: any;
-  error: string = '';
+  errors: string[] = [];
   isPending: boolean = false;
   constructor(
     private fb: FormBuilder,
@@ -35,6 +35,7 @@ export class SignUpComponent implements OnInit {
   handleSignup(): void {
     this.signupForm.disable();
     this.isPending = true;
+    this.errors = [];
     const newUser = {
       username: this.signupForm.getRawValue().username,
       email: this.signupForm.getRawValue().email,
@@ -43,22 +44,17 @@ export class SignUpComponent implements OnInit {
 
     this.usersService.createUser(newUser).subscribe((res: any) => {
       if (res.error) {
-        
-        // Object.keys(res.errors).forEach(key => {
-        //   this.errors.push(`${key} ${res.errors[key][0]}`)
-        // })
-        this.error = res.error;
-        // console.log(Object.keys(res.errors));
+        Object.keys(res.error.errors).forEach(key => {
+          this.errors.push(`${key} ${res.error.errors[key][0]}`)
+        })
         this.isPending = false;
-        this.signupForm.markAsUntouched();
         this.signupForm.enable();
+        this.signupForm.markAsUntouched();
         return;
-      }      
+      }
       this.authorizationService.authorize(res.user.token);
       this.router.navigateByUrl('').catch(err => console.log(err));
       this.isPending = false;
     });
   }
-
-
 }

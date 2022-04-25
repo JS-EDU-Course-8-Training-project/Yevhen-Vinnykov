@@ -33,6 +33,8 @@ export class SignInComponent implements OnInit {
   }
 
   handleSignin(): void {
+    this.signinForm.disable();
+    this.errors = [];
     this.isPending = true;
     const user: IUserData = {
       email: this.signinForm.getRawValue().email,
@@ -40,15 +42,15 @@ export class SignInComponent implements OnInit {
     };
 
     this.usersService.signIn(user).subscribe((res: any) => {
-      // if (res.errors) {
-      //   Object.keys(res.errors).forEach(key => {
-      //     this.errors.push(`${key} ${res.errors[key][0]}`)
-      //   })
-      //   console.log(Object.keys(res.errors));
-      //   console.log(this.errors);
-      //   this.isPending = false;
-      //   return;
-      // }    
+      if (res.error) {
+        Object.keys(res.error.errors).forEach(key => {
+          this.errors.push(`${key} ${res.error.errors[key][0]}`)
+        })
+        this.isPending = false;
+        this.signinForm.enable();
+        this.signinForm.markAsUntouched();
+        return;
+      }
       this.authorizationService.authorize(res.user.token);
       this.router.navigateByUrl('').catch(err => console.log(err));
       this.isPending = false;
