@@ -29,25 +29,17 @@ export class ArticleListComponent implements OnInit {
   }
 
   public handleLikeDislike(slug: string): void {
-    if((!this.isAuthorized)) return this.redirectUnauthorized();
+    if ((!this.isAuthorized)) return this.redirectUnauthorized();
     this.isPending = true;
-    if (this.isLiked) return this.dislikeArticle(slug);
-    if (!this.isLiked) return this.likeArticle(slug);
+    if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
+    if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
   }
 
-  private likeArticle(slug: string): void {
-    this.articlesService.addToFavorites(slug).subscribe(article => {
+  private likeHandler(slug: string, method: 'addToFavorites' | 'removeFromFavorites'): void {
+    this.articlesService[method](slug).subscribe(article => {
       this.isLiked = article.favorited;
       this.isPending = false;
       this.likesCount = article.favoritesCount;
-    })
-  }
-
-  private dislikeArticle(slug: string): void {
-    this.articlesService.removeFromFavorites(slug).subscribe(article => {
-      this.isLiked = article.favorited;
-      this.likesCount = article.favoritesCount;
-      this.isPending = false;
     })
   }
 
