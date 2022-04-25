@@ -11,7 +11,7 @@
                 <p class="text-secondary">{{article.createdAt | date}}</p>
             </div>
         </div>
-        <button [disabled]="favoriteInProgress" (click)="handleLike(article.slug)" mat-stroked-button>
+        <button [disabled]="isPending" (click)="handleLikeDislike(article.slug)" mat-stroked-button>
             <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
             {{likesCount}}
         </button>
