@@ -42,7 +42,6 @@ export class SignUpComponent implements OnInit {
     };
 
     this.usersService.createUser(newUser).subscribe((res: any) => {
-      console.log('res', res.error);
       if (res.error) {
         
         // Object.keys(res.errors).forEach(key => {
@@ -50,7 +49,6 @@ export class SignUpComponent implements OnInit {
         // })
         this.error = res.error;
         // console.log(Object.keys(res.errors));
-        console.log(this.error);
         this.isPending = false;
         this.signupForm.markAsUntouched();
         this.signupForm.enable();

@@ -22,7 +22,6 @@ export class SettingsFormComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.authUser);
     this.settingsForm = this.fb.group({
       imageURL: [this.authUser?.image],
       username: [this.authUser?.username],

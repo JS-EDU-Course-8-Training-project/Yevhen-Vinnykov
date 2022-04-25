@@ -25,7 +25,6 @@ export class ArticleListComponent implements OnInit {
       this.articlesService.removeFromFavorites(slug).subscribe(article => {
         this.isLiked = article.favorited;
         this.likesCount = article.favoritesCount;
-        console.log(article);
         this.favoriteInProgress = false;
         
       })
@@ -34,7 +33,6 @@ export class ArticleListComponent implements OnInit {
         this.isLiked = article.favorited;
         this.favoriteInProgress = false;
         this.likesCount = article.favoritesCount;
-        console.log(article);
       })
     }
   }

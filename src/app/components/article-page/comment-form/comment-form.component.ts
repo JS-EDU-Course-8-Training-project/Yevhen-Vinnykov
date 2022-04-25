@@ -31,7 +31,6 @@ export class CommentFormComponent implements OnInit {
     };
     if (this.commentForm.status === 'VALID') {
       this.commentsService.createComment(this.slug, newComment).subscribe(comment => {
-        console.log(comment);
         this.commentEventEmmiter.emit();
         this.commentForm.reset();
       });

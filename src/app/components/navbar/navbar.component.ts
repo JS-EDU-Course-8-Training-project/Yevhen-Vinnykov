@@ -18,7 +18,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorizationService.checkIfAuthorized();
-    //console.log(this.router.url);
     this.router.events.subscribe(() => this.url$.next(this.router.url));
   }
 }

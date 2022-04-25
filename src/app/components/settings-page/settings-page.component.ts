@@ -16,7 +16,6 @@ export class SettingsPageComponent implements OnInit {
   ngOnInit(): void {
     this.usersService.fetchAuthUser().subscribe(user => {
       this.authUser = user;
-      console.log(this.authUser);
     });
   }
 }

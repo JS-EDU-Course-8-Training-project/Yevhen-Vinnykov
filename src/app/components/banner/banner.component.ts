@@ -10,7 +10,6 @@ export class BannerComponent implements OnInit {
   @Input() className!: string;
 
   ngOnInit(): void {    
-    console.log(this.className);
     
   }
 

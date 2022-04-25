@@ -44,7 +44,6 @@ export class ArticlePageComponent implements OnInit {
     this.isLoaded = false;
     this.articlesService.fetchArticle(this.slug)
       .subscribe(article => {
-        console.log(article);
         this.article = article;
         this.isLoaded = true;
       });
@@ -55,7 +54,6 @@ export class ArticlePageComponent implements OnInit {
     this.commentsService.fetchArticleComments(this.slug)
       .subscribe(comments => {
         this.comments = comments;
-        console.log(this.comments);
         this.isLoaded = true;
       });
   }
