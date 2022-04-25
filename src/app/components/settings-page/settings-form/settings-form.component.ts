@@ -1,19 +1,21 @@
 import { UsersService } from 'src/app/services/users.service';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/models/IExistingUser';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/services/authorization.service';
-
 
 @Component({
   selector: 'app-settings-form',
   templateUrl: './settings-form.component.html',
   styleUrls: ['./settings-form.component.scss']
 })
+
 export class SettingsFormComponent implements OnInit, OnChanges {
-  public settingsForm: any;
   @Input() authUser!: IExistingUser;
+  error: string = '';
+  isPending!: boolean;
+  public settingsForm!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
@@ -21,21 +23,31 @@ export class SettingsFormComponent implements OnInit, OnChanges {
     private authorizationService: AuthorizationService
   ) { }
 
-  ngOnInit(): void {
+  private initializeForm(): void {
     this.settingsForm = this.fb.group({
-      imageURL: [this.authUser?.image],
-      username: [this.authUser?.username],
-      bio: [this.authUser?.bio],
-      email: [this.authUser?.email],
-      newPassword: [''],
+      imageURL: [this.authUser?.image || ''],
+      username: [this.authUser?.username || '', [Validators.required]],
+      bio: [this.authUser?.bio || ''],
+      email: [this.authUser?.email || '', [Validators.required, Validators.email]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
     });
+  }
 
+  public checkIfValid(formControl: string): boolean {
+    return !(this.settingsForm.get(formControl)?.touched && this.settingsForm.get(formControl)?.invalid);
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
   }
   ngOnChanges(): void {
-    this.ngOnInit();
+    this.initializeForm();
   }
 
-  updateSettings(): void {
+  public updateSettings(): void {
+    this.isPending = true;
+    this.settingsForm.disable();
+    this.error = '';
     const settings: IExistingUser = {
       image: this.settingsForm.getRawValue().imageURL,
       username: this.settingsForm.getRawValue().username,
@@ -43,8 +55,15 @@ export class SettingsFormComponent implements OnInit, OnChanges {
       email: this.settingsForm.getRawValue().email,
       password: this.settingsForm.getRawValue().newPassword,
     };
-    this.usersService.updateUser(settings).subscribe(user => {
-      this.router.navigateByUrl(`user/${user.username}`); // TODO: change redirect to User Page
+    this.usersService.updateUser(settings).subscribe(res => {
+      if (res.error) {
+        this.error = res.error;
+        this.isPending = false;
+        this.settingsForm.enable();
+        this.settingsForm.markAsUntouched();
+        return;
+      }
+      this.router.navigateByUrl(`user/${res.username}`);
     });
   }
 

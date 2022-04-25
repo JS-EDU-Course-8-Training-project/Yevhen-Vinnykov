@@ -1,7 +1,7 @@
 import { IUserData } from './../../models/IUserData';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 
@@ -11,7 +11,7 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
-  signinForm: any;
+  signinForm!: FormGroup;
   errors: string[] = [];
   isPending: boolean = false;
   constructor(
@@ -29,7 +29,7 @@ export class SignInComponent implements OnInit {
   }
 
   checkIfValid(formControl: string): boolean {
-    return !(this.signinForm.get(formControl).touched && this.signinForm.get(formControl).invalid);
+    return !(this.signinForm.get(formControl)?.touched && this.signinForm.get(formControl)?.invalid);
   }
 
   handleSignin(): void {

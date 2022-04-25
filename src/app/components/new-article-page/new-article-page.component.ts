@@ -1,5 +1,6 @@
+import { INewArticle } from './../../models/INewArticle';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,11 +11,13 @@ import { IArticle } from 'src/app/models/IArticle';
   templateUrl: './new-article-page.component.html',
   styleUrls: ['./new-article-page.component.scss']
 })
+
 export class NewArticlePageComponent implements OnInit {
-  public articleForm: any;
+  public articleForm!: FormGroup;
   public isEditMode: boolean = this.router.url !== '/create-article';
   public articleToEdit!: IArticle | null;
   public slug!: string;
+
   constructor(
     private articlesService: ArticlesService,
     private fb: FormBuilder,
@@ -26,46 +29,50 @@ export class NewArticlePageComponent implements OnInit {
       this.slug = this.router.url.split('/')[2];
       this.articlesService.fetchArticle(this.slug).subscribe(article => {
         this.articleToEdit = article;
-        this.articleForm = this.fb.group({
-          title: [this.articleToEdit?.title, [Validators.required]],
-          description: [this.articleToEdit?.description, [Validators.required]],
-          body: [this.articleToEdit?.body, [Validators.required]],
-          tagList: [this.articleToEdit?.tagList.join(','), [Validators.required]],
-        });
+        this.initializeForm();
+        this.articleForm.markAllAsTouched();
+        return;
       });
-      return;   // needs DRY refactoring
     }
+    this.initializeForm();
+  }
+
+  private initializeForm(): void {
     this.articleForm = this.fb.group({
-      title: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      body: ['', [Validators.required]],
-      tagList: [''],
+      title: [this.articleToEdit?.title || '', [Validators.required]],
+      description: [this.articleToEdit?.description || '', [Validators.required]],
+      body: [this.articleToEdit?.body || '', [Validators.required]],
+      tagList: [this.articleToEdit?.tagList.join(',') || '', [Validators.required]],
     });
   }
 
   checkIfValid(formControl: string): boolean {
-    return !(this.articleForm.get(formControl).touched && this.articleForm.get(formControl).invalid);
+    return !(this.articleForm.get(formControl)?.touched && this.articleForm.get(formControl)?.invalid);
   }
 
   public handleArticleAction(): void {
-    const newArticle = {
-      title: this.articleForm.getRawValue().title,
-      description: this.articleForm.getRawValue().description,
-      body: this.articleForm.getRawValue().body,
-      tagList: this.articleForm.getRawValue().tagList.split(','),
+    const newArticle: INewArticle = {
+      title: this.articleForm.getRawValue().title.trim(),
+      description: this.articleForm.getRawValue().description.trim(),
+      body: this.articleForm.getRawValue().body.trim(),
+      tagList: this.articleForm.getRawValue().tagList.split(',').map((tag: string) => tag.trim()),
     };
-    const isValid = this.articleForm.status === 'VALID';
-    if (isValid && !this.isEditMode) {
-      this.articlesService.createArticle(newArticle).subscribe((article: any) => {
-        this.router.navigateByUrl(`article/${article.article.slug}`);
-      });
-      return;
+    if (this.articleForm.valid && !this.isEditMode) {
+      this.createArticle(newArticle);
+    } else {
+      this.updateArticle(this.slug, newArticle);
     }
-    if (isValid && this.isEditMode) {
-      this.articlesService.updateArticle(this.slug, newArticle).subscribe((article: any) => {
-        this.router.navigateByUrl(`article/${article.article.slug}`);
-      });
-      return;
-    }
+  }
+
+  private createArticle(newArticle: INewArticle): void {
+    this.articlesService.createArticle(newArticle).subscribe((article: any) => {
+      this.router.navigateByUrl(`article/${article.article.slug}`);
+    });
+  }
+
+  private updateArticle(slug: string, newArticle: INewArticle): void {
+    this.articlesService.updateArticle(this.slug, newArticle).subscribe((article: any) => {
+      this.router.navigateByUrl(`article/${article.article.slug}`);
+    });
   }
 }

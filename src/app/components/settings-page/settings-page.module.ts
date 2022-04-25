@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SettingsPageComponent } from './settings-page.component';
 import { SettingsFormComponent } from './settings-form/settings-form.component';
 import {MatButtonModule} from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {MatButtonModule} from '@angular/material/button';
     CommonModule,
     SettingsPageRoutingModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SettingsPageModule { }
