@@ -1,18 +1,40 @@
 <mat-card-actions align="end">
-    <button  (click)="redirectToEditArticle(slug)" *ngIf="isAuthor" class="fave-btn"  mat-raised-button
-        color="primary">
+    <button 
+        (click)="redirectToEditArticle(slug)" 
+        *ngIf="isAuthor" 
+        class="fave-btn"  
+        mat-raised-button
+        color="primary"
+    >
         Edit
     </button>
-    <button (click)="deleteArticle(slug)" *ngIf="isAuthor" class="fave-btn" mat-raised-button
-        color="primary">
+    <button 
+        (click)="deleteArticle(slug)" 
+        *ngIf="isAuthor" 
+        class="fave-btn" 
+        mat-raised-button
+        color="primary"
+    >
        Delete
     </button>
-    <button  *ngIf="!isAuthor" class="fave-btn" [disabled]="followingInProgress" (click)="handleFollowUnfollow(username)" mat-raised-button
-        color="primary">
+    <button 
+        *ngIf="!isAuthor" 
+        class="fave-btn" 
+        [disabled]="followingInProgress" 
+        (click)="handleFollowUnfollow(username)" 
+        mat-raised-button
+        color="primary"
+    >
         {{isFollowed ? 'Unfollow' : 'Follow'}} {{username}}
     </button>
-    <button *ngIf="!isAuthor" class="fave-btn" [disabled]="favoriteInProgress" (click)="handleLikeDislike(slug)" mat-raised-button
-        color="primary">
+    <button 
+        *ngIf="!isAuthor" 
+        class="fave-btn" 
+        [disabled]="favoriteInProgress" 
+        (click)="handleLikeDislike(slug)" 
+        mat-raised-button
+        color="primary"
+    >
         <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
         Favorite Arcticle ({{likesCount}})
     </button>

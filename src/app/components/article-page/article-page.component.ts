@@ -26,8 +26,6 @@ export class ArticlePageComponent implements OnInit {
     private router: Router,
   ) { }
 
-
-
   ngOnInit(): void {
     this.getArticle();
     this.getComments();

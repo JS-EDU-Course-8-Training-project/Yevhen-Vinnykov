@@ -29,7 +29,7 @@ export class ArticleListComponent implements OnInit {
   }
 
   public handleLikeDislike(slug: string): void {
-    if ((!this.isAuthorized)) return this.redirectUnauthorized();
+    if (!this.isAuthorized) return this.redirectUnauthorized();
     this.isPending = true;
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
