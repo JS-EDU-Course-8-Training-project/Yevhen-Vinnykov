@@ -1,5 +1,8 @@
 .tags-container {
-    width: 300px;
+    max-width: 300px;
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    margin: 0 0 0 30px;
     .tags {
         text-align: center;
         display: flex;
@@ -21,9 +24,19 @@
             flex: 1 1 auto;
             min-width: 80px;
             cursor: pointer;
+            &:hover{
+                filter: brightness(0.9);
+            }
             &.selected{
-                filter: brightness(0.8);
+                filter: brightness(0.7);
             }
         }
+    }
+}
+@media (max-width: 768px) {
+    .tags-container{
+        max-width: 100%;
+        padding: 10px;
+        margin: 0;
     }
 }

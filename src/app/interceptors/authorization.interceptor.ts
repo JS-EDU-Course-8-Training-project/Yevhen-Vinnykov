@@ -20,7 +20,6 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     this.authorizationService.isAuthorized$.subscribe(isAuthorized => this.isAuthorized = isAuthorized);
       if(this.isAuthorized){
         const token: string = `Bearer ${localStorage.getItem('token')}`;
-        console.log(token);
         const authorizedRequest = request.clone({
           headers: request.headers.append('Authorization', token)
         });

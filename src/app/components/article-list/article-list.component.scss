@@ -17,6 +17,13 @@
     }
     .info {
         display: flex;
+        a{
+            text-decoration: none;
+            color: inherit;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
     }
     button {
         height: 50px;

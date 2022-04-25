@@ -3,7 +3,7 @@
     <mat-card-content class="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit</mat-card-content>
 </app-banner>
 <div class="container">
-    <section>
+    <section class="section">
         <mat-tab-group (focusChange)="handleChange($event.index)" [selectedIndex]="tabIndex">
             <mat-tab *ngIf="isAuthorized" label="Your Feed">
                 <app-your-feed [tabIndex]="tabIndex"></app-your-feed>
