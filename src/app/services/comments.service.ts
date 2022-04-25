@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 const httpOptions = {
   headers: new HttpHeaders({
     'accept': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json',
   })
 };
@@ -21,8 +20,6 @@ interface INewComment {
 })
 export class CommentsService {
   private baseURL: string = environment.apiURL;
-
-
   constructor(private http: HttpClient) { }
 
   fetchArticleComments(slug: string): Observable<IComment[]> {

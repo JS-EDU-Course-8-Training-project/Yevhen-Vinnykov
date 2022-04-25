@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 const httpOptions = {
   headers: new HttpHeaders({
     'accept': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json',
   })
 };
@@ -19,24 +18,16 @@ const httpOptions = {
 })
 export class ArticlesService {
   private baseURL: string = `${environment.apiURL}/articles`;
-  private isAuthorized: boolean = localStorage.getItem('authorized') === 'true';
-
   constructor(private http: HttpClient) {
   }
   fetchArticles(): Observable<IArticleResponse> {
-    if (this.isAuthorized) {
-      return this.http.get<IArticleResponse>(this.baseURL, httpOptions);
-    }
-    return this.http.get<IArticleResponse>(this.baseURL);
+    return this.http.get<IArticleResponse>(this.baseURL, httpOptions);
   }
   fetchFollowedArticles(): Observable<IArticleResponse> {
     return this.http.get<IArticleResponse>(`${this.baseURL}/feed`, httpOptions);
   }
   fetchArticle(slug: string): Observable<IArticle> {
-    if (this.isAuthorized) {
-      return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`, httpOptions).pipe(pluck('article'));
-    }
-    return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`).pipe(pluck('article'));
+    return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`, httpOptions).pipe(pluck('article'));
   }
   createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
     return this.http.post<ICreatedArticle | HttpErrorResponse>(this.baseURL, JSON.stringify({ article }), httpOptions);
@@ -48,16 +39,10 @@ export class ArticlesService {
     return this.http.put<IArticle>(`${this.baseURL}/${slug}`, JSON.stringify({ article }), httpOptions); // CHECK ONCE THE API IS BACK UP
   }
   fetchTags(): Observable<string[]> {
-    if (this.isAuthorized) {
-      return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags'), httpOptions).pipe(pluck('tags'));
-    }
-    return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags')).pipe(pluck('tags'));
+    return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags'), httpOptions).pipe(pluck('tags'));
   }
   fetchArticlesByTag(tag: string): Observable<IArticleResponse> {
-    if (this.isAuthorized) {
-      return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`, httpOptions);
-    }
-    return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`);
+    return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`, httpOptions);
   }
 
   fetchUserArticles(username: string, limit: number = 20, offset: number = 0): Observable<IArticleResponse> {

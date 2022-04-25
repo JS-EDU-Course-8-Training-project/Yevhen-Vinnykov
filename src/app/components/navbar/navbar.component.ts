@@ -1,7 +1,6 @@
 import { AuthorizationService } from 'src/app/services/authorization.service';
-import { BehaviorSubject } from 'rxjs';
-import { Component, OnInit, Input } from '@angular/core';
-import { IExistingUser } from 'src/app/models/IExistingUser';
+import { BehaviorSubject, pipe, take } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -10,9 +9,8 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
 })
 export class NavbarComponent implements OnInit {
   isAuthorized$: BehaviorSubject<boolean> = this.authorizationService.isAuthorized$;
-  @Input() authUser!: IExistingUser;
   constructor(
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
   ) { }
 
   ngOnInit(): void {

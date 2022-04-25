@@ -1,7 +1,7 @@
 import { SignUpModule } from './components/sign-up/sign-up.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +15,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BannerModule } from './components/banner/banner.module';
 import { HomeModule } from './components/home/home.module';
 import { ArticleListModule } from './components/article-list/article-list.module';
+import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
+import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 
 
 
@@ -24,6 +26,7 @@ import { ArticleListModule } from './components/article-list/article-list.module
     HeaderComponent,
     NavbarComponent,
     ButtonComponent,
+    NavbarUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,9 @@ import { ArticleListModule } from './components/article-list/article-list.module
     HomeModule,
     ArticleListModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

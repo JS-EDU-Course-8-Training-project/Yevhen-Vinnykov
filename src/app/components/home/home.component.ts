@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthorizationService } from 'src/app/services/authorization.service';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +11,12 @@ export class HomeComponent implements OnInit {
   tabIndex: number = 0;
   isAuthorized: boolean = false;
   selectedTag!: string | null;
-  constructor() {}
+  constructor(
+    private authorizationService: AuthorizationService
+  ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('authorized') === 'true') {
-      this.isAuthorized = true;
-    }
+    this.authorizationService.isAuthorized$.subscribe(isAuthorized => this.isAuthorized = isAuthorized);
   }
 
   handleSelectTag(tag: any) {
