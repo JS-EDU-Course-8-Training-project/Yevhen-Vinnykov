@@ -10,6 +10,7 @@ import { ArticlesService } from 'src/app/services/articles.service';
 })
 export class GlobalFeedComponent implements OnChanges, OnDestroy {
   @Input() tabIndex!: number;
+  @Input() isAuthorized!: boolean;
 
   public globalArticles: IArticle[] = [];
   public isLoading: boolean = false;
@@ -20,7 +21,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy {
   ) { }
 
   ngOnChanges(): void {
-    if (this.tabIndex === 1) {
+    if (this.tabIndex === 1 || !this.isAuthorized) {
       this.getArticles();
     }
   }

@@ -9,7 +9,7 @@
                 <app-your-feed [tabIndex]="tabIndex"></app-your-feed>
             </mat-tab>
             <mat-tab label="Global Feed">
-                <app-global-feed [tabIndex]="tabIndex"></app-global-feed>
+                <app-global-feed [isAuthorized]="isAuthorized" [tabIndex]="tabIndex"></app-global-feed>
             </mat-tab>
             <mat-tab *ngIf="selectedTag" label="#{{selectedTag}}">
                 <app-tagged-articles [tabIndex]="tabIndex" [selectedTag]="selectedTag"></app-tagged-articles>
