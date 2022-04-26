@@ -1,5 +1,6 @@
+import { Subscription } from 'rxjs';
 import { IArticle } from 'src/app/models/IArticle';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/services/articles.service';
 
 @Component({
@@ -7,26 +8,33 @@ import { ArticlesService } from 'src/app/services/articles.service';
   templateUrl: './tagged-articles.component.html',
   styleUrls: ['./tagged-articles.component.scss']
 })
-export class TaggedArticlesComponent implements OnInit, OnChanges {
+export class TaggedArticlesComponent implements OnChanges, OnDestroy {
   @Input() isAuthorized: boolean = false;
   @Input() selectedTag!: string | null;
-  articlesSelectedByTag: IArticle[] = [];
-  isLoading: boolean = false;
+  @Input() tabIndex!: number;
 
-  constructor(private articlesService: ArticlesService) { }
+  public articlesSelectedByTag: IArticle[] = [];
+  public isLoading: boolean = false;
+  private articlesSubscription!: Subscription;
+
+  constructor(
+    private articlesService: ArticlesService
+  ) { }
 
   ngOnChanges() {
-    this.getFollowedArticles();
+    if (this.tabIndex === 2) {
+      this.getFollowedArticles();
+    }
   }
 
-  ngOnInit(): void {
-    this.getFollowedArticles();
+  ngOnDestroy(): void {
+    this.articlesSubscription.unsubscribe();
   }
 
-  getFollowedArticles() {
+  private getFollowedArticles() {
     if (this.selectedTag) {
       this.isLoading = true;
-      this.articlesService
+      this.articlesSubscription = this.articlesService
         .fetchArticlesByTag(this.selectedTag)
         .subscribe(res => {
           this.articlesSelectedByTag = res.articles;

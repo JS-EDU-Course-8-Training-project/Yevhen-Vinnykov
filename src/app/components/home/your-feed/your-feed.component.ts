@@ -1,5 +1,5 @@
 import { IArticle } from 'src/app/models/IArticle';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ArticlesService } from 'src/app/services/articles.service';
 
 @Component({
@@ -7,19 +7,22 @@ import { ArticlesService } from 'src/app/services/articles.service';
   templateUrl: './your-feed.component.html',
   styleUrls: ['./your-feed.component.scss']
 })
-export class YourFeedComponent implements OnInit {
+export class YourFeedComponent implements OnChanges {
   @Input() tabIndex!: number;
-  followedArticles: IArticle[] = [];
-  isLoading: boolean = false;
-  constructor(private articlesService: ArticlesService) { }
+  public followedArticles: IArticle[] = [];
+  public isLoading: boolean = false;
 
-  ngOnInit(): void {
-    this.getFollowedArticles();
-  }
+  constructor(
+    private articlesService: ArticlesService
+  ) { }
+
   ngOnChanges(): void {
-    this.getFollowedArticles();
+    if (this.tabIndex === 0) {
+      this.getFollowedArticles();
+    }
   }
-  getFollowedArticles() {
+
+  private getFollowedArticles() {
     this.isLoading = true;
     this.articlesService.fetchFollowedArticles().subscribe(res => {
       this.followedArticles = res.articles;

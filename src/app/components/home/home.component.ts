@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 
 @Component({
@@ -6,25 +7,32 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-  isLoading: boolean = false;
-  tabIndex: number = 0;
-  isAuthorized: boolean = false;
-  selectedTag!: string | null;
+export class HomeComponent implements OnInit, OnDestroy {
+  public isLoading: boolean = false;
+  public tabIndex: number = 0;
+  public isAuthorized: boolean = false;
+  public selectedTag!: string | null;
+  private authSubscription!: Subscription;
+
   constructor(
     private authorizationService: AuthorizationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.authorizationService.isAuthorized$.subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+    this.authSubscription = this.authorizationService.isAuthorized$
+      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription.unsubscribe();
   }
 
   handleSelectTag(tag: any) {
-    this.selectedTag = tag;  
-    this.tabIndex = 2;  
+    this.selectedTag = tag;
+    this.tabIndex = 2;
   }
 
-  handleChange(index: number): void {
+  handleTabChange(index: number): void {
     this.tabIndex = index;
     if (index !== 2) {
       this.selectedTag = null;
