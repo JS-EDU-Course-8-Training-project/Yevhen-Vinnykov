@@ -1,9 +1,14 @@
+import { AuthorizationGuard } from './../../guards/authorization.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SettingsPageComponent } from './settings-page.component';
 
 const routes: Routes = [
-  { path: '', component: SettingsPageComponent }
+  {
+    path: '',
+    component: SettingsPageComponent,
+    canActivate: [AuthorizationGuard]
+  }
 ];
 
 @NgModule({
