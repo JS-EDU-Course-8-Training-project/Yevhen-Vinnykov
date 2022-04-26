@@ -1,18 +1,24 @@
+import { Subject, takeUntil } from 'rxjs';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { IArticle } from 'src/app/models/IArticle';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-favorited-articles',
   templateUrl: './favorited-articles.component.html',
   styleUrls: ['./favorited-articles.component.scss']
 })
-export class FavoritedArticlesComponent implements OnChanges {
+export class FavoritedArticlesComponent implements OnChanges, OnDestroy {
   @Input() username!: string;
   @Input() tabIndex!: number;
+
   public favoritedArticles: IArticle[] = [];
   public isLoading: boolean = false;
-  constructor(private articlesService: ArticlesService) { }
+  private notifier: Subject<void> = new Subject<void>();
+
+  constructor(
+    private articlesService: ArticlesService
+  ) { }
 
   ngOnChanges(): void {
     if (this.tabIndex === 1) {
@@ -20,12 +26,19 @@ export class FavoritedArticlesComponent implements OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
+  }
+
   private getArticles(): void {
     this.isLoading = true;
-    this.articlesService.fetchFavoritedArticles(this.username).subscribe(res => {
-      this.favoritedArticles = res.articles;
-      this.isLoading = false;
-    });
+    this.articlesService.fetchFavoritedArticles(this.username)
+      .pipe(takeUntil(this.notifier))
+      .subscribe(res => {
+        this.favoritedArticles = res.articles;
+        this.isLoading = false;
+      });
   }
 }
 

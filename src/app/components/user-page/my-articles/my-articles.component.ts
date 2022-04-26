@@ -1,17 +1,21 @@
+import { Subject, takeUntil } from 'rxjs';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { IArticle } from 'src/app/models/IArticle';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-my-articles',
   templateUrl: './my-articles.component.html',
   styleUrls: ['./my-articles.component.scss']
 })
-export class MyArticlesComponent implements OnChanges {
+export class MyArticlesComponent implements OnChanges, OnDestroy {
   @Input() username!: string;
   @Input() tabIndex!: number;
+
   public myArticles: IArticle[] = [];
   public isLoading: boolean = false;
+  private notifier: Subject<void> = new Subject<void>();
+
   constructor(
     private articlesService: ArticlesService,
   ) { }
@@ -22,11 +26,18 @@ export class MyArticlesComponent implements OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
+  }
+
   private getArticles(): void {
     this.isLoading = true;
-    this.articlesService.fetchUserArticles(this.username).subscribe(res => {
-      this.myArticles = res.articles;
-      this.isLoading = false;
-    });
+    this.articlesService.fetchUserArticles(this.username)
+      .pipe(takeUntil(this.notifier))
+      .subscribe(res => {
+        this.myArticles = res.articles;
+        this.isLoading = false;
+      });
   }
 }

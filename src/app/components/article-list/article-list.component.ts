@@ -1,5 +1,6 @@
+import { Subject, takeUntil } from 'rxjs';
 import { IArticle } from '../../models/IArticle';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/services/authorization.service';
@@ -9,12 +10,13 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.scss']
 })
-export class ArticleListComponent implements OnInit {
+export class ArticleListComponent implements OnInit, OnDestroy {
   @Input() article!: IArticle;
   public isLiked!: boolean;
   public isPending: boolean = false;
   public likesCount!: number;
   private isAuthorized!: boolean;
+  private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private articlesService: ArticlesService,
@@ -25,7 +27,13 @@ export class ArticleListComponent implements OnInit {
   ngOnInit(): void {
     this.likesCount = this.article.favoritesCount;
     this.isLiked = this.article.favorited;
-    this.authorizationService.isAuthorized$.subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+    this.authorizationService.isAuthorized$.pipe(takeUntil(this.notifier))
+      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+  }
+
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   public handleLikeDislike(slug: string): void {
@@ -36,11 +44,12 @@ export class ArticleListComponent implements OnInit {
   }
 
   private likeHandler(slug: string, method: 'addToFavorites' | 'removeFromFavorites'): void {
-    this.articlesService[method](slug).subscribe(article => {
-      this.isLiked = article.favorited;
-      this.isPending = false;
-      this.likesCount = article.favoritesCount;
-    })
+    this.articlesService[method](slug).pipe(takeUntil(this.notifier))
+      .subscribe(article => {
+        this.isLiked = article.favorited;
+        this.isPending = false;
+        this.likesCount = article.favoritesCount;
+      })
   }
 
   private redirectUnauthorized(): void {

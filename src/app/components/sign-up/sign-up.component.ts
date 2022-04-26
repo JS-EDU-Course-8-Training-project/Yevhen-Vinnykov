@@ -1,4 +1,5 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router } from '@angular/router';
@@ -10,9 +11,11 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-  signupForm: any;
-  errors: string[] = [];
-  isPending: boolean = false;
+  public signupForm!: FormGroup;
+  public errors: string[] = [];
+  public isPending: boolean = false;
+  private notifier: Subject<void> = new Subject<void>();
+
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
@@ -28,11 +31,16 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  checkIfValid(formControl: string): boolean {
-    return !(this.signupForm.get(formControl).touched && this.signupForm.get(formControl).invalid);
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 
-  handleSignup(): void {
+  public checkIfValid(formControl: string): boolean {
+    return !(this.signupForm.get(formControl)?.touched && this.signupForm.get(formControl)?.invalid);
+  }
+
+  public handleSignup(): void {
     this.signupForm.disable();
     this.isPending = true;
     this.errors = [];
@@ -41,8 +49,9 @@ export class SignUpComponent implements OnInit {
       email: this.signupForm.getRawValue().email,
       password: this.signupForm.getRawValue().password
     };
-
-    this.usersService.createUser(newUser).subscribe((res: any) => {
+    this.usersService.createUser(newUser)
+    .pipe(takeUntil(this.notifier))
+    .subscribe((res: any) => {
       if (res.error) {
         Object.keys(res.error.errors).forEach(key => {
           this.errors.push(`${key} ${res.error.errors[key][0]}`)

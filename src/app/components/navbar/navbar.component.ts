@@ -1,7 +1,7 @@
 import { AuthorizationService } from 'src/app/services/authorization.service';
-import { BehaviorSubject, pipe, take } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil, filter } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,8 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  isAuthorized$: BehaviorSubject<boolean> = this.authorizationService.isAuthorized$;
-  url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
+  public isAuthorized$: BehaviorSubject<boolean> = this.authorizationService.isAuthorized$;
+  public url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
+  private notifier: Subject<void> = new Subject<void>();
+
   constructor(
     private authorizationService: AuthorizationService,
     private router: Router
@@ -18,6 +20,15 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorizationService.checkIfAuthorized();
-    this.router.events.subscribe(() => this.url$.next(this.router.url));
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.notifier))
+      .subscribe(() => this.url$.next(this.router.url));
+  }
+
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 }

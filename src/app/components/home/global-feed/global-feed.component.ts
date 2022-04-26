@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { Subscription, Subject, takeUntil } from 'rxjs';
 import { IArticle } from 'src/app/models/IArticle';
 import { Component, OnChanges, Input, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/services/articles.service';
@@ -14,7 +14,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy {
 
   public globalArticles: IArticle[] = [];
   public isLoading: boolean = false;
-  private articlesSubscription!: Subscription;
+  private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private articlesService: ArticlesService
@@ -27,14 +27,17 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.articlesSubscription.unsubscribe();
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   private getArticles(): void {
     this.isLoading = true;
-    this.articlesSubscription = this.articlesService.fetchArticles().subscribe(res => {
-      this.globalArticles = res.articles;
-      this.isLoading = false;
-    });
+    this.articlesService.fetchArticles()
+      .pipe(takeUntil(this.notifier))
+      .subscribe(res => {
+        this.globalArticles = res.articles;
+        this.isLoading = false;
+      });
   }
 }

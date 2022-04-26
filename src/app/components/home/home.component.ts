@@ -27,12 +27,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authSubscription.unsubscribe();
   }
 
-  handleSelectTag(tag: any) {
+  public handleSelectTag(tag: any) {
     this.selectedTag = tag;
     this.tabIndex = 2;
   }
 
-  handleTabChange(index: number): void {
+  public handleTabChange(index: number): void {
     this.tabIndex = index;
     if (index !== 2) {
       this.selectedTag = null;

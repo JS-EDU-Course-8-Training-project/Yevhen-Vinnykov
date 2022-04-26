@@ -1,6 +1,7 @@
+import { Subject, takeUntil } from 'rxjs';
 import { CommentsService } from './../../services/comments.service';
 import { ArticlesService } from 'src/app/services/articles.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/models/IArticle';
 import { Router } from '@angular/router';
 import { IComment } from 'src/app/models/IComment';
@@ -12,12 +13,13 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
   templateUrl: './article-page.component.html',
   styleUrls: ['./article-page.component.scss'],
 })
-export class ArticlePageComponent implements OnInit {
-  slug: string = this.router.url.split('/')[2];
-  article!: IArticle;
-  comments!: IComment[];
-  authUser!: IExistingUser;
-  isLoaded: boolean = false;
+export class ArticlePageComponent implements OnInit, OnDestroy {
+  public slug: string = this.router.url.split('/')[2];
+  public article!: IArticle;
+  public comments!: IComment[];
+  public authUser!: IExistingUser;
+  public isLoaded: boolean = false;
+  private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private articlesService: ArticlesService,
@@ -32,33 +34,42 @@ export class ArticlePageComponent implements OnInit {
     this.getAuthUser();
   }
 
-  getAuthUser(): void {
-    this.usersService.fetchAuthUser().subscribe(user => {
-      this.authUser = user; 
-    });
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 
-  getArticle(): void {
+  private getAuthUser(): void {
+    this.usersService.fetchAuthUser()
+      .pipe(takeUntil(this.notifier))
+      .subscribe(user => this.authUser = user);
+  }
+
+  private getArticle(): void {
     this.isLoaded = false;
     this.articlesService.fetchArticle(this.slug)
+      .pipe(takeUntil(this.notifier))
       .subscribe(article => {
         this.article = article;
         this.isLoaded = true;
       });
   }
 
-  getComments(): void {
+  public getComments(): void {
     this.isLoaded = false;
     this.commentsService.fetchArticleComments(this.slug)
+      .pipe(takeUntil(this.notifier))
       .subscribe(comments => {
         this.comments = comments;
         this.isLoaded = true;
       });
   }
 
-  deleteComment(id: number): void {
-    this.commentsService.removeComment(this.slug, id).subscribe(() => {
-      this.getComments();
-    });
+  public deleteComment(id: number): void {
+    this.commentsService.removeComment(this.slug, id)
+      .pipe(takeUntil(this.notifier))
+      .subscribe(() => {
+        this.getComments();
+      });
   }
 }

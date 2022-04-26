@@ -17,7 +17,8 @@ export class SettingsPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.usersService.authUser$.pipe(takeUntil(this.notifier))
+    this.usersService.authUser$
+      .pipe(takeUntil(this.notifier))
       .subscribe(authUser => this.authUser = authUser);
   }
 

@@ -1,5 +1,6 @@
+import { Subject, takeUntil } from 'rxjs';
 import { INewArticle } from './../../models/INewArticle';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Validators } from '@angular/forms';
@@ -12,11 +13,13 @@ import { IArticle } from 'src/app/models/IArticle';
   styleUrls: ['./new-article-page.component.scss']
 })
 
-export class NewArticlePageComponent implements OnInit {
+export class NewArticlePageComponent implements OnInit, OnDestroy {
   public articleForm!: FormGroup;
   public isEditMode: boolean = this.router.url !== '/create-article';
   public articleToEdit!: IArticle | null;
   public slug!: string;
+  private notifier: Subject<void> = new Subject<void>();
+
 
   constructor(
     private articlesService: ArticlesService,
@@ -27,14 +30,21 @@ export class NewArticlePageComponent implements OnInit {
   ngOnInit(): void {
     if (this.isEditMode) {
       this.slug = this.router.url.split('/')[2];
-      this.articlesService.fetchArticle(this.slug).subscribe(article => {
-        this.articleToEdit = article;
-        this.initializeForm();
-        this.articleForm.markAllAsTouched();
-        return;
-      });
+      this.articlesService.fetchArticle(this.slug)
+        .pipe(takeUntil(this.notifier))
+        .subscribe(article => {
+          this.articleToEdit = article;
+          this.initializeForm();
+          this.articleForm.markAllAsTouched();
+          return;
+        });
     }
     this.initializeForm();
+  }
+
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   private initializeForm(): void {
@@ -65,14 +75,18 @@ export class NewArticlePageComponent implements OnInit {
   }
 
   private createArticle(newArticle: INewArticle): void {
-    this.articlesService.createArticle(newArticle).subscribe((article: any) => {
-      this.router.navigateByUrl(`article/${article.article.slug}`);
-    });
+    this.articlesService.createArticle(newArticle)
+      .pipe(takeUntil(this.notifier))
+      .subscribe((article: any) => {
+        this.router.navigateByUrl(`article/${article.article.slug}`);
+      });
   }
 
   private updateArticle(slug: string, newArticle: INewArticle): void {
-    this.articlesService.updateArticle(this.slug, newArticle).subscribe((article: any) => {
-      this.router.navigateByUrl(`article/${article.article.slug}`);
-    });
+    this.articlesService.updateArticle(this.slug, newArticle)
+      .pipe(takeUntil(this.notifier))
+      .subscribe((article: any) => {
+        this.router.navigateByUrl(`article/${article.article.slug}`);
+      });
   }
 }

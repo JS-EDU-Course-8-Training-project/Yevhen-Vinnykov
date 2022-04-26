@@ -60,7 +60,8 @@ export class SettingsFormComponent implements OnChanges, OnDestroy {
       email: this.settingsForm.getRawValue().email,
       password: this.settingsForm.getRawValue().newPassword,
     };
-    this.usersService.updateUser(settings).pipe(takeUntil(this.notifier))
+    this.usersService.updateUser(settings)
+      .pipe(takeUntil(this.notifier))
       .subscribe(res => {
         if (res.error) {
           this.error = res.error;

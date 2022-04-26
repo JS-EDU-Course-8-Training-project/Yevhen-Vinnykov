@@ -2,7 +2,7 @@
     <div class="banner-container">
         <mat-card-title class="title">{{article?.title}}</mat-card-title>
         <div class="banner-actions">
-                <a routerLink="/user/{{article.author.username}}">
+                <a routerLink="/user/{{article?.author?.username}}">
                     <img src="{{article?.author?.image}}" alt="">
                     <div>
                         <h3>{{article?.author?.username}}</h3>
@@ -29,7 +29,7 @@
                     <p>{{comment?.createdAt | date}}</p>
                 </div>
             </div>
-            <mat-icon (click)="deleteComment(comment.id)" *ngIf="comment.author.username === authUser?.username"
+            <mat-icon (click)="deleteComment(comment.id)" *ngIf="comment?.author?.username === authUser?.username"
                 class="delete-icon">delete</mat-icon>
         </mat-card-footer>
     </mat-card>

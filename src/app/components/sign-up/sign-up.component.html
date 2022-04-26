@@ -11,8 +11,8 @@
             <span class="form-error" *ngIf="!checkIfValid('username')">This field is required</span>
             <input type="text" class="form-control" id="email" name="email" required formControlName="email"
                 placeholder="Email">
-            <span class="form-error" *ngIf="!checkIfValid('email') && !signupForm.get('email').value">This field is required</span>
-            <span class="form-error" *ngIf="signupForm.get('email').errors?.email">Enter a valid email</span>
+            <span class="form-error" *ngIf="!checkIfValid('email') && !signupForm.get('email')?.value">This field is required</span>
+            <span class="form-error" *ngIf="signupForm.get('email')?.errors?.['email']">Enter a valid email</span>
             <input type="password" class="form-control" id="password" name="password" required
                 formControlName="password" placeholder="Password">
             <span class="form-error" *ngIf="!checkIfValid('password')">Password must be at least 6 characters long</span>
