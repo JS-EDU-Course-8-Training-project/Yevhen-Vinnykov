@@ -1,5 +1,6 @@
+import { Subject, takeUntil } from 'rxjs';
 import { UsersService } from 'src/app/services/users.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
@@ -7,15 +8,22 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss']
 })
-export class SettingsPageComponent implements OnInit {
+export class SettingsPageComponent implements OnInit, OnDestroy {
   public authUser!: IExistingUser;
+  private notifier: Subject<void> = new Subject<void>();
+
   constructor(
     private usersService: UsersService
   ) { }
 
   ngOnInit(): void {
-    this.usersService.fetchAuthUser().subscribe(user => {
-      this.authUser = user;
-    });
+    this.usersService.authUser$.pipe(takeUntil(this.notifier))
+      .subscribe(authUser => this.authUser = authUser);
   }
+
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
+  }
+
 }

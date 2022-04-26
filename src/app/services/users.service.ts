@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { IExistingUser } from './../models/IExistingUser';
 import { IUserData } from './../models/IUserData';
-import { catchError, Observable, of, pluck, throwError, map } from 'rxjs';
+import { catchError, Observable, of, pluck, throwError, map, BehaviorSubject } from 'rxjs';
 import { INewUser } from '../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -18,7 +18,12 @@ const httpOptions = {
 })
 export class UsersService {
   private baseURL: string = environment.apiURL;
-  public authUser!: IExistingUser;
+  public authUser$: BehaviorSubject<IExistingUser> = new BehaviorSubject<IExistingUser>({
+    email: '',
+    username: '',
+    bio: '',
+    image: '',
+  });
 
   constructor(private http: HttpClient) { }
 
@@ -53,7 +58,7 @@ export class UsersService {
     return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/user`, httpOptions).pipe(
       pluck('user'),
       map(user => {
-        this.authUser = user;
+        this.authUser$.next(user);
         return user;
       }),
       catchError((err): any => this.handleError(err))

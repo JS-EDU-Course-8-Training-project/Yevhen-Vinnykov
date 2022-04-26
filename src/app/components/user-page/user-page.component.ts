@@ -23,6 +23,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public isFollowed!: boolean;
   private isAuthorized!: boolean;
   private userSubscription!: Subscription;
+  private authUserSubscription!: Subscription;
   private authSubscription!: Subscription;
 
   constructor(
@@ -44,14 +45,15 @@ export class UserPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
     this.authSubscription.unsubscribe();
+    this.authUserSubscription.unsubscribe();
   }
 
   private setUserData(): void {
     this.urlUsername = this.router.url.split('/')[2];
-    this.isMyself = this.usersService.authUser?.username === this.urlUsername;
+    this.isMyself = this.usersService.authUser$.getValue().username === this.urlUsername;
     this.tabIndex = 0;
-    if (this.urlUsername === this.usersService.authUser?.username) {
-      this.user = this.usersService.authUser;
+    if (this.urlUsername === this.usersService.authUser$.getValue().username) {
+      this.authUserSubscription = this.usersService.authUser$.subscribe(authUser => this.user = authUser);
     } else {
       this.profilesService.fetchUser(this.urlUsername).subscribe(user => this.user = user);
     }
