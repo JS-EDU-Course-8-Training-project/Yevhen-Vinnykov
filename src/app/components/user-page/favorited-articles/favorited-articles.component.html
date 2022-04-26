@@ -1,7 +1,7 @@
 <p *ngIf="isLoading">Loading articles...</p>
-<h4 *ngIf="!favoritedArticles.length && !isLoading">
+<p *ngIf="!favoritedArticles.length && !isLoading">
     No articles are here... yet.
-</h4>
+</p>
 <ng-container *ngIf="!isLoading">
     <div *ngFor="let article of favoritedArticles">
         <app-article-list [article]="article"></app-article-list>

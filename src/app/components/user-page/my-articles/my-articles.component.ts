@@ -7,19 +7,22 @@ import { Component, Input, OnChanges } from '@angular/core';
   templateUrl: './my-articles.component.html',
   styleUrls: ['./my-articles.component.scss']
 })
-export class MyArticlesComponent implements OnChanges{
+export class MyArticlesComponent implements OnChanges {
   @Input() username!: string;
-  myArticles: IArticle[] = [];
-  isLoading: boolean = false;
+  @Input() tabIndex!: number;
+  public myArticles: IArticle[] = [];
+  public isLoading: boolean = false;
   constructor(
     private articlesService: ArticlesService,
   ) { }
 
   ngOnChanges(): void {
-    this.getArticles();
+    if (this.tabIndex === 0) {
+      this.getArticles();
+    }
   }
 
-  getArticles(): void {
+  private getArticles(): void {
     this.isLoading = true;
     this.articlesService.fetchUserArticles(this.username).subscribe(res => {
       this.myArticles = res.articles;

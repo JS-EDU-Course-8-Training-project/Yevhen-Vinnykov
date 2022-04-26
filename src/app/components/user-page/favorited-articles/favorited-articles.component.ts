@@ -10,15 +10,17 @@ import { Component, Input, OnChanges } from '@angular/core';
 export class FavoritedArticlesComponent implements OnChanges {
   @Input() username!: string;
   @Input() tabIndex!: number;
-  favoritedArticles: IArticle[] = [];
-  isLoading: boolean = false;
+  public favoritedArticles: IArticle[] = [];
+  public isLoading: boolean = false;
   constructor(private articlesService: ArticlesService) { }
 
   ngOnChanges(): void {
-    this.getArticles();
+    if (this.tabIndex === 1) {
+      this.getArticles();
+    }
   }
 
-  getArticles(): void {
+  private getArticles(): void {
     this.isLoading = true;
     this.articlesService.fetchFavoritedArticles(this.username).subscribe(res => {
       this.favoritedArticles = res.articles;
