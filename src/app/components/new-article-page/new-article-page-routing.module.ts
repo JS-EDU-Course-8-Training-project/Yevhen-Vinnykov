@@ -1,3 +1,4 @@
+import { ConfirmationGuard } from './../../guards/confirmation.guard';
 import { AuthorizationGuard } from './../../guards/authorization.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -7,7 +8,8 @@ const routes: Routes = [
   {
     path: '',
     component: NewArticlePageComponent,
-    canActivate: [AuthorizationGuard]
+    canActivate: [AuthorizationGuard],
+    canDeactivate: [ConfirmationGuard]
   }
 ];
 

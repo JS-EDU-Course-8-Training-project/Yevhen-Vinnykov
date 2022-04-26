@@ -4,7 +4,7 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { filter, Subscription, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 
 
@@ -22,9 +22,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
   public followingInProgress!: boolean;
   public isFollowed!: boolean;
   private isAuthorized!: boolean;
-  private userSubscription!: Subscription;
-  private authUserSubscription!: Subscription;
-  private authSubscription!: Subscription;
+  private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private usersService: UsersService,
@@ -35,28 +33,32 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setUserData();
-    this.authSubscription = this.authorizationService.isAuthorized$
+    this.authorizationService.isAuthorized$
+      .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized => this.isAuthorized = isAuthorized));
-    this.userSubscription = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.notifier))
       .subscribe(() => this.setUserData());
   }
 
   ngOnDestroy(): void {
-    this.userSubscription.unsubscribe();
-    this.authSubscription.unsubscribe();
-    this.authUserSubscription.unsubscribe();
+    this.notifier.next();
+    this.notifier.complete();
   }
 
   private setUserData(): void {
     this.urlUsername = this.router.url.split('/')[2];
     this.isMyself = this.usersService.authUser$.getValue().username === this.urlUsername;
     this.tabIndex = 0;
-    if (this.urlUsername === this.usersService.authUser$.getValue().username) {
-      this.authUserSubscription = this.usersService.authUser$.subscribe(authUser => this.user = authUser);
-    } else {
-      this.profilesService.fetchUser(this.urlUsername).subscribe(user => this.user = user);
-    }
+    // if (this.isMyself) {
+    //   this.authUserSubscription = this.usersService.authUser$.subscribe(authUser => this.user = authUser);
+    // } else {
+    this.profilesService.fetchUser(this.urlUsername).subscribe(user => this.user = user);
+    // }
+    // HAVE TO CHANGE THE LOGIC OF STORING THE LOGGED IN USER'S DATA
+    // BEACAUSE THIS WAY IT'S NOT SYNCHRONIZED
   }
 
   public handleFollowUnfollow(username: string): void {

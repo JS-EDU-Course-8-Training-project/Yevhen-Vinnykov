@@ -1,4 +1,4 @@
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil, BehaviorSubject } from 'rxjs';
 import { UsersService } from 'src/app/services/users.service';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,8 +12,10 @@ import { AuthorizationService } from 'src/app/services/authorization.service';
   styleUrls: ['./settings-form.component.scss']
 })
 
-export class SettingsFormComponent implements OnChanges, OnDestroy {
+export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() authUser!: IExistingUser;
+  @Input() isModified$!: BehaviorSubject<boolean>;
+
   public error: string = '';
   public isPending!: boolean;
   public settingsForm!: FormGroup;
@@ -25,6 +27,12 @@ export class SettingsFormComponent implements OnChanges, OnDestroy {
     private router: Router,
     private authorizationService: AuthorizationService
   ) { }
+
+  ngOnInit(): void {
+    this.settingsForm.valueChanges
+      .pipe(take(1))
+      .subscribe(() => this.isModified$.next(true));
+  }
 
   ngOnChanges(): void {
     this.initializeForm();
@@ -68,8 +76,11 @@ export class SettingsFormComponent implements OnChanges, OnDestroy {
           this.isPending = false;
           this.settingsForm.enable();
           this.settingsForm.markAsUntouched();
+          this.usersService.fetchAuthUser();
           return;
         }
+        this.isModified$.next(false);
+        this.usersService.fetchAuthUser();
         this.router.navigateByUrl(`user/${res.username}`);
       });
   }

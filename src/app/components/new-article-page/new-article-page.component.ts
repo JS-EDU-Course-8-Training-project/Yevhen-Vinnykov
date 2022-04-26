@@ -6,6 +6,7 @@ import { ArticlesService } from 'src/app/services/articles.service';
 import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IArticle } from 'src/app/models/IArticle';
+import { ISavedData } from 'src/app/models/ISavedData';
 
 @Component({
   selector: 'app-new-article-page',
@@ -13,7 +14,7 @@ import { IArticle } from 'src/app/models/IArticle';
   styleUrls: ['./new-article-page.component.scss']
 })
 
-export class NewArticlePageComponent implements OnInit, OnDestroy {
+export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   public articleForm!: FormGroup;
   public isEditMode: boolean = this.router.url !== '/create-article';
   public articleToEdit!: IArticle | null;
@@ -88,5 +89,9 @@ export class NewArticlePageComponent implements OnInit, OnDestroy {
       .subscribe((article: any) => {
         this.router.navigateByUrl(`article/${article.article.slug}`);
       });
+  }
+
+  public isDataSaved(): boolean {
+    return !this.articleForm.dirty;
   }
 }

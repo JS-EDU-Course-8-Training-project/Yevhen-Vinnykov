@@ -1,14 +1,16 @@
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { UsersService } from 'src/app/services/users.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { IExistingUser } from 'src/app/models/IExistingUser';
+import { ISavedData } from 'src/app/models/ISavedData';
 
 @Component({
   selector: 'app-settings-page',
   templateUrl: './settings-page.component.html',
   styleUrls: ['./settings-page.component.scss']
 })
-export class SettingsPageComponent implements OnInit, OnDestroy {
+export class SettingsPageComponent implements OnInit, OnDestroy, ISavedData {
+  public isModified$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public authUser!: IExistingUser;
   private notifier: Subject<void> = new Subject<void>();
 
@@ -27,4 +29,7 @@ export class SettingsPageComponent implements OnInit, OnDestroy {
     this.notifier.complete();
   }
 
+  public isDataSaved(): boolean {
+    return !this.isModified$.getValue();
+  }
 }

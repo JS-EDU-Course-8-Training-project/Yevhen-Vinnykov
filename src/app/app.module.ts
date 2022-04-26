@@ -1,3 +1,4 @@
+import { MatDialogModule } from '@angular/material/dialog';
 import { SignUpModule } from './components/sign-up/sign-up.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -40,7 +41,8 @@ import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user
     ReactiveFormsModule,
     BannerModule,
     HomeModule,
-    ArticleListModule
+    ArticleListModule,
+    MatDialogModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true },
