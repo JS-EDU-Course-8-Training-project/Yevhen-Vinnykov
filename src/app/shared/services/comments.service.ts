@@ -1,8 +1,9 @@
-import { Observable, pluck } from 'rxjs';
+import { catchError, Observable, pluck } from 'rxjs';
 import { IComment } from '../models/IComment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { ErrorHandlerService } from './error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -18,17 +19,36 @@ interface INewComment {
 @Injectable({
   providedIn: 'root'
 })
+
 export class CommentsService {
   private baseURL: string = environment.apiURL;
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService
+  ) { }
 
-  fetchArticleComments(slug: string): Observable<IComment[]> {
-    return this.http.get<{ comments: IComment[] }>(`${this.baseURL}/articles/${slug}/comments`, httpOptions).pipe(pluck('comments'));
+  public fetchArticleComments(slug: string): Observable<IComment[] | HttpErrorResponse> {
+    return this.http
+      .get<{ comments: IComment[] }>(`${this.baseURL}/articles/${slug}/comments`, httpOptions)
+      .pipe(
+        pluck('comments'),
+        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+      );
   }
-  createComment(slug: string, comment: INewComment): Observable<IComment> {
-    return this.http.post<IComment>(`${this.baseURL}/articles/${slug}/comments`, JSON.stringify({ comment }), httpOptions);
+
+  public createComment(slug: string, comment: INewComment): Observable<IComment | HttpErrorResponse> {
+    return this.http
+      .post<IComment>(`${this.baseURL}/articles/${slug}/comments`, JSON.stringify({ comment }), httpOptions)
+      .pipe(
+        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+      );
   }
-  removeComment(slug: string, id: number): Observable<IComment> {
-    return this.http.delete<IComment>(`${this.baseURL}/articles/${slug}/comments/${id}`, httpOptions);
+
+  public removeComment(slug: string, id: number): Observable<IComment | HttpErrorResponse> {
+    return this.http
+      .delete<IComment>(`${this.baseURL}/articles/${slug}/comments/${id}`, httpOptions)
+      .pipe(
+        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+      );
   }
 }

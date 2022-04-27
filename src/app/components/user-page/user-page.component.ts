@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/shared/services/users.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/shared/services/authorization.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -61,8 +62,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
           this.profilesService.fetchUser(this.urlUsername)
             .pipe(takeUntil(this.notifier))
             .subscribe(user => {
-              this.user = user;
-              this.isFollowed = user.following;
+              if (!(user instanceof HttpErrorResponse)) {
+                this.user = user;
+                this.isFollowed = user.following;
+              }
             });
         }
       });
@@ -77,8 +80,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   private followingHandler(username: string, method: 'follow' | 'unfollow'): void {
     this.profilesService[method](username).subscribe((profile => {
-      this.isFollowed = profile.following;
-      this.followingInProgress = false;
+      if (!(profile instanceof HttpErrorResponse)) {
+        this.isFollowed = profile.following;
+        this.followingInProgress = false;
+      }
     }));
   }
 
@@ -86,6 +91,3 @@ export class UserPageComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
   }
 }
-
-
-

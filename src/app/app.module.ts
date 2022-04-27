@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ButtonComponent } from './components/button/button.component';
 import { MatButtonModule } from '@angular/material/button';
 import { SignInModule } from './components/sign-in/sign-in.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -26,7 +25,6 @@ import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user
     AppComponent,
     HeaderComponent,
     NavbarComponent,
-    ButtonComponent,
     NavbarUserComponent,
   ],
   imports: [

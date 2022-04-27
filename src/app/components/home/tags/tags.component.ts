@@ -1,13 +1,14 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tags',
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss']
 })
-export class TagsComponent implements OnInit, OnChanges, OnDestroy{
+export class TagsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() tabIndex!: number;
   @Output() selectedTagEmmiter: EventEmitter<string> = new EventEmitter();
 
@@ -23,11 +24,13 @@ export class TagsComponent implements OnInit, OnChanges, OnDestroy{
   ngOnInit(): void {
     this.isLoading = true;
     this.articlesService.fetchTags()
-    .pipe(takeUntil(this.notifier))
-    .subscribe(tags => {
-      this.tags = tags
-      this.isLoading = false;
-    });
+      .pipe(takeUntil(this.notifier))
+      .subscribe(tags => {
+        if (!(tags instanceof HttpErrorResponse)) {
+          this.tags = tags
+          this.isLoading = false;
+        }
+      });
   }
 
   ngOnDestroy(): void {

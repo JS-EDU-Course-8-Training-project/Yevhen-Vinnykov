@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, take } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { UsersService } from './users.service';
 
@@ -21,7 +21,7 @@ export class AuthorizationService {
     localStorage.setItem('authorized', 'true');
     localStorage.setItem('token', token);
     this.isAuthorized$.next(true);
-    this.usersService.fetchAuthUser();
+    this.usersService.fetchAuthUser().pipe(take(1)).subscribe();
   }
 
   public removeAuthorization(): void {

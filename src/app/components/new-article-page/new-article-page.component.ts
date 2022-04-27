@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { INewArticle } from '../../shared/models/INewArticle';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -34,10 +35,12 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
       this.articlesService.fetchArticle(this.slug)
         .pipe(takeUntil(this.notifier))
         .subscribe(article => {
-          this.articleToEdit = article;
-          this.initializeForm();
-          this.articleForm.markAllAsTouched();
-          return;
+          if (!(article instanceof HttpErrorResponse)) {
+            this.articleToEdit = article;
+            this.initializeForm();
+            this.articleForm.markAllAsTouched();
+            return;
+          }
         });
     }
     this.initializeForm();

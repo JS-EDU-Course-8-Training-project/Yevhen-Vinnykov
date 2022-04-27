@@ -1,7 +1,8 @@
-import { Subscription, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, OnChanges, Input, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-global-feed',
@@ -36,8 +37,10 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy {
     this.articlesService.fetchArticles()
       .pipe(takeUntil(this.notifier))
       .subscribe(res => {
-        this.globalArticles = res.articles;
-        this.isLoading = false;
+        if (!(res instanceof HttpErrorResponse)){
+          this.globalArticles = res.articles;
+          this.isLoading = false;
+        }
       });
   }
 }

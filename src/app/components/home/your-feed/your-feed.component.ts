@@ -2,6 +2,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-your-feed',
@@ -35,8 +36,10 @@ export class YourFeedComponent implements OnChanges, OnDestroy {
     this.articlesService.fetchFollowedArticles()
       .pipe(takeUntil(this.notifier))
       .subscribe(res => {
-        this.followedArticles = res.articles;
-        this.isLoading = false;
+        if (!(res instanceof HttpErrorResponse)) {
+          this.followedArticles = res.articles;
+          this.isLoading = false;
+        }
       });
   }
 }

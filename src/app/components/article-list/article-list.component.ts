@@ -4,6 +4,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles.service';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/services/authorization.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-article-list',
@@ -46,10 +47,12 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   private likeHandler(slug: string, method: 'addToFavorites' | 'removeFromFavorites'): void {
     this.articlesService[method](slug).pipe(takeUntil(this.notifier))
       .subscribe(article => {
-        this.isLiked = article.favorited;
-        this.isPending = false;
-        this.likesCount = article.favoritesCount;
-      })
+        if (!(article instanceof HttpErrorResponse)) {
+          this.isLiked = article.favorited;
+          this.isPending = false;
+          this.likesCount = article.favoritesCount;
+        }
+      });
   }
 
   private redirectUnauthorized(): void {

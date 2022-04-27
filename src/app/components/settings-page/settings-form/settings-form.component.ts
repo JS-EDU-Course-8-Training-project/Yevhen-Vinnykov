@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/services/authorization.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-settings-form',
@@ -71,7 +72,7 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
     this.usersService.updateUser(settings)
       .pipe(takeUntil(this.notifier))
       .subscribe(res => {
-        if (res.error) {
+        if (res instanceof HttpErrorResponse) {
           this.error = res.error;
           this.isPending = false;
           this.settingsForm.enable();
@@ -79,8 +80,9 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
           this.usersService.fetchAuthUser();
           return;
         }
+        if(res as IExistingUser)
         this.isModified$.next(false);
-        this.authorizationService.authorize(res.token);
+        this.authorizationService.authorize(res.token || '');
         this.router.navigateByUrl(`user/${res.username}`);
       });
   }

@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tagged-articles',
@@ -37,8 +38,10 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy {
       this.articlesSubscription = this.articlesService
         .fetchArticlesByTag(this.selectedTag)
         .subscribe(res => {
-          this.articlesSelectedByTag = res.articles;
-          this.isLoading = false;
+          if (!(res instanceof HttpErrorResponse)) {
+            this.articlesSelectedByTag = res.articles;
+            this.isLoading = false;
+          }
         });
     }
   }

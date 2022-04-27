@@ -1,8 +1,9 @@
 import { IProfile } from '../models/IProfile';
-import { Observable, pluck } from 'rxjs';
+import { catchError, Observable, pluck } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { ErrorHandlerService } from './error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -16,15 +17,35 @@ const httpOptions = {
 export class ProfilesService {
   private baseURL: string = environment.apiURL;
 
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService
+  ) { }
 
-  constructor(private http: HttpClient) { }
-  follow(username: string): Observable<IProfile> {
-    return this.http.post<{ profile: IProfile }>(`${this.baseURL}/profiles/${username}/follow`, null, httpOptions).pipe(pluck('profile'));
+  public follow(username: string): Observable<IProfile | HttpErrorResponse> {
+    return this.http
+      .post<{ profile: IProfile }>(`${this.baseURL}/profiles/${username}/follow`, null, httpOptions)
+      .pipe(
+        pluck('profile'),
+        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+      );
   }
-  unfollow(username: string): Observable<IProfile> {
-    return this.http.delete<{ profile: IProfile }>(`${this.baseURL}/profiles/${username}/follow`, httpOptions).pipe(pluck('profile'));
+
+  public unfollow(username: string): Observable<IProfile | HttpErrorResponse> {
+    return this.http
+      .delete<{ profile: IProfile }>(`${this.baseURL}/profiles/${username}/follow`, httpOptions)
+      .pipe(
+        pluck('profile'),
+        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+      );
   }
-  fetchUser(username: string): Observable<IProfile> {
-    return this.http.get<{profile: IProfile}>(`${this.baseURL}/profiles/${username}`, httpOptions).pipe(pluck('profile'));
+
+  public fetchUser(username: string): Observable<IProfile | HttpErrorResponse> {
+    return this.http
+      .get<{ profile: IProfile }>(`${this.baseURL}/profiles/${username}`, httpOptions)
+      .pipe(
+        pluck('profile'),
+        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+      );
   }
 }

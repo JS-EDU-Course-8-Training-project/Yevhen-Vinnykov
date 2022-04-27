@@ -2,6 +2,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-my-articles',
@@ -36,8 +37,10 @@ export class MyArticlesComponent implements OnChanges, OnDestroy {
     this.articlesService.fetchUserArticles(this.username)
       .pipe(takeUntil(this.notifier))
       .subscribe(res => {
-        this.myArticles = res.articles;
-        this.isLoading = false;
+        if (!(res instanceof HttpErrorResponse)) {
+          this.myArticles = res.articles;
+          this.isLoading = false;
+        }
       });
   }
 }

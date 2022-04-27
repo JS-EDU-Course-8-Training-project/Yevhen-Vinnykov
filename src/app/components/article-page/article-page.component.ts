@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { IComment } from 'src/app/shared/models/IComment';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-article-page',
@@ -41,8 +42,13 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
 
   private getAuthUser(): void {
     this.usersService.fetchAuthUser()
-      .pipe(takeUntil(this.notifier))
-      .subscribe(user => this.authUser = user);
+      .pipe(
+        takeUntil(this.notifier))
+      .subscribe(user => {
+        if (!(user instanceof HttpErrorResponse)) {
+          this.authUser = user;
+        }
+      });
   }
 
   private getArticle(): void {
@@ -50,8 +56,10 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
     this.articlesService.fetchArticle(this.slug)
       .pipe(takeUntil(this.notifier))
       .subscribe(article => {
-        this.article = article;
-        this.isLoaded = true;
+        if (!(article instanceof HttpErrorResponse)) {
+          this.article = article;
+          this.isLoaded = true;
+        }
       });
   }
 
@@ -60,8 +68,10 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
     this.commentsService.fetchArticleComments(this.slug)
       .pipe(takeUntil(this.notifier))
       .subscribe(comments => {
-        this.comments = comments;
-        this.isLoaded = true;
+        if (!(comments instanceof HttpErrorResponse)) {
+          this.comments = comments;
+          this.isLoaded = true;
+        }
       });
   }
 
