@@ -1,3 +1,5 @@
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { TagsComponent } from './tags/tags.component';
@@ -25,6 +27,8 @@ import { BannerModule } from '../banner/banner.module';
     ArticleListModule,
     MatCardModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
     BannerModule
   ],
 })

@@ -3,7 +3,7 @@ import { ICreatedArticle } from '../models/ICreatedArticle';
 import { IArticle, IArticleResponse } from '../models/IArticle';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, pluck } from 'rxjs';
+import { catchError, delay, Observable, pluck, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ErrorHandlerService } from './error-handler.service';
 
@@ -25,15 +25,15 @@ export class ArticlesService {
     private errorHandler: ErrorHandlerService
   ) { }
 
-  public fetchArticles(): Observable<IArticleResponse | HttpErrorResponse> {
-    return this.http.get<IArticleResponse>(this.baseURL, httpOptions)
+  public fetchArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse | HttpErrorResponse> {
+    return this.http.get<IArticleResponse>(`${this.baseURL}/?offset=${offset}&limit=${limit}`, httpOptions)
       .pipe(
         catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
       );
   }
 
-  public fetchFollowedArticles(): Observable<IArticleResponse | HttpErrorResponse> {
-    return this.http.get<IArticleResponse>(`${this.baseURL}/feed`, httpOptions)
+  public fetchFollowedArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse | HttpErrorResponse> {
+    return this.http.get<IArticleResponse>(`${this.baseURL}/feed/?offset=${offset}&limit=${limit}`, httpOptions)
       .pipe(
         catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
       );

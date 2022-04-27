@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authSubscription.unsubscribe();
   }
 
-  public handleSelectTag(tag: any) {
+  public handleSelectTag(tag: string) {
     this.selectedTag = tag;
     this.tabIndex = 2;
   }
