@@ -60,7 +60,10 @@ export class UserPageComponent implements OnInit, OnDestroy {
         } else {
           this.profilesService.fetchUser(this.urlUsername)
             .pipe(takeUntil(this.notifier))
-            .subscribe(user => this.user = user);
+            .subscribe(user => {
+              this.user = user;
+              this.isFollowed = user.following;
+            });
         }
       });
   }

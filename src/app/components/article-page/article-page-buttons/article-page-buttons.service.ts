@@ -1,42 +1,50 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
+export interface IButtonsState {
+  favoriteInProgress: boolean;
+  followingInProgress: boolean;
+  isLiked: boolean;
+  isFollowed: boolean;
+  likesCount: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ArticlePageButtonsService {
-  public favoriteInProgress$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public followingInProgress$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public isLiked$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public likesCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  public isFollowed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+  public ButtonsState$: BehaviorSubject<IButtonsState> = new BehaviorSubject<IButtonsState>({
+    favoriteInProgress: false,
+    followingInProgress: false,
+    isLiked: false,
+    isFollowed: false,
+    likesCount: 0
+  });
 
   constructor() { }
 
-  public initialize(isLiked: boolean, isFollowed: boolean, likesCount: number): void {
-    this.setIsLiked(isLiked);
-    this.setIsFollowed(isFollowed);
-    this.setLikesCount(likesCount);
+  public initialize(initialState: IButtonsState): BehaviorSubject<IButtonsState> {
+    this.ButtonsState$.next(initialState);
+    return this.ButtonsState$;
   }
 
   public setLikesCount(count: number): void {
-    this.likesCount$.next(count);
+    this.ButtonsState$.next({...this.ButtonsState$.getValue(), likesCount: count});
   }
 
   public setIsLiked(value: boolean): void {
-    this.isLiked$.next(value);
+    this.ButtonsState$.next({...this.ButtonsState$.getValue(), isLiked: value});
   }
 
   public setIsFollowed(value: boolean): void {
-    this.isFollowed$.next(value);
+    this.ButtonsState$.next({...this.ButtonsState$.getValue(), isFollowed: value});
   }
 
   public setFavoriteInProgress(value: boolean): void {
-    this.favoriteInProgress$.next(value);
+    this.ButtonsState$.next({...this.ButtonsState$.getValue(), favoriteInProgress: value});
   }
 
   public setFollowingInProgress(value: boolean): void {
-    this.followingInProgress$.next(value);
+    this.ButtonsState$.next({...this.ButtonsState$.getValue(), followingInProgress: value});
   }
 }

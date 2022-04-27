@@ -1,5 +1,5 @@
 import { Subject, takeUntil } from 'rxjs';
-import { ArticlePageButtonsService } from './article-page-buttons.service';
+import { ArticlePageButtonsService, IButtonsState } from './article-page-buttons.service';
 import { AuthorizationService } from '../../../services/authorization.service';
 import { IArticle } from 'src/app/models/IArticle';
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
@@ -13,7 +13,7 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
   templateUrl: './article-page-buttons.component.html',
   styleUrls: ['./article-page-buttons.component.scss']
 })
-export class ArticlePageButtonsComponent implements OnInit, OnChanges, OnDestroy {
+export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
   @Input() article!: IArticle;
   @Input() slug!: string;
   @Input() authUser!: IExistingUser;
@@ -36,12 +36,8 @@ export class ArticlePageButtonsComponent implements OnInit, OnChanges, OnDestroy
     private articlePageButtonsService: ArticlePageButtonsService
   ) { }
 
-  ngOnInit(): void {
-    this.initialize();
-  }
-
   ngOnChanges(): void {
-    this.isAuthor = this.article?.author?.username === this.authUser?.username;
+    this.initialize();
   }
 
   ngOnDestroy(): void {
@@ -50,29 +46,28 @@ export class ArticlePageButtonsComponent implements OnInit, OnChanges, OnDestroy
   }
 
   private initialize(): void {
-    // REALLY DOUBT THIS IS THE WAY IT SHOULD BE. REFACTORING NEEDED
-    this.articlePageButtonsService
-      .initialize(this.article?.favorited, this.article?.author?.following, this.article?.favoritesCount);
-    this.articlePageButtonsService.isLiked$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(isLiked => this.isLiked = isLiked);
-    this.articlePageButtonsService.isFollowed$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(isFollowed => this.isFollowed = isFollowed);
-    this.articlePageButtonsService.likesCount$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(likesCount => this.likesCount = likesCount);
-    this.articlePageButtonsService.favoriteInProgress$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(value => this.favoriteInProgress = value);
-    this.articlePageButtonsService.followingInProgress$
-      .pipe(takeUntil(this.notifier))
-      .subscribe(value => this.followingInProgress = value);
+    const initialState: IButtonsState = {
+      followingInProgress: false,
+      favoriteInProgress: false,
+      isLiked: this.article?.favorited,
+      isFollowed: this.article?.author?.following, 
+      likesCount: this.article?.favoritesCount
+    };
+    this.articlePageButtonsService.initialize(initialState)
+    .pipe(takeUntil(this.notifier))
+    .subscribe(state => {
+      this.followingInProgress = state.followingInProgress;
+      this.favoriteInProgress = state.favoriteInProgress;
+      this.isFollowed = state.isFollowed;
+      this.isLiked = state.isLiked;
+      this.likesCount = state.likesCount;
+    });
     this.username = this.article?.author?.username;
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized) => this.isAuthorized = isAuthorized);
+    
   }
 
   public handleLikeDislike(slug: string): void {
