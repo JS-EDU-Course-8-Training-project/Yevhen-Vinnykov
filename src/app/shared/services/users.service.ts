@@ -1,6 +1,6 @@
-import { environment } from './../../environments/environment';
-import { IExistingUser } from './../models/IExistingUser';
-import { IUserData } from './../models/IUserData';
+import { environment } from '../../../environments/environment';
+import { IExistingUser } from '../models/IExistingUser';
+import { IUserData } from '../models/IUserData';
 import { catchError, Observable, of, pluck, map, BehaviorSubject } from 'rxjs';
 import { INewUser } from '../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';

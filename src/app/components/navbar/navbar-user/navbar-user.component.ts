@@ -1,7 +1,7 @@
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { IExistingUser } from 'src/app/models/IExistingUser';
-import { UsersService } from 'src/app/services/users.service';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-navbar-user',

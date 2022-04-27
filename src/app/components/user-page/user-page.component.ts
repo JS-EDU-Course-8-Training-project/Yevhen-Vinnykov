@@ -1,11 +1,11 @@
-import { IProfile } from './../../models/IProfile';
-import { ProfilesService } from 'src/app/services/profiles.service';
-import { IExistingUser } from 'src/app/models/IExistingUser';
+import { IProfile } from '../../shared/models/IProfile';
+import { ProfilesService } from 'src/app/shared/services/profiles.service';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UsersService } from 'src/app/services/users.service';
+import { UsersService } from 'src/app/shared/services/users.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { AuthorizationService } from 'src/app/services/authorization.service';
+import { AuthorizationService } from 'src/app/shared/services/authorization.service';
 
 
 @Component({

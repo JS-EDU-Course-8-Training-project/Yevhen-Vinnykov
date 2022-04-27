@@ -1,6 +1,6 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
 
 @Component({
   selector: 'app-tags',

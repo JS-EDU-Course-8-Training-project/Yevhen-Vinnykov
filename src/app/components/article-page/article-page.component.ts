@@ -1,12 +1,12 @@
 import { Subject, takeUntil } from 'rxjs';
-import { CommentsService } from './../../services/comments.service';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { CommentsService } from '../../shared/services/comments.service';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IArticle } from 'src/app/models/IArticle';
+import { IArticle } from 'src/app/shared/models/IArticle';
 import { Router } from '@angular/router';
-import { IComment } from 'src/app/models/IComment';
-import { UsersService } from 'src/app/services/users.service';
-import { IExistingUser } from 'src/app/models/IExistingUser';
+import { IComment } from 'src/app/shared/models/IComment';
+import { UsersService } from 'src/app/shared/services/users.service';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
 @Component({
   selector: 'app-article-page',

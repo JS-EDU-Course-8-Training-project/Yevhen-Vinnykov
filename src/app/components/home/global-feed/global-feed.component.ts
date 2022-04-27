@@ -1,7 +1,7 @@
 import { Subscription, Subject, takeUntil } from 'rxjs';
-import { IArticle } from 'src/app/models/IArticle';
+import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, OnChanges, Input, OnDestroy } from '@angular/core';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
 
 @Component({
   selector: 'app-global-feed',

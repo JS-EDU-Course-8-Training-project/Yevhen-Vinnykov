@@ -1,6 +1,6 @@
-import { IArticle } from 'src/app/models/IArticle';
+import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnInit } from '@angular/core';
-import { IExistingUser } from 'src/app/models/IExistingUser';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
 @Component({
   selector: 'app-article-body',

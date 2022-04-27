@@ -16,7 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BannerModule } from './components/banner/banner.module';
 import { HomeModule } from './components/home/home.module';
 import { ArticleListModule } from './components/article-list/article-list.module';
-import { AuthorizationInterceptor } from './interceptors/authorization.interceptor';
+import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
 import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 
 

@@ -1,8 +1,8 @@
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { UsersService } from 'src/app/services/users.service';
+import { UsersService } from 'src/app/shared/services/users.service';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { IExistingUser } from 'src/app/models/IExistingUser';
-import { ISavedData } from 'src/app/models/ISavedData';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { ISavedData } from 'src/app/shared/models/ISavedData';
 
 @Component({
   selector: 'app-settings-page',

@@ -1,4 +1,4 @@
-import { IProfile } from './../models/IProfile';
+import { IProfile } from '../models/IProfile';
 import { Observable, pluck } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';

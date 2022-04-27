@@ -1,10 +1,10 @@
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from 'src/app/services/users.service';
+import { UsersService } from 'src/app/shared/services/users.service';
 import { Router } from '@angular/router';
-import { AuthorizationService } from 'src/app/services/authorization.service';
-import { IExistingUser } from 'src/app/models/IExistingUser';
+import { AuthorizationService } from 'src/app/shared/services/authorization.service';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
 @Component({
   selector: 'app-sign-up',

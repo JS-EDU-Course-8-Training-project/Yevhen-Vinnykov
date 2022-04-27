@@ -1,9 +1,9 @@
 import { Subject, takeUntil } from 'rxjs';
-import { IArticle } from '../../models/IArticle';
+import { IArticle } from '../../shared/models/IArticle';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
 import { Router } from '@angular/router';
-import { AuthorizationService } from 'src/app/services/authorization.service';
+import { AuthorizationService } from 'src/app/shared/services/authorization.service';
 
 @Component({
   selector: 'app-article-list',

@@ -1,5 +1,5 @@
-import { ConfirmationGuard } from './../../guards/confirmation.guard';
-import { AuthorizationGuard } from './../../guards/authorization.guard';
+import { ConfirmationGuard } from '../../shared/guards/confirmation.guard';
+import { AuthorizationGuard } from '../../shared/guards/authorization.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NewArticlePageComponent } from './new-article-page.component';

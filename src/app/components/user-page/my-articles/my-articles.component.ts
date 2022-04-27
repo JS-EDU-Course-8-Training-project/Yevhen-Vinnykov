@@ -1,6 +1,6 @@
 import { Subject, takeUntil } from 'rxjs';
-import { ArticlesService } from 'src/app/services/articles.service';
-import { IArticle } from 'src/app/models/IArticle';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 
 @Component({

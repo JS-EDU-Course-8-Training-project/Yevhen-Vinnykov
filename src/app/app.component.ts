@@ -1,7 +1,7 @@
 import { take } from 'rxjs';
 import { Component } from '@angular/core';
-import { AuthorizationService } from './services/authorization.service';
-import { UsersService } from './services/users.service';
+import { AuthorizationService } from './shared/services/authorization.service';
+import { UsersService } from './shared/services/users.service';
 
 @Component({
   selector: 'app-root',

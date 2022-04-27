@@ -1,12 +1,12 @@
 import { Subject, takeUntil } from 'rxjs';
-import { INewArticle } from './../../models/INewArticle';
+import { INewArticle } from '../../shared/models/INewArticle';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
 import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IArticle } from 'src/app/models/IArticle';
-import { ISavedData } from 'src/app/models/ISavedData';
+import { IArticle } from 'src/app/shared/models/IArticle';
+import { ISavedData } from 'src/app/shared/models/ISavedData';
 
 @Component({
   selector: 'app-new-article-page',

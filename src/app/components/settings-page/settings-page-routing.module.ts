@@ -1,8 +1,8 @@
-import { AuthorizationGuard } from './../../guards/authorization.guard';
+import { AuthorizationGuard } from '../../shared/guards/authorization.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SettingsPageComponent } from './settings-page.component';
-import { ConfirmationGuard } from 'src/app/guards/confirmation.guard';
+import { ConfirmationGuard } from 'src/app/shared/guards/confirmation.guard';
 
 const routes: Routes = [
   {

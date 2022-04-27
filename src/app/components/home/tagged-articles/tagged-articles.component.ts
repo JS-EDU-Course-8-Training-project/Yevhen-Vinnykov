@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
-import { IArticle } from 'src/app/models/IArticle';
+import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { ArticlesService } from 'src/app/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles.service';
 
 @Component({
   selector: 'app-tagged-articles',
