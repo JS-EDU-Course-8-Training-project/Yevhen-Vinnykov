@@ -70,8 +70,10 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     };
     if (this.articleForm.valid && !this.isEditMode) {
       this.createArticle(newArticle);
+      this.articleForm.reset();
     } else {
       this.updateArticle(this.slug, newArticle);
+      this.articleForm.reset();
     }
   }
 
