@@ -1,7 +1,7 @@
 import { environment } from './../../environments/environment';
 import { IExistingUser } from './../models/IExistingUser';
 import { IUserData } from './../models/IUserData';
-import { catchError, Observable, of, pluck, throwError, map, BehaviorSubject } from 'rxjs';
+import { catchError, Observable, of, pluck, map, BehaviorSubject } from 'rxjs';
 import { INewUser } from '../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -43,13 +43,23 @@ export class UsersService {
   }
 
   createUser(user: INewUser): Observable<IExistingUser | any> {
-    return this.http.post<IExistingUser | any>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
+    return this.http.post<{ user: IExistingUser }>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
+      pluck('user'),
+      map(user => {
+        this.authUser$.next(user);
+        return user;
+      }),
       catchError((err): any => this.handleError(err))
     );
   }
 
-  signIn(user: IUserData): Observable<IUserData | any> {
-    return this.http.post<IUserData>(`${this.baseURL}/users/login`, JSON.stringify({ user }), httpOptions).pipe(
+  signIn(user: IUserData): Observable<IExistingUser | any> {
+    return this.http.post<{ user: IExistingUser }>(`${this.baseURL}/users/login`, JSON.stringify({ user }), httpOptions).pipe(
+      pluck('user'),
+      map(user => {
+        this.authUser$.next(user);
+        return user;
+      }),
       catchError((err): any => this.handleError(err))
     );
   }
@@ -68,6 +78,10 @@ export class UsersService {
   updateUser(settings: IExistingUser): Observable<IExistingUser | any> {
     return this.http.put<{ user: IExistingUser }>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions).pipe(
       pluck('user'),
+      map(user => {
+        this.authUser$.next(user);
+        return user;
+      }),
       catchError((err): any => this.handleError(err))
     );
   }

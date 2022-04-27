@@ -1,5 +1,5 @@
 import { IArticle } from 'src/app/models/IArticle';
-import { Component, Input, OnInit, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({

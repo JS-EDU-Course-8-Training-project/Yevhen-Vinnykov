@@ -5,6 +5,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthorizationService } from 'src/app/services/authorization.service';
+import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
   selector: 'app-sign-in',
@@ -50,7 +51,7 @@ export class SignInComponent implements OnInit, OnDestroy {
     };
     this.usersService.signIn(user)
       .pipe(takeUntil(this.notifier))
-      .subscribe((res: any) => {
+      .subscribe((res: IExistingUser | any) => {
         if (res.error) {
           Object.keys(res.error.errors).forEach(key => {
             this.errors.push(`${key} ${res.error.errors[key][0]}`)
@@ -60,7 +61,7 @@ export class SignInComponent implements OnInit, OnDestroy {
           this.signinForm.markAsUntouched();
           return;
         }
-        this.authorizationService.authorize(res.user.token);
+        this.authorizationService.authorize(res.token);
         this.router.navigateByUrl('').catch(err => console.log(err));
         this.isPending = false;
       });

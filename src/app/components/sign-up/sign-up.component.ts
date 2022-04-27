@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/services/authorization.service';
+import { IExistingUser } from 'src/app/models/IExistingUser';
 
 @Component({
   selector: 'app-sign-up',
@@ -51,7 +52,7 @@ export class SignUpComponent implements OnInit {
     };
     this.usersService.createUser(newUser)
     .pipe(takeUntil(this.notifier))
-    .subscribe((res: any) => {
+    .subscribe((res: IExistingUser | any) => {
       if (res.error) {
         Object.keys(res.error.errors).forEach(key => {
           this.errors.push(`${key} ${res.error.errors[key][0]}`)
@@ -61,7 +62,7 @@ export class SignUpComponent implements OnInit {
         this.signupForm.markAsUntouched();
         return;
       }
-      this.authorizationService.authorize(res.user.token);
+      this.authorizationService.authorize(res.token);
       this.router.navigateByUrl('').catch(err => console.log(err));
       this.isPending = false;
     });

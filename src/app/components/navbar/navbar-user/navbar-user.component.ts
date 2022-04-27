@@ -1,6 +1,5 @@
-import { BehaviorSubject, pipe, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { IExistingUser } from 'src/app/models/IExistingUser';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -21,7 +20,7 @@ export class NavbarUserComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.usersService.fetchAuthUser()
+    this.usersService.authUser$
       .pipe(takeUntil(this.notifier))
       .subscribe(user => this.authUser = user);
     this.url$

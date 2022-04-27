@@ -1,4 +1,6 @@
+import { take } from 'rxjs';
 import { Component } from '@angular/core';
+import { AuthorizationService } from './services/authorization.service';
 import { UsersService } from './services/users.service';
 
 @Component({
@@ -7,10 +9,26 @@ import { UsersService } from './services/users.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor() { }
-  
-  ngOnInit() {
 
+  constructor(
+    private usersService: UsersService,
+    private authorizationService: AuthorizationService
+  ) { }
+
+  ngOnInit() {
+    this.initialize();
   }
-  
+
+  private initialize(): void {
+    this.authorizationService.checkIfAuthorized();
+    this.authorizationService.isAuthorized$
+      .pipe(take(1))
+      .subscribe(isAuthorized => {
+        if (isAuthorized && !this.usersService.authUser$.getValue().username) {
+          this.usersService.fetchAuthUser()
+            .pipe(take(1))
+            .subscribe();
+        }
+      });
+  }
 }

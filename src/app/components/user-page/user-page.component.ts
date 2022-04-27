@@ -4,7 +4,7 @@ import { IExistingUser } from 'src/app/models/IExistingUser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter, Subscription, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/services/authorization.service';
 
 
@@ -50,15 +50,19 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   private setUserData(): void {
     this.urlUsername = this.router.url.split('/')[2];
-    this.isMyself = this.usersService.authUser$.getValue().username === this.urlUsername;
-    this.tabIndex = 0;
-    // if (this.isMyself) {
-    //   this.authUserSubscription = this.usersService.authUser$.subscribe(authUser => this.user = authUser);
-    // } else {
-    this.profilesService.fetchUser(this.urlUsername).subscribe(user => this.user = user);
-    // }
-    // HAVE TO CHANGE THE LOGIC OF STORING THE LOGGED IN USER'S DATA
-    // BEACAUSE THIS WAY IT'S NOT SYNCHRONIZED
+    this.usersService.authUser$
+      .pipe(takeUntil(this.notifier))
+      .subscribe(authUser => {
+        this.tabIndex = 0;
+        this.isMyself = authUser.username === this.urlUsername;
+        if (this.isMyself) {
+          this.user = this.usersService.authUser$.getValue();
+        } else {
+          this.profilesService.fetchUser(this.urlUsername)
+            .pipe(takeUntil(this.notifier))
+            .subscribe(user => this.user = user);
+        }
+      });
   }
 
   public handleFollowUnfollow(username: string): void {

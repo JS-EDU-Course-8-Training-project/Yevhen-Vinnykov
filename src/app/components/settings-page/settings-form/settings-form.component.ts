@@ -80,7 +80,7 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
           return;
         }
         this.isModified$.next(false);
-        this.usersService.fetchAuthUser();
+        this.authorizationService.authorize(res.token);
         this.router.navigateByUrl(`user/${res.username}`);
       });
   }
