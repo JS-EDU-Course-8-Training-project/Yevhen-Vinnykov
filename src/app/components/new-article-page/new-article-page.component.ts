@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, Observable, catchError } from 'rxjs';
 import { INewArticle } from '../../shared/models/INewArticle';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -8,6 +8,7 @@ import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { ISavedData } from 'src/app/shared/models/ISavedData';
+import { ICreatedArticle } from 'src/app/shared/models/ICreatedArticle';
 
 @Component({
   selector: 'app-new-article-page',
@@ -22,7 +23,6 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   public slug!: string;
   private notifier: Subject<void> = new Subject<void>();
 
-
   constructor(
     private articlesService: ArticlesService,
     private fb: FormBuilder,
@@ -33,14 +33,13 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     if (this.isEditMode) {
       this.slug = this.router.url.split('/')[2];
       this.articlesService.fetchArticle(this.slug)
-        .pipe(takeUntil(this.notifier))
-        .subscribe(article => {
-          if (!(article instanceof HttpErrorResponse)) {
+        .pipe(
+          takeUntil(this.notifier),
+          catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+        .subscribe((article: IArticle | any) => {
             this.articleToEdit = article;
             this.initializeForm();
             this.articleForm.markAllAsTouched();
-            return;
-          }
         });
     }
     this.initializeForm();
@@ -60,38 +59,37 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     });
   }
 
-  checkIfValid(formControl: string): boolean {
+  private onCatchError(error: HttpErrorResponse): void {
+    console.error(error);
+  }
+  
+  public checkIfValid(formControl: string): boolean {
     return !(this.articleForm.get(formControl)?.touched && this.articleForm.get(formControl)?.invalid);
   }
 
-  public handleArticleAction(): void {
-    const newArticle: INewArticle = {
+  private createArticleData(): INewArticle {
+    return {
       title: this.articleForm.getRawValue().title.trim(),
       description: this.articleForm.getRawValue().description.trim(),
       body: this.articleForm.getRawValue().body.trim(),
       tagList: this.articleForm.getRawValue().tagList.split(',').map((tag: string) => tag.trim()),
     };
-    if (this.articleForm.valid && !this.isEditMode) {
-      this.createArticle(newArticle);
-      this.articleForm.reset();
-    } else {
-      this.updateArticle(this.slug, newArticle);
+  }
+
+  public handleArticleAction(): void {
+    if (this.articleForm.valid) {
+      this.articleAction(this.slug, this.createArticleData());
       this.articleForm.reset();
     }
   }
 
-  private createArticle(newArticle: INewArticle): void {
-    this.articlesService.createArticle(newArticle)
+  private articleAction(slug: string, newArticle: INewArticle) {
+    const subscription: Observable<ICreatedArticle | HttpErrorResponse> = this.isEditMode
+      ? this.articlesService.updateArticle(slug, newArticle)
+      : this.articlesService.createArticle(newArticle);
+    subscription
       .pipe(takeUntil(this.notifier))
-      .subscribe((article: any) => {
-        this.router.navigateByUrl(`article/${article.article.slug}`);
-      });
-  }
-
-  private updateArticle(slug: string, newArticle: INewArticle): void {
-    this.articlesService.updateArticle(this.slug, newArticle)
-      .pipe(takeUntil(this.notifier))
-      .subscribe((article: any) => {
+      .subscribe((article: ICreatedArticle | any) => {
         this.router.navigateByUrl(`article/${article.article.slug}`);
       });
   }
