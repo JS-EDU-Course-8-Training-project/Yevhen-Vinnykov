@@ -1,5 +1,5 @@
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { IArticle } from 'src/app/shared/models/IArticle';
+import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
+import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -59,18 +59,24 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
       this.isLoading = true;
       this.articlesService
         .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
-        .pipe(takeUntil(this.notifier))
-        .subscribe(res => {
-          if (!(res instanceof HttpErrorResponse)) {
-            this.articlesSelectedByTag = [...this.articlesSelectedByTag, ...res.articles];
-            this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
-            this.isFinished = this.currentPage === this.pagesTotalCount;
-            this.isLoading = false;
-            this.canLoad$.next(!this.isFinished && !this.isLoading);
-            this.nextPage();
-          }
-        });
+        .pipe(
+          takeUntil(this.notifier),
+          catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+        .subscribe((res: IArticleResponse | any) => this.setDataOnResponse(res));
     }
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    console.error(error);
+  }
+  
+  private setDataOnResponse(response: IArticleResponse): void {
+    this.articlesSelectedByTag = [...this.articlesSelectedByTag, ...response.articles];
+    this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
+    this.isFinished = this.currentPage === this.pagesTotalCount;
+    this.isLoading = false;
+    this.canLoad$.next(!this.isFinished && !this.isLoading);
+    this.nextPage();
   }
 
   private nextPage(): void {
