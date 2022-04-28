@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ArticlePageComponent } from './pages/article-page/article-page.component';
 import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'article/:slug', component: ArticlePageComponent },
+  {
+    path: 'article/:slug',
+    loadChildren: () => import('./pages/article-page/article-page.module').then(m => m.ArticlePageModule)
+  },
   {
     path: 'create-article',
-    loadChildren: () => import('./pages/new-article-page/new-article-page.module').then(m => m.NewArticlePageModule) 
+    loadChildren: () => import('./pages/new-article-page/new-article-page.module').then(m => m.NewArticlePageModule)
   },
   {
     path: 'edit-article/:slug',
-    loadChildren: () => import('./pages/new-article-page/new-article-page.module').then(m => m.NewArticlePageModule) 
+    loadChildren: () => import('./pages/new-article-page/new-article-page.module').then(m => m.NewArticlePageModule)
   },
   {
     path: 'article/:slug',
-    loadChildren: () => import('./pages/article-page/article-page.module').then(m =>m.ArticlePageModule)
+    loadChildren: () => import('./pages/article-page/article-page.module').then(m => m.ArticlePageModule)
   },
   {
     path: 'settings',
