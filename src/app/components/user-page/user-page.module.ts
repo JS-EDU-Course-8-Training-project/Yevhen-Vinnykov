@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArticleListComponent } from './../article-list/article-list.component';
 import { MatButtonModule } from '@angular/material/button';
 import { BannerModule } from './../banner/banner.module';
@@ -24,6 +25,7 @@ import { ArticleListModule } from '../article-list/article-list.module';
     UserPageRoutingModule,
     MatTabsModule,
     MatCardModule,
+    MatProgressSpinnerModule,
     BannerModule,
     MatButtonModule,
     ArticleListModule

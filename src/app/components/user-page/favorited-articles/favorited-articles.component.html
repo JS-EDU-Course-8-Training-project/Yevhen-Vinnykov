@@ -1,9 +1,13 @@
-<p *ngIf="isLoading">Loading articles...</p>
 <p *ngIf="!favoritedArticles.length && !isLoading">
     No articles are here... yet.
 </p>
-<ng-container *ngIf="!isLoading">
-    <div *ngFor="let article of favoritedArticles">
-        <app-article-list [article]="article"></app-article-list>
+<ng-container>
+    <div *ngFor="let article of favoritedArticles; let i = index">
+        <app-article-list [article]="article" *ngIf="i + 1 !== favoritedArticles.length"></app-article-list>
+        <app-article-list [article]="article" *ngIf="i + 1 === favoritedArticles.length" #lastItem></app-article-list>
+    </div>
+    <mat-spinner [ngStyle]="{'margin': '10px auto'}" *ngIf="isLoading" diameter="50"></mat-spinner>
+    <div class="finished" *ngIf="isFinished">
+        <div>No more articles for now...</div>
     </div>
 </ng-container>
