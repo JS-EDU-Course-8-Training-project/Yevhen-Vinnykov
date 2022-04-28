@@ -6,6 +6,7 @@ import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorHandlerService } from '../error-handler/error-handler.service';
+import { AuthorizationService } from '../authorization/authorization.service';
 
 
 const httpOptions = {
@@ -29,7 +30,8 @@ export class UsersService {
 
   constructor(
     private http: HttpClient,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private authorizationService: AuthorizationService
   ) { }
 
   public createUser(user: INewUser): Observable<IExistingUser | HttpErrorResponse> {
@@ -37,6 +39,7 @@ export class UsersService {
       .post<{ user: IExistingUser }>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
         pluck('user'),
         map(user => {
+          this.authorizationService.authorize(user.token || '');
           this.authUser$.next(user);
           return user;
         }),
@@ -50,6 +53,7 @@ export class UsersService {
       .pipe(
         pluck('user'),
         map(user => {
+          this.authorizationService.authorize(user.token || '');
           this.authUser$.next(user);
           return user;
         }),
@@ -76,10 +80,17 @@ export class UsersService {
       .pipe(
         pluck('user'),
         map(user => {
+          this.authorizationService.authorize(user.token || '');
           this.authUser$.next(user);
           return user;
         }),
         catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
       );
   }
+
+  public signOut(): void {
+    this.authorizationService.removeAuthorization();
+    this.authUser$.next({} as IExistingUser);
+  }
+
 }

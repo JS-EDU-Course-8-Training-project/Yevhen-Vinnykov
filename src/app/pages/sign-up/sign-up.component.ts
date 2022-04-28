@@ -3,7 +3,6 @@ import { catchError, Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/shared/services/users/users.service';
-import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { INewUser } from 'src/app/shared/models/INewUser';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -23,7 +22,6 @@ export class SignUpComponent implements OnInit {
     private fb: FormBuilder,
     private usersService: UsersService,
     private redirectionService: RedirectionService,
-    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -73,7 +71,6 @@ export class SignUpComponent implements OnInit {
         takeUntil(this.notifier),
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
-        this.authorizationService.authorize(user.token);
         this.redirectionService.redirectHome();
         this.isPending = false;
       });

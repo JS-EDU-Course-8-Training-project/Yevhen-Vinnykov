@@ -1,4 +1,4 @@
-import { BehaviorSubject, take } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { UsersService } from '../users/users.service';
 
@@ -8,9 +8,7 @@ import { UsersService } from '../users/users.service';
 export class AuthorizationService {
   public isAuthorized$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   
-  constructor(
-    private usersService: UsersService
-  ) { }
+  constructor() { }
 
   public checkIfAuthorized(): void {
     const isAuth: boolean = localStorage.getItem('authorized') === 'true';
@@ -21,18 +19,11 @@ export class AuthorizationService {
     localStorage.setItem('authorized', 'true');
     localStorage.setItem('token', token);
     this.isAuthorized$.next(true);
-    this.usersService.fetchAuthUser().pipe(take(1)).subscribe();
   }
 
   public removeAuthorization(): void {
     localStorage.removeItem('authorized');
     localStorage.removeItem('token');
     this.isAuthorized$.next(false);
-    this.usersService.authUser$.next({
-      email: '',
-      username: '',
-      bio: '',
-      image: '',
-    });
   }
 }

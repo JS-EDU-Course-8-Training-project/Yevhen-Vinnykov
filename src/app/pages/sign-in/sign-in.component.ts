@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -23,7 +22,6 @@ export class SignInComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private usersService: UsersService,
     private redirectionService: RedirectionService,
-    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -71,7 +69,6 @@ export class SignInComponent implements OnInit, OnDestroy {
         takeUntil(this.notifier),
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
-        this.authorizationService.authorize(user.token || '');
         this.redirectionService.redirectHome();
         this.isPending = false;
       });

@@ -3,7 +3,6 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
@@ -26,7 +25,6 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
     private fb: FormBuilder,
     private usersService: UsersService,
     private redirectionService: RedirectionService,
-    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
@@ -89,13 +87,12 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
         this.isModified$.next(false);
-        this.authorizationService.authorize(user.token || '');
         this.redirectionService.redirectByUrl(`user/${user.username}`);
       });
   }
 
   public logout(): void {
-    this.authorizationService.removeAuthorization();
+    this.usersService.signOut();
     this.redirectionService.redirectHome();
   }
 }
