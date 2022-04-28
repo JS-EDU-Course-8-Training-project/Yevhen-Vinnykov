@@ -6,8 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent implements OnInit {
-  constructor() { }
   @Input() className!: string;
+
+  constructor() { }
 
   ngOnInit(): void {    
     

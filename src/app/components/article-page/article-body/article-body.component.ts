@@ -11,6 +11,7 @@ export class ArticleBodyComponent implements OnInit {
   @Input() article!: IArticle;
   @Input() slug!: string;
   @Input() authUser!: IExistingUser;
+  
   constructor() { }
 
   ngOnInit(): void {}

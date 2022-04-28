@@ -1,5 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { IArticle } from 'src/app/shared/models/IArticle';
 
 export interface IButtonsState {
   favoriteInProgress: boolean;
@@ -23,8 +24,18 @@ export class ArticlePageButtonsService {
 
   constructor() { }
 
-  public initialize(initialState: IButtonsState): BehaviorSubject<IButtonsState> {
-    this.ButtonsState$.next(initialState);
+  public createInitialState(article: IArticle): IButtonsState {
+    return {
+      followingInProgress: false,
+      favoriteInProgress: false,
+      isLiked: article?.favorited,
+      isFollowed: article?.author?.following,
+      likesCount: article?.favoritesCount
+    };
+  }
+
+  public initialize(article: IArticle): BehaviorSubject<IButtonsState> {
+    this.ButtonsState$.next(this.createInitialState(article));
     return this.ButtonsState$;
   }
 

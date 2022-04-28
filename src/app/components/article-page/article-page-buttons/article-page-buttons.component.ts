@@ -2,7 +2,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ArticlePageButtonsService, IButtonsState } from '../services/buttons/article-page-buttons.service';
 import { AuthorizationService } from '../../../shared/services/authorization/authorization.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
-import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
@@ -47,27 +47,22 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
   }
 
   private initialize(): void {
-    const initialState: IButtonsState = {
-      followingInProgress: false,
-      favoriteInProgress: false,
-      isLiked: this.article?.favorited,
-      isFollowed: this.article?.author?.following,
-      likesCount: this.article?.favoritesCount
-    };
-    this.articlePageButtonsService.initialize(initialState)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(state => {
-        this.followingInProgress = state.followingInProgress;
-        this.favoriteInProgress = state.favoriteInProgress;
-        this.isFollowed = state.isFollowed;
-        this.isLiked = state.isLiked;
-        this.likesCount = state.likesCount;
-      });
     this.username = this.article?.author?.username;
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
+    this.articlePageButtonsService.initialize(this.article)
+      .pipe(takeUntil(this.notifier))
+      .subscribe(state => this.setDataOnResponse(state));
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized) => this.isAuthorized = isAuthorized);
+  }
+
+  private setDataOnResponse(state: IButtonsState){
+    this.followingInProgress = state.followingInProgress;
+    this.favoriteInProgress = state.favoriteInProgress;
+    this.isFollowed = state.isFollowed;
+    this.isLiked = state.isLiked;
+    this.likesCount = state.likesCount;
   }
 
   public handleLikeDislike(slug: string): void {

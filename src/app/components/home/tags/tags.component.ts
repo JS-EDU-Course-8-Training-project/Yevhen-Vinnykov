@@ -1,7 +1,6 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tags',
@@ -25,8 +24,8 @@ export class TagsComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoading = true;
     this.articlesService.fetchTags()
       .pipe(takeUntil(this.notifier))
-      .subscribe(tags => {
-        if (!(tags instanceof HttpErrorResponse)) {
+      .subscribe((tags: string[] | any) => {
+        if (tags as string[]) {
           this.tags = tags
           this.isLoading = false;
         }
