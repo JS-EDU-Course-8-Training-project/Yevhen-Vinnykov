@@ -32,19 +32,17 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   ) { }
 
   ngOnInit(): void {
-    if (this.isEditMode) {
-      this.slug = this.router.url.split('/')[2];
-      this.articlesService.fetchArticle(this.slug)
-        .pipe(
-          takeUntil(this.notifier),
-          catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
-        .subscribe((article: IArticle | any) => {
-            this.articleToEdit = article;
-            this.initializeForm();
-            this.articleForm.markAllAsTouched();
-        });
-    }
-    this.initializeForm();
+    this.slug = this.router.url.split('/')[2];
+    if (!this.isEditMode) return this.initializeForm();
+    this.articlesService.fetchArticle(this.slug)
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+      .subscribe((article: IArticle | any) => {
+        this.articleToEdit = article;
+        this.initializeForm();
+        this.articleForm.markAllAsTouched();
+      });
   }
 
   ngOnDestroy(): void {
@@ -64,7 +62,7 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   private onCatchError(error: HttpErrorResponse): void {
     console.error(error);
   }
-  
+
   public checkIfValid(formControl: string): boolean {
     return !(this.articleForm.get(formControl)?.touched && this.articleForm.get(formControl)?.invalid);
   }
