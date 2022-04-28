@@ -21,4 +21,9 @@ export class RedirectionService {
   public redirectHome(): void{
     this.router.navigateByUrl('').catch((err: any) => console.log(err));
   }
+
+  public redirectByUrl(url: string): void {
+    this.router.navigateByUrl(url).catch((err: any) => console.log(err));
+  }
+
 }

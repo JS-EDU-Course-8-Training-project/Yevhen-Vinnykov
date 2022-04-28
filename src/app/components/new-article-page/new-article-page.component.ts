@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { ISavedData } from 'src/app/shared/models/ISavedData';
 import { ICreatedArticle } from 'src/app/shared/models/ICreatedArticle';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
 @Component({
   selector: 'app-new-article-page',
@@ -26,7 +27,8 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   constructor(
     private articlesService: ArticlesService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private redirectionService: RedirectionService
   ) { }
 
   ngOnInit(): void {
@@ -90,7 +92,7 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     subscription
       .pipe(takeUntil(this.notifier))
       .subscribe((article: ICreatedArticle | any) => {
-        this.router.navigateByUrl(`article/${article.article.slug}`);
+        this.redirectionService.redirectByUrl(`article/${article.article.slug}`);
       });
   }
 
