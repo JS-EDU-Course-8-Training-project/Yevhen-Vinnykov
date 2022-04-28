@@ -40,22 +40,22 @@ export class CommentFormComponent implements OnInit {
     this.notifier.complete();
   }
 
+  private createCommentData(): { body: string } {
+    return { body: this.commentForm.getRawValue().body };
+  }
+
   public addComment(): void {
-    const newComment = {
-      body: this.commentForm.getRawValue().body,
-    };
-    if (this.commentForm.valid) {
-      this.isLoading = true;
-      this.commentForm.disable();
-      this.commentsService.createComment(this.slug, newComment)
-        .pipe(takeUntil(this.notifier))
-        .subscribe(() => {
-          this.commentEventEmmiter.emit();
-          this.commentForm.reset();
-          this.isLoading = false;
-          this.commentForm.enable();
-        });
-    }
+    if (!this.commentForm.valid) return;
+    this.isLoading = true;
+    this.commentForm.disable();
+    this.commentsService.createComment(this.slug, this.createCommentData())
+      .pipe(takeUntil(this.notifier))
+      .subscribe(() => {
+        this.commentEventEmmiter.emit();
+        this.commentForm.reset();
+        this.isLoading = false;
+        this.commentForm.enable();
+      });
   }
 }
 
