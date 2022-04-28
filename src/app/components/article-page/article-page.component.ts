@@ -1,11 +1,11 @@
 import { Subject, takeUntil } from 'rxjs';
-import { CommentsService } from '../../shared/services/comments.service';
-import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { CommentsService } from '../../shared/services/comments/comments.service';
+import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Router } from '@angular/router';
 import { IComment } from 'src/app/shared/models/IComment';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 

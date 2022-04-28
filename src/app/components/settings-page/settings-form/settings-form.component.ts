@@ -1,10 +1,10 @@
 import { Subject, take, takeUntil, BehaviorSubject } from 'rxjs';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { Router } from '@angular/router';
-import { AuthorizationService } from 'src/app/shared/services/authorization.service';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({

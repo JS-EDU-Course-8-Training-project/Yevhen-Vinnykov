@@ -1,11 +1,11 @@
-import { IUpdateArticle } from '../models/IUpdateArticle';
-import { ICreatedArticle } from '../models/ICreatedArticle';
-import { IArticle, IArticleResponse } from '../models/IArticle';
+import { IUpdateArticle } from '../../models/IUpdateArticle';
+import { ICreatedArticle } from '../../models/ICreatedArticle';
+import { IArticle, IArticleResponse } from '../../models/IArticle';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, delay, Observable, pluck, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ErrorHandlerService } from './error-handler.service';
+import { ErrorHandlerService } from '../error-handler/error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({

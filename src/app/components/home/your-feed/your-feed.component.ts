@@ -1,8 +1,9 @@
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
-import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 
 @Component({
   selector: 'app-your-feed',
@@ -10,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./your-feed.component.scss']
 })
 export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @ViewChildren('lastItem', {read: ElementRef}) lastItem!: QueryList<ElementRef>;
+  @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
   @Input() tabIndex!: number;
 
   public followedArticles: IArticle[] = [];
@@ -21,17 +22,19 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   private pagesTotalCount!: number;
   private limit: number = 5;
   private currentPage: number = 1;
-  private observer!: IntersectionObserver;
-  
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+
   constructor(
-    private articlesService: ArticlesService
+    private articlesService: ArticlesService,
+    private infiniteScroll: InfiniteScrollService
   ) { }
 
   ngOnChanges(): void {
     this.reset();
     if (this.tabIndex === 0) {
       this.getFollowedArticles();
-      this.observeIntersection();
+      this.infiniteScroll
+      .observeIntersection({ canLoad: this.canLoad$, callback: this.getFollowedArticles.bind(this) });
     }
   }
 
@@ -42,7 +45,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.lastItem.changes.subscribe(change => {
-      if(change.last) this.observer.observe(change.last.nativeElement);
+      if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
     });
   }
 
@@ -56,25 +59,17 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
           this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
           this.isFinished = this.currentPage === this.pagesTotalCount;
           this.isLoading = false;
+          this.canLoad$.next(!this.isFinished && !this.isLoading);
+          this.nextPage();
         }
       });
   }
 
-  private observeIntersection(): void {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5
-    };
-    this.observer = new IntersectionObserver((entries) => {
-      if(entries[0].isIntersecting){
-        if(!this.isFinished && !this.isLoading){
-          this.offset += this.limit;
-          this.getFollowedArticles();
-          this.currentPage++;
-        }
-      }
-    }, options);
+  public nextPage() {
+    if (this.currentPage < this.pagesTotalCount) {
+      this.currentPage++;
+      this.offset += this.limit;
+    }
   }
 
   private reset(): void {

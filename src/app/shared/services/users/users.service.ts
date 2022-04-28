@@ -1,11 +1,11 @@
-import { environment } from '../../../environments/environment';
-import { IExistingUser } from '../models/IExistingUser';
-import { IUserData } from '../models/IUserData';
+import { environment } from '../../../../environments/environment';
+import { IExistingUser } from '../../models/IExistingUser';
+import { IUserData } from '../../models/IUserData';
 import { catchError, Observable, of, pluck, map, BehaviorSubject, filter } from 'rxjs';
-import { INewUser } from '../models/INewUser';
+import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorHandlerService } from './error-handler.service';
+import { ErrorHandlerService } from '../error-handler/error-handler.service';
 
 
 const httpOptions = {

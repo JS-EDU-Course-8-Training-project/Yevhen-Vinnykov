@@ -1,11 +1,11 @@
 import { Subject, takeUntil } from 'rxjs';
 import { ArticlePageButtonsService, IButtonsState } from './article-page-buttons.service';
-import { AuthorizationService } from '../../../shared/services/authorization.service';
+import { AuthorizationService } from '../../../shared/services/authorization/authorization.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ArticlesService } from 'src/app/shared/services/articles.service';
-import { ProfilesService } from 'src/app/shared/services/profiles.service';
+import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
+import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 

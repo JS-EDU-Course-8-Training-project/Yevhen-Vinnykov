@@ -1,9 +1,9 @@
 import { catchError, Observable, pluck } from 'rxjs';
-import { IComment } from '../models/IComment';
+import { IComment } from '../../models/IComment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ErrorHandlerService } from './error-handler.service';
+import { ErrorHandlerService } from '../error-handler/error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({

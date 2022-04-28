@@ -1,9 +1,9 @@
-import { IProfile } from '../models/IProfile';
+import { IProfile } from '../../models/IProfile';
 import { catchError, Observable, pluck } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ErrorHandlerService } from './error-handler.service';
+import { ErrorHandlerService } from '../error-handler/error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({

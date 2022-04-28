@@ -1,8 +1,9 @@
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, OnChanges, Input, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
-import { ArticlesService } from 'src/app/shared/services/articles.service';
+import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 
 @Component({
   selector: 'app-global-feed',
@@ -19,20 +20,22 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   private notifier: Subject<void> = new Subject<void>();
   public isFinished!: boolean;
   private offset: number = 0;
-  private observer!: IntersectionObserver;
   private currentPage: number = 1;
   private pagesTotalCount!: number;
   private limit: number = 5;
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
-    private articlesService: ArticlesService
+    private articlesService: ArticlesService,
+    private infiniteScroll: InfiniteScrollService
   ) { }
 
   ngOnChanges(): void {
     this.reset();
     if (this.tabIndex === 1 || !this.isAuthorized) {
       this.getArticles();
-      this.observeIntersection();
+      this.infiniteScroll
+      .observeIntersection({canLoad: this.canLoad$, callback: this.getArticles.bind(this)});
     }
   }
 
@@ -43,7 +46,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   ngAfterViewInit(): void {
     this.lastItem.changes.subscribe(change => {
-      if (change.last) this.observer.observe(change.last.nativeElement);
+      if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
     });
   }
 
@@ -58,25 +61,17 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
         this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
         this.isFinished = this.currentPage === this.pagesTotalCount;
         this.isLoading = false;
+        this.canLoad$.next(!this.isFinished && !this.isLoading);
+        this.nextPage();
         // }
       });
   }
 
-  private observeIntersection(): void {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5
-    };
-    this.observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        if (!this.isFinished && !this.isLoading) {
-          this.offset += this.limit;
-          this.getArticles();
-          this.currentPage++;
-        }
-      }
-    }, options);
+  public nextPage(): void {
+    if(this.currentPage < this.pagesTotalCount){
+      this.currentPage++;
+      this.offset += this.limit;
+    }
   }
 
   private reset(): void {

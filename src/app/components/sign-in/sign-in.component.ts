@@ -1,10 +1,10 @@
 import { Subject, takeUntil } from 'rxjs';
 import { IUserData } from '../../shared/models/IUserData';
 import { Router } from '@angular/router';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthorizationService } from 'src/app/shared/services/authorization.service';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
 @Component({

@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { ISavedData } from 'src/app/shared/models/ISavedData';
