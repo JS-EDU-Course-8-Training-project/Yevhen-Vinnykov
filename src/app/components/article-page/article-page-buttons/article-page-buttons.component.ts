@@ -3,11 +3,11 @@ import { ArticlePageButtonsService, IButtonsState } from '../services/buttons/ar
 import { AuthorizationService } from '../../../shared/services/authorization/authorization.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
 @Component({
   selector: 'app-article-page-buttons',
@@ -30,11 +30,11 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
-    private router: Router,
     private articlesService: ArticlesService,
     private profilesService: ProfilesService,
     private authorizationService: AuthorizationService,
-    private articlePageButtonsService: ArticlePageButtonsService
+    private articlePageButtonsService: ArticlePageButtonsService,
+    private redirectionService: RedirectionService
   ) { }
 
   ngOnChanges(): void {
@@ -66,14 +66,14 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
   }
 
   public handleLikeDislike(slug: string): void {
-    if ((!this.isAuthorized)) return this.redirectUnauthorized();
+    if ((!this.isAuthorized)) return this.redirectionService.redirectUnauthorized();
     this.articlePageButtonsService.updateState('favoriteInProgress', true);
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
   }
 
   public handleFollowUnfollow(username: string): void {
-    if ((!this.isAuthorized)) return this.redirectUnauthorized();
+    if ((!this.isAuthorized)) return this.redirectionService.redirectUnauthorized();
     this.articlePageButtonsService.updateState('followingInProgress', true);
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
@@ -105,16 +105,10 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
   public deleteArticle(slug: string): void {
     this.articlesService.deleteArticle(slug)
       .pipe(takeUntil(this.notifier))
-      .subscribe(() => {
-        this.router.navigateByUrl('/').catch(err => console.log(err));
-      });
+      .subscribe(() => this.redirectionService.redirectHome());
   }
 
   public redirectToEditArticle(slug: string): void {
-    this.router.navigateByUrl(`/edit-article/${slug}`).catch(err => console.log(err));
-  }
-
-  private redirectUnauthorized(): void {
-    this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
+    this.redirectionService.redirectToEditArticle(slug);
   }
 }
