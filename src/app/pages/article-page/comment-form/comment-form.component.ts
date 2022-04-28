@@ -2,7 +2,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { CommentsService } from 'src/app/components/article-page/services/comments/comments.service';
+import { CommentsService } from 'src/app/pages/article-page/services/comments/comments.service';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 @Component({

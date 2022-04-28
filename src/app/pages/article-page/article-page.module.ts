@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ArticlePageComponent } from './article-page.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
-import { BannerModule } from '../banner/banner.module';
+import { BannerModule } from '../../components/banner/banner.module';
 import { ArticleBodyComponent } from './article-body/article-body.component';
 import { ArticlePageButtonsComponent } from './article-page-buttons/article-page-buttons.component';
 

@@ -1,5 +1,5 @@
 import { MatDialogModule } from '@angular/material/dialog';
-import { SignUpModule } from './components/sign-up/sign-up.module';
+import { SignUpModule } from './pages/sign-up/sign-up.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -10,10 +10,10 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { HeaderComponent } from './components/header/header.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MatButtonModule } from '@angular/material/button';
-import { SignInModule } from './components/sign-in/sign-in.module';
+import { SignInModule } from './pages/sign-in/sign-in.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BannerModule } from './components/banner/banner.module';
-import { HomeModule } from './components/home/home.module';
+import { HomeModule } from './pages/home/home.module';
 import { ArticleListModule } from './components/article-list/article-list.module';
 import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
 import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';

@@ -6,7 +6,7 @@ import { NewArticlePageRoutingModule } from './new-article-page-routing.module';
 import { NewArticlePageComponent } from './new-article-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
-import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dialog/confirmation-dialog.component';
 
 
 
