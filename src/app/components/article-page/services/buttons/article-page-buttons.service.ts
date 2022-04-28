@@ -10,6 +10,8 @@ export interface IButtonsState {
   likesCount: number;
 }
 
+type Tfield = 'favoriteInProgress' | 'followingInProgress' | 'isLiked' | 'isFollowed' | 'likesCount';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,23 +41,7 @@ export class ArticlePageButtonsService {
     return this.ButtonsState$;
   }
 
-  public setLikesCount(count: number): void {
-    this.ButtonsState$.next({...this.ButtonsState$.getValue(), likesCount: count});
-  }
-
-  public setIsLiked(value: boolean): void {
-    this.ButtonsState$.next({...this.ButtonsState$.getValue(), isLiked: value});
-  }
-
-  public setIsFollowed(value: boolean): void {
-    this.ButtonsState$.next({...this.ButtonsState$.getValue(), isFollowed: value});
-  }
-
-  public setFavoriteInProgress(value: boolean): void {
-    this.ButtonsState$.next({...this.ButtonsState$.getValue(), favoriteInProgress: value});
-  }
-
-  public setFollowingInProgress(value: boolean): void {
-    this.ButtonsState$.next({...this.ButtonsState$.getValue(), followingInProgress: value});
+  public updateState(field: Tfield, value: number | boolean): void {
+    this.ButtonsState$.next({...this.ButtonsState$.getValue(), [field]: value});
   }
 }

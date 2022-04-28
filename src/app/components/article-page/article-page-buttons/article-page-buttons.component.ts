@@ -67,14 +67,14 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
 
   public handleLikeDislike(slug: string): void {
     if ((!this.isAuthorized)) return this.redirectUnauthorized();
-    this.articlePageButtonsService.setFavoriteInProgress(true);
+    this.articlePageButtonsService.updateState('favoriteInProgress', true);
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
   }
 
   public handleFollowUnfollow(username: string): void {
     if ((!this.isAuthorized)) return this.redirectUnauthorized();
-    this.articlePageButtonsService.setFollowingInProgress(true);
+    this.articlePageButtonsService.updateState('followingInProgress', true);
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
   }
@@ -84,9 +84,9 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
       .pipe(takeUntil(this.notifier))
       .subscribe(article => {
         if (!(article instanceof HttpErrorResponse)) {
-          this.articlePageButtonsService.setIsLiked(article.favorited);
-          this.articlePageButtonsService.setLikesCount(article.favoritesCount);
-          this.articlePageButtonsService.setFavoriteInProgress(false);
+          this.articlePageButtonsService.updateState('isLiked', article.favorited);
+          this.articlePageButtonsService.updateState('likesCount' ,article.favoritesCount);
+          this.articlePageButtonsService.updateState('favoriteInProgress', false);
         }
       });
   }
@@ -96,8 +96,8 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
       .pipe(takeUntil(this.notifier))
       .subscribe((profile => {
         if (!(profile instanceof HttpErrorResponse)) {
-          this.articlePageButtonsService.setIsFollowed(profile.following);
-          this.articlePageButtonsService.setFollowingInProgress(false);
+          this.articlePageButtonsService.updateState('isFollowed', profile.following);
+          this.articlePageButtonsService.updateState('followingInProgress', false);
         }
       }));
   }
