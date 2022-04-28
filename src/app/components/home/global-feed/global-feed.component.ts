@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, catchError, Subject, takeUntil } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, OnChanges, Input, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -53,18 +53,23 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   private getArticles(): void {
     this.isLoading = true;
     this.articlesService.fetchArticles(this.offset, this.limit)
-      .pipe(takeUntil(this.notifier))
-      .subscribe((response: IArticleResponse | HttpErrorResponse) => {
-        // if (!(res instanceof HttpErrorResponse)){
-        const res = response as IArticleResponse;
-        this.globalArticles = [...this.globalArticles, ...res.articles];
-        this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
-        this.isFinished = this.currentPage === this.pagesTotalCount;
-        this.isLoading = false;
-        this.canLoad$.next(!this.isFinished && !this.isLoading);
-        this.nextPage();
-        // }
-      });
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
+      .subscribe((response: IArticleResponse | any) => this.setDataOnResponse(response));
+  }
+
+  private setDataOnResponse(response: IArticleResponse): void {
+    this.globalArticles = [...this.globalArticles, ...response.articles];
+    this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
+    this.isFinished = this.currentPage === this.pagesTotalCount;
+    this.isLoading = false;
+    this.canLoad$.next(!this.isFinished && !this.isLoading);
+    this.nextPage();
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    console.error(error);
   }
 
   private nextPage(): void {
