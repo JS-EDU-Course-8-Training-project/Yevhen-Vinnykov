@@ -1,6 +1,6 @@
-import { Subject, takeUntil, BehaviorSubject } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, catchError } from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { IArticle } from 'src/app/shared/models/IArticle';
+import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
@@ -54,18 +54,24 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   private getArticles(): void {
     this.isLoading = true;
     this.articlesService.fetchUserArticles(this.username, this.limit, this.offset)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(res => {
-        if (!(res instanceof HttpErrorResponse)) {
-          this.myArticles = [...this.myArticles, ...res.articles];
-          this.isLoading = false;
-          this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
-          this.isFinished = this.currentPage === this.pagesTotalCount;
-          this.isLoading = false;
-          this.canLoad$.next(!this.isFinished && !this.isLoading);
-          this.nextPage();
-        }
-      });
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
+      .subscribe((res: IArticleResponse | any) => this.setData(res));
+  }
+
+  private setData(response: IArticleResponse): void {
+    this.myArticles = [...this.myArticles, ...response.articles];
+    this.isLoading = false;
+    this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
+    this.isFinished = this.currentPage === this.pagesTotalCount;
+    this.isLoading = false;
+    this.canLoad$.next(!this.isFinished && !this.isLoading);
+    this.nextPage();
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    console.error(error);
   }
 
   private nextPage() {

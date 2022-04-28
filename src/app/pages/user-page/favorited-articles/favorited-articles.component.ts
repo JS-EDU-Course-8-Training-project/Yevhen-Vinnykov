@@ -1,6 +1,6 @@
-import { Subject, takeUntil, BehaviorSubject } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, catchError, Observable } from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { IArticle } from 'src/app/shared/models/IArticle';
+import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
@@ -10,7 +10,7 @@ import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/i
   templateUrl: './favorited-articles.component.html',
   styleUrls: ['./favorited-articles.component.scss']
 })
-export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterViewInit{
+export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
 
   @Input() username!: string;
@@ -26,7 +26,6 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
   private currentPage: number = 1;
   public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-
   constructor(
     private articlesService: ArticlesService,
     private infiniteScroll: InfiniteScrollService
@@ -37,7 +36,7 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
     if (this.tabIndex === 1) {
       this.getArticles();
       this.infiniteScroll
-      .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
+        .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
     }
   }
 
@@ -55,18 +54,24 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
   private getArticles(): void {
     this.isLoading = true;
     this.articlesService.fetchFavoritedArticles(this.username, this.limit, this.offset)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(res => {
-        if (!(res instanceof HttpErrorResponse)) {
-          this.favoritedArticles = [...this.favoritedArticles, ...res.articles];
-          this.isLoading = false;
-          this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
-          this.isFinished = this.currentPage === this.pagesTotalCount;
-          this.isLoading = false;
-          this.canLoad$.next(!this.isFinished && !this.isLoading);
-          this.nextPage();
-        }
-      });
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+      .subscribe((res: IArticleResponse | any) => this.setData(res));
+  }
+
+  private setData(response: IArticleResponse): void {
+    this.favoritedArticles = [...this.favoritedArticles, ...response.articles];
+    this.isLoading = false;
+    this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
+    this.isFinished = this.currentPage === this.pagesTotalCount;
+    this.isLoading = false;
+    this.canLoad$.next(!this.isFinished && !this.isLoading);
+    this.nextPage();
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    console.error(error);
   }
 
   private nextPage() {
