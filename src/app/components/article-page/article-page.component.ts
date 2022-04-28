@@ -21,6 +21,7 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   public authUser!: IExistingUser;
   public isLoaded: boolean = false;
   private notifier: Subject<void> = new Subject<void>();
+  public commentsBeingDeletedIds: number[] = [];
 
   constructor(
     private articlesService: ArticlesService,
@@ -76,10 +77,15 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   }
 
   public deleteComment(id: number): void {
+    const commentToBeDeletedId: number | undefined = this.comments.find(comment => comment.id === id)?.id;
+    if (commentToBeDeletedId) {
+      this.commentsBeingDeletedIds.push(commentToBeDeletedId);
+    }
     this.commentsService.removeComment(this.slug, id)
       .pipe(takeUntil(this.notifier))
       .subscribe(() => {
         this.getComments();
+        this.commentsBeingDeletedIds.pop();
       });
   }
 }

@@ -18,6 +18,7 @@ export class CommentFormComponent implements OnInit {
   public commentForm!: FormGroup;
   public isAuthorized!: boolean;
   private notifier: Subject<void> = new Subject<void>();
+  public isLoading: boolean = false;
 
   constructor(
     private commentsService: CommentsService,
@@ -44,11 +45,15 @@ export class CommentFormComponent implements OnInit {
       body: this.commentForm.getRawValue().body,
     };
     if (this.commentForm.valid) {
+      this.isLoading = true;
+      this.commentForm.disable();
       this.commentsService.createComment(this.slug, newComment)
         .pipe(takeUntil(this.notifier))
         .subscribe(() => {
           this.commentEventEmmiter.emit();
           this.commentForm.reset();
+          this.isLoading = false;
+          this.commentForm.enable();
         });
     }
   }

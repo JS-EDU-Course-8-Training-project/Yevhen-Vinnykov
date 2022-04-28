@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 //import { BannerComponent } from './../banner/banner.component';
 import { MatDividerModule } from '@angular/material/divider';
@@ -30,6 +31,7 @@ import { ArticlePageButtonsComponent } from './article-page-buttons/article-page
     ReactiveFormsModule,
     MatIconModule,
     MatChipsModule,
+    MatProgressSpinnerModule,
     MatDividerModule,
     BannerModule,
     MatButtonModule,
