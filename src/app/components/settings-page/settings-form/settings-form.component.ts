@@ -3,9 +3,9 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
 @Component({
   selector: 'app-settings-form',
@@ -25,7 +25,7 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private router: Router,
+    private redirectionService: RedirectionService,
     private authorizationService: AuthorizationService
   ) { }
 
@@ -90,12 +90,12 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe((user: IExistingUser | any) => {
         this.isModified$.next(false);
         this.authorizationService.authorize(user.token || '');
-        this.router.navigateByUrl(`user/${user.username}`);
+        this.redirectionService.redirectByUrl(`user/${user.username}`);
       });
   }
 
   public logout(): void {
     this.authorizationService.removeAuthorization();
-    this.router.navigateByUrl('/');
+    this.redirectionService.redirectHome();
   }
 }
