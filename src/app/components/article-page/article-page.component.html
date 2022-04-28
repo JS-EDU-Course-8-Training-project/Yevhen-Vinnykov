@@ -9,34 +9,30 @@
                         <p>{{article?.createdAt | date}}</p>
                     </div>
                 </a>
-            <app-article-page-buttons [authUser]="authUser" [article]="article" [slug]="slug"></app-article-page-buttons>
+            <app-article-page-buttons 
+                [authUser]="authUser" 
+                [article]="article" 
+                [slug]="slug"
+                >
+            </app-article-page-buttons>
         </div>
     </div>
 </app-banner>
-<app-article-body [authUser]="authUser" [slug]="slug" [article]="article"></app-article-body>
-<app-comment-form [image]="authUser?.image || ''" (commentEventEmmiter)="getComments()" [slug]="slug">
+<app-article-body 
+    [authUser]="authUser" 
+    [slug]="slug" 
+    [article]="article"
+    >
+</app-article-body>
+<app-comment-form 
+    [image]="authUser?.image || ''" 
+    (commentEventEmmiter)="reuestComments()" 
+    [slug]="slug"
+    >
 </app-comment-form>
-<section class="article-comments">
-    <mat-card class="comment" *ngFor="let comment of comments">
-        <mat-card-content>
-            <p>{{comment?.body}}</p>
-        </mat-card-content>
-        <mat-card-footer class="footer">
-            <div>
-                <img src="{{comment?.author?.image}}" alt="">
-                <div>
-                    <p>{{comment?.author?.username}}</p>
-                    <p>{{comment?.createdAt | date}}</p>
-                </div>
-            </div>
-            <mat-icon 
-            (click)="deleteComment(comment.id)" 
-            *ngIf="comment?.author?.username === authUser?.username"
-            class="delete-icon"
-            >
-            <span *ngIf="!commentsBeingDeletedIds.includes(comment.id)">delete</span>
-            <mat-spinner diameter="25" *ngIf="commentsBeingDeletedIds.includes(comment.id)"></mat-spinner>
-        </mat-icon>
-        </mat-card-footer>
-    </mat-card>
-</section>
+<app-comments 
+    [requestForComments$]="requestForComments$" 
+    [authUser]="authUser" 
+    [slug]="slug"
+    >
+</app-comments>

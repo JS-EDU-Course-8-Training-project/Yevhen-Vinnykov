@@ -1,6 +1,6 @@
+import { CommentsComponent } from './comments/comments.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
-//import { BannerComponent } from './../banner/banner.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,6 +23,7 @@ import { ArticlePageButtonsComponent } from './article-page-buttons/article-page
     CommentFormComponent,
     ArticleBodyComponent,
     ArticlePageButtonsComponent,
+    CommentsComponent,
   ],
   imports: [
     CommonModule,

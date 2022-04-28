@@ -1,10 +1,8 @@
 import { Subject, takeUntil } from 'rxjs';
-import { CommentsService } from './services/comments/comments.service';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Router } from '@angular/router';
-import { IComment } from 'src/app/shared/models/IComment';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,22 +15,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ArticlePageComponent implements OnInit, OnDestroy {
   public slug: string = this.router.url.split('/')[2];
   public article!: IArticle;
-  public comments!: IComment[];
   public authUser!: IExistingUser;
   public isLoaded: boolean = false;
   private notifier: Subject<void> = new Subject<void>();
-  public commentsBeingDeletedIds: number[] = [];
+  public requestForComments$: Subject<void> = new Subject<void>();
 
   constructor(
     private articlesService: ArticlesService,
-    private commentsService: CommentsService,
     private usersService: UsersService,
     private router: Router,
   ) { }
 
   ngOnInit(): void {
     this.getArticle();
-    this.getComments();
     this.getAuthUser();
   }
 
@@ -41,10 +36,13 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
     this.notifier.complete();
   }
 
+  public reuestComments(): void {
+    this.requestForComments$.next();
+  }
+
   private getAuthUser(): void {
     this.usersService.fetchAuthUser()
-      .pipe(
-        takeUntil(this.notifier))
+      .pipe(takeUntil(this.notifier))
       .subscribe(user => {
         if (!(user instanceof HttpErrorResponse)) {
           this.authUser = user;
@@ -61,31 +59,6 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
           this.article = article;
           this.isLoaded = true;
         }
-      });
-  }
-
-  public getComments(): void {
-    this.isLoaded = false;
-    this.commentsService.fetchArticleComments(this.slug)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(comments => {
-        if (!(comments instanceof HttpErrorResponse)) {
-          this.comments = comments;
-          this.isLoaded = true;
-        }
-      });
-  }
-
-  public deleteComment(id: number): void {
-    const commentToBeDeletedId: number | undefined = this.comments.find(comment => comment.id === id)?.id;
-    if (commentToBeDeletedId) {
-      this.commentsBeingDeletedIds.push(commentToBeDeletedId);
-    }
-    this.commentsService.removeComment(this.slug, id)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(() => {
-        this.getComments();
-        this.commentsBeingDeletedIds.pop();
       });
   }
 }
