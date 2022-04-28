@@ -2,9 +2,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { IArticle } from '../../shared/models/IArticle';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
 @Component({
   selector: 'app-article-list',
@@ -21,14 +21,15 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   constructor(
     private articlesService: ArticlesService,
-    private router: Router,
+    private redirectionService: RedirectionService,
     private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit(): void {
     this.likesCount = this.article.favoritesCount;
     this.isLiked = this.article.favorited;
-    this.authorizationService.isAuthorized$.pipe(takeUntil(this.notifier))
+    this.authorizationService.isAuthorized$
+      .pipe(takeUntil(this.notifier))
       .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
   }
 
@@ -38,7 +39,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   public handleLikeDislike(slug: string): void {
-    if (!this.isAuthorized) return this.redirectUnauthorized();
+    if (!this.isAuthorized) return this.redirectionService.redirectUnauthorized();
     this.isPending = true;
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
@@ -53,9 +54,5 @@ export class ArticleListComponent implements OnInit, OnDestroy {
           this.likesCount = article.favoritesCount;
         }
       });
-  }
-
-  private redirectUnauthorized(): void {
-    this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
   }
 }
