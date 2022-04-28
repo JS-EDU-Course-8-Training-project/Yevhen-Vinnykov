@@ -1,5 +1,5 @@
 import { Subject, takeUntil } from 'rxjs';
-import { CommentsService } from '../../shared/services/comments/comments.service';
+import { CommentsService } from './services/comments/comments.service';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';

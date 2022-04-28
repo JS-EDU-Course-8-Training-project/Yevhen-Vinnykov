@@ -1,5 +1,5 @@
 import { Subject, takeUntil } from 'rxjs';
-import { ArticlePageButtonsService, IButtonsState } from './article-page-buttons.service';
+import { ArticlePageButtonsService, IButtonsState } from '../services/buttons/article-page-buttons.service';
 import { AuthorizationService } from '../../../shared/services/authorization/authorization.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, OnInit, Input, OnChanges, OnDestroy } from '@angular/core';
