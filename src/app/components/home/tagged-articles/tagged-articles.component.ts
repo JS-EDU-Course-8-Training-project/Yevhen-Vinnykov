@@ -1,48 +1,91 @@
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
-import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 
 @Component({
   selector: 'app-tagged-articles',
   templateUrl: './tagged-articles.component.html',
   styleUrls: ['./tagged-articles.component.scss']
 })
-export class TaggedArticlesComponent implements OnChanges, OnDestroy {
+export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewInit {
+  @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
+
   @Input() isAuthorized: boolean = false;
   @Input() selectedTag!: string | null;
   @Input() tabIndex!: number;
 
   public articlesSelectedByTag: IArticle[] = [];
   public isLoading: boolean = false;
-  private articlesSubscription!: Subscription;
+  private notifier: Subject<void> = new Subject<void>();
+  public isFinished!: boolean;
+  private offset: number = 0;
+  private pagesTotalCount!: number;
+  private limit: number = 5;
+  private currentPage: number = 1;
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor(
-    private articlesService: ArticlesService
+    private articlesService: ArticlesService,
+    private infiniteScroll: InfiniteScrollService
   ) { }
 
   ngOnChanges() {
+    this.reset();
     if (this.tabIndex === 2) {
-      this.getFollowedArticles();
+      this.getTaggedArticles();
+      this.infiniteScroll
+        .observeIntersection({ canLoad: this.canLoad$, callback: this.getTaggedArticles.bind(this) });
     }
   }
 
   ngOnDestroy(): void {
-    this.articlesSubscription.unsubscribe();
+    this.notifier.next();
+    this.notifier.complete();
   }
 
-  private getFollowedArticles() {
+  ngAfterViewInit(): void {
+    this.lastItem.changes
+      .pipe(takeUntil(this.notifier))
+      .subscribe(change => {
+        if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
+      });
+  }
+
+  private getTaggedArticles() {
     if (this.selectedTag) {
       this.isLoading = true;
-      this.articlesSubscription = this.articlesService
-        .fetchArticlesByTag(this.selectedTag)
+      this.articlesService
+        .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
+        .pipe(takeUntil(this.notifier))
         .subscribe(res => {
           if (!(res instanceof HttpErrorResponse)) {
-            this.articlesSelectedByTag = res.articles;
+            this.articlesSelectedByTag = [...this.articlesSelectedByTag, ...res.articles];
+            this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
+            this.isFinished = this.currentPage === this.pagesTotalCount;
             this.isLoading = false;
+            this.canLoad$.next(!this.isFinished && !this.isLoading);
+            this.nextPage();
           }
         });
     }
   }
+
+  private nextPage(): void {
+    if (this.currentPage < this.pagesTotalCount) {
+      this.currentPage++;
+      this.offset += this.limit;
+    }
+  }
+
+  private reset(): void {
+    this.articlesSelectedByTag = [];
+    this.offset = 0;
+    this.isFinished = false;
+    this.currentPage = 1;
+    this.pagesTotalCount = 0;
+  }
+
 }

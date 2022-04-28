@@ -67,7 +67,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
       });
   }
 
-  public nextPage(): void {
+  private nextPage(): void {
     if(this.currentPage < this.pagesTotalCount){
       this.currentPage++;
       this.offset += this.limit;

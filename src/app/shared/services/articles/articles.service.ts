@@ -76,8 +76,9 @@ export class ArticlesService {
     );
   }
 
-  public fetchArticlesByTag(tag: string): Observable<IArticleResponse | HttpErrorResponse> {
-    return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}`, httpOptions)
+  public fetchArticlesByTag(tag: string, offset: number = 0, limit: number = 5):
+    Observable<IArticleResponse | HttpErrorResponse> {
+    return this.http.get<IArticleResponse>(`${this.baseURL}?tag=${tag}&limit=${limit}&offset=${offset}`, httpOptions)
       .pipe(
         catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
       );;

@@ -65,7 +65,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
       });
   }
 
-  public nextPage() {
+  private nextPage() {
     if (this.currentPage < this.pagesTotalCount) {
       this.currentPage++;
       this.offset += this.limit;
