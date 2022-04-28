@@ -1,8 +1,8 @@
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { catchError, Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/shared/services/users/users.service';
-import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { INewUser } from 'src/app/shared/models/INewUser';
@@ -22,7 +22,7 @@ export class SignUpComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private router: Router,
+    private redirectionService: RedirectionService,
     private authorizationService: AuthorizationService
   ) { }
 
@@ -74,7 +74,7 @@ export class SignUpComponent implements OnInit {
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
         this.authorizationService.authorize(user.token);
-        this.router.navigateByUrl('').catch(err => console.log(err));
+        this.redirectionService.redirectHome();
         this.isPending = false;
       });
   }

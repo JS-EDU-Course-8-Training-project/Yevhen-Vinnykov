@@ -1,12 +1,12 @@
-import { catchError, Observable, Subject, takeUntil } from 'rxjs';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { catchError, Subject, takeUntil } from 'rxjs';
 import { IUserData } from '../../shared/models/IUserData';
-import { Router } from '@angular/router';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,7 +22,7 @@ export class SignInComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private router: Router,
+    private redirectionService: RedirectionService,
     private authorizationService: AuthorizationService
   ) { }
 
@@ -72,7 +72,7 @@ export class SignInComponent implements OnInit, OnDestroy {
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
         this.authorizationService.authorize(user.token || '');
-        this.router.navigateByUrl('').catch(err => console.log(err));
+        this.redirectionService.redirectHome();
         this.isPending = false;
       });
   }
