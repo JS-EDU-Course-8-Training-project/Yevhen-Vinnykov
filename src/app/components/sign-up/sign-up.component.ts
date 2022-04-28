@@ -1,10 +1,12 @@
-import { Subject, takeUntil } from 'rxjs';
+import { catchError, Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Router } from '@angular/router';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { INewUser } from 'src/app/shared/models/INewUser';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-up',
@@ -41,30 +43,39 @@ export class SignUpComponent implements OnInit {
     return !(this.signupForm.get(formControl)?.touched && this.signupForm.get(formControl)?.invalid);
   }
 
-  public handleSignup(): void {
-    this.signupForm.disable();
-    this.isPending = true;
-    this.errors = [];
-    const newUser = {
+  private createUserData(): INewUser {
+    return {
       username: this.signupForm.getRawValue().username,
       email: this.signupForm.getRawValue().email,
       password: this.signupForm.getRawValue().password
     };
-    this.usersService.createUser(newUser)
-    .pipe(takeUntil(this.notifier))
-    .subscribe((res: IExistingUser | any) => {
-      if (res.error) {
-        Object.keys(res.error.errors).forEach(key => {
-          this.errors.push(`${key} ${res.error.errors[key][0]}`)
-        })
+  }
+
+  private onSubmit(): void {
+    this.signupForm.disable();
+    this.isPending = true;
+    this.errors = [];
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    Object.keys(error.error.errors).forEach(key => {
+      this.errors.push(`${key} ${error.error.errors[key][0]}`)
+    })
+    this.isPending = false;
+    this.signupForm.enable();
+    this.signupForm.markAsUntouched();
+  }
+
+  public handleSignup(): void {
+    this.onSubmit();
+    this.usersService.createUser(this.createUserData())
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
+      .subscribe((user: IExistingUser | any) => {
+        this.authorizationService.authorize(user.token);
+        this.router.navigateByUrl('').catch(err => console.log(err));
         this.isPending = false;
-        this.signupForm.enable();
-        this.signupForm.markAsUntouched();
-        return;
-      }
-      this.authorizationService.authorize(res.token);
-      this.router.navigateByUrl('').catch(err => console.log(err));
-      this.isPending = false;
-    });
+      });
   }
 }

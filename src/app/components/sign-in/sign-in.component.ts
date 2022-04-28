@@ -70,8 +70,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.notifier),
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
-      .subscribe((res: IExistingUser | any) => {
-        const user: IExistingUser = res;
+      .subscribe((user: IExistingUser | any) => {
         this.authorizationService.authorize(user.token || '');
         this.router.navigateByUrl('').catch(err => console.log(err));
         this.isPending = false;
