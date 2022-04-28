@@ -7,6 +7,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class UserPageComponent implements OnInit, OnDestroy {
     private usersService: UsersService,
     private profilesService: ProfilesService,
     private router: Router,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private redirectionService: RedirectionService,
   ) { }
 
   ngOnInit(): void {
@@ -88,6 +90,6 @@ export class UserPageComponent implements OnInit, OnDestroy {
   }
 
   private redirectUnauthorized(): void {
-    this.router.navigateByUrl('/sign-in').catch((err: any) => console.log(err));
+    this.redirectionService.redirectUnauthorized();
   }
 }
