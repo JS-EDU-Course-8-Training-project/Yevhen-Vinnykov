@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -23,6 +23,6 @@ export class ErrorHandlerService {
     //return throwError(() => new Error('Something bad happened; please try again later.'));
     console.log(error);
     
-    return of(error);
+    return throwError(() => error);
   }
 }
