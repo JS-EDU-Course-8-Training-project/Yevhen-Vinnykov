@@ -1,5 +1,5 @@
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { IArticle } from 'src/app/shared/models/IArticle';
+import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
+import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -34,7 +34,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     if (this.tabIndex === 0) {
       this.getFollowedArticles();
       this.infiniteScroll
-      .observeIntersection({ canLoad: this.canLoad$, callback: this.getFollowedArticles.bind(this) });
+        .observeIntersection({ canLoad: this.canLoad$, callback: this.getFollowedArticles.bind(this) });
     }
   }
 
@@ -52,17 +52,23 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   private getFollowedArticles() {
     this.isLoading = true;
     this.articlesService.fetchFollowedArticles(this.offset, this.limit)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(res => {
-        if (!(res instanceof HttpErrorResponse)) {
-          this.followedArticles = [...this.followedArticles, ...res.articles];
-          this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
-          this.isFinished = this.currentPage === this.pagesTotalCount;
-          this.isLoading = false;
-          this.canLoad$.next(!this.isFinished && !this.isLoading);
-          this.nextPage();
-        }
-      });
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+      .subscribe((response: IArticleResponse | any) => this.setDataOnResponse(response));
+  }
+
+  private setDataOnResponse(response: IArticleResponse): void {
+    this.followedArticles = [...this.followedArticles, ...response.articles];
+    this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
+    this.isFinished = this.currentPage === this.pagesTotalCount;
+    this.isLoading = false;
+    this.canLoad$.next(!this.isFinished && !this.isLoading);
+    this.nextPage();
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    console.error(error);
   }
 
   private nextPage() {
