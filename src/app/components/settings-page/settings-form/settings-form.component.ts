@@ -1,4 +1,4 @@
-import { Subject, take, takeUntil, BehaviorSubject } from 'rxjs';
+import { Subject, take, takeUntil, BehaviorSubject, catchError } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -58,32 +58,39 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
     return !(this.settingsForm.get(formControl)?.touched && this.settingsForm.get(formControl)?.invalid);
   }
 
-  public updateSettings(): void {
-    this.isPending = true;
-    this.settingsForm.disable();
-    this.error = '';
-    const settings: IExistingUser = {
+  private createUserData(): IExistingUser {
+    return {
       image: this.settingsForm.getRawValue().imageURL,
       username: this.settingsForm.getRawValue().username,
       bio: this.settingsForm.getRawValue().bio,
       email: this.settingsForm.getRawValue().email,
       password: this.settingsForm.getRawValue().newPassword,
     };
-    this.usersService.updateUser(settings)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(res => {
-        if (res instanceof HttpErrorResponse) {
-          this.error = res.error;
-          this.isPending = false;
-          this.settingsForm.enable();
-          this.settingsForm.markAsUntouched();
-          this.usersService.fetchAuthUser();
-          return;
-        }
-        if(res as IExistingUser)
+  }
+
+  private onSubmit(): void {
+    this.isPending = true;
+    this.settingsForm.disable();
+    this.error = '';
+  }
+
+  private onCatchError(error: HttpErrorResponse): void {
+    this.error = error.error;
+    this.isPending = false;
+    this.settingsForm.enable();
+    this.settingsForm.markAsUntouched();
+  }
+
+  public updateSettings(): void {
+    this.onSubmit();
+    this.usersService.updateUser(this.createUserData())
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
+      .subscribe((user: IExistingUser | any) => {
         this.isModified$.next(false);
-        this.authorizationService.authorize(res.token || '');
-        this.router.navigateByUrl(`user/${res.username}`);
+        this.authorizationService.authorize(user.token || '');
+        this.router.navigateByUrl(`user/${user.username}`);
       });
   }
 
