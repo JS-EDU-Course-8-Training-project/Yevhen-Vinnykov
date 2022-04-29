@@ -1,9 +1,8 @@
-import { catchError, Observable, pluck } from 'rxjs';
+import { Observable, pluck } from 'rxjs';
 import { IComment } from '../../../../shared/models/IComment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ErrorHandlerService } from '../../../../shared/services/error-handler/error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -23,32 +22,22 @@ interface INewComment {
 export class CommentsService {
   private baseURL: string = environment.apiURL;
   constructor(
-    private http: HttpClient,
-    private errorHandler: ErrorHandlerService
-  ) { }
+    private http: HttpClient
+      ) { }
 
   public fetchArticleComments(slug: string): Observable<IComment[] | HttpErrorResponse> {
     return this.http
       .get<{ comments: IComment[] }>(`${this.baseURL}/articles/${slug}/comments`, httpOptions)
-      .pipe(
-        pluck('comments'),
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
-      );
+      .pipe(pluck('comments'));
   }
 
   public createComment(slug: string, comment: INewComment): Observable<IComment | HttpErrorResponse> {
     return this.http
-      .post<IComment>(`${this.baseURL}/articles/${slug}/comments`, JSON.stringify({ comment }), httpOptions)
-      .pipe(
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
-      );
+      .post<IComment>(`${this.baseURL}/articles/${slug}/comments`, JSON.stringify({ comment }), httpOptions);
   }
 
   public removeComment(slug: string, id: number): Observable<IComment | HttpErrorResponse> {
     return this.http
-      .delete<IComment>(`${this.baseURL}/articles/${slug}/comments/${id}`, httpOptions)
-      .pipe(
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
-      );
+      .delete<IComment>(`${this.baseURL}/articles/${slug}/comments/${id}`, httpOptions);
   }
 }

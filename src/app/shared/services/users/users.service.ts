@@ -1,11 +1,10 @@
 import { environment } from '../../../../environments/environment';
 import { IExistingUser } from '../../models/IExistingUser';
 import { IUserData } from '../../models/IUserData';
-import { catchError, Observable, of, pluck, map, BehaviorSubject, filter } from 'rxjs';
+import { Observable, of, pluck, map, BehaviorSubject, filter } from 'rxjs';
 import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorHandlerService } from '../error-handler/error-handler.service';
 import { AuthorizationService } from '../authorization/authorization.service';
 
 
@@ -30,7 +29,6 @@ export class UsersService {
 
   constructor(
     private http: HttpClient,
-    private errorHandler: ErrorHandlerService,
     private authorizationService: AuthorizationService
   ) { }
 
@@ -42,8 +40,7 @@ export class UsersService {
           this.authorizationService.authorize(user.token || '');
           this.authUser$.next(user);
           return user;
-        }),
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
+        })
       );
   }
 
@@ -57,7 +54,6 @@ export class UsersService {
           this.authUser$.next(user);
           return user;
         }),
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
       );
   }
 
@@ -70,7 +66,6 @@ export class UsersService {
           this.authUser$.next(user);
           return user;
         }),
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
       );
   }
 
@@ -84,8 +79,7 @@ export class UsersService {
           this.authUser$.next(user);
           return user;
         }),
-        catchError((err): Observable<HttpErrorResponse> => this.errorHandler.handleError(err))
-      );
+     );
   }
 
   public signOut(): void {
