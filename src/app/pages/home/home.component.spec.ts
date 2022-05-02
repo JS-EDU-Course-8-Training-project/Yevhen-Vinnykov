@@ -8,7 +8,9 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
+      declarations: [ HomeComponent ],
+      imports: [
+      ]
     })
     .compileComponents();
   });
@@ -22,4 +24,31 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should select tag', () => {
+    const spy = spyOn(component, 'handleSelectTag').and.callThrough();
+    component.handleSelectTag('test');
+    expect(component.selectedTag).toBe('test');
+    expect(component.tabIndex).toBe(2);
+    expect(spy).toHaveBeenCalledOnceWith('test');
+  });
+
+  it('should change tab index and', () => {
+    const spy = spyOn(component, 'handleTabChange').and.callThrough();
+    component.handleSelectTag('test');
+    component.handleTabChange(2);
+    expect(component.tabIndex).toBe(2);
+    expect(component.selectedTag).toBe('test');
+    expect(spy).toHaveBeenCalledOnceWith(2);
+  });
+
+  it('should change tab index and set tag to null', () => {
+    const spy = spyOn(component, 'handleTabChange').and.callThrough();
+    component.handleSelectTag('test');
+    component.handleTabChange(1);
+    expect(component.tabIndex).toBe(1);
+    expect(component.selectedTag).toBe(null);
+    expect(spy).toHaveBeenCalledOnceWith(1);
+  });
+
 });
