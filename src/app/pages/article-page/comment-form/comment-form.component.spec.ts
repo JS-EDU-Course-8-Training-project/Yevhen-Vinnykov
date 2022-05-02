@@ -62,70 +62,34 @@ describe('CommentFormComponent', () => {
   });
 
   it('AddComment method should not be called because the form is empty', () => {
-    const spy = spyOn(component, 'addComment');
+    const spy = spyOn(component, 'addComment').and.callThrough();
     component.commentForm.controls['body'].setValue('');
     fixture.detectChanges();
-    const button = fixture.debugElement.query(By.css('button'));
-    expect(button.nativeElement.disabled).toBeTruthy();
+    const button = fixture.debugElement.query(By.css('button')).nativeElement;
+    expect(button.disabled).toBeTruthy();
+    expect(component.commentForm.valid).toBeFalsy();
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('AddComment method should be called', waitForAsync(() => {
-    fixture.detectChanges();
-    const spy = spyOn(component, 'addComment');
-    const spyCreateCommentData = spyOn<any>(component, 'createCommentData');
+    const spy = spyOn(component, 'addComment').and.callThrough();
+    const spyCreateCommentData = spyOn<any>(component, 'createCommentData').and.callThrough();
     component.commentForm.controls['body'].setValue('test-comment');
     fixture.detectChanges();
     const button = fixture.debugElement.query(By.css('button')).nativeElement;
-    button.click();
-    fixture.detectChanges();
     expect(component.commentForm.getRawValue().body).toBe('test-comment');
     expect(component.commentForm.valid).toBeTruthy();
     expect(button.disabled).toBeFalsy();
+    button.click();
+    fixture.detectChanges();
+    expect(component.commentForm.getRawValue().body).toBeFalsy();
+    expect(component.commentForm.valid).toBeFalsy();
+    expect(button.disabled).toBeTruthy();
     expect(spy).toHaveBeenCalled();
-    //expect(spyCreateCommentData).toHaveBeenCalled();
+    expect(spyCreateCommentData).toHaveBeenCalled();
   }));
 
 });
 
-
-
-// describe('CommentFormComponent', () => {
-//   let component: CommentFormComponent;
-//   let fixture: ComponentFixture<CommentFormComponent>;
-
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [CommentFormComponent],
-//       providers: [FormBuilder],
-//       imports: [ReactiveFormsModule]
-//     }).overrideComponent(CommentFormComponent, {
-//       set: {
-//         providers: [
-//           { provide: CommentsService, useClass: CommentsServiceMock },
-//           { provide: AuthorizationService, useClass: AuthorizationServiceMock }
-//         ]
-//       }
-//     })
-//       .compileComponents();
-//   });
-
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(CommentFormComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
-
-
-//   it('AddComment method should be called but should not create a comment', () => {
-//     const spy = spyOn(component, 'addComment');
-//     const spyCreateCommentData = spyOn<any>(component, 'createCommentData');
-//     fixture.debugElement.query(By.css('form')).triggerEventHandler('ngSubmit', null);
-//     fixture.detectChanges();
-//     expect(spy).toHaveBeenCalled();
-//     expect(spyCreateCommentData).not.toHaveBeenCalled();
-//   });
-
-// });
 
 
