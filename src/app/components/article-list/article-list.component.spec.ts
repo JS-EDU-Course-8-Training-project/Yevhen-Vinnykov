@@ -1,6 +1,52 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { AuthorizationService } from './../../shared/services/authorization/authorization.service';
+import { RedirectionService } from './../../shared/services/redirection/redirection.service';
+import { ArticlesService } from './../../shared/services/articles/articles.service';
+import { of } from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ArticleListComponent } from './article-list.component';
+import { IArticle } from './../../shared/models/IArticle';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard } from '@angular/material/card';
+import { By } from '@angular/platform-browser';
+
+const article: IArticle = {
+  slug: 'test-slug',
+  title: '',
+  description: '',
+  body: '',
+  tagList: [],
+  createdAt: '',
+  updatedAt: '',
+  favorited: false,
+  favoritesCount: 2,
+  author: {
+    username: 'test',
+    bio: 'test-bio',
+    image: '',
+    following: false,
+  }
+};
+
+class AricleServiceMock {
+  
+  public addToFavorites = (slug: string) => of(
+    { ...article, favorited: true, favoritesCount: article.favoritesCount + 1 });
+
+  public removeFromFavorites = (slug: string) => of(
+    { ...article, favorited: false, favoritesCount: article.favoritesCount - 1 });
+}
+
+class RedirectionServiceMock {
+  public redirectUnauthorized = () => new Promise<boolean>((resolve, reject) => resolve(true));
+}
+
+class AuthorizationServiceAuthorizedMock {
+  public isAuthorized$ = of(true);
+}
+
+class AuthorizationServiceNotAuthorizedMock {
+  public isAuthorized$ = of(false);
+}
 
 describe('ArticleComponent', () => {
   let component: ArticleListComponent;
@@ -8,18 +54,122 @@ describe('ArticleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArticleListComponent ]
+      declarations: [ArticleListComponent, MatIcon, MatCard],
+      providers: [
+        { provide: ArticlesService, useClass: AricleServiceMock },
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
+        { provide: AuthorizationService, useClass: AuthorizationServiceAuthorizedMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ArticleListComponent);
     component = fixture.componentInstance;
+    const inputArticle: IArticle = article;
+    component.article = inputArticle;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async () => {
     expect(component).toBeTruthy();
   });
+
+  it('should initialize correctly', async () => {
+    expect(component.likesCount).toBe(2);
+  });
+
+});
+
+
+describe('HandleLikeDislike Method', () => {
+  let component: ArticleListComponent;
+  let fixture: ComponentFixture<ArticleListComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ArticleListComponent, MatIcon, MatCard],
+      providers: [
+        { provide: ArticlesService, useClass: AricleServiceMock },
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
+        { provide: AuthorizationService, useClass: AuthorizationServiceAuthorizedMock }
+      ]
+    })
+      .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ArticleListComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should be invoked on button click and dislike', waitForAsync(() => {
+    const inputArticle: IArticle = {...article, favorited: true};
+    component.article = inputArticle;
+    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+    fixture.detectChanges();
+    const buttonElement = fixture.debugElement.query(By.css('button'));
+    buttonElement.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.likesCount).toBe(1);
+      expect(component.isLiked).toBe(false);
+      expect(spy).toHaveBeenCalledWith('test-slug', 'removeFromFavorites');
+    });
+  })); 
+
+  it('should be invoked on button click and like', waitForAsync(() => {
+    const inputArticle: IArticle = {...article, favorited: false};
+    component.article = inputArticle;
+    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+    fixture.detectChanges();
+    const buttonElement = fixture.debugElement.query(By.css('button'));
+    buttonElement.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.likesCount).toBe(3);
+      expect(component.isLiked).toBe(true);
+      expect(spy).toHaveBeenCalledWith('test-slug', 'addToFavorites');
+    });
+  }));
+
+});
+
+describe('HandleLikeDislike Method', () => {
+  let component: ArticleListComponent;
+  let fixture: ComponentFixture<ArticleListComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ArticleListComponent, MatIcon, MatCard],
+      providers: [
+        { provide: ArticlesService, useClass: AricleServiceMock },
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
+        { provide: AuthorizationService, useClass: AuthorizationServiceNotAuthorizedMock }
+      ]
+    })
+      .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ArticleListComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should not be invoked on button because unauthorized', waitForAsync(() => {
+    const inputArticle: IArticle = {...article};
+    component.article = inputArticle;
+    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+    fixture.detectChanges();
+    const buttonElement = fixture.debugElement.query(By.css('button'));
+    buttonElement.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.likesCount).toBe(2);
+      expect(component.isLiked).toBe(false);
+      expect(spy).not.toHaveBeenCalled();
+    });
+  })); 
+
 });
