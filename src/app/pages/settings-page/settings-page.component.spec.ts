@@ -1,6 +1,26 @@
+import { UsersService } from './../../shared/services/users/users.service';
+import { of } from 'rxjs';
+import { IExistingUser } from './../../shared/models/IExistingUser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SettingsPageComponent } from './settings-page.component';
+import { SettingsFormComponent } from './settings-form/settings-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
+const mockUser: IExistingUser = {
+  email: 'test@example.com',
+  username: 'test-username',
+  bio: 'test-bio',
+  image: 'test-image',
+  token: 'test-token',
+  password: 'test-password'
+}
+
+
+class UsersServiceMock {
+  public authUser$ = of(mockUser);
+}
 
 describe('SettingsPageComponent', () => {
   let component: SettingsPageComponent;
@@ -8,9 +28,13 @@ describe('SettingsPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SettingsPageComponent ]
+      declarations: [SettingsPageComponent, SettingsFormComponent],
+      imports: [ReactiveFormsModule, FormsModule],
+      providers: [
+        { provide: UsersService, useClass: UsersServiceMock }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

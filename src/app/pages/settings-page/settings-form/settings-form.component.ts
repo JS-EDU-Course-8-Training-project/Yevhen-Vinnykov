@@ -1,6 +1,6 @@
 import { Subject, take, takeUntil, BehaviorSubject, catchError } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
   styleUrls: ['./settings-form.component.scss']
 })
 
-export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
+export class SettingsFormComponent implements OnInit, OnDestroy {
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
@@ -28,13 +28,10 @@ export class SettingsFormComponent implements OnInit, OnChanges, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.initializeForm();
     this.settingsForm.valueChanges
       .pipe(take(1))
       .subscribe(() => this.isModified$.next(true));
-  }
-
-  ngOnChanges(): void {
-    this.initializeForm();
   }
 
   ngOnDestroy(): void {

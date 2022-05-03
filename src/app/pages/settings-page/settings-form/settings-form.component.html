@@ -19,11 +19,27 @@
             <input type="text" class="form-control" id="newPassword" name="newPassword" required
                 formControlName="newPassword" placeholder="New password">
             <div>
-                <button [disabled]="isPending" align="end" type="submit" mat-raised-button color="primary">
+                <button 
+                    [disabled]="isPending" 
+                    align="end" 
+                    type="submit" 
+                    mat-raised-button 
+                    color="primary"
+                    data-angular="test-update-button"
+                >
                     <span *ngIf="!isPending">Update</span>
                     <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
                 </button>
-                <button (click)="logout()" align="end" type="button" mat-raised-button color="warn">Logout</button>
+                <button 
+                    (click)="logout()" 
+                    align="end" 
+                    type="button" 
+                    mat-raised-button 
+                    color="warn"
+                    data-angular="test-logout-button"
+                >
+                    Logout
+            </button>
             </div>
         </div>
     </form>

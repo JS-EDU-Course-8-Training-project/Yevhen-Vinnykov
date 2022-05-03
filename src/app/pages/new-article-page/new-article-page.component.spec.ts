@@ -222,7 +222,7 @@ describe('OnCatchError Method', () => {
 
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-    component.ngOnInit()
+    component.ngOnInit();
     expect(spy).toHaveBeenCalledWith('Fetching articles failed');
   });
 
