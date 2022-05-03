@@ -8,11 +8,15 @@
         <button *ngIf="isMyself" mat-raised-button color="primary">
             <a routerLink="/settings">Update Profile Settings</a>
         </button>
-        <button [disabled]="followingInProgress" (click)="handleFollowUnfollow(user.username)" *ngIf="!isMyself && !isFollowed" mat-raised-button color="primary">
-            Follow {{user?.username}}
-        </button>
-        <button [disabled]="followingInProgress" (click)="handleFollowUnfollow(user.username)" *ngIf="!isMyself && isFollowed" mat-raised-button color="primary">
-            Unfollow {{user?.username}}
+        <button 
+            [disabled]="followingInProgress" 
+            (click)="handleFollowUnfollow(user.username)" 
+            *ngIf="!isMyself" 
+            mat-raised-button 
+            color="primary"
+            data-angular="test-follow-button"
+        >
+            {{ isFollowed ? 'Unfollow' : 'Follow' }} {{user?.username}}
         </button>
     </div>
 </app-banner>
