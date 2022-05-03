@@ -36,9 +36,9 @@ export class ArticlesService {
       .pipe(pluck('article'));
   }
 
-  public createArticle(article: ICreatedArticle): Observable<ICreatedArticle | HttpErrorResponse> {
+  public createArticle(article: ICreatedArticle): Observable<IArticle | HttpErrorResponse> {
     return this.http
-      .post<ICreatedArticle>(this.baseURL, JSON.stringify({ article }), httpOptions);
+      .post<IArticle>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }
 
   public deleteArticle(slug: string): Observable<Object> {

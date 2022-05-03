@@ -19,7 +19,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
 
 export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   public articleForm!: FormGroup;
-  public isEditMode: boolean = this.router.url !== '/create-article';
+  public isEditMode!: boolean;
   public articleToEdit!: IArticle | null;
   public slug!: string;
   private notifier: Subject<void> = new Subject<void>();
@@ -32,17 +32,20 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   ) { }
 
   ngOnInit(): void {
+    this.isEditMode = this.router.url !== '/create-article';
     this.slug = this.router.url.split('/')[2];
-    if (!this.isEditMode) return this.initializeForm();
-    this.articlesService.fetchArticle(this.slug)
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
-      .subscribe((article: IArticle | any) => {
-        this.articleToEdit = article;
-        this.initializeForm();
-        this.articleForm.markAllAsTouched();
-      });
+    this.initializeForm();
+    if (this.isEditMode) {
+      this.articlesService.fetchArticle(this.slug)
+        .pipe(
+          takeUntil(this.notifier),
+          catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+        .subscribe((article: IArticle | any) => {
+          this.articleToEdit = article;
+          this.initializeForm();
+          this.articleForm.markAllAsTouched();
+        });
+    }
   }
 
   ngOnDestroy(): void {
