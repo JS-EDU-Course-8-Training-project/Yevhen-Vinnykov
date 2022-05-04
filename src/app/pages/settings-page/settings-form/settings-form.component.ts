@@ -1,10 +1,12 @@
 import { Subject, take, takeUntil, BehaviorSubject, catchError } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+
+type TSettingsControls = 'imageURL' | 'username' | 'bio' | 'email' | 'newPassword';
 
 @Component({
   selector: 'app-settings-form',
@@ -12,7 +14,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
   styleUrls: ['./settings-form.component.scss']
 })
 
-export class SettingsFormComponent implements OnInit, OnDestroy {
+export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
@@ -27,11 +29,15 @@ export class SettingsFormComponent implements OnInit, OnDestroy {
     private redirectionService: RedirectionService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initializeForm();
     this.settingsForm.valueChanges
       .pipe(take(1))
       .subscribe(() => this.isModified$.next(true));
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
   }
 
   ngOnDestroy(): void {
@@ -41,15 +47,15 @@ export class SettingsFormComponent implements OnInit, OnDestroy {
 
   private initializeForm(): void {
     this.settingsForm = this.fb.group({
-      imageURL: [this.authUser?.image || ''],
-      username: [this.authUser?.username || '', [Validators.required]],
-      bio: [this.authUser?.bio || ''],
-      email: [this.authUser?.email || '', [Validators.required, Validators.email]],
+      imageURL: [this.authUser.image],
+      username: [this.authUser.username, [Validators.required]],
+      bio: [this.authUser.bio],
+      email: [this.authUser.email, [Validators.required, Validators.email]],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  public checkIfValid(formControl: string): boolean {
+  public checkIfValid(formControl: TSettingsControls): boolean {
     return !(this.settingsForm.get(formControl)?.touched && this.settingsForm.get(formControl)?.invalid);
   }
 
