@@ -7,6 +7,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 
+type TSigninControls = 'email' | 'password';
+
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -36,15 +38,12 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.notifier.complete();
   }
 
-  public checkIfValid(formControl: string): boolean {
-    return !(this.signinForm.get(formControl)?.touched && this.signinForm.get(formControl)?.invalid);
+  public checkIfValid(formControl: TSigninControls): boolean {
+    return !(this.signinForm.controls[formControl].touched && this.signinForm.controls[formControl].invalid);
   }
 
   private createUserData(): IUserData {
-    return {
-      email: this.signinForm.getRawValue().email,
-      password: this.signinForm.getRawValue().password,
-    };
+    return this.signinForm.getRawValue();
   }
 
   private onSubmit(): void {

@@ -26,7 +26,7 @@ const userMock: IExistingUser = {
 const mockError: HttpErrorResponse = {
   error: {
     errors: {
-      'email': 'is wrong'
+      'email': ['is wrong']
     }
   },
   name: 'HttpErrorResponse',
@@ -104,6 +104,15 @@ describe('SignInComponent', () => {
     expect(spyCreateUserData).toHaveBeenCalled();
   });
 
+  it('checkIfValid should work correctly', () => {
+    const spyCheckIfValid = spyOn(component, 'checkIfValid').and.callThrough();
+    component.signinForm.controls['email'].setValue('wrong-email');
+    component.signinForm.markAllAsTouched();
+    fixture.detectChanges();
+    expect(spyCheckIfValid).toHaveBeenCalledWith('email');
+    expect(component.checkIfValid('email')).toBe(false);
+  });
+
 });
 
 
@@ -131,11 +140,13 @@ describe('OnCatchError', () => {
 
   it('should be invoked', () => {
     const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
-    const spy = spyOn<any>(component, 'onCatchError');
+    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
     component.signinForm.setValue(dataMock);
     fixture.detectChanges();
     signinButton.click();
-    expect(spy).toHaveBeenCalled();
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalledWith(mockError);
+    expect(component.errors).toEqual(['email is wrong']);
   });
 
 });
