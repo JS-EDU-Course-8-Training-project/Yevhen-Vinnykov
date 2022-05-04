@@ -7,6 +7,8 @@ import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { INewUser } from 'src/app/shared/models/INewUser';
 import { HttpErrorResponse } from '@angular/common/http';
 
+type TSignupControls = 'username' | 'email' | 'password';
+
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -37,16 +39,12 @@ export class SignUpComponent implements OnInit {
     this.notifier.complete();
   }
 
-  public checkIfValid(formControl: string): boolean {
-    return !(this.signupForm.get(formControl)?.touched && this.signupForm.get(formControl)?.invalid);
+  public checkIfValid(formControl: TSignupControls): boolean {
+    return !(this.signupForm.controls[formControl].touched && this.signupForm.controls[formControl].invalid);
   }
 
   private createUserData(): INewUser {
-    return {
-      username: this.signupForm.getRawValue().username,
-      email: this.signupForm.getRawValue().email,
-      password: this.signupForm.getRawValue().password
-    };
+    return this.signupForm.getRawValue();
   }
 
   private onSubmit(): void {
