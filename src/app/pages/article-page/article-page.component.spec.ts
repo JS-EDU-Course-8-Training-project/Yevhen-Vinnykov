@@ -52,4 +52,10 @@ describe('ArticlePageComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('requestForComments$ should emit', () => {
+    const spy = spyOn(component.requestForComments$, 'next');
+    component.reuestComments();
+    expect(spy).toHaveBeenCalled();
+  });
+
 });

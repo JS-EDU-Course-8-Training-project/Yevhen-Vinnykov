@@ -45,7 +45,6 @@ export class CommentFormComponent implements OnInit {
   }
 
   public addComment(): void {
-    if (!this.commentForm.valid) return;
     this.isLoading = true;
     this.commentForm.disable();
     this.commentsService.createComment(this.slug, this.createCommentData())
