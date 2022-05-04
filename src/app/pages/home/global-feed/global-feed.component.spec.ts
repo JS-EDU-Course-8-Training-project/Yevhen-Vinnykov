@@ -55,7 +55,7 @@ describe('GlobalFeedComponent', () => {
     fixture = TestBed.createComponent(GlobalFeedComponent);
     component = fixture.componentInstance;
     component.tabIndex = 1;
-    component.isAuthorized = false;
+    component.isAuthorized = true;
     fixture.detectChanges();
   });
 
@@ -63,11 +63,20 @@ describe('GlobalFeedComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('setDataOnResponse should be called', () => {
+  it('setDataOnResponse should be called because tabIndex is 1', () => {
     const spy = spyOn<any>(component, 'setDataOnResponse').and.callThrough();
     component.ngOnChanges();
     expect(spy).toHaveBeenCalledWith(expectedData);
   });
+
+  it('setDataOnResponse should be called because is Authorized is false', () => {
+    component.isAuthorized = false;
+    component.tabIndex = 0;
+    const spy = spyOn<any>(component, 'setDataOnResponse').and.callThrough();
+    component.ngOnChanges();
+    expect(spy).toHaveBeenCalledWith(expectedData);
+  });
+
 });
 
 
