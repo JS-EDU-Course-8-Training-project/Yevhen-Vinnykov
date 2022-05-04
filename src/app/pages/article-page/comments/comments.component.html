@@ -16,6 +16,7 @@
                 *ngIf="comment?.author?.username === authUser?.username"
                 class="delete-icon"
                 color="primary"
+                data-angular="test-delete-icon"
             >
                 <span *ngIf="!commentsBeingDeletedIds.includes(comment.id)">delete</span>
                 <mat-spinner diameter="25" *ngIf="commentsBeingDeletedIds.includes(comment.id)"></mat-spinner>

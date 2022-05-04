@@ -66,11 +66,23 @@ describe('CommentsComponent', () => {
   });
 
   it('should delete comment', () => {
-    fixture.detectChanges();
-    component.ngOnInit();
+    const spy = spyOn(component, 'deleteComment').and.callThrough();
     const deleteIcon = fixture.debugElement.query(By.css('[data-angular="test-delete-icon"]'));
     deleteIcon.triggerEventHandler('click', null);
-    expect(deleteIcon.nativeElement).toBeTruthy();
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalledWith(1);
+  });
+
+  it('should not delete a comment that does not exist', () => {
+    const spy = spyOn(component, 'deleteComment').and.callThrough();
+    component.deleteComment(1000);
+    expect(spy).toHaveBeenCalledWith(1000);
+  });
+
+  it('requestForComments$ should trigger getComments', () => {
+    const spy = spyOn(component, 'getComments').and.callThrough();
+    component.requestForComments$.next();
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
 });
