@@ -9,6 +9,23 @@ import { UsersService } from './shared/services/users/users.service';
 import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 import { IExistingUser } from './shared/models/IExistingUser';
 
+class AuthorizationServiceMock {
+  public isAuthorized$ = of(true);
+  public checkIfAuthorized = () => of(true);
+}
+
+class UsersServiceMock {
+  public authUser$ = of({ username: 'user' });
+  public fetchAuthUser = () => of({} as IExistingUser)
+}
+
+class UsersServiceMockEmpty {
+  public authUser$ = {
+    getValue: () => ({username: ''})
+  };
+  public fetchAuthUser = () => of({} as IExistingUser)
+}
+
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,23 +34,13 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        HeaderComponent,
         NavbarComponent,
         NavbarUserComponent,
+        HeaderComponent,
       ],
       providers: [
-        {
-          provide: AuthorizationService, useValue: {
-          isAuthorized$: of(true),
-          checkIfAuthorized: () => of(true)
-        }
-      }, 
-      {
-        provide: UsersService, useValue: {
-          authUser$: of({username: 'user'}),
-          fetchAuthUser: () => of({} as IExistingUser)
-        }
-      }
+        { provide: AuthorizationService, useClass: AuthorizationServiceMock },
+        { provide: UsersService, useClass: UsersServiceMock }
       ],
     }).compileComponents();
   });
@@ -43,19 +50,16 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
-  it('should call initialize method', () => {
+
+  it('should call initialize method but not trigger UsersService subscription', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     const spy = spyOn<any>(app, 'initialize').and.callThrough();
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   });
+
 });
-
-
-
-
-
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -65,32 +69,20 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        HeaderComponent,
-        NavbarComponent,
-        NavbarUserComponent,
       ],
       providers: [
-        {
-          provide: AuthorizationService, useValue: {
-          isAuthorized$: of(true),
-          checkIfAuthorized: () => of(true)
-        }
-      }, 
-      {
-        provide: UsersService, useValue: {
-          authUser$: of({} as IExistingUser),
-          fetchAuthUser: () => of({} as IExistingUser)
-        }
-      }
+        { provide: AuthorizationService, useClass: AuthorizationServiceMock },
+        { provide: UsersService, useClass: UsersServiceMockEmpty }
       ],
     }).compileComponents();
   });
 
-  it('should call initialize method', () => {
+  it('should call initialize method and trigger UsersService subscription', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     const spy = spyOn<any>(app, 'initialize').and.callThrough();
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   });
+  
 });
