@@ -26,7 +26,7 @@ export class NavbarUserComponent implements OnInit, OnDestroy {
     this.url$
       .pipe(takeUntil(this.notifier))
       .subscribe(path => {
-        this.className = path === `/user/${this.authUser?.username}` ? 'selected' : '';
+        this.className = path === `/user/${this.authUser.username}` ? 'selected' : '';
       });
   }
 
