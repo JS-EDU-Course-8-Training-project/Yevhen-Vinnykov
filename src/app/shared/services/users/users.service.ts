@@ -37,8 +37,7 @@ export class UsersService {
       .post<{ user: IExistingUser }>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
         pluck('user'),
         map(user => {
-          this.authorizationService.authorize(user.token || '');
-          this.authUser$.next(user);
+          this.authorizationHelper(user);
           return user;
         })
       );
@@ -50,8 +49,7 @@ export class UsersService {
       .pipe(
         pluck('user'),
         map(user => {
-          this.authorizationService.authorize(user.token || '');
-          this.authUser$.next(user);
+          this.authorizationHelper(user);
           return user;
         }),
       );
@@ -75,8 +73,7 @@ export class UsersService {
       .pipe(
         pluck('user'),
         map(user => {
-          this.authorizationService.authorize(user.token || '');
-          this.authUser$.next(user);
+          this.authorizationHelper(user);
           return user;
         }),
      );
@@ -85,6 +82,13 @@ export class UsersService {
   public signOut(): void {
     this.authorizationService.removeAuthorization();
     this.authUser$.next({} as IExistingUser);
+  }
+
+  private authorizationHelper(user: IExistingUser) {
+    if(user.token){
+      this.authorizationService.authorize(user.token);
+    }
+    this.authUser$.next(user);
   }
 
 }
