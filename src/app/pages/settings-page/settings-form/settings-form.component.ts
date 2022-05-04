@@ -56,17 +56,11 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   public checkIfValid(formControl: TSettingsControls): boolean {
-    return !(this.settingsForm.get(formControl)?.touched && this.settingsForm.get(formControl)?.invalid);
+    return !(this.settingsForm.controls[formControl].touched && this.settingsForm.controls[formControl].invalid);
   }
 
   private createUserData(): IExistingUser {
-    return {
-      image: this.settingsForm.getRawValue().imageURL,
-      username: this.settingsForm.getRawValue().username,
-      bio: this.settingsForm.getRawValue().bio,
-      email: this.settingsForm.getRawValue().email,
-      password: this.settingsForm.getRawValue().newPassword,
-    };
+    return this.settingsForm.getRawValue();
   }
 
   private onSubmit(): void {
