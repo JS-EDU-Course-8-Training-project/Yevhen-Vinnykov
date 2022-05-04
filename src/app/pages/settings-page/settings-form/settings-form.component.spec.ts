@@ -82,6 +82,15 @@ describe('SettingsFormComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('checkIfValid should work correctly', () => {
+    const spyCheckIfValid = spyOn(component, 'checkIfValid').and.callThrough();
+    component.settingsForm.controls['email'].setValue('wrong-email');
+    component.settingsForm.markAllAsTouched();
+    fixture.detectChanges();
+    expect(spyCheckIfValid).toHaveBeenCalledWith('email');
+    expect(component.checkIfValid('email')).toBe(false);
+  });
+
 });
 
 
