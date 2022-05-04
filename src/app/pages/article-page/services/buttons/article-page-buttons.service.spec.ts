@@ -37,33 +37,27 @@ describe('ArticlePageButtonsService', () => {
     const initialState = {
       followingInProgress: false,
       favoriteInProgress: false,
-      isLiked: article?.favorited,
-      isFollowed: article?.author?.following,
-      likesCount: article?.favoritesCount
+      isLiked: article.favorited,
+      isFollowed: article.author.following,
+      likesCount: article.favoritesCount
     };
     const spy = spyOn(service, 'createInitialState').and.callThrough();
-    spy(article);
+    service.createInitialState(article);
     expect(spy).toHaveBeenCalled();
-    expect(spy(article)).toEqual(initialState);
+    expect(service.createInitialState(article)).toEqual(initialState);
   });
 
   it('Initialize method should be called', () => {
     const spy = spyOn(service, 'initialize').and.callThrough();
-    spy(article);
+    service.initialize(article);
     expect(spy).toHaveBeenCalled();
+    expect(service.initialize(article)).toEqual(service.ButtonsState$);
   });
 
 
   it('UpdateState method should be called', () => {
-    const initialState = {
-      followingInProgress: false,
-      favoriteInProgress: false,
-      isLiked: article?.favorited,
-      isFollowed: article?.author?.following,
-      likesCount: article?.favoritesCount
-    };
     const spy = spyOn(service, 'updateState').and.callThrough();
-    spy('isFollowed', true);
+    service.updateState('isFollowed', true);
     expect(spy).toHaveBeenCalled();
   });
 

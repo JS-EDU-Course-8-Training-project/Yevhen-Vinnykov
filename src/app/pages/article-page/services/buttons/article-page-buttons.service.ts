@@ -30,9 +30,9 @@ export class ArticlePageButtonsService {
     return {
       followingInProgress: false,
       favoriteInProgress: false,
-      isLiked: article?.favorited,
-      isFollowed: article?.author?.following,
-      likesCount: article?.favoritesCount
+      isLiked: article.favorited,
+      isFollowed: article.author.following,
+      likesCount: article.favoritesCount
     };
   }
 
