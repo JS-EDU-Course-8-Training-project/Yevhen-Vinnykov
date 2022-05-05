@@ -27,7 +27,6 @@ export class AuthorizationInterceptor implements HttpInterceptor {
       });
     }
     return next.handle(request).pipe(
-      tap((res) => console.log(res)),
       catchError((error: HttpErrorResponse): Observable<HttpEvent<unknown>> => {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {
