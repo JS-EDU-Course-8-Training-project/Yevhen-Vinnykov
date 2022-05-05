@@ -1,6 +1,6 @@
 import { AuthorizationService } from './../services/authorization/authorization.service';
 import { BehaviorSubject, catchError, of, throwError } from 'rxjs';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed, waitForAsync, tick } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -132,27 +132,18 @@ describe('AuthorizationInterceptor ERROR', () => {
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should not add an Authorization header', waitForAsync(() => {
-    service.getPosts()//.pipe(catchError((error): any => console.log(error)));
-    // .pipe(
-    //   catchError((error): any => {
-    //     const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
-    //   expect(httpRequest.error).toEqual(mockError);
-    //     return throwError(() => error)
-    //     // expect(error).toBeInstanceOf(HttpErrorResponse);
-    //     // const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
-    //     // expect(httpRequest.error).toEqual(mockError);
-    //   })
-    // )
-    
-    .subscribe((res) => {
-     
-     // expect(res.status).toBe(0);      
-   }, (err) => {
-    expect(err).toEqual(mockError);
-   });
-  // const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
-  // expect(httpRequest.error).toEqual(mockError);
-  }));
-
+  it('should return error', () => {
+    let httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter']);
+    let httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
+    httpHandlerSpy.handle.and.returnValue(throwError(() => mockError));
+    interceptor.intercept(httpRequestSpy, httpHandlerSpy)
+      .subscribe({
+        next: result => console.log('good', result),
+        error: err => {
+          console.log('error', err);
+          expect(err).toEqual(mockError);
+        }
+      });
+  })
 });
+
