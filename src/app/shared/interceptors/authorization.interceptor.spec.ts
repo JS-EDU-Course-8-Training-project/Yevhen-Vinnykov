@@ -1,11 +1,11 @@
 import { AuthorizationService } from './../services/authorization/authorization.service';
-import { of, BehaviorSubject } from 'rxjs';
-import { fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { BehaviorSubject, catchError, of, throwError } from 'rxjs';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpHeaders, HttpEventType, HttpErrorResponse } from '@angular/common/http';
 
 import { AuthorizationInterceptor } from './authorization.interceptor';
 import { MockDataService } from './mock-data-service.service';
@@ -17,7 +17,7 @@ class AuthorizationServiceMock {
 
 class AuthorizationServiceMockNotAuth {
   public checkIfAuthorized = () => { }
-  public isAuthorized$ = new BehaviorSubject<boolean>(true);
+  public isAuthorized$ = new BehaviorSubject<boolean>(false);
 }
 
 
@@ -43,17 +43,13 @@ describe('AuthorizationInterceptor', () => {
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', () => {
-    expect(interceptor).toBeTruthy();
-  });
-
   it('should add an Authorization header', waitForAsync(() => {
     service.getPosts().subscribe(response => {
       expect(response).toBeTruthy();
-      const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
-      expect(httpRequest.request.url).toBe(`${service.ROOT_URL}/posts`);
-      expect(httpRequest.request.headers.has('Authorization')).toBeTrue();
     });
+    const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
+    expect(httpRequest.request.url).toBe(`${service.ROOT_URL}/posts`);
+    expect(httpRequest.request.headers.has('Authorization')).toBeTrue();
   }));
 
 });
@@ -83,10 +79,80 @@ describe('AuthorizationInterceptor', () => {
   it('should not add an Authorization header', waitForAsync(() => {
     service.getPosts().subscribe(response => {
       expect(response).toBeTruthy();
-      const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
-      expect(httpRequest.request.headers.has('Authorization')).toBeFalse();
     });
- 
+    const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
+    expect(httpRequest.request.headers.has('Authorization')).toBeFalse();
+  }));
+
+});
+
+
+///////////////////////////////////////////ERROR/////////////////////////////////////////////////////
+
+const mockError: HttpErrorResponse = {
+  error: {
+    errors: {
+      'email': ['is wrong']
+    }
+  },
+  name: 'HttpErrorResponse',
+  message: '',
+  ok: false,
+  headers: new HttpHeaders,
+  status: 0,
+  statusText: '',
+  url: null,
+  type: HttpEventType.ResponseHeader
+};
+
+class MockDataServiceWithError {
+  public ROOT_URL = `http://jsonplaceholder.typicode.com`;
+  public getPosts = () => throwError(() => mockError);
+}
+
+describe('AuthorizationInterceptor ERROR', () => {
+  let interceptor: AuthorizationInterceptor;
+  let httpMock: HttpTestingController;
+  let service: MockDataServiceWithError;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        AuthorizationInterceptor,
+        { provide: MockDataServiceWithError, useClass: MockDataServiceWithError },
+        { provide: AuthorizationService, useClass: AuthorizationServiceMockNotAuth },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }
+      ],
+      imports: [
+        HttpClientTestingModule
+      ]
+    });
+    interceptor = TestBed.inject(AuthorizationInterceptor);
+    service = TestBed.inject(MockDataServiceWithError);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  it('should not add an Authorization header', waitForAsync(() => {
+    service.getPosts()//.pipe(catchError((error): any => console.log(error)));
+    // .pipe(
+    //   catchError((error): any => {
+    //     const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
+    //   expect(httpRequest.error).toEqual(mockError);
+    //     return throwError(() => error)
+    //     // expect(error).toBeInstanceOf(HttpErrorResponse);
+    //     // const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
+    //     // expect(httpRequest.error).toEqual(mockError);
+    //   })
+    // )
+    
+    .subscribe((res) => {
+     
+     // expect(res.status).toBe(0);      
+   }, (err) => {
+    expect(err).toEqual(mockError);
+   });
+  // const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
+  // expect(httpRequest.error).toEqual(mockError);
   }));
 
 });

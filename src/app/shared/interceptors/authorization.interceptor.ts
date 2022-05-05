@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpErrorResponse
 } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AuthorizationService } from '../services/authorization/authorization.service';
 
 @Injectable()
@@ -27,6 +27,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
       });
     }
     return next.handle(request).pipe(
+      tap((res) => console.log(res)),
       catchError((error: HttpErrorResponse): Observable<HttpEvent<unknown>> => {
         let errorMsg = '';
         if (error.error instanceof ErrorEvent) {
