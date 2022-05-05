@@ -1,18 +1,11 @@
 import { AuthorizationService } from './../services/authorization/authorization.service';
-import { BehaviorSubject, throwError } from 'rxjs';
-import { TestBed } from '@angular/core/testing';
+import { BehaviorSubject, throwError, of, Observable } from 'rxjs';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import {
-  HTTP_INTERCEPTORS,
-  HttpHeaders,
-  HttpEventType,
-  HttpErrorResponse,
-  HttpRequest,
-  HttpHandler
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpHeaders, HttpEventType, HttpErrorResponse, HttpRequest, HttpHandler } from '@angular/common/http';
 
 import { AuthorizationInterceptor } from './authorization.interceptor';
 import { MockDataService } from './mock-data-service.service';
@@ -164,3 +157,6 @@ describe('AuthorizationInterceptor Error Handling', () => {
       });
   });
 });
+
+
+
