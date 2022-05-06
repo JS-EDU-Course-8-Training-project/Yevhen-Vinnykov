@@ -4,20 +4,67 @@
             <div *ngIf="error.length">
                 <div class="form-error">{{error}}</div>
             </div>
-            <input type="text" class="form-control" id="imageURL" name="imageURL" required formControlName="imageURL"
-                placeholder="User photo URL">
-            <input type="text" class="form-control" id="username" name="username" required formControlName="username"
-                placeholder="Username">
-            <span class="form-error" *ngIf="!checkIfValid('username')">This field is required</span>
-            <textarea type="text" class="form-control" id="bio" name="bio" required formControlName="bio"
-                placeholder="Bio">
-        </textarea>
-            <input type="text" class="form-control" id="email" name="email" required formControlName="email"
-                placeholder="Email">
-            <span class="form-error" *ngIf="!checkIfValid('email') && !settingsForm.get('email')?.value">This field is required</span>
-            <span class="form-error" *ngIf="settingsForm.get('email')?.errors?.['email']">Enter a valid email</span>
-            <input type="text" class="form-control" id="newPassword" name="newPassword" required
-                formControlName="newPassword" placeholder="New password">
+            <input 
+                type="text" 
+                class="form-control" 
+                id="imageURL" 
+                name="imageURL" 
+                required 
+                formControlName="imageURL"
+                placeholder="User photo URL"
+            >
+            <input 
+                type="text" 
+                class="form-control" 
+                id="username" 
+                name="username" 
+                required 
+                formControlName="username"
+                placeholder="Username"
+            >
+            <span class="form-error" *ngIf="!checkIfValid('username')">
+                This field is required
+            </span>
+            <textarea 
+                type="text" 
+                class="form-control" 
+                id="bio" 
+                name="bio" 
+                required 
+                formControlName="bio"
+                placeholder="Bio"
+            >
+            </textarea>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="email" 
+                name="email" 
+                required 
+                formControlName="email"
+                placeholder="Email"
+            >
+            <span 
+                class="form-error"
+                *ngIf="!checkIfValid('email') && !settingsForm.get('email')?.value"
+             >
+                This field is required
+            </span>
+            <span 
+                class="form-error" 
+                *ngIf="settingsForm.get('email')?.errors?.['email']"
+            >
+                Enter a valid email
+            </span>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="newPassword" 
+                name="newPassword" 
+                required
+                formControlName="newPassword"  
+                placeholder="New password"
+            >
             <div>
                 <button 
                     [disabled]="isPending" 
@@ -39,7 +86,7 @@
                     data-angular="test-logout-button"
                 >
                     Logout
-            </button>
+                 </button>
             </div>
         </div>
     </form>

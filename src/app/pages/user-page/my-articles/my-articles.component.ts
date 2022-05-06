@@ -25,6 +25,7 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   private limit: number = 5;
   private currentPage: number = 1;
   public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public error: string = '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -33,11 +34,11 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   ngOnChanges(): void {
     this.reset();
-    if (this.tabIndex === 0) {
-      this.getArticles();
-      this.infiniteScroll
-        .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
-    }
+    if (this.tabIndex !== 0) return;
+    this.getArticles();
+    this.infiniteScroll
+      .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
+
   }
 
   ngOnDestroy(): void {
@@ -52,6 +53,7 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   private getArticles(): void {
+    this.error = '';
     this.isLoading = true;
     this.articlesService.fetchUserArticles(this.username, this.limit, this.offset)
       .pipe(
@@ -71,7 +73,8 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   private onCatchError(error: HttpErrorResponse): void {
-    console.error(error);
+    this.error = 'Something went wrong :(';
+    this.isLoading = false;
   }
 
   private nextPage() {

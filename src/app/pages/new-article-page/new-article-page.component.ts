@@ -67,7 +67,7 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   }
 
   public checkIfValid(formControl: string): boolean {
-    return !(this.articleForm.get(formControl)?.touched && this.articleForm.get(formControl)?.invalid);
+    return !(this.articleForm.controls[formControl].touched && this.articleForm.controls[formControl].invalid);
   }
 
   private createArticleData(): INewArticle {
@@ -80,10 +80,9 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   }
 
   public handleArticleAction(): void {
-    if (this.articleForm.valid) {
+    if (!this.articleForm.valid) return; 
       this.articleAction(this.slug, this.createArticleData());
       this.articleForm.reset();
-    }
   }
 
   private articleAction(slug: string, newArticle: INewArticle) {

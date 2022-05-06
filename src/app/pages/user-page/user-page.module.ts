@@ -1,5 +1,4 @@
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ArticleListComponent } from '../../components/article-list/article-list.component';
 import { MatButtonModule } from '@angular/material/button';
 import { BannerModule } from '../../components/banner/banner.module';
 import { MatCardModule } from '@angular/material/card';

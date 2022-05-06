@@ -1,19 +1,53 @@
 <div>
     <form [formGroup]="articleForm" (ngSubmit)="handleArticleAction()">
         <div class="form-group">
-            <input type="text" class="form-control" id="title" name="title" required formControlName="title"
-                placeholder="Article Title">
+            <input 
+                type="text" 
+                class="form-control" 
+                id="title" 
+                name="title" 
+                required 
+                formControlName="title"
+                placeholder="Article Title"
+            >
             <span class="" *ngIf="!checkIfValid('title')">This field is required</span>
-            <input type="text" class="form-control" id="description" name="description" required
-                formControlName="description" placeholder="What's this article about?">
+            <input 
+                type="text" 
+                class="form-control" 
+                id="description" 
+                name="description" 
+                required
+                formControlName="description" 
+                placeholder="What's this article about?"
+            >
             <span *ngIf="!checkIfValid('description')">This field is required</span>
-            <textarea type="text" class="form-control" id="body" name="body" required formControlName="body"
+            <textarea 
+                type="text" 
+                class="form-control" 
+                id="body" 
+                name="body" 
+                required 
+                formControlName="body"
                 placeholder="Write your article">
         </textarea>
             <span *ngIf="!checkIfValid('body')">This field is required</span>
-            <input type="text" class="form-control" id="tagList" name="tagList" required formControlName="tagList"
+            <input 
+                type="text" 
+                class="form-control" 
+                id="tagList" 
+                name="tagList" 
+                required 
+                formControlName="tagList"
                 placeholder="Tags">
-            <button [disabled]="!articleForm.valid || !this.articleForm.touched && !isEditMode" align="end" type="submit" mat-raised-button color="primary">Publish</button>
+            <button 
+                [disabled]="!articleForm.valid || !this.articleForm.touched && !isEditMode" 
+                align="end" 
+                type="submit" 
+                mat-raised-button 
+                color="primary"
+            >
+            Publish
+        </button>
         </div>
     </form>
 </div>

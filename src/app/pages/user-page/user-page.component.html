@@ -21,12 +21,23 @@
     </div>
 </app-banner>
 <section>
-    <mat-tab-group (focusChange)="this.tabIndex = $event.index" [selectedIndex]="tabIndex">
+    <mat-tab-group 
+        (focusChange)="this.tabIndex = $event.index"
+        [selectedIndex]="tabIndex"
+    >
         <mat-tab label="My Articles">
-            <app-my-articles [tabIndex]="tabIndex" [username]="urlUsername"></app-my-articles>
+            <app-my-articles 
+                [tabIndex]="tabIndex" 
+                [username]="urlUsername"
+            >
+            </app-my-articles>
         </mat-tab>
         <mat-tab label="Favorited Articles">
-            <app-favorited-articles [tabIndex]="tabIndex" [username]="urlUsername"></app-favorited-articles>
+            <app-favorited-articles 
+                [tabIndex]="tabIndex" 
+                [username]="urlUsername"
+            >
+            </app-favorited-articles>
         </mat-tab>
     </mat-tab-group>
 </section>

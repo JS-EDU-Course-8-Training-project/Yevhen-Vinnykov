@@ -1,8 +1,42 @@
 <div class="navbar-container">
-    <a [class]="(url$ | async) === '/' ? 'selected' : ''" mat-button routerLink="/">Home</a>
-    <a [class]="(url$ | async) === '/sign-in' ? 'selected' : ''" *ngIf="!(isAuthorized$ | async)" mat-button routerLink="/sign-in">Sign in</a>
-    <a [class]="(url$ | async) === '/sign-up' ? 'selected' : ''" *ngIf="!(isAuthorized$ | async)" mat-button routerLink="/sign-up">Sign up</a>
-    <a [class]="(url$ | async) === '/create-article' ? 'selected' : ''" *ngIf="isAuthorized$ | async" mat-button routerLink="/create-article">New Arcticle</a>
-    <a [class]="(url$ | async) === '/settings' ? 'selected' : ''" *ngIf="isAuthorized$ | async" mat-button routerLink="/settings">Settings</a>
+    <a 
+        [class]="(url$ | async) === '/' ? 'selected' : ''"
+        mat-button 
+        routerLink="/"
+    >
+        Home
+    </a>
+    <a 
+        [class]="(url$ | async) === '/sign-in' ? 'selected' : ''" 
+        *ngIf="!(isAuthorized$ | async)" 
+        mat-button 
+        routerLink="/sign-in"
+    >
+        Sign in
+    </a>
+    <a 
+        [class]="(url$ | async) === '/sign-up' ? 'selected' : ''"
+        *ngIf="!(isAuthorized$ | async)" 
+        mat-button 
+        routerLink="/sign-up"
+     >
+        Sign up
+    </a>
+    <a 
+        [class]="(url$ | async) === '/create-article' ? 'selected' : ''" 
+        *ngIf="isAuthorized$ | async" 
+        mat-button 
+        routerLink="/create-article"
+    >
+        New Arcticle
+    </a>
+    <a 
+        [class]="(url$ | async) === '/settings' ? 'selected' : ''"
+        *ngIf="isAuthorized$ | async" 
+        mat-button 
+        routerLink="/settings"
+    >
+        Settings
+    </a>
     <app-navbar-user [url$]="url$" *ngIf="isAuthorized$ | async"></app-navbar-user>
 </div>

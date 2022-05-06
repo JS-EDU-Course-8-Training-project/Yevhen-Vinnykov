@@ -26,7 +26,7 @@ export class TagsComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.notifier))
       .subscribe((tags: string[] | any) => {
         if (tags as string[]) {
-          this.tags = tags
+          this.tags = tags;
           this.isLoading = false;
         }
       });
