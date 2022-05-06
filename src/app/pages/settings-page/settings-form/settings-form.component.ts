@@ -6,7 +6,7 @@ import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
-type TSettingsControls = 'imageURL' | 'username' | 'bio' | 'email' | 'newPassword';
+type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'newPassword';
 
 @Component({
   selector: 'app-settings-form',
@@ -48,7 +48,7 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
 
   private initializeForm(): void {
     this.settingsForm = this.fb.group({
-      imageURL: [this.authUser.image],
+      image: [this.authUser.image],
       username: [this.authUser.username, [Validators.required]],
       bio: [this.authUser.bio],
       email: [this.authUser.email, [Validators.required, Validators.email]],
