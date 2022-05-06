@@ -1,7 +1,7 @@
 import { IUpdateArticle } from '../../models/IUpdateArticle';
 import { ICreatedArticle } from '../../models/ICreatedArticle';
 import { IArticle, IArticleResponse } from '../../models/IArticle';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, pluck } from 'rxjs';
 import { environment } from 'src/environments/environment';

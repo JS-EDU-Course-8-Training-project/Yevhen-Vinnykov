@@ -1,6 +1,7 @@
-<p *ngIf="!globalArticles.length && !isLoading">
+<p *ngIf="!globalArticles.length && !isLoading && !error.length">
     No articles are here... yet.
 </p>
+<p *ngIf="error.length">{{error}}</p>
 <ng-container>
     <div *ngFor="let article of globalArticles; let i = index">
         <app-article-list [article]="article" *ngIf="i + 1 !== globalArticles.length"></app-article-list>

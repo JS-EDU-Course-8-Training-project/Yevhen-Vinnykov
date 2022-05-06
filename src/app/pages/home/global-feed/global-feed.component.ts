@@ -24,6 +24,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   private pagesTotalCount!: number;
   private limit: number = 5;
   public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public error: string = '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -51,6 +52,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   private getArticles(): void {
+    this.error = '';
     this.isLoading = true;
     this.articlesService.fetchArticles(this.offset, this.limit)
       .pipe(
@@ -69,7 +71,8 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   private onCatchError(error: HttpErrorResponse): void {
-    console.error(error);
+    this.error = 'Something went wrong :(';
+    this.isLoading = false;
   }
 
   private nextPage(): void {

@@ -23,7 +23,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   private limit: number = 5;
   private currentPage: number = 1;
   public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public error!: string;
+  public error: string = '';
 
   constructor(
     private articlesService: ArticlesService,
