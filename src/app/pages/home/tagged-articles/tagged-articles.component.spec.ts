@@ -74,6 +74,7 @@ describe('TaggedArticlesComponent', () => {
     it('should not be called because tab index is not 2', () => {
       const spy = spyOn<any>(component, 'getTaggedArticles').and.callThrough();
       component.ngOnChanges();
+      fixture.detectChanges();
       expect(spy).not.toHaveBeenCalled();
     });
 
@@ -115,6 +116,7 @@ describe('TaggedArticlesComponent', () => {
   it('onCatchError should be called', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
     component.ngOnChanges();
+    fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   });
 

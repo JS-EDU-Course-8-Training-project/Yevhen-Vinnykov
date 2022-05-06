@@ -71,7 +71,7 @@ describe('CommentFormComponent', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('AddComment method should be called', waitForAsync(() => {
+  it('AddComment method should be called', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
     const spyCreateCommentData = spyOn<any>(component, 'createCommentData').and.callThrough();
     component.commentForm.controls['body'].setValue('test-comment');
@@ -87,7 +87,7 @@ describe('CommentFormComponent', () => {
     expect(button.disabled).toBeTruthy();
     expect(spy).toHaveBeenCalled();
     expect(spyCreateCommentData).toHaveBeenCalled();
-  }));
+  });
 
 });
 

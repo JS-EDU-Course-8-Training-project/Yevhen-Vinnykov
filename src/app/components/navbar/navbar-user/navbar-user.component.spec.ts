@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
 import { NavbarUserComponent } from './navbar-user.component';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const mockAuthUser: IExistingUser = {
   email: 'test-email',
@@ -25,7 +26,8 @@ describe('NavbarUserComponent', () => {
       declarations: [NavbarUserComponent],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

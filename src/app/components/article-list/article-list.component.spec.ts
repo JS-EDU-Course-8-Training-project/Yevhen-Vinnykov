@@ -8,6 +8,7 @@ import { IArticle } from './../../shared/models/IArticle';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const article: IArticle = {
   slug: 'test-slug',
@@ -59,7 +60,8 @@ describe('ArticleComponent', () => {
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceAuthorizedMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
@@ -94,7 +96,8 @@ describe('HandleLikeDislike Method', () => {
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceAuthorizedMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
@@ -147,7 +150,8 @@ describe('HandleLikeDislike Method', () => {
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceNotAuthorizedMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

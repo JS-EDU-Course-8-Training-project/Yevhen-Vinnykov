@@ -40,46 +40,36 @@ describe('ArticlesService Get Methods', () => {
     articlesService = new ArticlesService(httpClientSpy);
   });
 
-  it('getArticles methods should return expected data', (done: DoneFn) => {
+  it('getArticles methods should return expected data', () => {
     httpClientSpy.get.and.returnValue(of(expectedData));
     articlesService.fetchArticles().subscribe({
       next: articles => {
         expect(articles).withContext('expected articles').toEqual(expectedData);
-        done();
-      },
-      error: done.fail
+      }
     });
 
     articlesService.fetchFollowedArticles().subscribe({
       next: articles => {
         expect(articles).withContext('expected articles').toEqual(expectedData);
-        done();
-      },
-      error: done.fail
+      }
     });
 
     articlesService.fetchArticlesByTag('test-tag').subscribe({
       next: articles => {
         expect(articles).withContext('expected articles').toEqual(expectedData);
-        done();
-      },
-      error: done.fail
+      }
     });
 
     articlesService.fetchUserArticles('test-username').subscribe({
       next: articles => {
         expect(articles).withContext('expected articles').toEqual(expectedData);
-        done();
-      },
-      error: done.fail
+      }
     });
 
     articlesService.fetchFavoritedArticles('test-username').subscribe({
       next: articles => {
         expect(articles).withContext('expected articles').toEqual(expectedData);
-        done();
-      },
-      error: done.fail
+      }
     });
 
     expect(httpClientSpy.get.calls.count()).toBe(5);

@@ -1,3 +1,4 @@
+import { of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TestBed } from '@angular/core/testing';
 
@@ -5,7 +6,7 @@ import { ConfirmationGuard } from './confirmation.guard';
 
 class DialogMock {
   public open = () => ({
-    afterClosed: () => false
+    afterClosed: () => of(false)
   });
 }
 
@@ -14,7 +15,7 @@ const componentStub = {
 };
 
 describe('ConfirmationGuard', () => {
-  let guard: any; //ConfirmationGuard;
+  let guard: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,7 +39,10 @@ describe('ConfirmationGuard', () => {
 
   it('should not allow deactivation', () => {
     const componentStub = { isDataSaved: () => false };
-    expect(guard.canDeactivate(componentStub)).toBe(false);
+    //expect(guard.canDeactivate(componentStub)).toBe(false);
+    guard.canDeactivate(componentStub).subscribe((res: boolean) => {
+      expect(res).toBe(false);
+    })
   });
 
 });

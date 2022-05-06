@@ -8,6 +8,7 @@ describe('AuthorizationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(AuthorizationService);
+    localStorage.clear();
   });
 
   it('should be created', () => {

@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { UsersService } from './shared/services/users/users.service';
 import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 import { IExistingUser } from './shared/models/IExistingUser';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 class AuthorizationServiceMock {
   public isAuthorized$ = of(true);
@@ -42,6 +43,7 @@ describe('AppComponent', () => {
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
         { provide: UsersService, useClass: UsersServiceMock }
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
   });
 
@@ -74,6 +76,7 @@ describe('AppComponent', () => {
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
         { provide: UsersService, useClass: UsersServiceMockEmpty }
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).compileComponents();
   });
 
