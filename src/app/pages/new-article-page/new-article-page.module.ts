@@ -6,21 +6,21 @@ import { NewArticlePageRoutingModule } from './new-article-page-routing.module';
 import { NewArticlePageComponent } from './new-article-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
-import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogModule } from 'src/app/components/confirmation-dialog/confirmation-dialog.module';
 
 
 
 @NgModule({
   declarations: [
     NewArticlePageComponent,
-    ConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
     NewArticlePageRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    ConfirmationDialogModule
   ]
 })
 export class NewArticlePageModule { }

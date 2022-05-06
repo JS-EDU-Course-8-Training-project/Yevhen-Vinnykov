@@ -7,6 +7,7 @@ import { SettingsPageComponent } from './settings-page.component';
 import { SettingsFormComponent } from './settings-form/settings-form.component';
 import {MatButtonModule} from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ConfirmationDialogModule } from 'src/app/components/confirmation-dialog/confirmation-dialog.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     SettingsPageRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ConfirmationDialogModule
   ]
 })
 export class SettingsPageModule { }

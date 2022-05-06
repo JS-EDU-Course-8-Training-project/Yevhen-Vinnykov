@@ -1,4 +1,4 @@
-import { Subject, take, takeUntil, BehaviorSubject, catchError } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, catchError } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -31,13 +31,14 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
 
   ngOnChanges(): void {
     this.initializeForm();
-    this.settingsForm.valueChanges
-      .pipe(take(1))
-      .subscribe(() => this.isModified$.next(true));
   }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.settingsForm.valueChanges
+      .pipe(takeUntil(this.notifier))
+      .subscribe(() => this.isModified$.next(true));
+    
   }
 
   ngOnDestroy(): void {
