@@ -23,6 +23,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   private limit: number = 5;
   private currentPage: number = 1;
   public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public error!: string;
 
   constructor(
     private articlesService: ArticlesService,
@@ -50,6 +51,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   private getFollowedArticles() {
+    this.error = '';
     this.isLoading = true;
     this.articlesService.fetchFollowedArticles(this.offset, this.limit)
       .pipe(
@@ -68,7 +70,8 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   }
 
   private onCatchError(error: HttpErrorResponse): void {
-    console.error(error);
+    this.error = 'Something went wrong :(';
+    this.isLoading = false;
   }
 
   private nextPage() {

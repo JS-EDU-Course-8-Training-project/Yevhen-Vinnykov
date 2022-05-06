@@ -1,5 +1,5 @@
-import { Subject, takeUntil } from 'rxjs';
-import { IArticle } from '../../shared/models/IArticle';
+import { catchError, Subject, takeUntil } from 'rxjs';
+import { IArticle, IArticleResponse } from '../../shared/models/IArticle';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
@@ -47,12 +47,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
 
   private likeHandler(slug: string, method: 'addToFavorites' | 'removeFromFavorites'): void {
     this.articlesService[method](slug).pipe(takeUntil(this.notifier))
-      .subscribe(article => {
-        if (!(article instanceof HttpErrorResponse)) {
+      .pipe(catchError((err): any => console.log(err)))
+      .subscribe((article: IArticleResponse | any) => {
           this.isLiked = article.favorited;
           this.isPending = false;
           this.likesCount = article.favoritesCount;
-        }
       });
   }
 }

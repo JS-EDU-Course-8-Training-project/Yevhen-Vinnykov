@@ -23,20 +23,20 @@ export class ArticlesService {
     private http: HttpClient
   ) { }
 
-  public fetchArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse | HttpErrorResponse> {
+  public fetchArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse> {
     return this.http.get<IArticleResponse>(`${this.baseURL}/?offset=${offset}&limit=${limit}`, httpOptions);
   }
 
-  public fetchFollowedArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse | HttpErrorResponse> {
+  public fetchFollowedArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse> {
     return this.http.get<IArticleResponse>(`${this.baseURL}/feed/?offset=${offset}&limit=${limit}`, httpOptions);
   }
 
-  public fetchArticle(slug: string): Observable<IArticle | HttpErrorResponse> {
+  public fetchArticle(slug: string): Observable<IArticle> {
     return this.http.get<{ article: IArticle }>(`${this.baseURL}/${slug}`, httpOptions)
       .pipe(pluck('article'));
   }
 
-  public createArticle(article: ICreatedArticle): Observable<IArticle | HttpErrorResponse> {
+  public createArticle(article: ICreatedArticle): Observable<IArticle> {
     return this.http
       .post<IArticle>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }
@@ -45,39 +45,39 @@ export class ArticlesService {
     return this.http.delete(`${this.baseURL}/${slug}`, httpOptions);
   }
 
-  public updateArticle(slug: string, article: IUpdateArticle): Observable<IArticle | HttpErrorResponse> {
+  public updateArticle(slug: string, article: IUpdateArticle): Observable<IArticle> {
     return this.http.put<IArticle>(`${this.baseURL}/${slug}`, JSON.stringify({ article }), httpOptions);
   }
 
-  public fetchTags(): Observable<string[] | HttpErrorResponse> {
+  public fetchTags(): Observable<string[]> {
     return this.http.get<{ tags: string[] }>(this.baseURL.replace('articles', 'tags'), httpOptions)
       .pipe(pluck('tags'));
   }
 
   public fetchArticlesByTag(tag: string, offset: number = 0, limit: number = 5):
-    Observable<IArticleResponse | HttpErrorResponse> {
+    Observable<IArticleResponse> {
     return this.http
       .get<IArticleResponse>(`${this.baseURL}?tag=${tag}&limit=${limit}&offset=${offset}`, httpOptions);
   }
 
   public fetchUserArticles(username: string, limit: number = 20, offset: number = 0):
-    Observable<IArticleResponse | HttpErrorResponse> {
+    Observable<IArticleResponse> {
     return this.http
       .get<IArticleResponse>(`${this.baseURL}?author=${username}&limit=${limit}&offset=${offset}`, httpOptions);
   }
 
   public fetchFavoritedArticles(username: string, limit: number = 20, offset: number = 0):
-    Observable<IArticleResponse | HttpErrorResponse> {
+    Observable<IArticleResponse> {
     return this.http
       .get<IArticleResponse>(`${this.baseURL}?favorited=${username}&limit=${limit}&offset=${offset}`, httpOptions);
   }
 
-  public addToFavorites(slug: string): Observable<IArticle | HttpErrorResponse> {
+  public addToFavorites(slug: string): Observable<IArticle> {
     return this.http.post<{ article: IArticle }>(`${this.baseURL}/${slug}/favorite`, null, httpOptions)
       .pipe(pluck('article'));
   }
 
-  public removeFromFavorites(slug: string): Observable<IArticle | HttpErrorResponse> {
+  public removeFromFavorites(slug: string): Observable<IArticle> {
     return this.http.delete<{ article: IArticle }>(`${this.baseURL}/${slug}/favorite`, httpOptions)
       .pipe(pluck('article'));
   }
