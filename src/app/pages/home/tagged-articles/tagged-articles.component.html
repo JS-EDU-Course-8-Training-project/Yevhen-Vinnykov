@@ -1,3 +1,4 @@
+<p *ngIf="error.length">{{error}}</p>
 <ng-container>
     <div *ngFor="let article of articlesSelectedByTag; let i = index">
         <app-article-list [article]="article" *ngIf="i + 1 !== articlesSelectedByTag.length"></app-article-list>

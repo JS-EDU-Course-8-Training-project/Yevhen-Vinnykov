@@ -26,6 +26,7 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
   private limit: number = 5;
   private currentPage: number = 1;
   public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public error = '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -34,11 +35,11 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
 
   ngOnChanges() {
     this.reset();
-    if (this.tabIndex === 2) {
-      this.getTaggedArticles();
-      this.infiniteScroll
-        .observeIntersection({ canLoad: this.canLoad$, callback: this.getTaggedArticles.bind(this) });
-    }
+    if (this.tabIndex !== 2) return;
+    this.getTaggedArticles();
+    this.infiniteScroll
+      .observeIntersection({ canLoad: this.canLoad$, callback: this.getTaggedArticles.bind(this) });
+
   }
 
   ngOnDestroy(): void {
@@ -55,21 +56,23 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
   }
 
   private getTaggedArticles() {
-    if (this.selectedTag) {
-      this.isLoading = true;
-      this.articlesService
-        .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
-        .pipe(
-          takeUntil(this.notifier),
-          catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
-        .subscribe((res: IArticleResponse | any) => this.setDataOnResponse(res));
-    }
+    if (!this.selectedTag) return;
+    this.error = '';
+    this.isLoading = true;
+    this.articlesService
+      .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+      .subscribe((res: IArticleResponse | any) => this.setDataOnResponse(res));
+
   }
 
   private onCatchError(error: HttpErrorResponse): void {
-    console.error(error);
+    this.error = 'Something went wrong :(';
+    this.isLoading = false;
   }
-  
+
   private setDataOnResponse(response: IArticleResponse): void {
     this.articlesSelectedByTag = [...this.articlesSelectedByTag, ...response.articles];
     this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
