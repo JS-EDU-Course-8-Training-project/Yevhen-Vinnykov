@@ -49,9 +49,11 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
   private initialize(): void {
     this.username = this.article?.author?.username;
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
-    this.articlePageButtonsService.initialize(this.article)
+    if(!this.isAuthor && this.article) {
+      this.articlePageButtonsService.initialize(this.article)
       .pipe(takeUntil(this.notifier))
       .subscribe(state => this.setDataOnResponse(state));
+    }
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized) => this.isAuthorized = isAuthorized);
