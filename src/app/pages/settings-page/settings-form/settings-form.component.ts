@@ -6,7 +6,7 @@ import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 
-type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'newPassword';
+type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'password';
 
 @Component({
   selector: 'app-settings-form',
@@ -52,7 +52,7 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
       username: [this.authUser.username, [Validators.required]],
       bio: [this.authUser.bio],
       email: [this.authUser.email, [Validators.required, Validators.email]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
