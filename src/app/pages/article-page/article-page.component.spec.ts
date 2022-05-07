@@ -8,6 +8,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArticlePageComponent } from './article-page.component';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { UsersService } from 'src/app/shared/services/users/users.service';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 class ArticlesServiceMock {
   public fetchArticle = (slug: string) => of({} as IArticle);
@@ -37,7 +38,8 @@ describe('ArticlePageComponent', () => {
         { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: UsersService, useClass: UsersServiceMock },
         { provide: Router, useClass: RouterMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

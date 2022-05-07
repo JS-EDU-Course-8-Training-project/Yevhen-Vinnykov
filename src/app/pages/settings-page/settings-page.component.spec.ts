@@ -7,6 +7,7 @@ import { SettingsPageComponent } from './settings-page.component';
 import { SettingsFormComponent } from './settings-form/settings-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 const mockUser: IExistingUser = {
@@ -38,7 +39,8 @@ describe('SettingsPageComponent', () => {
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

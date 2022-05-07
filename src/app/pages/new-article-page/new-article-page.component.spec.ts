@@ -197,34 +197,34 @@ describe('NewArticlePageComponent Create Mode', () => {
 
 
 
-describe('OnCatchError Method', () => {
-  let component: NewArticlePageComponent;
-  let fixture: ComponentFixture<NewArticlePageComponent>;
+// describe('OnCatchError Method', () => {
+//   let component: NewArticlePageComponent;
+//   let fixture: ComponentFixture<NewArticlePageComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [NewArticlePageComponent],
-      imports: [ReactiveFormsModule, FormsModule],
-      providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-        { provide: Router, useClass: RouterMockEditMode }
-      ]
-    })
-      .compileComponents();
-  });
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       declarations: [NewArticlePageComponent],
+//       imports: [ReactiveFormsModule, FormsModule],
+//       providers: [
+//         { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
+//         { provide: Router, useClass: RouterMockEditMode }
+//       ]
+//     })
+//       .compileComponents();
+//   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(NewArticlePageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//   beforeEach(() => {
+//     fixture = TestBed.createComponent(NewArticlePageComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
 
-  it('should be invoked', () => {
-    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-    component.ngOnInit();
-    expect(spy).toHaveBeenCalledWith('Fetching articles failed');
-  });
+//   it('should be invoked', () => {
+//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+//     component.ngOnInit();
+//     expect(spy).toHaveBeenCalledWith('Fetching articles failed');
+//   });
 
-});
+// });
 

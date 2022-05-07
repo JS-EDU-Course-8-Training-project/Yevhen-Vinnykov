@@ -1,3 +1,4 @@
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
@@ -10,7 +11,8 @@ describe('HomeComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ HomeComponent ],
       imports: [
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });

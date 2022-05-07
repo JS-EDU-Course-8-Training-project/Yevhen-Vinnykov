@@ -8,6 +8,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommentsComponent } from './comments.component';
 import { CommentsService } from '../services/comments/comments.service';
 import { By } from '@angular/platform-browser';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const comments: IComment[] = [{
   id: 1,
@@ -47,7 +48,8 @@ describe('CommentsComponent', () => {
       imports: [MatCardModule, MatIconModule],
       providers: [
         { provide: CommentsService, useClass: CommentsServiceMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });

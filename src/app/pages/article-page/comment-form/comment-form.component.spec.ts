@@ -7,6 +7,7 @@ import { CommentFormComponent } from './comment-form.component';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { CommentsService } from '../services/comments/comments.service';
 import { By } from '@angular/platform-browser';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 const returnComment: IComment = {
@@ -38,13 +39,14 @@ describe('CommentFormComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CommentFormComponent],
       providers: [FormBuilder],
-      imports: [ReactiveFormsModule, FormsModule]
+      imports: [ReactiveFormsModule, FormsModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     }).overrideComponent(CommentFormComponent, {
       set: {
         providers: [
           { provide: CommentsService, useClass: CommentsServiceMock },
           { provide: AuthorizationService, useClass: AuthorizationServiceMock }
-        ]
+        ],
       }
     })
       .compileComponents();

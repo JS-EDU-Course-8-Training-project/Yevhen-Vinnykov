@@ -10,6 +10,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { By } from '@angular/platform-browser';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const mockAuthUser: IExistingUser = {
   email: 'test-auth@example.com',
@@ -69,7 +70,8 @@ describe('UserPageComponent', () => {
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
@@ -128,7 +130,8 @@ describe('RedirectUnauthorized', () => {
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceMockNotAuth }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
@@ -167,7 +170,8 @@ describe('UserPageComponent Myself Mode', () => {
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceMock }
-      ]
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

@@ -46,7 +46,9 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.lastItem.changes.subscribe(change => {
+    this.lastItem.changes
+    .pipe(takeUntil(this.notifier))
+    .subscribe(change => {
       if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
     });
   }

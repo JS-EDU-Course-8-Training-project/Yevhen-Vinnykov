@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { ArticlePageButtonsService } from '../services/buttons/article-page-buttons.service';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 interface IButtonsState {
   favoriteInProgress: boolean;
@@ -129,7 +130,8 @@ describe('ArticlePageButtonsComponent', () => {
         { provide: ArticlePageButtonsService, useClass: ArticlePageButtonsServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceMock }
       ],
-      imports: [MatCardModule, MatIconModule]
+      imports: [MatCardModule, MatIconModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
@@ -307,7 +309,8 @@ describe('Unauthorized Redirection', () => {
         { provide: ArticlePageButtonsService, useClass: ArticlePageButtonsServiceMock },
         { provide: AuthorizationService, useClass: AuthorizationServiceNotAuthMock }
       ],
-      imports: [MatCardModule, MatIconModule]
+      imports: [MatCardModule, MatIconModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
