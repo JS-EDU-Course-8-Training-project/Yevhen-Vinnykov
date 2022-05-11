@@ -1,5 +1,5 @@
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
-import { catchError, Subject, takeUntil } from 'rxjs';
+import { catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { IUserData } from '../../shared/models/IUserData';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -52,13 +52,14 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.isPending = true;
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
     Object.keys(error.error.errors).forEach(key => {
       this.errors.push(`${key} ${error.error.errors[key][0]}`)
     });
     this.isPending = false;
     this.signinForm.enable();
     this.signinForm.markAsUntouched();
+    return of({} as IExistingUser);
   }
 
   public handleSignin(): void {

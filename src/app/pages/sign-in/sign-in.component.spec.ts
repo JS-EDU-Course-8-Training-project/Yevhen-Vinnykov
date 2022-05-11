@@ -1,56 +1,13 @@
 import { UsersService } from './../../shared/services/users/users.service';
-import { of, throwError } from 'rxjs';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { IUserData } from 'src/app/shared/models/IUserData';
 
 import { SignInComponent } from './sign-in.component';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { By } from '@angular/platform-browser';
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { dataMock, mockError, RedirectionServiceMock, UsersServiceMock, UsersServiceMockWithError } from './sign-in.mocks.spec';
 
-const dataMock: IUserData = {
-  email: 'test-user@example.com',
-  password: 'test-password'
-};
-
-const userMock: IExistingUser = {
-  email: 'test-user@example.com',
-  password: 'test-password',
-  bio: null,
-  image: '',
-  username: 'test-username'
-};
-
-const mockError: HttpErrorResponse = {
-  error: {
-    errors: {
-      'email': ['is wrong']
-    }
-  },
-  name: 'HttpErrorResponse',
-  message: '',
-  ok: false,
-  headers: new HttpHeaders,
-  status: 0,
-  statusText: '',
-  url: null,
-  type: HttpEventType.ResponseHeader
-};
-
-class RedirectionServiceMock {
-  public redirectHome = () => new Promise<boolean>((resolve, reject) => resolve(true));
-}
-
-class UsersServiceMock {
-  public signIn = (data: IUserData) => of(userMock);
-}
-
-class UsersServiceMockWithError {
-  public signIn = (data: IUserData) => throwError(() => mockError);
-}
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -118,37 +75,37 @@ describe('SignInComponent', () => {
 });
 
 
-// describe('OnCatchError', () => {
-//   let component: SignInComponent;
-//   let fixture: ComponentFixture<SignInComponent>;
+describe('OnCatchError', () => {
+  let component: SignInComponent;
+  let fixture: ComponentFixture<SignInComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [SignInComponent],
-//       imports: [ReactiveFormsModule, FormsModule],
-//       providers: [
-//         { provide: UsersService, useClass: UsersServiceMockWithError },
-//         { provide: RedirectionService, useClass: RedirectionServiceMock }
-//       ]
-//     })
-//       .compileComponents();
-//   });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [SignInComponent],
+      imports: [ReactiveFormsModule, FormsModule],
+      providers: [
+        { provide: UsersService, useClass: UsersServiceMockWithError },
+        { provide: RedirectionService, useClass: RedirectionServiceMock }
+      ]
+    })
+      .compileComponents();
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(SignInComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SignInComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-//   it('should be invoked', () => {
-//     const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     component.signinForm.setValue(dataMock);
-//     fixture.detectChanges();
-//     signinButton.click();
-//     fixture.detectChanges();
-//     expect(spy).toHaveBeenCalledWith(mockError);
-//     expect(component.errors).toEqual(['email is wrong']);
-//   });
+  it('should be invoked', () => {
+    const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+    component.signinForm.setValue(dataMock);
+    fixture.detectChanges();
+    signinButton.click();
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalledWith(mockError);
+    expect(component.errors).toEqual(['email is wrong']);
+  });
 
-// });
+});
