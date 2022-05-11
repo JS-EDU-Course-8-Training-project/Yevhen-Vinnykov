@@ -6,7 +6,13 @@ import { SignInComponent } from './sign-in.component';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { dataMock, mockError, RedirectionServiceMock, UsersServiceMock, UsersServiceMockWithError } from './sign-in.mocks.spec';
+import {
+  dataMock,
+  mockError,
+  RedirectionServiceMock,
+  UsersServiceMock,
+  UsersServiceMockWithError
+} from './sign-in.mocks.spec';
 
 
 describe('SignInComponent', () => {

@@ -1,49 +1,19 @@
 import { By } from '@angular/platform-browser';
 import { RedirectionService } from './../../shared/services/redirection/redirection.service';
 import { UsersService } from './../../shared/services/users/users.service';
-import { IUserData } from './../../shared/models/IUserData';
-import { of, throwError } from 'rxjs';
-import { IExistingUser } from './../../shared/models/IExistingUser';
-import { INewUser } from './../../shared/models/INewUser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SignUpComponent } from './sign-up.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import {
+  UsersServiceMock,
+  RedirectionServiceMock,
+  dataMock,
+  UsersServiceMockWithError,
+  mockError
+} from './sign-up.mocks.spec';
 
-const dataMock: INewUser = {
-  email: 'test-user@example.com',
-  password: 'test-password',
-  username: 'test-username'
-};
-
-const userMock: IExistingUser = {
-  email: 'test-user@example.com',
-  password: 'test-password',
-  bio: null,
-  image: '',
-  username: 'test-username'
-};
-
-const mockError = {
-  error: {
-    errors: {
-      'email': ['is wrong']
-    }
-  }
-};
-
-class RedirectionServiceMock {
-  public redirectHome = () => new Promise<boolean>((resolve, reject) => resolve(true));
-}
-
-class UsersServiceMock {
-  public createUser = (data: INewUser) => of(userMock);
-}
-
-class UsersServiceMockWithError {
-  public createUser = (data: IUserData) => throwError(() => mockError);
-}
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;
@@ -111,36 +81,36 @@ describe('SignUpComponent', () => {
 });
 
 
-// describe('OnCatchError', () => {
-//   let component: SignUpComponent;
-//   let fixture: ComponentFixture<SignUpComponent>;
+describe('OnCatchError', () => {
+  let component: SignUpComponent;
+  let fixture: ComponentFixture<SignUpComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [SignUpComponent],
-//       imports: [ReactiveFormsModule, FormsModule],
-//       providers: [
-//         { provide: UsersService, useClass: UsersServiceMockWithError },
-//         { provide: RedirectionService, useClass: RedirectionServiceMock }
-//       ]
-//     })
-//       .compileComponents();
-//   });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [SignUpComponent],
+      imports: [ReactiveFormsModule, FormsModule],
+      providers: [
+        { provide: UsersService, useClass: UsersServiceMockWithError },
+        { provide: RedirectionService, useClass: RedirectionServiceMock }
+      ]
+    })
+      .compileComponents();
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(SignUpComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SignUpComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-//   it('should be invoked', () => {
-//     const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     component.signupForm.setValue(dataMock);
-//     fixture.detectChanges();
-//     signinButton.click();
-//     expect(spy).toHaveBeenCalledWith(mockError);
-//     expect(component.errors).toEqual(['email is wrong']);
-//   });
+  it('should be invoked', () => {
+    const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+    component.signupForm.setValue(dataMock);
+    fixture.detectChanges();
+    signinButton.click();
+    expect(spy).toHaveBeenCalledWith(mockError);
+    expect(component.errors).toEqual(['email is wrong']);
+  });
 
-// });
+});

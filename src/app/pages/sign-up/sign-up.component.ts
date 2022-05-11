@@ -1,5 +1,5 @@
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
-import { catchError, Subject, takeUntil } from 'rxjs';
+import { catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/shared/services/users/users.service';
@@ -53,13 +53,14 @@ export class SignUpComponent implements OnInit {
     this.errors = [];
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
     Object.keys(error.error.errors).forEach(key => {
       this.errors.push(`${key} ${error.error.errors[key][0]}`)
     })
     this.isPending = false;
     this.signupForm.enable();
     this.signupForm.markAsUntouched();
+    return of({} as IExistingUser);
   }
 
   public handleSignup(): void {
