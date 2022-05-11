@@ -1,5 +1,5 @@
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { of, throwError } from 'rxjs';
+import { of, throwError, catchError } from 'rxjs';
 import { IArticleResponse } from './../../../shared/models/IArticle';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -87,32 +87,36 @@ describe('FavoritedArticlesComponent', () => {
 });
 
 
-// describe('OnCatchError', () => {
-//   let component: FavoritedArticlesComponent;
-//   let fixture: ComponentFixture<FavoritedArticlesComponent>;
+describe('OnCatchError', () => {
+  let component: FavoritedArticlesComponent;
+  let fixture: ComponentFixture<FavoritedArticlesComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [FavoritedArticlesComponent],
-//       providers: [
-//         { provide: ArticlesService, useClass: ArticlesServiceMockWithError }
-//       ]
-//     })
-//       .compileComponents();
-//   });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [FavoritedArticlesComponent],
+      providers: [
+        { provide: ArticlesService, useClass: ArticlesServiceMockWithError }
+      ]
+    })
+      .compileComponents();
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(FavoritedArticlesComponent);
-//     component = fixture.componentInstance;
-//     component.username = 'test-username';
-//     component.tabIndex = 1;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(FavoritedArticlesComponent);
+    component = fixture.componentInstance;
+    component.username = 'test-username';
+    component.tabIndex = 1;
+    fixture.detectChanges();
+    component.ngOnChanges();
+  });
 
-//   it('onCatchError should be called', () => {
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     component.ngOnChanges();
-//     expect(spy).toHaveBeenCalledWith(Error('Fetching articles failed'));
-//   });
+  it('onCatchError should be called', () => {
+    const service = TestBed.inject(ArticlesService);
+    service.fetchFavoritedArticles('test-username').pipe(
+      catchError((): any => {
+        expect(component.error).toBe('Something went wrong :(');
+      })
+    );
+  });
 
-// });
+});

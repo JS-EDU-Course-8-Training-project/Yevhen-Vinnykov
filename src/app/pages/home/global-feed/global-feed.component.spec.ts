@@ -132,39 +132,4 @@ describe('GlobalFeedComponent', () => {
       )
     }));
   });
-  // I think test below is extra
-  // describe('GlobalFeedComponent', () => {
-  //   let component: GlobalFeedComponent;
-  //   let fixture: ComponentFixture<GlobalFeedComponent>;
-  //   let articleServiceSpy: jasmine.SpyObj<ArticlesService>;
-  //
-  //   beforeEach(async () => {
-  //     await TestBed.configureTestingModule({
-  //       declarations: [GlobalFeedComponent],
-  //       providers: [
-  //         { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-  //       ]
-  //     })
-  //       .compileComponents();
-  //   });
-  //
-  //   beforeEach(() => {
-  //     articleServiceSpy = jasmine.createSpyObj('ArticlesService', ['fetchArticles']);
-  //     fixture = TestBed.createComponent(GlobalFeedComponent);
-  //     component = fixture.componentInstance;
-  //     component.tabIndex = 1;
-  //     component.isAuthorized = false;
-  //     fixture.detectChanges();
-  //   });
-  //
-  //   it('onCatchError should be called', () => {
-  //     articleServiceSpy.fetchArticles.and.returnValue(throwError(() => Error('Fetching articles failed')));
-  //     fixture.detectChanges();
-  //     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-  //     fixture.detectChanges();
-  //     expect(spy).toHaveBeenCalled();
-  //     expect(component.error).toBe('Something went wrong :(');
-  //   });
-  //
-  // });
-})
+});

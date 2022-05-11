@@ -1,4 +1,4 @@
-import { Subject, takeUntil, BehaviorSubject, catchError, Observable } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, catchError, Observable, of } from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
@@ -71,9 +71,10 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
     this.nextPage();
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
+    return of({articles: [], articlesCount: 0});
   }
 
   private nextPage() {

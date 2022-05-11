@@ -1,6 +1,6 @@
-import { of, throwError } from 'rxjs';
-import { IArticleResponse } from './../../../shared/models/IArticle';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { IArticleResponse } from 'src/app/shared/models/IArticle';
+import { of, throwError, catchError } from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MyArticlesComponent } from './my-articles.component';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -89,32 +89,37 @@ describe('MyArticlesComponent', () => {
 });
 
 
-// describe('OnCatchError', () => {
-//   let component: MyArticlesComponent;
-//   let fixture: ComponentFixture<MyArticlesComponent>;
+describe('OnCatchError', () => {
+  let component: MyArticlesComponent;
+  let fixture: ComponentFixture<MyArticlesComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [MyArticlesComponent],
-//       providers: [
-//         { provide: ArticlesService, useClass: ArticlesServiceMockWithError }
-//       ]
-//     })
-//       .compileComponents();
-//   });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [MyArticlesComponent],
+      providers: [
+        { provide: ArticlesService, useClass: ArticlesServiceMockWithError }
+      ]
+    })
+      .compileComponents();
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(MyArticlesComponent);
-//     component = fixture.componentInstance;
-//     component.username = 'test-username';
-//     component.tabIndex = 0;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(MyArticlesComponent);
+    component = fixture.componentInstance;
+    component.username = 'test-username';
+    component.tabIndex = 0;
+    fixture.detectChanges();
+    component.ngOnChanges();
+  });
 
-//   it('onCatchError should be called', () => {
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     component.ngOnChanges();
-//     expect(spy).toHaveBeenCalledWith(Error('Fetching articles failed'));
-//   });
+  it('onCatchError should be called', waitForAsync(() => {
+    const service = TestBed.inject(ArticlesService);
+    service.fetchUserArticles('test-username').pipe(
+      catchError((): any => {
+        expect(component.error).toBe('Something went wrong :(');
+        return of({} as IArticleResponse);
+      })
+    );
+  }));
  
-// });
+});
