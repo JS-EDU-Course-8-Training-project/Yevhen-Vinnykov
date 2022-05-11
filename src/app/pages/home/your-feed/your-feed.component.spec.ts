@@ -54,7 +54,8 @@ describe('YourFeedComponent', () => {
       await TestBed.configureTestingModule({
         declarations: [YourFeedComponent],
         providers: [
-          { provide: ArticlesService, useClass: ArticlesServiceMock }
+          { provide: ArticlesService, useClass: ArticlesServiceMock },
+          { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock }
         ],
         schemas: [NO_ERRORS_SCHEMA]
       })
@@ -74,20 +75,12 @@ describe('YourFeedComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('getFollowedArticles should be called when tab index is 0', () => {
+    it('getFollowedArticles should be called', waitForAsync(() => {
       const service = TestBed.inject(ArticlesService);
       service.fetchFollowedArticles().subscribe((data: IArticleResponse) => {
         expect(data.articles).toEqual(expectedData.articles);
       });
-    });
-
-    it('getFollowedArticles should not be called when tab index is not 0', () => {
-      component.tabIndex = 1;
-      const service = TestBed.inject(ArticlesService);
-      service.fetchFollowedArticles().subscribe((data: IArticleResponse) => {
-        expect(data.articles).toEqual(expectedData.articles);
-      });
-    });
+    }));
   });
 
 

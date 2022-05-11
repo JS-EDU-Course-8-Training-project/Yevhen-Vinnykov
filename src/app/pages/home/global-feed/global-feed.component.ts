@@ -9,7 +9,8 @@ import {
   ElementRef,
   QueryList,
   AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  ChangeDetectionStrategy, 
+  ChangeDetectorRef
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';

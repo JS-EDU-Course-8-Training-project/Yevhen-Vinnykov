@@ -1,6 +1,17 @@
-import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, takeUntil, of } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { 
+  AfterViewInit, 
+  Component, 
+  ElementRef, 
+  Input, 
+  OnChanges, 
+  OnDestroy, 
+  QueryList, 
+  ViewChildren,
+  ChangeDetectionStrategy, 
+  ChangeDetectorRef
+ } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
@@ -8,7 +19,8 @@ import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/i
 @Component({
   selector: 'app-tagged-articles',
   templateUrl: './tagged-articles.component.html',
-  styleUrls: ['./tagged-articles.component.scss']
+  styleUrls: ['./tagged-articles.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
@@ -30,7 +42,8 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
 
   constructor(
     private articlesService: ArticlesService,
-    private infiniteScroll: InfiniteScrollService
+    private infiniteScroll: InfiniteScrollService, 
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnChanges() {
@@ -68,9 +81,12 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
 
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
+    this.cdRef.detectChanges();
+    return of({articles: [], articlesCount: 0});
+
   }
 
   private setDataOnResponse(response: IArticleResponse): void {
@@ -80,6 +96,7 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
     this.isLoading = false;
     this.canLoad$.next(!this.isFinished && !this.isLoading);
     this.nextPage();
+    this.cdRef.detectChanges();
   }
 
   private nextPage(): void {
@@ -95,6 +112,7 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
     this.isFinished = false;
     this.currentPage = 1;
     this.pagesTotalCount = 0;
+    this.cdRef.detectChanges();
   }
 
 }

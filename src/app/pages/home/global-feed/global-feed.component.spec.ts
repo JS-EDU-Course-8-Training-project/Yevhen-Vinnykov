@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ArticlesService } from './../../../shared/services/articles/articles.service';
 import { IArticleResponse } from './../../../shared/models/IArticle';
-import {catchError, of, tap, throwError} from 'rxjs';
+import {catchError, of, throwError} from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GlobalFeedComponent } from './global-feed.component';
@@ -42,7 +42,7 @@ class ArticlesServiceMockWithError {
 
 class InfiniteScrollServiceMock {
   public observeIntersection = () => of([]);
-  public observer = {observe: () => {}}
+  public observer = { observe: () => {} };
 }
 
 describe('GlobalFeedComponent', () => {

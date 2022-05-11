@@ -1,10 +1,11 @@
+import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { ArticlesService } from './../../../shared/services/articles/articles.service';
-import { of, throwError } from 'rxjs';
+import { of, throwError, catchError } from 'rxjs';
 import { IArticleResponse } from './../../../shared/models/IArticle';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TaggedArticlesComponent } from './tagged-articles.component';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, QueryList, ElementRef } from '@angular/core';
 
 const expectedData: IArticleResponse = {
   articles: [
@@ -38,88 +39,106 @@ class ArticlesServiceMockWithError {
   public fetchArticlesByTag = (tag: string, offset: number, limit: number) => throwError(() => new Error('Failed'));
 }
 
+class InfiniteScrollServiceMock {
+  public observeIntersection = () => of([]);
+  public observer = { observe: () => {} };
+}
+
 describe('TaggedArticlesComponent', () => {
-  let component: TaggedArticlesComponent;
-  let fixture: ComponentFixture<TaggedArticlesComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [TaggedArticlesComponent],
-      providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMock },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TaggedArticlesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  describe('GetTaggedArticles', () => {
-    
+  describe('When no error thrown', () => {
+    let component: TaggedArticlesComponent;
+    let fixture: ComponentFixture<TaggedArticlesComponent>;
+  
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        declarations: [TaggedArticlesComponent],
+        providers: [
+          { provide: ArticlesService, useClass: ArticlesServiceMock },
+          { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock}
+        ],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      })
+        .compileComponents();
+    });
+  
     beforeEach(() => {
       fixture = TestBed.createComponent(TaggedArticlesComponent);
       component = fixture.componentInstance;
-      component.tabIndex = 1;
       component.selectedTag = 'test';
-      fixture.detectChanges();
-    });
-
-    it('should not be called because tab index is not 2', () => {
-      const spy = spyOn<any>(component, 'getTaggedArticles').and.callThrough();
-      component.ngOnChanges();
-      fixture.detectChanges();
-      expect(spy).not.toHaveBeenCalled();
-    });
-
-    it('should be called because tab index is 2', () => {
-      const spy = spyOn<any>(component, 'getTaggedArticles').and.callThrough();
+      component.lastItem = new QueryList<ElementRef<any>>();
       component.tabIndex = 2;
-      component.ngOnChanges();
       fixture.detectChanges();
-      expect(spy).toHaveBeenCalled();
+      component.ngOnChanges();
     });
+  
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('setDataOnResponse should be called', waitForAsync(() => {
+      const service = TestBed.inject(ArticlesService);
+      service.fetchArticlesByTag('test').subscribe((data) => {
+        expect(component.articlesSelectedByTag).toEqual(data.articles);
+      })
+    }));
+
+    it('should not be called because selectedTag is null', () => {
+      component.selectedTag = null;
+      component.ngOnChanges();
+      expect(component.articlesSelectedByTag).toEqual([]);
+    });
+
+    it('should not be called because tabIndex is not 2', () => {
+      component.tabIndex = 0;
+      component.ngOnChanges();
+      expect(component.articlesSelectedByTag).toEqual([]);
+    });
+
+    });
+
+    describe('When error is thrown', () => {
+      let component: TaggedArticlesComponent;
+      let fixture: ComponentFixture<TaggedArticlesComponent>;
+    
+      beforeEach(async () => {
+        await TestBed.configureTestingModule({
+          declarations: [TaggedArticlesComponent],
+          providers: [
+            { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
+            { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock }
+          ]
+        })
+          .compileComponents();
+      });
+    
+      beforeEach(() => {
+        fixture = TestBed.createComponent(TaggedArticlesComponent);
+        component = fixture.componentInstance;
+        component.tabIndex = 2;
+        component.selectedTag = 'test';
+        component.lastItem = new QueryList<ElementRef<any>>();
+        fixture.detectChanges();
+        component.ngOnChanges();
+      });
+    
+      it('onCatchError should be called', waitForAsync(() => {
+        const service = TestBed.inject(ArticlesService);
+        service.fetchArticlesByTag('test').pipe(
+          catchError(() => {
+            expect(component.error).toBe('Something went wrong :(');
+            return of({articles: [], articlesCount: 0});
+          })
+        );
+      }));
+    
+    });
+
 
   });
-});
 
 
 
-// describe('TaggedArticlesComponent', () => {
-//   let component: TaggedArticlesComponent;
-//   let fixture: ComponentFixture<TaggedArticlesComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [TaggedArticlesComponent],
-//       providers: [
-//         { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-//       ]
-//     })
-//       .compileComponents();
-//   });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(TaggedArticlesComponent);
-//     component = fixture.componentInstance;
-//     component.tabIndex = 2;
-//     component.selectedTag = 'test';
-//     fixture.detectChanges();
-//   });
 
-//   it('onCatchError should be called', () => {
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     component.ngOnChanges();
-//     fixture.detectChanges();
-//     expect(spy).toHaveBeenCalled();
-//   });
-
-// });
