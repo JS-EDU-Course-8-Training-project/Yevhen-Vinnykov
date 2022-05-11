@@ -1,66 +1,17 @@
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { IUpdateArticle } from './../../shared/models/IUpdateArticle';
-import { of, Observable, throwError } from 'rxjs';
-import { IArticle } from './../../shared/models/IArticle';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
-import { NewArticlePageComponent } from './new-article-page.component';
-import { ICreatedArticle } from 'src/app/shared/models/ICreatedArticle';
+import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { By } from '@angular/platform-browser';
 
-const expectedData: IArticle = {
-  slug: 'test-slug',
-  title: 'test-title',
-  description: 'test-description',
-  body: 'test-body',
-  tagList: ['test-tag'],
-  createdAt: Date.now().toString(),
-  updatedAt: Date.now().toString(),
-  favorited: false,
-  favoritesCount: 2,
-  author: {
-    username: 'test-author',
-    bio: 'test-bio',
-    image: 'test-image',
-    following: false,
-  }
-};
+import { NewArticlePageComponent } from './new-article-page.component';
+import { 
+  ArticlesServiceMock, 
+  ArticlesServiceMockWithError, 
+  RouterMockCreateMode, 
+  RouterMockEditMode 
+} from './new-article-page.mocks.spec';
 
-
-class ArticlesServiceMock {
-
-  public fetchArticle = (slug: string): Observable<IArticle> => of(expectedData);
-
-  public createArticle = (newArticle: ICreatedArticle): Observable<IArticle> => of({
-    ...expectedData,
-    title: newArticle.title,
-    description: newArticle.description,
-    body: newArticle.body,
-    tagList: [...newArticle.tagList]
-  });
-
-  public updateArticle = (slug: string, article: IUpdateArticle): Observable<IArticle> => of({
-    ...expectedData,
-    title: article.title,
-    description: article.description,
-    body: article.body
-  });
-
-}
-
-class ArticlesServiceMockWithError {
-  public fetchArticle = (slug: string) => throwError(() => 'Fetching articles failed');
-}
-
-class RouterMockEditMode {
-  public url = 'localhost:3000/article/test-slug';
-}
-
-class RouterMockCreateMode {
-  public url = '/create-article';
-}
 
 describe('NewArticlePageComponent Edit Mode', () => {
   let component: NewArticlePageComponent;
@@ -115,7 +66,6 @@ describe('NewArticlePageComponent Edit Mode', () => {
   }));
 
 });
-
 
 
 describe('NewArticlePageComponent Create Mode', () => {
@@ -196,35 +146,34 @@ describe('NewArticlePageComponent Create Mode', () => {
 });
 
 
+describe('OnCatchError Method', () => {
+  let component: NewArticlePageComponent;
+  let fixture: ComponentFixture<NewArticlePageComponent>;
 
-// describe('OnCatchError Method', () => {
-//   let component: NewArticlePageComponent;
-//   let fixture: ComponentFixture<NewArticlePageComponent>;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [NewArticlePageComponent],
+      imports: [ReactiveFormsModule, FormsModule],
+      providers: [
+        { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
+        { provide: Router, useClass: RouterMockEditMode }
+      ]
+    })
+      .compileComponents();
+  });
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [NewArticlePageComponent],
-//       imports: [ReactiveFormsModule, FormsModule],
-//       providers: [
-//         { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-//         { provide: Router, useClass: RouterMockEditMode }
-//       ]
-//     })
-//       .compileComponents();
-//   });
-
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(NewArticlePageComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(NewArticlePageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
 
-//   it('should be invoked', () => {
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     component.ngOnInit();
-//     expect(spy).toHaveBeenCalledWith('Fetching articles failed');
-//   });
+  it('should be invoked', () => {
+    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+    component.ngOnInit();
+    expect(spy).toHaveBeenCalledWith('Fetching articles failed');
+  });
 
-// });
+});
 

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subject, takeUntil, Observable, catchError } from 'rxjs';
+import { Subject, takeUntil, Observable, catchError, of } from 'rxjs';
 import { INewArticle } from '../../shared/models/INewArticle';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -58,12 +58,13 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
       title: [this.articleToEdit?.title || '', [Validators.required]],
       description: [this.articleToEdit?.description || '', [Validators.required]],
       body: [this.articleToEdit?.body || '', [Validators.required]],
-      tagList: [this.articleToEdit?.tagList.join(',') || '', [Validators.required]],
+      tagList: [this.articleToEdit?.tagList?.join(',') || '', [Validators.required]],
     });
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IArticle> {
     console.error(error);
+    return of({} as IArticle);
   }
 
   public checkIfValid(formControl: string): boolean {
@@ -80,7 +81,6 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   }
 
   public handleArticleAction(): void {
-    if (!this.articleForm.valid) return; 
       this.articleAction(this.slug, this.createArticleData());
       this.articleForm.reset();
   }
