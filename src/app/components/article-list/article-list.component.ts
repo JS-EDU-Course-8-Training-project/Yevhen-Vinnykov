@@ -1,15 +1,15 @@
-import { catchError, Subject, takeUntil } from 'rxjs';
-import { IArticle, IArticleResponse } from '../../shared/models/IArticle';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import {catchError, Subject, takeUntil} from 'rxjs';
+import {IArticle, IArticleResponse} from '../../shared/models/IArticle';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ArticlesService} from 'src/app/shared/services/articles/articles.service';
+import {AuthorizationService} from 'src/app/shared/services/authorization/authorization.service';
+import {RedirectionService} from 'src/app/shared/services/redirection/redirection.service';
 
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
-  styleUrls: ['./article-list.component.scss']
+  styleUrls: ['./article-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ArticleListComponent implements OnInit, OnDestroy {
   @Input() article!: IArticle;
@@ -22,7 +22,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   constructor(
     private articlesService: ArticlesService,
     private redirectionService: RedirectionService,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +53,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
           this.isLiked = article.favorited;
           this.isPending = false;
           this.likesCount = article.favoritesCount;
+          this.cdRef.detectChanges();
       });
   }
 }
