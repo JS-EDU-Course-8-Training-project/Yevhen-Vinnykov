@@ -98,36 +98,36 @@ describe('SettingsFormComponent', () => {
 
 
 
-// describe('OnCatchError', () => {
-//   let component: SettingsFormComponent;
-//   let fixture: ComponentFixture<SettingsFormComponent>;
+describe('OnCatchError', () => {
+  let component: SettingsFormComponent;
+  let fixture: ComponentFixture<SettingsFormComponent>;
 
-//   beforeEach(async () => {
-//     await TestBed.configureTestingModule({
-//       declarations: [SettingsFormComponent],
-//       imports: [ReactiveFormsModule, FormsModule, MatProgressSpinnerModule],
-//       providers: [
-//         { provide: UsersService, useClass: UsersServiceMockWithError },
-//         { provide: RedirectionService, useClass: RedirectionServiceMock }
-//       ]
-//     })
-//       .compileComponents();
-//   });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [SettingsFormComponent],
+      imports: [ReactiveFormsModule, FormsModule, MatProgressSpinnerModule],
+      providers: [
+        { provide: UsersService, useClass: UsersServiceMockWithError },
+        { provide: RedirectionService, useClass: RedirectionServiceMock }
+      ]
+    })
+      .compileComponents();
+  });
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(SettingsFormComponent);
-//     component = fixture.componentInstance;
-//     component.authUser = settingsMock;
-//     fixture.detectChanges();
-//   });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SettingsFormComponent);
+    component = fixture.componentInstance;
+    component.authUser = settingsMock;
+    fixture.detectChanges();
+  });
 
-//   it('should be invoked', () => {
-//     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-//     const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
-//     updateButton.click();
-//     fixture.detectChanges();
-//     expect(spy).toHaveBeenCalledWith({error: 'Fetching articles failed'});
-//     expect(component.error).toBe('Fetching articles failed');
-//   });
+  it('should be invoked', () => {
+    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+    const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
+    updateButton.click();
+    fixture.detectChanges();
+    expect(spy).toHaveBeenCalledWith({error: 'Fetching articles failed'});
+    expect(component.error).toBe('Fetching articles failed');
+  });
 
-// });
+});

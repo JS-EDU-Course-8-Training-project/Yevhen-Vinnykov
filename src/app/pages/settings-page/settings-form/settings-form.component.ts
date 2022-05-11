@@ -1,4 +1,4 @@
-import { Subject, takeUntil, BehaviorSubject, catchError } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, catchError, of, Observable } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -70,11 +70,12 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
     this.error = '';
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
     this.error = error.error;
     this.isPending = false;
     this.settingsForm.enable();
     this.settingsForm.markAsUntouched();
+    return of({} as IExistingUser);
   }
 
   public updateSettings(): void {
