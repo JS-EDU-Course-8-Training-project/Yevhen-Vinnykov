@@ -1,6 +1,17 @@
-import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
-import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
+import { 
+  Component, 
+  Input, 
+  OnChanges, 
+  OnDestroy, 
+  ViewChildren, 
+  ElementRef, 
+  QueryList, 
+  AfterViewInit, 
+  ChangeDetectionStrategy, 
+  ChangeDetectorRef
+} from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
@@ -8,7 +19,8 @@ import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/i
 @Component({
   selector: 'app-your-feed',
   templateUrl: './your-feed.component.html',
-  styleUrls: ['./your-feed.component.scss']
+  styleUrls: ['./your-feed.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
@@ -27,7 +39,8 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   constructor(
     private articlesService: ArticlesService,
-    private infiniteScroll: InfiniteScrollService
+    private infiniteScroll: InfiniteScrollService, 
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnChanges(): void {
@@ -67,11 +80,14 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.isLoading = false;
     this.canLoad$.next(!this.isFinished && !this.isLoading);
     this.nextPage();
+    this.cdRef.detectChanges();
   }
 
-  private onCatchError(error: HttpErrorResponse): void {
+  private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
+    this.cdRef.detectChanges();
+    return of({articles: [], articlesCount: 0});
   }
 
   private nextPage() {
@@ -87,5 +103,6 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.isFinished = false;
     this.currentPage = 1;
     this.pagesTotalCount = 0;
+    this.cdRef.detectChanges();
   }
 }
