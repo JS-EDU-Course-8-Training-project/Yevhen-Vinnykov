@@ -1,7 +1,6 @@
+import { IArticle } from 'src/app/shared/models/IArticle';
 import { MatCardModule } from '@angular/material/card';
-import { Router } from '@angular/router';
-import { ArticlesService } from './../../shared/services/articles/articles.service';
-import { IArticle } from './../../shared/models/IArticle';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -10,16 +9,14 @@ import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-class ArticlesServiceMock {
-  public fetchArticle = (slug: string) => of({} as IArticle);
-}
-
 class UsersServiceMock {
-  public fetchAuthUser = () => of({} as IExistingUser)
+  public authUser$ = of({} as IExistingUser);
 }
 
-class RouterMock {
-  url = 'test/url/test'
+class ActivatedRouteMock {
+  public data = of({
+    article: {} as IArticle
+  })
 }
 
 describe('ArticlePageComponent', () => {
@@ -35,9 +32,8 @@ describe('ArticlePageComponent', () => {
         MatCardModule
       ],
       providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: UsersService, useClass: UsersServiceMock },
-        { provide: Router, useClass: RouterMock }
+        { provide: ActivatedRoute, useClass: ActivatedRouteMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
     })

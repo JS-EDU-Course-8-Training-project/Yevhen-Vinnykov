@@ -11,21 +11,22 @@ import { IExistingUser } from 'src/app/shared/models/IExistingUser';
   styleUrls: ['./article-page.component.scss'],
 })
 export class ArticlePageComponent implements OnInit, OnDestroy {
-  public slug: string = this.router.url.split('/')[2];
+  public slug!: string;
   public article!: IArticle;
   public authUser!: IExistingUser;
-  public isLoaded: boolean = false;
   private notifier: Subject<void> = new Subject<void>();
   public requestForComments$: Subject<void> = new Subject<void>();
 
   constructor(
     private usersService: UsersService,
-    private router: Router,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data: Data) => this.article = data['article']);
+    this.route.data.subscribe((data: Data) => {
+      this.article = data['article'];
+      this.slug = this.article.slug;
+  });
     this.getAuthUser();
   }
 
