@@ -1,7 +1,7 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
