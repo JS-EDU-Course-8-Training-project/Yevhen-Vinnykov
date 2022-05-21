@@ -69,8 +69,8 @@ export class SignInComponent implements OnInit, OnDestroy {
         takeUntil(this.notifier),
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
-        this.redirectionService.redirectHome();
         this.isPending = false;
+        if (!this.errors.length) this.redirectionService.redirectHome();;
       });
   }
 }

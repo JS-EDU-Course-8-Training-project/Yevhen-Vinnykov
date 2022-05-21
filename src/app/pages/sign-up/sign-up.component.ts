@@ -70,8 +70,8 @@ export class SignUpComponent implements OnInit {
         takeUntil(this.notifier),
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
-        this.redirectionService.redirectHome();
         this.isPending = false;
+        if (!this.errors.length) this.redirectionService.redirectHome();
       });
   }
 }
