@@ -1,6 +1,7 @@
 import { IArticleAuthor } from "./IArticle"
   export interface IComment {
-      id: number;
+      _id: string;
+      id: string;
       createdAt: string;
       updatedAt: string;
       body: string;

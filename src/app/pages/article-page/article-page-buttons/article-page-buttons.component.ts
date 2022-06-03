@@ -48,7 +48,7 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
 
   private initialize(): void {
     this.username = this.article?.author?.username;
-    this.isAuthor = this.article?.author?.username === this.authUser?.username;
+    this.isAuthor = this.article?.author?.username === this.authUser?.username;    
     if(!this.isAuthor && this.article) {
       this.articlePageButtonsService.initialize(this.article)
       .pipe(takeUntil(this.notifier))

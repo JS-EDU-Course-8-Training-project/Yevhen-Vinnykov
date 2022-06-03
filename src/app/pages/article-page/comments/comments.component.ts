@@ -16,7 +16,7 @@ export class CommentsComponent implements OnInit, OnDestroy{
   @Input() requestForComments$!: Subject<void>;
 
   public comments!: IComment[];
-  public commentsBeingDeletedIds: number[] = [];
+  public commentsBeingDeletedIds: string[] = [];
   private notifier: Subject<void> = new Subject<void>();
   public isLoaded!: boolean;
 
@@ -40,7 +40,7 @@ export class CommentsComponent implements OnInit, OnDestroy{
     this.isLoaded = false;
     this.commentsService.fetchArticleComments(this.slug)
       .pipe(takeUntil(this.notifier))
-      .subscribe(comments => {
+      .subscribe((comments) => {
         if (!(comments instanceof HttpErrorResponse)) {
           this.comments = comments;
           this.isLoaded = true;
@@ -48,9 +48,9 @@ export class CommentsComponent implements OnInit, OnDestroy{
       });
   }
 
-  public deleteComment(id: number): void {
-    const commentToBeDeletedId: number = this.comments
-    .find(comment => comment.id === id)?.id || 0;
+  public deleteComment(id: string): void {
+    const commentToBeDeletedId: string = this.comments
+    .find(comment => comment.id === id)?.id || '0';
     this.commentsBeingDeletedIds.push(commentToBeDeletedId);
     this.commentsService.removeComment(this.slug, id)
       .pipe(takeUntil(this.notifier))

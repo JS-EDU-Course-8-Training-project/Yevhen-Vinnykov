@@ -1,3 +1,4 @@
+import { IUpdateUser } from './../../models/IUpdateUser';
 import { environment } from '../../../../environments/environment';
 import { IExistingUser } from '../../models/IExistingUser';
 import { IUserData } from '../../models/IUserData';
@@ -34,7 +35,8 @@ export class UsersService {
 
   public createUser(user: INewUser): Observable<IExistingUser | HttpErrorResponse> {
     return this.http
-      .post<{ user: IExistingUser }>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
+    // .post<{ user: IExistingUser }>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
+      .post<{ user: IExistingUser }>(`${this.baseURL}/users/signup`, { user }, httpOptions).pipe(
         pluck('user'),
         map(user => {
           this.authorizationHelper(user);
@@ -56,7 +58,8 @@ export class UsersService {
   }
 
   public fetchAuthUser(): Observable<IExistingUser | HttpErrorResponse> {
-    return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/user`, httpOptions)
+   // return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/user`, httpOptions)
+    return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/users`, httpOptions)
       .pipe(
         pluck('user'),
         filter(res => !(res instanceof HttpErrorResponse)),
@@ -67,9 +70,10 @@ export class UsersService {
       );
   }
 
-  public updateUser(settings: IExistingUser): Observable<IExistingUser | HttpErrorResponse> {
+  public updateUser(settings: IUpdateUser): Observable<IExistingUser | HttpErrorResponse> {
     return this.http
-      .put<{ user: IExistingUser }>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions)
+    //.put<{ user: IExistingUser }>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions)
+      .put<{ user: IExistingUser }>(`${this.baseURL}/users`, { user: { ...settings } }, httpOptions)
       .pipe(
         pluck('user'),
         map(user => {

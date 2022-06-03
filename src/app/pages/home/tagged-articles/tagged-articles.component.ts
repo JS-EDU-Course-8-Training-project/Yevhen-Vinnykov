@@ -72,6 +72,7 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
     if (!this.selectedTag) return;
     this.error = '';
     this.isLoading = true;
+    this.cdRef.detectChanges();
     this.articlesService
       .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
       .pipe(

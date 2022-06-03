@@ -21,9 +21,11 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     this.authorizationService.checkIfAuthorized();
     this.isAuthorized = this.authorizationService.isAuthorized$.getValue();
     if (this.isAuthorized) {
-      const token: string = `Bearer ${localStorage.getItem('token')}`;
+      //const token: string = `Bearer ${localStorage.getItem('token')}`;
+      const token: string = `${localStorage.getItem('token')}`;
       request = request.clone({
-        headers: request.headers.append('Authorization', token)
+       // headers: request.headers.append('Authorization', token)
+       headers: request.headers.append('x-access-token', token)
       });
     }
     return next.handle(request).pipe(

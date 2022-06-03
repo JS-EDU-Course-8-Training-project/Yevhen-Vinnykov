@@ -69,6 +69,7 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
   private getArticles(): void {
     this.error = '';
     this.isLoading = true;
+    this.cdRef.detectChanges();
     this.articlesService.fetchArticles(this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),
@@ -78,9 +79,9 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   private setDataOnResponse(response: IArticleResponse): void {
     this.globalArticles = [...this.globalArticles, ...response.articles];
+    this.isLoading = false;
     this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
     this.isFinished = this.currentPage === this.pagesTotalCount;
-    this.isLoading = false;
     this.canLoad$.next(!this.isFinished && !this.isLoading);
     this.nextPage();
     this.cdRef.detectChanges();

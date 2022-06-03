@@ -66,6 +66,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
   private getFollowedArticles() {
     this.error = '';
     this.isLoading = true;
+    this.cdRef.detectChanges();
     this.articlesService.fetchFollowedArticles(this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),

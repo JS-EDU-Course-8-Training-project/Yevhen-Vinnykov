@@ -1,3 +1,4 @@
+import { IUpdateUser } from './../../../shared/models/IUpdateUser';
 import { Subject, takeUntil, BehaviorSubject, catchError, of, Observable } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
@@ -18,7 +19,7 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
-  public error: string = '';
+  public errors: string[] = [];
   public isPending!: boolean;
   public settingsForm!: FormGroup;
   private notifier: Subject<void> = new Subject<void>();
@@ -38,7 +39,7 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
     this.settingsForm.valueChanges
       .pipe(takeUntil(this.notifier))
       .subscribe(() => this.isModified$.next(true));
-    
+
   }
 
   ngOnDestroy(): void {
@@ -60,18 +61,33 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
     return !(this.settingsForm.controls[formControl].touched && this.settingsForm.controls[formControl].invalid);
   }
 
-  private createUserData(): IExistingUser {
-    return this.settingsForm.getRawValue();
+  private createUserData(): IUpdateUser {
+    const formData: IExistingUser = this.settingsForm.getRawValue();
+    const updatedData: IUpdateUser = {};
+    for (const key in formData) {
+      const formDataProp = formData[key as keyof IExistingUser];
+      const authUserProp = this.authUser[key as keyof IExistingUser];
+      if(key === 'password' && formDataProp){
+        updatedData[key as keyof IUpdateUser] = formData[key as keyof IUpdateUser];
+        continue;
+      }
+      if (key !== 'password' && formDataProp !== authUserProp) {
+        updatedData[key as keyof IUpdateUser] = formData[key as keyof IUpdateUser];
+      }
+    }
+    return updatedData;
   }
 
   private onSubmit(): void {
     this.isPending = true;
     this.settingsForm.disable();
-    this.error = '';
+    this.errors = [];
   }
 
   private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
-    this.error = error.error;
+    Object.keys(error.error.errors).forEach(key => {
+      this.errors.push(`${key} ${error.error.errors[key][0]}`)
+    });
     this.isPending = false;
     this.settingsForm.enable();
     this.settingsForm.markAsUntouched();
@@ -86,7 +102,9 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
         catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
       .subscribe((user: IExistingUser | any) => {
         this.isModified$.next(false);
-        this.redirectionService.redirectByUrl(`user/${user.username}`);
+        if (!this.errors.length) {
+          this.redirectionService.redirectByUrl(`user/${user.username}`);
+        }
       });
   }
 

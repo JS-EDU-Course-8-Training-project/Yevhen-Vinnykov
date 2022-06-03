@@ -1,4 +1,4 @@
-import { Observable, pluck } from 'rxjs';
+import { Observable, pluck, tap } from 'rxjs';
 import { IComment } from '../../../../shared/models/IComment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -23,12 +23,15 @@ export class CommentsService {
   private baseURL: string = environment.apiURL;
   constructor(
     private http: HttpClient
-      ) { }
+  ) { }
 
   public fetchArticleComments(slug: string): Observable<IComment[] | HttpErrorResponse> {
     return this.http
       .get<{ comments: IComment[] }>(`${this.baseURL}/articles/${slug}/comments`, httpOptions)
-      .pipe(pluck('comments'));
+      .pipe(
+        pluck('comments'),
+        tap(comments => comments.map(c => c.id = c._id))
+      );
   }
 
   public createComment(slug: string, comment: INewComment): Observable<IComment | HttpErrorResponse> {
@@ -36,7 +39,7 @@ export class CommentsService {
       .post<IComment>(`${this.baseURL}/articles/${slug}/comments`, JSON.stringify({ comment }), httpOptions);
   }
 
-  public removeComment(slug: string, id: number): Observable<IComment | HttpErrorResponse> {
+  public removeComment(slug: string, id: string): Observable<IComment | HttpErrorResponse> {
     return this.http
       .delete<IComment>(`${this.baseURL}/articles/${slug}/comments/${id}`, httpOptions);
   }

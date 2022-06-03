@@ -67,7 +67,6 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
     this.isLoading = false;
     this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
     this.isFinished = this.currentPage === this.pagesTotalCount;
-    this.isLoading = false;
     this.canLoad$.next(!this.isFinished && !this.isLoading);
     this.nextPage();
   }
