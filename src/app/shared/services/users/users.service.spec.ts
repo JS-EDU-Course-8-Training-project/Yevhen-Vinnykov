@@ -9,7 +9,6 @@ import { INewUser } from '../../models/INewUser';
 const mockUser: IExistingUser = {
   email: 'test-email',
   username: 'test-username',
-  bio: null,
   image: 'test-image',
   token: 'test-token',
   password: 'test-password'

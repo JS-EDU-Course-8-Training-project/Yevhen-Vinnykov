@@ -11,7 +11,8 @@ import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const comments: IComment[] = [{
-  id: 1,
+  _id: '1',
+  id: '1',
   createdAt: Date.now().toString(),
   updatedAt: Date.now().toString(),
   body: 'test-comment',
@@ -72,13 +73,13 @@ describe('CommentsComponent', () => {
     const deleteIcon = fixture.debugElement.query(By.css('[data-angular="test-delete-icon"]'));
     deleteIcon.triggerEventHandler('click', null);
     fixture.detectChanges();
-    expect(spy).toHaveBeenCalledWith(1);
+    expect(spy).toHaveBeenCalledWith('1');
   });
 
   it('should not delete a comment that does not exist', () => {
     const spy = spyOn(component, 'deleteComment').and.callThrough();
-    component.deleteComment(1000);
-    expect(spy).toHaveBeenCalledWith(1000);
+    component.deleteComment('1000');
+    expect(spy).toHaveBeenCalledWith('1000');
   });
 
   it('requestForComments$ should trigger getComments', () => {

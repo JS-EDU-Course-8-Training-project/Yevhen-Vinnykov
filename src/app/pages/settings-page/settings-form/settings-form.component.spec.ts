@@ -13,17 +13,24 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 const settingsMock: IExistingUser = {
   email: 'test-username@example.com',
   username: 'test-username',
-  bio: null,
   image: 'test-image'
 };
 
+const errorResponseMock = {
+  error: {
+    errors: {
+      'Error:': ['Fetching articles failed']
+    }
+  }
+};
+
 class UsersServiceMockWithError {
-  public updateUser = (settings: IExistingUser) => throwError(() => ({error: 'Fetching articles failed'}));
+  public updateUser = (settings: IExistingUser) => throwError(() => errorResponseMock);
 }
 
 class UsersServiceMock {
   public updateUser = (settings: IExistingUser) => of({ ...settingsMock, username: 'updated-user-name' });
-  public signOut = () => {};
+  public signOut = () => { };
 
 }
 
@@ -126,8 +133,8 @@ describe('OnCatchError', () => {
     const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
     updateButton.click();
     fixture.detectChanges();
-    expect(spy).toHaveBeenCalledWith({error: 'Fetching articles failed'});
-    expect(component.error).toBe('Fetching articles failed');
+    expect(spy).toHaveBeenCalledWith(errorResponseMock);
+    expect(component.errors).toEqual(['Error: Fetching articles failed']);
   });
 
 });

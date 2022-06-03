@@ -11,7 +11,6 @@ export const dataMock: IUserData = {
 export const userMock: IExistingUser = {
     email: 'test-user@example.com',
     password: 'test-password',
-    bio: null,
     image: '',
     username: 'test-username'
 };

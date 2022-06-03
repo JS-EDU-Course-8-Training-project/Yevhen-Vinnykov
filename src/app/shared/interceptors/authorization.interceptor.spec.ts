@@ -58,7 +58,7 @@ describe('AuthorizationInterceptor', () => {
     });
     const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
     expect(httpRequest.request.url).toBe(`${service.ROOT_URL}/posts`);
-    expect(httpRequest.request.headers.has('Authorization')).toBeTrue();
+    expect(httpRequest.request.headers.has('x-access-token')).toBeTrue();
   });
 
 });

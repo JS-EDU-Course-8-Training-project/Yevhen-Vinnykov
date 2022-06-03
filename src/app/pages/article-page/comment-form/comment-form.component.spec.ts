@@ -11,7 +11,8 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 const returnComment: IComment = {
-  id: 1,
+  _id: '1',
+  id: '1',
   createdAt: Date.now().toLocaleString(),
   updatedAt: Date.now().toLocaleString(),
   body: 'test-comment',

@@ -5,7 +5,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CommentsService } from './comments.service';
 
 const expectedData: IComment[] = [{
-  id: 1,
+  _id: '1',
+  id: '1',
   createdAt: Date.now().toString(),
   updatedAt: Date.now().toString(),
   body: 'test-comment',
@@ -51,7 +52,7 @@ describe('CommentService', () => {
 
   it('should delete comment', waitForAsync(() => {
     const spy = spyOn(service, 'removeComment').and.callThrough();
-    service.removeComment('test-slug', 1).subscribe(comment => {
+    service.removeComment('test-slug', '1').subscribe(comment => {
       expect(comment).toEqual(expectedData[0]);
     });
     expect(spy).toHaveBeenCalled();
