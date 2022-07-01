@@ -1,10 +1,10 @@
 import { IUpdateArticle } from '../../models/IUpdateArticle';
-import { ICreatedArticle } from '../../models/ICreatedArticle';
 import { IArticle, IArticleResponse } from '../../models/IArticle';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, pluck } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { INewArticle } from '../../models/INewArticle';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -36,7 +36,7 @@ export class ArticlesService {
       .pipe(pluck('article'));
   }
 
-  public createArticle(article: ICreatedArticle): Observable<IArticle> {
+  public createArticle(article: INewArticle): Observable<IArticle> {
     return this.http
       .post<IArticle>(this.baseURL, JSON.stringify({ article }), httpOptions);
   }

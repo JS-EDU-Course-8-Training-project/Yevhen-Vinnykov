@@ -1,7 +1,6 @@
 import { INewArticle } from '../../shared/models/INewArticle';
 import { Observable, of, throwError } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
-import { ICreatedArticle } from 'src/app/shared/models/ICreatedArticle';
 import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
 
 
@@ -35,7 +34,7 @@ export const expectedData: IArticle = {
   
     public fetchArticle = (slug: string): Observable<IArticle> => of(expectedData);
   
-    public createArticle = (newArticle: ICreatedArticle): Observable<IArticle> => of({
+    public createArticle = (newArticle: INewArticle): Observable<IArticle> => of({
       ...expectedData,
       title: newArticle.title,
       description: newArticle.description,
@@ -45,9 +44,9 @@ export const expectedData: IArticle = {
   
     public updateArticle = (slug: string, article: IUpdateArticle): Observable<IArticle> => of({
       ...expectedData,
-      title: article.title,
-      description: article.description,
-      body: article.body
+      title: article.title || expectedData.title,
+      description: article.description || expectedData.description,
+      body: article.body || expectedData.body,
     });
   
   }

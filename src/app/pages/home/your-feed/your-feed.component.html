@@ -4,11 +4,24 @@
 <p *ngIf="error.length">{{error}}</p>
 <ng-container>
     <div *ngFor="let article of followedArticles; let i = index">
-        <app-article-list [article]="article" *ngIf="i + 1 !== followedArticles.length"></app-article-list>
-        <app-article-list [article]="article" *ngIf="i + 1 === followedArticles.length" #lastItem>
+        <app-article-list 
+            [article]="article" 
+            *ngIf="i + 1 !== followedArticles.length"
+        >
+        </app-article-list>
+        <app-article-list 
+            [article]="article" 
+            *ngIf="i + 1 === followedArticles.length" 
+            #lastItem
+        >
         </app-article-list>
     </div>
-    <mat-spinner [ngStyle]="{'margin': '10px auto'}" *ngIf="isLoading" diameter="50"></mat-spinner>
+    <mat-spinner 
+        [ngStyle]="{'margin': '10px auto'}" 
+        *ngIf="isLoading" 
+        diameter="50"
+    >
+    </mat-spinner>
     <div class="finished" *ngIf="isFinished">
         <div>No more articles for now...</div>
     </div>

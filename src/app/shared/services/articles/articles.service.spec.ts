@@ -3,7 +3,7 @@ import { IArticleResponse } from './../../models/IArticle';
 import { HttpClient } from '@angular/common/http';
 
 import { ArticlesService } from './articles.service';
-import { ICreatedArticle } from '../../models/ICreatedArticle';
+import { INewArticle } from '../../models/INewArticle';
 import { IUpdateArticle } from '../../models/IUpdateArticle';
 
 const expectedData: IArticleResponse = {
@@ -108,7 +108,7 @@ describe('ArticlesService Post Methods', () => {
 
   it('createArticle should create an article and return correct data', () => {
     const expectedArticle = expectedData.articles[0];
-    const newArticleMock: ICreatedArticle = {
+    const newArticleMock: INewArticle = {
       title: 'test-title',
       description: 'test-description',
       body: 'test-body',

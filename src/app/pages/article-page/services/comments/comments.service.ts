@@ -30,7 +30,6 @@ export class CommentsService {
       .get<{ comments: IComment[] }>(`${this.baseURL}/articles/${slug}/comments`, httpOptions)
       .pipe(
         pluck('comments'),
-        tap(comments => comments.map(c => c.id = c._id))
       );
   }
 

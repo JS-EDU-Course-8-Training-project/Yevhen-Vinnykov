@@ -52,7 +52,6 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
     this.getTaggedArticles();
     this.infiniteScroll
       .observeIntersection({ canLoad: this.canLoad$, callback: this.getTaggedArticles.bind(this) });
-
   }
 
   ngOnDestroy(): void {

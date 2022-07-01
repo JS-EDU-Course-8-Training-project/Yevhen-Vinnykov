@@ -1,5 +1,6 @@
-export interface IUpdateArticle {
-    title: string;
-    description: string;
-    body: string;
-}
+export interface IUpdateArticle{
+    title?: string;
+    body?: string;
+    description?: string;
+    tagList?: string[];
+  }

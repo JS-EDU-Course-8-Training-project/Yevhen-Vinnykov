@@ -1,6 +1,6 @@
+import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil, Observable, catchError, of } from 'rxjs';
-import { INewArticle } from '../../shared/models/INewArticle';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -8,8 +8,9 @@ import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { ISavedData } from 'src/app/shared/models/ISavedData';
-import { ICreatedArticle } from 'src/app/shared/models/ICreatedArticle';
+import { INewArticle } from 'src/app/shared/models/INewArticle';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+
 
 @Component({
   selector: 'app-new-article-page',
@@ -71,27 +72,36 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     return !(this.articleForm.controls[formControl].touched && this.articleForm.controls[formControl].invalid);
   }
 
-  private createArticleData(): INewArticle {
-    return {
-      title: this.articleForm.getRawValue().title.trim(),
-      description: this.articleForm.getRawValue().description.trim(),
-      body: this.articleForm.getRawValue().body.trim(),
-      tagList: this.articleForm.getRawValue().tagList.split(',').map((tag: string) => tag.trim()),
-    };
+
+  private createArticleData(): INewArticle | IUpdateArticle {
+    const formData = this.articleForm.getRawValue();
+    formData.tagList = formData.tagList.split(',').map((tag: string) => tag.trim());
+    const articleData = {} as INewArticle | IUpdateArticle;
+
+    Object.keys(formData).forEach(key => {
+      const isEditModeAndFieldChanged = this.articleToEdit?.[key as keyof IUpdateArticle] !== formData[key]
+        && this.isEditMode;
+      if (isEditModeAndFieldChanged || !this.isEditMode) {
+        articleData[key as keyof IUpdateArticle] = formData[key];
+      }
+    });
+
+    return articleData;
+
   }
 
   public handleArticleAction(): void {
-      this.articleAction(this.slug, this.createArticleData());
-      this.articleForm.reset();
+    this.articleAction(this.slug, this.createArticleData());
+    this.articleForm.reset();
   }
 
-  private articleAction(slug: string, newArticle: INewArticle) {
-    const subscription: Observable<ICreatedArticle | HttpErrorResponse> = this.isEditMode
-      ? this.articlesService.updateArticle(slug, newArticle)
-      : this.articlesService.createArticle(newArticle);
+  private articleAction(slug: string, newArticle: INewArticle | IUpdateArticle) {
+    const subscription: Observable<INewArticle | HttpErrorResponse> = this.isEditMode
+      ? this.articlesService.updateArticle(slug, newArticle as IUpdateArticle)
+      : this.articlesService.createArticle(newArticle as INewArticle);
     subscription
       .pipe(takeUntil(this.notifier))
-      .subscribe((article: ICreatedArticle | any) => {
+      .subscribe((article: INewArticle | any) => {
         this.redirectionService.redirectByUrl(`article/${article.article.slug}`);
       });
   }
