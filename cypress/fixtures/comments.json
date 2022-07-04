@@ -1,0 +1,16 @@
+{
+    "comments": [
+        {
+            "id": "629b8e492856b8bc95d945d2",
+            "body": "This is my comment",
+            "author": {
+                "usernamme": "John",
+                "bio": "bio",
+                "image": "https://www.pixsy.com/wp-content/uploads/2021/04/ben-sweet-2LowviVHZ-E-unsplash-1.jpeg"
+            },
+            "article": "6297b6650c045b2b09a59f54",
+            "createdAt": "2022-06-04T16:54:33.937+00:00",
+            "updatedAt": "2022-06-04T16:54:33.937+00:00"
+        }
+    ]
+}

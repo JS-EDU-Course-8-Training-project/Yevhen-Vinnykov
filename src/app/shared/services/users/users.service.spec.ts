@@ -5,6 +5,7 @@ import { AuthorizationService } from '../authorization/authorization.service';
 
 import { UsersService } from './users.service';
 import { INewUser } from '../../models/INewUser';
+import { Router } from '@angular/router';
 
 const mockUser: IExistingUser = {
   email: 'test-email',
@@ -24,12 +25,14 @@ describe('UsersService', () => {
   let service: UsersService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let authorizationServiceSpy: jasmine.SpyObj<AuthorizationService>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post', 'put']);
     authorizationServiceSpy = jasmine.createSpyObj('AuthorizationService', ['authorize', 'removeAuthorization']);
-    service = new UsersService(httpClientSpy, authorizationServiceSpy);
+    routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+    service = new UsersService(httpClientSpy, authorizationServiceSpy, routerSpy);
   });
 
   it('createUser should create a user and return correct data', () => {
@@ -70,6 +73,7 @@ describe('UsersService', () => {
   });
 
   it('signOut should remove authorization and emit empty user', () => {
+    routerSpy.navigateByUrl.and.callThrough();
     const spy = spyOn(service.authUser$, 'next');
     service.signOut();
     expect(spy).toHaveBeenCalledWith({} as IExistingUser);
