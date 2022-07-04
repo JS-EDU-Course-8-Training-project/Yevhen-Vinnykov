@@ -7,6 +7,7 @@ import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthorizationService } from '../authorization/authorization.service';
+import { Router } from '@angular/router';
 
 
 const httpOptions = {
@@ -21,6 +22,9 @@ const httpOptions = {
 })
 export class UsersService {
   private baseURL: string = environment.apiURL;
+  private tokenExpirationDuration: number = 3600 * 1000;
+  private tokenExpirationTimerId!: number | null;
+
   public authUser$: BehaviorSubject<IExistingUser> = new BehaviorSubject<IExistingUser>({
     email: '',
     username: '',
@@ -30,7 +34,8 @@ export class UsersService {
 
   constructor(
     private http: HttpClient,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private router: Router
   ) { }
 
   public createUser(user: INewUser): Observable<IExistingUser | HttpErrorResponse> {
@@ -83,11 +88,22 @@ export class UsersService {
   public signOut(): void {
     this.authorizationService.removeAuthorization();
     this.authUser$.next({} as IExistingUser);
+    if(this.tokenExpirationTimerId){
+      clearTimeout(this.tokenExpirationTimerId);
+      this.tokenExpirationTimerId = null;
+    }
+    this.router.navigateByUrl('/sign-in');
+  }
+
+  private autoSignOut(expirationDate: number): void {
+    if(this.tokenExpirationTimerId) clearTimeout(this.tokenExpirationTimerId);
+    this.tokenExpirationTimerId = window.setTimeout(() => this.signOut(), expirationDate);
   }
 
   private authorizationHelper(user: IExistingUser) {
     if(user.token){
       this.authorizationService.authorize(user.token);
+      this.autoSignOut(this.tokenExpirationDuration);
     }
     this.authUser$.next(user);
   }
