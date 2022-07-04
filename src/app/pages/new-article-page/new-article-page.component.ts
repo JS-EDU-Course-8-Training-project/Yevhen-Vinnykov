@@ -79,9 +79,8 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     const articleData = {} as INewArticle | IUpdateArticle;
 
     Object.keys(formData).forEach(key => {
-      const isEditModeAndFieldChanged = this.articleToEdit?.[key as keyof IUpdateArticle] !== formData[key]
-        && this.isEditMode;
-      if (isEditModeAndFieldChanged || !this.isEditMode) {
+      const isFieldChanged = this.articleToEdit?.[key as keyof IUpdateArticle] !== formData[key];
+      if (isFieldChanged) {
         articleData[key as keyof IUpdateArticle] = formData[key];
       }
     });

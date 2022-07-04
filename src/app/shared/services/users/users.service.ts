@@ -35,7 +35,6 @@ export class UsersService {
 
   public createUser(user: INewUser): Observable<IExistingUser | HttpErrorResponse> {
     return this.http
-    // .post<{ user: IExistingUser }>(`${this.baseURL}/users`, JSON.stringify({ user }), httpOptions).pipe(
       .post<{ user: IExistingUser }>(`${this.baseURL}/users/signup`, { user }, httpOptions).pipe(
         pluck('user'),
         map(user => {
@@ -58,7 +57,6 @@ export class UsersService {
   }
 
   public fetchAuthUser(): Observable<IExistingUser | HttpErrorResponse> {
-   // return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/user`, httpOptions)
     return this.http.get<{ user: IExistingUser }>(`${this.baseURL}/users`, httpOptions)
       .pipe(
         pluck('user'),
@@ -72,7 +70,6 @@ export class UsersService {
 
   public updateUser(settings: IUpdateUser): Observable<IExistingUser | HttpErrorResponse> {
     return this.http
-    //.put<{ user: IExistingUser }>(`${this.baseURL}/user`, JSON.stringify({ user: { ...settings } }), httpOptions)
       .put<{ user: IExistingUser }>(`${this.baseURL}/users`, { user: { ...settings } }, httpOptions)
       .pipe(
         pluck('user'),

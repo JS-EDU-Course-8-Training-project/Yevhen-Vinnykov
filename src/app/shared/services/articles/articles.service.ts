@@ -38,7 +38,7 @@ export class ArticlesService {
 
   public createArticle(article: INewArticle): Observable<IArticle> {
     return this.http
-      .post<IArticle>(this.baseURL, JSON.stringify({ article }), httpOptions);
+      .post<IArticle>(this.baseURL, { article }, httpOptions);
   }
 
   public deleteArticle(slug: string): Observable<Object> {
@@ -46,7 +46,7 @@ export class ArticlesService {
   }
 
   public updateArticle(slug: string, article: IUpdateArticle): Observable<IArticle> {
-    return this.http.put<IArticle>(`${this.baseURL}/${slug}`, JSON.stringify({ article }), httpOptions);
+    return this.http.put<IArticle>(`${this.baseURL}/${slug}`, { article }, httpOptions);
   }
 
   public fetchTags(): Observable<string[]> {

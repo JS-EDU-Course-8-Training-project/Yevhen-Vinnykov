@@ -50,8 +50,6 @@ describe('NewArticlePageComponent Edit Mode', () => {
     const spyArticleAction = spyOn<any>(component, 'articleAction');
     const expectedData = {
       title: 'new-test-title',
-      description: 'test-description',
-      body: 'test-body',
       tagList: ['test-tag']
     };
     component.articleForm.controls['title'].setValue('new-test-title');
