@@ -39,6 +39,7 @@
                 required 
                 formControlName="tagList"
                 placeholder="Tags">
+            <span class="" *ngIf="!checkIfValid('tagList')">This field is required</span>
             <button 
                 [disabled]="!articleForm.valid || !this.articleForm.touched && !isEditMode" 
                 align="end" 
