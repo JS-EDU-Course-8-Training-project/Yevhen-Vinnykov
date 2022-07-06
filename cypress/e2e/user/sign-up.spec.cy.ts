@@ -86,7 +86,7 @@ describe('SING UP PAGE', () => {
         });
 
         it('should redirect to home if the the credentials are valid', () => {
-            cy.intercept('POST', 'http://localhost:3000/api/users/signup', { fixture: 'user.json' }).as('signUp');
+            cy.intercept('POST', 'http://localhost:3000/api/users/signup', { fixture: 'authUser.json' }).as('signUp');
 
             cy.get('#username').type('Jane');
             cy.get('#email').type('janedoe@gmail.com');

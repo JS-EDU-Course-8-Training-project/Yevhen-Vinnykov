@@ -23,7 +23,7 @@ describe('ANUTHORIZED HOME PAGE', () => {
   });
 
   it('should redirect to article page once the article card is clicked', () => {
-    cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: "article.json" })
+    cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: "unfavoritedArticle.json" })
       .as('getArticleBySlug');
     cy.intercept('GET', 'http://localhost:3000/api/articles/**/comments', { fixture: "comments.json" })
       .as('getComments');
@@ -39,15 +39,14 @@ describe('ANUTHORIZED HOME PAGE', () => {
 
     cy.get('.tag-item').eq(0).click();
 
-    const tabs = cy.get('div.mat-tab-labels');
-    tabs.should('contain', '#lorem');
-    tabs.find('div:first').click();
-    tabs.should('not.contain', '#lorem');
+    cy.get('div.mat-tab-labels').as('tabs');
+    cy.get('@tabs').should('contain', '#lorem');
+    cy.get('@tabs').find('div:first').click();
+    cy.get('@tabs').should('not.contain', '#lorem');
   });
 
   it('should redirect to sign in page if the user tries to like an article', () => {
-    const likeButton = cy.get('.mat-card > header > button').eq(0);
-    likeButton.click();
+    cy.get('.mat-card > header > button').eq(0).click();
 
     cy.location('pathname').should('contain', '/sign-in');
     cy.get('.selected').should('contain', 'Sign in');

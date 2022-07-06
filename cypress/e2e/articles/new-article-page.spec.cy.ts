@@ -35,8 +35,8 @@ describe('NEW ARTICLE PAGE', () => {
         });
 
         it('should redirect to article page if the article has been created', () => {
-            cy.intercept('POST', 'http://localhost:3000/api/articles', { fixture: 'article.json'});
-            cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: 'article.json'});
+            cy.intercept('POST', 'http://localhost:3000/api/articles', { fixture: 'unfavoritedArticle.json'});
+            cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: 'unfavoritedArticle.json'});
 
             formFilelds.forEach((f) => cy.get(f).type('test'));
             cy.get('button').click();

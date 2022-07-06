@@ -25,7 +25,7 @@
             <div class="card-footer">
                 <a class="text-secondary" routerLink="/article/{{article.slug}}">Read more...</a>
                 <div class="tags">
-                    <p *ngFor="let tag of article.tagList">{{tag}}</p>
+                    <div class="tag" *ngFor="let tag of article.tagList">{{tag}}</div>
                 </div>
             </div>
         </a>

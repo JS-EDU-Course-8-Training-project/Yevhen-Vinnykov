@@ -25,7 +25,7 @@ describe('AUTHORIZED HOME PAGE', () => {
   });
 
   it('should redirect to article page once the article card is clicked', () => {
-    cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: "article.json" })
+    cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: "unfavoritedArticle.json" })
       .as('getArticleBySlug');
     cy.intercept('GET', 'http://localhost:3000/api/articles/**/comments', { fixture: "comments.json" })
       .as('getComments');
@@ -41,37 +41,36 @@ describe('AUTHORIZED HOME PAGE', () => {
 
     cy.get('.tag-item').eq(0).click();
 
-    const tabs = cy.get('div.mat-tab-labels');
-    tabs.should('contain', '#lorem');
-    tabs.find('div:first').click();
-    tabs.should('not.contain', '#lorem');
+    cy.get('div.mat-tab-labels').as('tabs');
+    cy.get('@tabs').should('contain', '#lorem');
+    cy.get('@tabs').find('div:first').click();
+    cy.get('@tabs').should('not.contain', '#lorem');
   });
 
   it('should like and dislike an article', () => {
-    const likeButton = cy.get('.mat-card > header > button').eq(0);
+    cy.get('.mat-card > header > button').eq(0).as('likeButton');
+
     cy.intercept(
       'POST', 'http://localhost:3000/api/articles/**/favorite',
-      { article: { favoritesCount: 9, favorited: true } }
+      { fixture: 'favoritedArticle.json' }
     ).as('favorite');
 
     cy.intercept(
       'DELETE', 'http://localhost:3000/api/articles/**/favorite',
-      { article: { favoritesCount: 8, favorited: false } }
+      { fixture: 'unfavoritedArticle.json' }
     ).as('unfavorite');
     
     // not liked
-    cy.get('span.mat-button-wrapper').should('contain','8');
-    cy.get('span.mat-button-wrapper > .mat-icon').eq(0).should('have.css', 'color', 'rgba(0, 0, 0, 0.87)');
+    cy.get('span.mat-button-wrapper').should('contain','0').as('likeCount');
+    cy.get('span.mat-button-wrapper > .mat-icon').eq(0).should('have.css', 'color', 'rgba(0, 0, 0, 0.87)').as('likeIcon');
     
     // like
-    likeButton.click();
-    cy.get('span.mat-button-wrapper').should('contain','9');
-    cy.get('span.mat-button-wrapper > .mat-icon').eq(0).should('have.css', 'color', 'rgb(244, 67, 54)');
+    cy.get('@likeButton').click().should('contain','1');
+    cy.get('@likeIcon').eq(0).should('have.css', 'color', 'rgb(244, 67, 54)');
 
     // dislike
-    likeButton.click();
-    cy.get('span.mat-button-wrapper').should('contain','8');
-    cy.get('span.mat-button-wrapper > .mat-icon').eq(0).should('have.css', 'color', 'rgba(0, 0, 0, 0.87)');
+    cy.get('@likeButton').click().should('contain','0');
+    cy.get('@likeIcon').eq(0).should('have.css', 'color', 'rgba(0, 0, 0, 0.87)');
   });
 });
 

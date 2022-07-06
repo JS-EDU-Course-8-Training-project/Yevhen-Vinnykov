@@ -36,19 +36,28 @@ describe('HEADER', () => {
         });
 
         it('links should redirect when clicked and add selected class', () => {
-            const signInButton = cy.get('app-navbar').find('a').eq(1);
-            signInButton.click();
-            signInButton.should('have.class', 'selected');
+            cy.get('app-navbar')
+                .find('a')
+                .eq(1)
+                .as('signInButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/sign-in');
 
-            const signUpButton = cy.get('app-navbar').find('a').eq(2);
-            signUpButton.click();
-            signUpButton.should('have.class', 'selected');
+            cy.get('app-navbar')
+                .find('a')
+                .eq(2)
+                .as('signUpButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/sign-up');
 
-            const homeButton = cy.get('app-navbar').find('a').eq(0);
-            homeButton.click();
-            homeButton.should('have.class', 'selected');
+            cy.get('app-navbar')
+                .find('a')
+                .eq(0)
+                .as('homeButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/');
         });
 
@@ -95,24 +104,35 @@ describe('HEADER', () => {
         });
 
         it('links should redirect when clicked and add selected class', () => {
-            const newArticleButton = cy.get('app-navbar').find('a').eq(1);
-            newArticleButton.click();
-            newArticleButton.should('have.class', 'selected');
+            cy.get('app-navbar')
+                .find('a')
+                .eq(1)
+                .as('newArticleButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/create-article');
 
-            const settingsButton = cy.get('app-navbar').find('a').eq(2);
-            settingsButton.click();
-            settingsButton.should('have.class', 'selected');
+            cy.get('app-navbar')
+                .find('a')
+                .eq(2)
+                .as('settingsButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/settings');
 
-            const userButton =  cy.get('app-navbar-user').find('a');
-            userButton.click();
-            userButton.should('have.class', 'selected');
+            cy.get('app-navbar-user')
+                .find('a')
+                .as('userButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/user/John');
 
-            const homeButton = cy.get('app-navbar').find('a').eq(0);
-            homeButton.click();
-            homeButton.should('have.class', 'selected');
+            cy.get('app-navbar')
+                .find('a')
+                .eq(0)
+                .as('homeButton')
+                .click()
+                .should('have.class', 'selected');
             cy.location('pathname').should('contain', '/');
         });
 

@@ -11,11 +11,11 @@
         "createdAt": "1654009605136",
         "updatedAt": "1656518693581",
         "favorited": false,
-        "favoritesCount": 8,
+        "favoritesCount": 0,
         "author": {
             "id": "6295e54f82752d6499471761",
-            "username": "yevhen",
-            "email": "yevhenvinnykov@gmail.com",
+            "username": "Jane",
+            "email": "jane@gmail.com",
             "favorites": [
                 "6297b41e1b30f7737b77289c",
                 "62b9e535edc0f2126fcad0c3"
@@ -26,7 +26,7 @@
                 "62960c745362713a3e72a73a"
             ],
             "bio": "test",
-            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4cfuNYZ0_rGRD409qduV0mXPGJE5i1aqJWQ&usqp=CAU"
+            "image": "https://st3.depositphotos.com/2229436/13671/v/600/depositphotos_136717406-stock-illustration-flat-user-icon-member-sign.jpg"
         }
     }
 }

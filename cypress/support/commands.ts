@@ -2,7 +2,8 @@ declare namespace Cypress {
     interface Chainable<Subject> {
         login(): Chainable<Subject>
     }
-  }
+}
+
 Cypress.Commands.add('login', () => {
     cy.request({
         method: 'POST',
