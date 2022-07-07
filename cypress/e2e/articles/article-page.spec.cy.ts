@@ -1,15 +1,16 @@
-describe('ARTICLE PAGE', () => {
+describe('NOT OWN ARTICLE PAGE', () => {
     beforeEach(() => {
         cy.login();
-        cy.visit('/article/Test');
+        cy.createNotOwnArticle();
+        cy.visit('/article/NotMyArticle');
     });
 
     describe('BANNER', () => {
         it('should have a title', () => {
-            cy.get('[data-angular="article-title"]').should('contain.text', 'Test');
+            cy.get('[data-angular="article-title"]').should('contain.text', 'NotMyArticle');
         });
 
-        it('should have an block with user image, user name and created date', () => {
+        it('should have a block with user image, user name and created date', () => {
             cy.get('[data-angular="banner-actions"]').as('bannerActions');
 
             cy.get('@bannerActions').find('img').should('be.visible');
@@ -17,71 +18,57 @@ describe('ARTICLE PAGE', () => {
             cy.get('@bannerActions').find('p').should('be.visible');
         });
 
-        it('should have a block with buttons', () => {
-            cy.get('[data-angular="test-follow-btn"]').should('be.visible').and('contain', 'Follow');
-            cy.get('[data-angular="test-like-btn"]').should('be.visible').and('contain', 'Favorite');
+        describe('NOT OWN ARTICLE > ACTIONS', () => {
+            it('should like and dislike an article', () => {
+                cy.get('[data-angular="test-like-btn"]').eq(0).as('likeButton');
+                cy.get('[data-angular="likeIcon"]').as('likeIcon');
+
+                cy.get('@likeButton')
+                    .click()
+                    .should('contain.text', ' favorite  Favorite Article (1) ');
+                cy.get('@likeIcon').should('have.css', 'color', 'rgb(244, 67, 54)');
+
+                cy.get('@likeButton')
+                    .click()
+                    .should('contain.text', ' favorite  Favorite Article (0) ');
+                cy.get('@likeIcon').should('have.css', 'color', 'rgb(255, 255, 255)');
+            });
+
+            it('should follow and unfollow a user', () => {
+                cy.get('[data-angular="test-follow-btn"]')
+                    .eq(0)
+                    .click()
+                    .should('contain.text', ' Unfollow Jane ')
+                    .click()
+                    .should('contain.text', ' Follow Jane ');
+            });
         });
 
-        it('should like an article', () => {
-            cy.intercept(
-                'POST', 'http://localhost:3000/api/articles/**/favorite',
-                { fixture: 'favoritedArticle.json' }
-            ).as('unfavorite');
+        describe('OWN ARTICLE > ACTIONS', () => {
+            beforeEach(() => {
+                cy.createOwnArticle();
+                cy.visit('/article/MyArticle');
+            });
 
-            cy.get('[data-angular="test-like-btn"]')
-                .eq(0)
-                .as('likeButton')
-                .click()
-                .should('contain.text', ' favorite  Favorite Article (1) ');
-
-            cy.get('[data-angular="likeIcon"]')
-                .should('have.css', 'color', 'rgb(244, 67, 54)');
+            it('should redirect to edit article page', () => {
+                cy.get('[data-angular="test-edit-btn"]')
+                    .should('contain', 'Edit')
+                    .eq(0)
+                    .click();
+    
+                cy.location('pathname').should('contain', '/edit-article');
+            });
+    
+            it('should delete an article and redirect to home page', () => {
+                cy.get('[data-angular="test-delete-btn"]')
+                    .should('contain', 'Delete')
+                    .eq(0)
+                    .click();
+    
+                cy.location('pathname').should('eq', '/');
+            });
         });
 
-        // it('should dislike an article', () => {
-        //     cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: 'favoritedArticle.json' });
-        //     cy.intercept(
-        //         'DELETE', 'http://localhost:3000/api/articles/**/favorite',
-        //         { fixture: 'unfavoritedArticle.json' }
-        //     ).as('unfavorite');
-
-        //     cy.get('[data-angular="test-like-btn"]').eq(0).as('likeButton').click();
-
-
-        //     cy.get('[data-angular="likeIcon"]')
-        //         .should('have.css', 'color', 'rgb(255, 255, 255)');
-
-        //     cy.get('@likeButton').should('contain.text', ' favorite  Favorite Article (0) ');
-        // });
-
-        //     it('should like and dislike the article', () => {
-        //         cy.intercept(
-        //             'POST', 'http://localhost:3000/api/articles/**/favorite',
-        //             {fixture: 'favoritedArticle.json'}
-        //           ).as('favorite');
-
-        //           cy.intercept(
-        //             'DELETE', 'http://localhost:3000/api/articles/**/favorite',
-        //             {fixture: 'unfavoritedArticle.json'}
-        //           ).as('unfavorite');
-
-        //         cy.get('[data-angular="test-like-btn"]').eq(0).as('likeButton');
-
-        //         cy.get('@likeButton')
-        //         .click()
-        //         .should('have.text', 'favorite Favorite Article (1)');
-
-        //         cy.get('[data-angular="likeIcon"]')
-        //         .as('likeIcon')
-        //         .should('have.css', 'color', 'rgb(244, 67, 54)');
-
-        //         cy.get('@likeButton')
-        //         .click()
-        //         .should('contain.text', '0');
-
-        //         cy.get('@likeIcon')
-        //         .should('have.css', 'color', 'rgb(255, 255, 255)');
-        //     });
     });
 
     describe('BODY', () => {
@@ -119,6 +106,7 @@ describe('ARTICLE PAGE', () => {
         it('should add a comment', () => {
             cy.get('#body').type('Test comment');
             cy.get('@postCommentBtn').click();
+            
             cy.get('[data-angular="comment"]')
                 .should('be.visible')
                 .and('contain.text', 'Test comment');
