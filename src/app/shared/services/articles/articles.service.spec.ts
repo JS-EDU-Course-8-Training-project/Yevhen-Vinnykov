@@ -29,9 +29,7 @@ const expectedData: IArticleResponse = {
   articlesCount: 10
 };
 
-//////////////////////////////////////GET/////////////////////////////////////////////
-
-describe('ArticlesService Get Methods', () => {
+describe('ARTICLES SERVICE > GET METHODS', () => {
   let articlesService: ArticlesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -42,62 +40,56 @@ describe('ArticlesService Get Methods', () => {
 
   it('getArticles methods should return expected data', () => {
     httpClientSpy.get.and.returnValue(of(expectedData));
-    articlesService.fetchArticles().subscribe({
-      next: articles => {
-        expect(articles).withContext('expected articles').toEqual(expectedData);
-      }
+
+    articlesService.fetchArticles().subscribe(articles => {
+      expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchFollowedArticles().subscribe({
-      next: articles => {
-        expect(articles).withContext('expected articles').toEqual(expectedData);
-      }
+    articlesService.fetchFollowedArticles().subscribe(articles => {
+      expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchArticlesByTag('test-tag').subscribe({
-      next: articles => {
-        expect(articles).withContext('expected articles').toEqual(expectedData);
-      }
+    articlesService.fetchArticlesByTag('test-tag').subscribe(articles => {
+      expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchUserArticles('test-username').subscribe({
-      next: articles => {
-        expect(articles).withContext('expected articles').toEqual(expectedData);
-      }
+    articlesService.fetchUserArticles('test-username').subscribe(articles => {
+      expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchFavoritedArticles('test-username').subscribe({
-      next: articles => {
-        expect(articles).withContext('expected articles').toEqual(expectedData);
-      }
+    articlesService.fetchFavoritedArticles('test-username').subscribe(articles => {
+      expect(articles).toEqual(expectedData);
     });
 
     expect(httpClientSpy.get.calls.count()).toBe(5);
   });
 
-  it('fetchArticle methods should return expected data', () => {
+  it('fetchArticle method should return expected data', () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.get.and.returnValue(of(expectedArticle));
+
     articlesService.fetchArticle('test-slug').subscribe(article => {
-      expect(article).withContext('expected article').toEqual(expectedArticle.article);
+      expect(article).toEqual(expectedArticle.article);
     });
+
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
 
   it('fetchTags methods should return expected data', () => {
     const expectedTags = { tags: ['test-tag'] };
     httpClientSpy.get.and.returnValue(of(expectedTags));
+
     articlesService.fetchTags().subscribe(tags => {
-      expect(tags).withContext('expected tags').toEqual(expectedTags.tags);
+      expect(tags).toEqual(expectedTags.tags);
     });
+
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
 
 });
 
-//////////////////////////////////////POST/////////////////////////////////////////////
 
-describe('ArticlesService Post Methods', () => {
+describe('ARTICLES SERVICE > POST METHODS', () => {
   let articlesService: ArticlesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -114,28 +106,30 @@ describe('ArticlesService Post Methods', () => {
       body: 'test-body',
       tagList: ['test-tag']
     };
+
     httpClientSpy.post.and.returnValue(of(expectedArticle));
+
     articlesService.createArticle(newArticleMock).subscribe(article => {
-      expect(article).withContext('expected article').toEqual(expectedArticle);
+      expect(article).toEqual(expectedArticle);
     });
+
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
 
   it('addToFavorites should return correct data', () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.post.and.returnValue(of(expectedArticle));
+
     articlesService.addToFavorites('test-slug').subscribe(article => {
-      expect(article).withContext('expected article').toEqual(expectedArticle.article);
+      expect(article).toEqual(expectedArticle.article);
     });
+
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
 
 });
 
-//////////////////////////////////////PUT/////////////////////////////////////////////
-
-
-describe('ArticlesService Put Methods', () => {
+describe('ARTICLES SERVICE > PUT METHODS', () => {
   let articlesService: ArticlesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -146,24 +140,24 @@ describe('ArticlesService Put Methods', () => {
 
   it('updateArticle should update an article and return correct data', () => {
     const expectedArticle = expectedData.articles[0];
+    httpClientSpy.put.and.returnValue(of(expectedArticle));
+
     const updateArticleMock: IUpdateArticle = {
       title: 'test-title',
       description: 'test-description',
       body: 'test-body',
     };
-    httpClientSpy.put.and.returnValue(of(expectedArticle));
+    
     articlesService.updateArticle('test-slug', updateArticleMock).subscribe(article => {
-      expect(article).withContext('expected article').toEqual(expectedArticle);
+      expect(article).toEqual(expectedArticle);
     });
+
     expect(httpClientSpy.put.calls.count()).toBe(1);
   });
 
 });
 
-//////////////////////////////////////DELETE/////////////////////////////////////////////
-
-
-describe('ArticlesService Delete Methods', () => {
+describe('ARTICLES SERVICE > DELETE METHODS', () => {
   let articlesService: ArticlesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -174,19 +168,22 @@ describe('ArticlesService Delete Methods', () => {
 
   it('deleteArticle should delete an article and return empty object', () => {
     httpClientSpy.delete.and.returnValue(of({}));
+
     articlesService.deleteArticle('test-slug').subscribe((res) => {
       expect(res).toEqual({});
     });
+
     expect(httpClientSpy.delete.calls.count()).toBe(1);
   });
 
   it('removeFromFavorites should return correct data', () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.delete.and.returnValue(of(expectedArticle));
+
     articlesService.removeFromFavorites('test-slug').subscribe((article) => {
-      expect(article).withContext('expected article').toEqual(expectedArticle.article);
+      expect(article).toEqual(expectedArticle.article);
     });
+
     expect(httpClientSpy.delete.calls.count()).toBe(1);
   });
-
 });

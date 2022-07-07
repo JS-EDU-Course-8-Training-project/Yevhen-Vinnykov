@@ -35,7 +35,9 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
   ngOnInit(): void {
     this.isEditMode = this.router.url !== '/create-article';
     this.slug = this.router.url.split('/')[2];
+
     this.initializeForm();
+
     if (this.isEditMode) {
       this.articlesService.fetchArticle(this.slug)
         .pipe(
@@ -72,7 +74,6 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     return !(this.articleForm.controls[formControl].touched && this.articleForm.controls[formControl].invalid);
   }
 
-
   private createArticleData(): INewArticle | IUpdateArticle {
     const formData = this.articleForm.getRawValue();
     formData.tagList = formData.tagList.split(',').map((tag: string) => tag.trim());
@@ -98,6 +99,7 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     const subscription: Observable<INewArticle | HttpErrorResponse> = this.isEditMode
       ? this.articlesService.updateArticle(slug, newArticle as IUpdateArticle)
       : this.articlesService.createArticle(newArticle as INewArticle);
+
     subscription
       .pipe(takeUntil(this.notifier))
       .subscribe((article: INewArticle | any) => {

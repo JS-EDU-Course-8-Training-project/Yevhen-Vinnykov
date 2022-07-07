@@ -21,16 +21,12 @@ const article: IArticle = {
   }
 };
 
-describe('ArticlePageButtonsService', () => {
+describe('ARTICLE PAGE BUTTONS SERVICE', () => {
   let service: ArticlePageButtonsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(ArticlePageButtonsService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
   });
 
   it('should create initial state', () => {
@@ -41,15 +37,20 @@ describe('ArticlePageButtonsService', () => {
       isFollowed: article.author.following,
       likesCount: article.favoritesCount
     };
+
     const spy = spyOn(service, 'createInitialState').and.callThrough();
+
     service.createInitialState(article);
+
     expect(spy).toHaveBeenCalled();
     expect(service.createInitialState(article)).toEqual(initialState);
   });
 
   it('Initialize method should be called', () => {
     const spy = spyOn(service, 'initialize').and.callThrough();
+
     service.initialize(article);
+
     expect(spy).toHaveBeenCalled();
     expect(service.initialize(article)).toEqual(service.ButtonsState$);
   });

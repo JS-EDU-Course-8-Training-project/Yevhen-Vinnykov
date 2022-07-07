@@ -49,11 +49,11 @@ export class CommentsComponent implements OnInit, OnDestroy{
   }
 
   public deleteComment(id: string): void {
-    const commentToBeDeletedId: string | undefined = this.comments
-    .find(comment => comment.id === id)?.id;
+    const commentToBeDeletedId: string | undefined = this.comments.find(c => c.id === id)?.id;
     if(!commentToBeDeletedId) return;
 
     this.commentsBeingDeletedIds.push(commentToBeDeletedId);
+
     this.commentsService.removeComment(this.slug, id)
       .pipe(takeUntil(this.notifier))
       .subscribe(() => {

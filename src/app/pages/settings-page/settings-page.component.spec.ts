@@ -28,7 +28,7 @@ class UsersServiceMock {
   public authUser$ = of(mockUser);
 }
 
-describe('SettingsPageComponent', () => {
+describe('SETTINGS PAGE COMPONENT', () => {
   let component: SettingsPageComponent;
   let fixture: ComponentFixture<SettingsPageComponent>;
 
@@ -49,10 +49,6 @@ describe('SettingsPageComponent', () => {
     fixture = TestBed.createComponent(SettingsPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 
   it('should initialize correctly', () => {

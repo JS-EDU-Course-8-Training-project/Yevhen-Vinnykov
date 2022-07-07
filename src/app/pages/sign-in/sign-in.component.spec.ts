@@ -15,7 +15,7 @@ import {
 } from './sign-in.mocks.spec';
 
 
-describe('SignInComponent', () => {
+describe('SIGN IN COMPONENT', () => {
   let component: SignInComponent;
   let fixture: ComponentFixture<SignInComponent>;
 
@@ -38,20 +38,19 @@ describe('SignInComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('form should be invalid and button disabled on first render', () => {
     const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+
     expect(component.signinForm.valid).toBe(false);
     expect(signinButton.disabled).toBe(true);
   });
 
   it('form should be valid and button enabled on data input', () => {
     const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+
     component.signinForm.setValue(dataMock);
     fixture.detectChanges();
+
     expect(component.signinForm.valid).toBe(true);
     expect(signinButton.disabled).toBe(false);
   });
@@ -61,9 +60,12 @@ describe('SignInComponent', () => {
     const spyHandleSignin = spyOn(component, 'handleSignin').and.callThrough();
     const spyOnSubmit = spyOn<any>(component, 'onSubmit').and.callThrough();
     const spyCreateUserData = spyOn<any>(component, 'createUserData').and.callThrough();
+
     component.signinForm.setValue(dataMock);
     fixture.detectChanges();
+
     signinButton.click();
+
     expect(spyHandleSignin).toHaveBeenCalled();
     expect(spyOnSubmit).toHaveBeenCalled();
     expect(spyCreateUserData).toHaveBeenCalled();
@@ -71,17 +73,18 @@ describe('SignInComponent', () => {
 
   it('checkIfValid should work correctly', () => {
     const spyCheckIfValid = spyOn(component, 'checkIfValid').and.callThrough();
-    component.signinForm.controls['email'].setValue('wrong-email');
+
+    component.signinForm.controls['email'].setValue('invalid-email');
     component.signinForm.markAllAsTouched();
     fixture.detectChanges();
+
     expect(spyCheckIfValid).toHaveBeenCalledWith('email');
     expect(component.checkIfValid('email')).toBe(false);
   });
-
 });
 
 
-describe('OnCatchError', () => {
+describe('ON CATCH ERROR METHOD', () => {
   let component: SignInComponent;
   let fixture: ComponentFixture<SignInComponent>;
 
@@ -106,12 +109,13 @@ describe('OnCatchError', () => {
   it('should be invoked', () => {
     const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+
     component.signinForm.setValue(dataMock);
     fixture.detectChanges();
+
     signinButton.click();
-    fixture.detectChanges();
+
     expect(spy).toHaveBeenCalledWith(mockError);
     expect(component.errors).toEqual(['email is wrong']);
   });
-
 });

@@ -47,6 +47,7 @@ export class CommentFormComponent implements OnInit {
   public addComment(): void {
     this.isLoading = true;
     this.commentForm.disable();
+    
     this.commentsService.createComment(this.slug, this.createCommentData())
       .pipe(takeUntil(this.notifier))
       .subscribe(() => {

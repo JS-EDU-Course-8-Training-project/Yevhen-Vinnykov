@@ -24,11 +24,13 @@ export class ArticlesService {
   ) { }
 
   public fetchArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(`${this.baseURL}/?offset=${offset}&limit=${limit}`, httpOptions);
+    return this.http
+      .get<IArticleResponse>(`${this.baseURL}/?offset=${offset}&limit=${limit}`, httpOptions);
   }
 
   public fetchFollowedArticles(offset: number = 0, limit: number = 5): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(`${this.baseURL}/feed/?offset=${offset}&limit=${limit}`, httpOptions);
+    return this.http
+      .get<IArticleResponse>(`${this.baseURL}/feed/?offset=${offset}&limit=${limit}`, httpOptions);
   }
 
   public fetchArticle(slug: string): Observable<IArticle> {

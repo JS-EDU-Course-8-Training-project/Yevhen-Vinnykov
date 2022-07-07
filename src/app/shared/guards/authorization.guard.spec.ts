@@ -14,7 +14,7 @@ class AuthorizationServiceMock {
   public isAuthorized$ = of(true);
 }
 
-describe('AuthorizationGuard Unauthorized', () => {
+describe('AUTHORIZATION GUARD > UNAUTHORIZED', () => {
   let guard: any;
   let authorizationService: AuthorizationServiceMockNotAuth;
   let routeMock: any = { snapshot: {} };
@@ -34,20 +34,15 @@ describe('AuthorizationGuard Unauthorized', () => {
     authorizationService = TestBed.inject(AuthorizationService);
   });
 
-  it('should be created', () => {
-    expect(guard).toBeTruthy();
-  });
-
   it('should redirect an unauthorized user to the login route', waitForAsync(() => {
     guard.canActivate(routeMock, routeStateMock).subscribe(() => {
       expect(routerMock.createUrlTree).toHaveBeenCalledWith(['/sign-in']);
-    })
+    });
   }));
-
 });
 
 
-describe('AuthorizationGuard Authorized', () => {
+describe('AUTHORIZATION GUARD > AUTHORIZED', () => {
   let guard: any;
   let authorizationService: AuthorizationServiceMock;
   let routeMock: any = { snapshot: {} };
@@ -72,5 +67,4 @@ describe('AuthorizationGuard Authorized', () => {
       expect(res).toBe(true);
     });
   }));
-
 });

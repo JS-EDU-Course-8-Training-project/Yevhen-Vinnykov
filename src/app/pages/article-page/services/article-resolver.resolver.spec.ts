@@ -28,7 +28,7 @@ class ArticleServiceStub {
   public fetchArticle = (slug: string) => of(expectedData);
 }
 
-describe('ArticleResolver', () => {
+describe('ARTICLE RESOLVER', () => {
   let resolver: ArticleResolver;
   let route: ActivatedRouteSnapshot;
   let routerState: RouterStateSnapshot;
@@ -42,10 +42,6 @@ describe('ArticleResolver', () => {
     resolver = TestBed.inject(ArticleResolver);
     route = new ActivatedRouteSnapshot();
     route.params = { slug: 'test-slug' };
-  });
-
-  it('should be created', () => {
-    expect(resolver).toBeTruthy();
   });
 
   it('should return correct data', () => {

@@ -27,10 +27,7 @@ class AuthorizationServiceMockNotAuth {
   public isAuthorized$ = new BehaviorSubject<boolean>(false);
 }
 
-//////////////////////////////////////////////ADDING AUTHORIZATION/////////////////////////////////////////////////////
-
-
-describe('AuthorizationInterceptor', () => {
+describe('AUTHORIZATION INERCEPTOR > ADDING AUTHORIZATION', () => {
   let interceptor: AuthorizationInterceptor;
   let httpMock: HttpTestingController;
   let service: MockDataService;
@@ -63,10 +60,7 @@ describe('AuthorizationInterceptor', () => {
 
 });
 
-///////////////////////////////////////////NOT ADDING AUTHORIZATION/////////////////////////////////////////////////////
-
-
-describe('AuthorizationInterceptor', () => {
+describe('AUTHORIZATION INERCEPTOR > NOT ADDING AUTHORIZATION', () => {
   let interceptor: AuthorizationInterceptor;
   let httpMock: HttpTestingController;
   let service: MockDataService;
@@ -99,8 +93,6 @@ describe('AuthorizationInterceptor', () => {
 });
 
 
-///////////////////////////////////////////ERROR HANDLING/////////////////////////////////////////////////////
-
 const mockError: HttpErrorResponse = {
   error: {
     errors: {
@@ -117,7 +109,7 @@ const mockError: HttpErrorResponse = {
   type: HttpEventType.ResponseHeader
 };
 
-describe('AuthorizationInterceptor Error Handling', () => {
+describe('AUTHORIZATION INERCEPTOR > ERROR HANDLING', () => {
   let interceptor: AuthorizationInterceptor;
   let httpRequestSpy: jasmine.SpyObj<HttpRequest<any>>;
   let httpHandlerSpy: jasmine.SpyObj<HttpHandler>;
@@ -140,13 +132,11 @@ describe('AuthorizationInterceptor Error Handling', () => {
 
   it('should return server side error', () => {
     httpHandlerSpy.handle.and.returnValue(throwError(() => mockError));
+
     interceptor.intercept(httpRequestSpy, httpHandlerSpy)
       .subscribe({
         next: result => console.log('good', result),
-        error: err => {
-          console.log('error', err);
-          expect(err).toEqual(mockError);
-        }
+        error: err => expect(err).toEqual(mockError)
       });
   });
 
@@ -158,10 +148,7 @@ describe('AuthorizationInterceptor Error Handling', () => {
     interceptor.intercept(httpRequestSpy, httpHandlerSpy)
       .subscribe({
         next: result => console.log('good', result),
-        error: err => {
-          console.log('error', err);
-          expect(err.error).toBeInstanceOf(ErrorEvent);
-        }
+        error: err => expect(err.error).toBeInstanceOf(ErrorEvent)
       });
   });
 });

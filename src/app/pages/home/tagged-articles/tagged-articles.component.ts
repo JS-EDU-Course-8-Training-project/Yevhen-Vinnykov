@@ -114,5 +114,4 @@ export class TaggedArticlesComponent implements OnChanges, OnDestroy, AfterViewI
     this.pagesTotalCount = 0;
     this.cdRef.detectChanges();
   }
-
 }

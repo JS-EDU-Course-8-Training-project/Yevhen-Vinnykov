@@ -36,10 +36,10 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
+
     this.settingsForm.valueChanges
       .pipe(takeUntil(this.notifier))
       .subscribe(() => this.isModified$.next(true));
-
   }
 
   ngOnDestroy(): void {
@@ -64,9 +64,11 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
   private createUserData(): IUpdateUser {
     const formData: IExistingUser = this.settingsForm.getRawValue();
     const updatedData: IUpdateUser = {};
+
     for (const key in formData) {
       const formDataProp = formData[key as keyof IExistingUser];
       const authUserProp = this.authUser[key as keyof IExistingUser];
+
       if(key === 'password' && formDataProp){
         updatedData[key as keyof IUpdateUser] = formData[key as keyof IUpdateUser];
         continue;
@@ -88,14 +90,17 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
     Object.keys(error.error.errors).forEach(key => {
       this.errors.push(`${key} ${error.error.errors[key][0]}`)
     });
+
     this.isPending = false;
     this.settingsForm.enable();
     this.settingsForm.markAsUntouched();
+
     return of({} as IExistingUser);
   }
 
   public updateSettings(): void {
     this.onSubmit();
+    
     this.usersService.updateUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

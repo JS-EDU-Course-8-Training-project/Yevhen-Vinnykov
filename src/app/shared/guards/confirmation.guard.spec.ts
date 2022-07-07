@@ -14,7 +14,7 @@ const componentStub = {
   isDataSaved: () => true
 };
 
-describe('ConfirmationGuard', () => {
+describe('CONFIRMATION GUARD', () => {
   let guard: any;
 
   beforeEach(() => {
@@ -27,10 +27,6 @@ describe('ConfirmationGuard', () => {
     guard = TestBed.inject(ConfirmationGuard);
   });
 
-  it('should be created', () => {
-    expect(guard).toBeTruthy();
-  });
-
   it('should allow deactivation', () => {
     guard.canDeactivate(componentStub).subscribe((res: boolean) => {
       expect(res).toBe(true);
@@ -39,10 +35,9 @@ describe('ConfirmationGuard', () => {
 
   it('should not allow deactivation', () => {
     const componentStub = { isDataSaved: () => false };
-    //expect(guard.canDeactivate(componentStub)).toBe(false);
+
     guard.canDeactivate(componentStub).subscribe((res: boolean) => {
       expect(res).toBe(false);
-    })
+    });
   });
-
 });

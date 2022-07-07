@@ -44,9 +44,8 @@ class InfiniteScrollServiceMock {
   public observer = { observe: () => {} };
 }
 
-describe('YourFeedComponent', () => {
-
-  describe('When no error thrown', () => {
+describe('YOUR FEED COMPONENT', () => {
+  describe('WHEN NO ERROR IS THROWN', () => {
     let component: YourFeedComponent;
     let fixture: ComponentFixture<YourFeedComponent>;
 
@@ -71,20 +70,16 @@ describe('YourFeedComponent', () => {
       component.ngOnChanges();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
     it('getFollowedArticles should be called', waitForAsync(() => {
       const service = TestBed.inject(ArticlesService);
+
       service.fetchFollowedArticles().subscribe((data: IArticleResponse) => {
         expect(data.articles).toEqual(expectedData.articles);
       });
     }));
   });
 
-
-  describe('When errorn thrown', () => {
+  describe('WHEN ERROR IS THROWN', () => {
     let component: YourFeedComponent;
     let fixture: ComponentFixture<YourFeedComponent>;
 
@@ -113,13 +108,12 @@ describe('YourFeedComponent', () => {
 
     it('onCatchError should be called', waitForAsync(() => {
       const service = TestBed.inject(ArticlesService);
+
       service.fetchFollowedArticles().pipe(
         catchError(() => {
-          expect(component.error).toBe('Something went wrong :(')
+          expect(component.error).toBe('Something went wrong :(');
           return of({ articles: [], articlesCount: 0 });
         }));
     }));
-
   });
-
 });

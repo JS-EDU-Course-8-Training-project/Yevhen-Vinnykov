@@ -36,9 +36,11 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setUserData();
+
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized => this.isAuthorized = isAuthorized));
+
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
@@ -53,29 +55,31 @@ export class UserPageComponent implements OnInit, OnDestroy {
 
   private setUserData(): void {
     this.urlUsername = this.router.url.split('/')[2];
+
     this.usersService.authUser$
       .pipe(takeUntil(this.notifier))
-      .subscribe(authUser => {
+      .subscribe((authUser): any => {
         this.tabIndex = 0;
         this.isMyself = authUser.username === this.urlUsername;
-        if (this.isMyself) {
-          this.user = this.usersService.authUser$.getValue();
-        } else {
-          this.profilesService.fetchUser(this.urlUsername)
-            .pipe(takeUntil(this.notifier))
-            .subscribe(user => {
-              if (!(user instanceof HttpErrorResponse)) {
-                this.user = user;
-                this.isFollowed = user.following;
-              }
-            });
-        }
+
+        if (this.isMyself) return this.user = this.usersService.authUser$.getValue();
+
+        this.profilesService.fetchUser(this.urlUsername)
+          .pipe(takeUntil(this.notifier))
+          .subscribe(user => {
+            if (!(user instanceof HttpErrorResponse)) {
+              this.user = user;
+              this.isFollowed = user.following;
+            }
+          });
       });
   }
 
   public handleFollowUnfollow(username: string): void {
     if (!this.isAuthorized) return this.redirectUnauthorized();
+
     this.followingInProgress = true;
+    
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
   }

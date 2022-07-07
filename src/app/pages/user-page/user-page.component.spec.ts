@@ -57,7 +57,7 @@ class AuthorizationServiceMockNotAuth {
   public isAuthorized$ = of(false);
 }
 
-describe('UserPageComponent', () => {
+describe('USER PAGE COMPONENT', () => {
   let component: UserPageComponent;
   let fixture: ComponentFixture<UserPageComponent>;
 
@@ -82,17 +82,16 @@ describe('UserPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should follow a user', waitForAsync(() => {
     const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
     const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+
     expect(followButton.nativeElement.innerText).toBe('Follow test-username');
     expect(component.isFollowed).toBe(false);
+
     followButton.triggerEventHandler('click', null);
     fixture.detectChanges();
+
     fixture.whenStable().then(() => {
       expect(component.isFollowed).toBe(true);
       expect(followButton.nativeElement.innerText).toBe('Unfollow test-username');
@@ -103,10 +102,14 @@ describe('UserPageComponent', () => {
   it('should unfollow a user', waitForAsync(() => {
     const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
     const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+
     followButton.triggerEventHandler('click', null);
+
     expect(component.isFollowed).toBe(true);
+
     followButton.triggerEventHandler('click', null);
     fixture.detectChanges();
+
     fixture.whenStable().then(() => {
       expect(component.isFollowed).toBe(false);
       expect(followButton.nativeElement.innerText).toBe('Follow test-username');
@@ -116,8 +119,7 @@ describe('UserPageComponent', () => {
 
 });
 
-
-describe('RedirectUnauthorized', () => {
+describe('REDIRECT UNAUTHORIZED', () => {
   let component: UserPageComponent;
   let fixture: ComponentFixture<UserPageComponent>;
 
@@ -145,8 +147,10 @@ describe('RedirectUnauthorized', () => {
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'redirectUnauthorized');
     const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+
     followButton.triggerEventHandler('click', null);
     fixture.detectChanges();
+
     expect(spy).toHaveBeenCalled();
   });
 
@@ -184,8 +188,8 @@ describe('UserPageComponent Myself Mode', () => {
 
   it('should initialize correctly', () => {
     const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+
     expect(component.isMyself).toBe(true);
     expect(followButton).toBeFalsy();
   });
-
 });

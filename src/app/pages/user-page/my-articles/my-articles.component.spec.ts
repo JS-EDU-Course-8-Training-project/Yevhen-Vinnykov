@@ -39,7 +39,7 @@ class ArticlesServiceMockWithError {
 }
 
 
-describe('MyArticlesComponent', () => {
+describe('MY ARTICLES COMPONENT', () => {
   let component: MyArticlesComponent;
   let fixture: ComponentFixture<MyArticlesComponent>;
 
@@ -62,26 +62,28 @@ describe('MyArticlesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('getArticles should be called', () => {
     const spy = spyOn<any>(component, 'getArticles').and.callThrough();
+
     component.ngOnChanges();
+
     expect(spy).toHaveBeenCalled();
   });
 
   it('getArticles should not be called', () => {
-    component.tabIndex = 1;
     const spy = spyOn<any>(component, 'getArticles').and.callThrough();
+
+    component.tabIndex = 1;
     component.ngOnChanges();
+
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('setData should be called', () => {
     const spy = spyOn<any>(component, 'setData').and.callThrough();
+
     component.ngOnChanges();
+
     expect(spy).toHaveBeenCalledWith(expectedData);
     expect(component.myArticles).toEqual(expectedData.articles);
   });
@@ -89,7 +91,7 @@ describe('MyArticlesComponent', () => {
 });
 
 
-describe('OnCatchError', () => {
+describe('ON CATCH ERROR METHOD', () => {
   let component: MyArticlesComponent;
   let fixture: ComponentFixture<MyArticlesComponent>;
 
@@ -114,6 +116,7 @@ describe('OnCatchError', () => {
 
   it('onCatchError should be called', waitForAsync(() => {
     const service = TestBed.inject(ArticlesService);
+
     service.fetchUserArticles('test-username').pipe(
       catchError((): any => {
         expect(component.error).toBe('Something went wrong :(');
@@ -121,5 +124,4 @@ describe('OnCatchError', () => {
       })
     );
   }));
- 
 });

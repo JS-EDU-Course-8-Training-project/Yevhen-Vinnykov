@@ -24,9 +24,7 @@ export class InfiniteScrollService {
     this.observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         data.canLoad.pipe(take(1)).subscribe(canLoad => {
-          if (canLoad) {
-            data.callback();
-          }
+          if (canLoad) data.callback();
         });
       }
     }, options);

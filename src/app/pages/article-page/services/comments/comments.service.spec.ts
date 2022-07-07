@@ -18,7 +18,7 @@ const expectedData: IComment[] = [{
   }
 }];
 
-describe('CommentService', () => {
+describe('COMMENTS SERVICE', () => {
   let service: CommentsService;
 
   beforeEach(() => {
@@ -30,34 +30,35 @@ describe('CommentService', () => {
     service = TestBed.inject(CommentsService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
   it('fetch correct comments', () => {
     const spy = spyOn(service, 'fetchArticleComments').and.callThrough();
+
     service.fetchArticleComments('test-slug').subscribe(comments => {
       expect(comments).toEqual(expectedData);
     });
+
     expect(spy).toHaveBeenCalled();
   });
 
   it('should create comment', () => {
     const spy = spyOn(service, 'createComment').and.callThrough();
+
     service.createComment('test-slug', { body: 'test-comment' }).subscribe(comments => {
       expect(comments).toEqual(expectedData[0]);
     });
+
     expect(spy).toHaveBeenCalled();
   });
 
   it('should delete comment', waitForAsync(() => {
     const spy = spyOn(service, 'removeComment').and.callThrough();
+
     service.removeComment('test-slug', '1').subscribe(comment => {
       expect(comment).toEqual(expectedData[0]);
     });
+
     expect(spy).toHaveBeenCalled();
   }));
-
 });
 
 

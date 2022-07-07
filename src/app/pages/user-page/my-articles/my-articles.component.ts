@@ -34,10 +34,15 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   ngOnChanges(): void {
     this.reset();
+
     if (this.tabIndex !== 0) return;
+
     this.getArticles();
-    this.infiniteScroll
-      .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
+
+    this.infiniteScroll.observeIntersection({
+      canLoad: this.canLoad$,
+      callback: this.getArticles.bind(this)
+    });
 
   }
 
@@ -55,6 +60,7 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   private getArticles(): void {
     this.error = '';
     this.isLoading = true;
+
     this.articlesService.fetchUserArticles(this.username, this.limit, this.offset)
       .pipe(
         takeUntil(this.notifier),
@@ -74,7 +80,8 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
-    return of({articles: [], articlesCount: 0});
+    
+    return of({ articles: [], articlesCount: 0 });
   }
 
   private nextPage() {

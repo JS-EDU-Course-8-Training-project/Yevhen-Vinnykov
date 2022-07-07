@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ArticlesService } from './../../../shared/services/articles/articles.service';
 import { IArticleResponse } from './../../../shared/models/IArticle';
-import {catchError, of, throwError} from 'rxjs';
+import { catchError, of, throwError } from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GlobalFeedComponent } from './global-feed.component';
-import {InfiniteScrollService} from "../../../shared/services/infinite-scroll/infinite-scroll.service";
-import {ElementRef, NO_ERRORS_SCHEMA, QueryList} from "@angular/core";
+import { InfiniteScrollService } from "../../../shared/services/infinite-scroll/infinite-scroll.service";
+import { ElementRef, NO_ERRORS_SCHEMA, QueryList } from "@angular/core";
 
 const expectedData: IArticleResponse = {
   articles: [
@@ -42,11 +42,11 @@ class ArticlesServiceMockWithError {
 
 class InfiniteScrollServiceMock {
   public observeIntersection = () => of([]);
-  public observer = { observe: () => {} };
+  public observer = { observe: () => { } };
 }
 
-describe('GlobalFeedComponent', () => {
-  describe('When no error thrown', () => {
+describe('GLOBAL FEED COMPONENT', () => {
+  describe('WHEN NO ERROR IS THROWN', () => {
     let component: GlobalFeedComponent;
     let fixture: ComponentFixture<GlobalFeedComponent>;
 
@@ -71,30 +71,28 @@ describe('GlobalFeedComponent', () => {
       component.ngOnChanges();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
     it('setDataOnResponse should be called because tabIndex is 1', waitForAsync(() => {
       const service = TestBed.inject(ArticlesService);
+
       service.fetchArticles().subscribe((data: IArticleResponse) => {
         expect(data.articles).toEqual(expectedData.articles);
-      })
+      });
     }));
 
     it('setDataOnResponse should be called because is Authorized is false', waitForAsync(() => {
       component.isAuthorized = false;
       component.tabIndex = 0;
+
       const service = TestBed.inject(ArticlesService);
+
       service.fetchArticles().subscribe((data: IArticleResponse) => {
         expect(data.articles).toEqual(expectedData.articles);
-      })
+      });
     }));
 
   });
 
-
-  describe('When throw error', () => {
+  describe('WHEN ERROR IS THROWN', () => {
     let component: GlobalFeedComponent;
     let fixture: ComponentFixture<GlobalFeedComponent>;
 
@@ -124,12 +122,13 @@ describe('GlobalFeedComponent', () => {
 
     it('onCatchError should be called', waitForAsync(() => {
       const service = TestBed.inject(ArticlesService);
+
       service.fetchArticles().pipe(
         catchError(() => {
-          expect(component.error).toBe('Something went wrong :(')
-          return of('')
+          expect(component.error).toBe('Something went wrong :(');
+          return of('');
         })
-      )
+      );
     }));
   });
 });

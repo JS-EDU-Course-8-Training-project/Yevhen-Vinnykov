@@ -57,14 +57,17 @@ export class SignUpComponent implements OnInit {
     Object.keys(error.error.errors).forEach(key => {
       this.errors.push(`${key} ${error.error.errors[key][0]}`)
     })
+
     this.isPending = false;
     this.signupForm.enable();
     this.signupForm.markAsUntouched();
+
     return of({} as IExistingUser);
   }
 
   public handleSignup(): void {
     this.onSubmit();
+    
     this.usersService.createUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

@@ -32,7 +32,7 @@ class AuthorizationServiceMock {
   public isAuthorized$ = of(true);
 }
 
-describe('CommentFormComponent', () => {
+describe('COMMENT FORM COMPONENT', () => {
   let component: CommentFormComponent;
   let fixture: ComponentFixture<CommentFormComponent>;
 
@@ -60,34 +60,38 @@ describe('CommentFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('AddComment method should not be called because the form is empty', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
     component.commentForm.controls['body'].setValue('');
-    fixture.detectChanges();
+   
     const button = fixture.debugElement.query(By.css('button')).nativeElement;
-    expect(button.disabled).toBeTruthy();
-    expect(component.commentForm.valid).toBeFalsy();
+    expect(button.disabled).toBe(true);
+
+    expect(component.commentForm.valid).toBe(false);
+
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('AddComment method should be called', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
     const spyCreateCommentData = spyOn<any>(component, 'createCommentData').and.callThrough();
+
     component.commentForm.controls['body'].setValue('test-comment');
     fixture.detectChanges();
-    const button = fixture.debugElement.query(By.css('button')).nativeElement;
+
     expect(component.commentForm.getRawValue().body).toBe('test-comment');
-    expect(component.commentForm.valid).toBeTruthy();
-    expect(button.disabled).toBeFalsy();
+    expect(component.commentForm.valid).toBe(true);
+
+    const button = fixture.debugElement.query(By.css('button')).nativeElement;
+    expect(button.disabled).toBe(false);
     button.click();
     fixture.detectChanges();
-    expect(component.commentForm.getRawValue().body).toBeFalsy();
-    expect(component.commentForm.valid).toBeFalsy();
-    expect(button.disabled).toBeTruthy();
+
+    expect(component.commentForm.getRawValue().body).toBe(null);
+    expect(component.commentForm.valid).toBe(false);
+
+    expect(button.disabled).toBe(true);
+
     expect(spy).toHaveBeenCalled();
     expect(spyCreateCommentData).toHaveBeenCalled();
   });

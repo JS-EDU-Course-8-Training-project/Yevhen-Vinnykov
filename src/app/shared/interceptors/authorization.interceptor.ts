@@ -20,6 +20,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     this.authorizationService.checkIfAuthorized();
     this.isAuthorized = this.authorizationService.isAuthorized$.getValue();
+
     if (this.isAuthorized) {
       //const token: string = `Bearer ${localStorage.getItem('token')}`;
       const token: string = `${localStorage.getItem('token')}`;
@@ -31,6 +32,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse): Observable<HttpEvent<unknown>> => {
         let errorMsg = '';
+
         if (error.error instanceof ErrorEvent) {
           console.log('This is client side error');
           errorMsg = `Error: ${error.error.message}`;
@@ -38,7 +40,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
           console.log('This is server side error');
           errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
         }
-        console.log(errorMsg);
+        
         return throwError(() => error);
       })
     );

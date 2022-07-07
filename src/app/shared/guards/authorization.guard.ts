@@ -11,6 +11,7 @@ export class AuthorizationGuard implements CanActivate {
     private router: Router,
     private authorizationService: AuthorizationService
   ) { }
+  
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

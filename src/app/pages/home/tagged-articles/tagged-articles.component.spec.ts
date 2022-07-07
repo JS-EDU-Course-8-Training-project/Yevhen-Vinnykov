@@ -44,9 +44,8 @@ class InfiniteScrollServiceMock {
   public observer = { observe: () => {} };
 }
 
-describe('TaggedArticlesComponent', () => {
-
-  describe('When no error thrown', () => {
+describe('TAGGED ARTICLES COMPONENT', () => {
+  describe('WHEN NO ERROR IS THROWN', () => {
     let component: TaggedArticlesComponent;
     let fixture: ComponentFixture<TaggedArticlesComponent>;
   
@@ -71,13 +70,10 @@ describe('TaggedArticlesComponent', () => {
       fixture.detectChanges();
       component.ngOnChanges();
     });
-  
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
 
     it('setDataOnResponse should be called', waitForAsync(() => {
       const service = TestBed.inject(ArticlesService);
+
       service.fetchArticlesByTag('test').subscribe((data) => {
         expect(component.articlesSelectedByTag).toEqual(data.articles);
       })
@@ -86,18 +82,20 @@ describe('TaggedArticlesComponent', () => {
     it('should not be called because selectedTag is null', () => {
       component.selectedTag = null;
       component.ngOnChanges();
+
       expect(component.articlesSelectedByTag).toEqual([]);
     });
 
     it('should not be called because tabIndex is not 2', () => {
       component.tabIndex = 0;
       component.ngOnChanges();
+
       expect(component.articlesSelectedByTag).toEqual([]);
     });
 
     });
 
-    describe('When error is thrown', () => {
+    describe('WHEN ERROR IS THROWN', () => {
       let component: TaggedArticlesComponent;
       let fixture: ComponentFixture<TaggedArticlesComponent>;
     
@@ -124,6 +122,7 @@ describe('TaggedArticlesComponent', () => {
     
       it('onCatchError should be called', waitForAsync(() => {
         const service = TestBed.inject(ArticlesService);
+
         service.fetchArticlesByTag('test').pipe(
           catchError(() => {
             expect(component.error).toBe('Something went wrong :(');
@@ -131,10 +130,7 @@ describe('TaggedArticlesComponent', () => {
           })
         );
       }));
-    
     });
-
-
   });
 
 

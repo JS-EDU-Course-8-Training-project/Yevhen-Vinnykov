@@ -37,7 +37,7 @@ class ArticlesServiceMockWithError {
   public fetchFavoritedArticles = () => throwError(() => Error('Fetching articles failed'));
 }
 
-describe('FavoritedArticlesComponent', () => {
+describe('FAVORITED ARTICLES COMPONENT', () => {
   let component: FavoritedArticlesComponent;
   let fixture: ComponentFixture<FavoritedArticlesComponent>;
 
@@ -60,10 +60,6 @@ describe('FavoritedArticlesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('getArticles should be called', () => {
     const spy = spyOn<any>(component, 'getArticles').and.callThrough();
     component.ngOnChanges();
@@ -71,23 +67,26 @@ describe('FavoritedArticlesComponent', () => {
   });
 
   it('getArticles should not be called', () => {
-    component.tabIndex = 0;
     const spy = spyOn<any>(component, 'getArticles').and.callThrough();
+
+    component.tabIndex = 0;
     component.ngOnChanges();
+
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('setData should be called', () => {
     const spy = spyOn<any>(component, 'setData').and.callThrough();
+
     component.ngOnChanges();
+
     expect(spy).toHaveBeenCalledWith(expectedData);
     expect(component.favoritedArticles).toEqual(expectedData.articles);
   });
 
 });
 
-
-describe('OnCatchError', () => {
+describe('ON CATCH ERROR METHOD', () => {
   let component: FavoritedArticlesComponent;
   let fixture: ComponentFixture<FavoritedArticlesComponent>;
 
@@ -112,11 +111,11 @@ describe('OnCatchError', () => {
 
   it('onCatchError should be called', () => {
     const service = TestBed.inject(ArticlesService);
+
     service.fetchFavoritedArticles('test-username').pipe(
       catchError((): any => {
         expect(component.error).toBe('Something went wrong :(');
       })
     );
   });
-
 });

@@ -67,6 +67,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.error = '';
     this.isLoading = true;
     this.cdRef.detectChanges();
+
     this.articlesService.fetchFollowedArticles(this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),
@@ -79,6 +80,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
     this.isFinished = this.currentPage === this.pagesTotalCount;
     this.isLoading = false;
+
     this.canLoad$.next(!this.isFinished && !this.isLoading);
     this.nextPage();
     this.cdRef.detectChanges();
@@ -88,6 +90,7 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
     this.cdRef.detectChanges();
+    
     return of({articles: [], articlesCount: 0});
   }
 

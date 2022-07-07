@@ -34,10 +34,15 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
 
   ngOnChanges(): void {
     this.reset();
+
     if (this.tabIndex !== 1) return;
+
     this.getArticles();
-    this.infiniteScroll
-      .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
+
+    this.infiniteScroll.observeIntersection({
+      canLoad: this.canLoad$,
+      callback: this.getArticles.bind(this)
+    });
   }
 
   ngOnDestroy(): void {
@@ -54,6 +59,7 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
   private getArticles(): void {
     this.error = '';
     this.isLoading = true;
+    
     this.articlesService.fetchFavoritedArticles(this.username, this.limit, this.offset)
       .pipe(
         takeUntil(this.notifier),
@@ -74,7 +80,7 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
-    return of({articles: [], articlesCount: 0});
+    return of({ articles: [], articlesCount: 0 });
   }
 
   private nextPage() {

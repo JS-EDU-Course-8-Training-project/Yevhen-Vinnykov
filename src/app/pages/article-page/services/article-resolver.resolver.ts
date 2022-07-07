@@ -12,7 +12,10 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class ArticleResolver implements Resolve<IArticle> {
-  constructor(private articlesService: ArticlesService) { }
+  constructor(
+    private articlesService: ArticlesService
+  ) { }
+
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IArticle> {
     return this.articlesService.fetchArticle(route.params['slug']);
   }

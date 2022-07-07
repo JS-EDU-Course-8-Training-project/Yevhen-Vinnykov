@@ -39,7 +39,7 @@ class CommentsServiceMock {
   public removeComment = (slug: string, id: number): Observable<IComment> => of(comments[0]);
 }
 
-describe('CommentsComponent', () => {
+describe('COMMENTS COMPONENT', () => {
   let component: CommentsComponent;
   let fixture: ComponentFixture<CommentsComponent>;
 
@@ -64,15 +64,12 @@ describe('CommentsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should delete comment', () => {
     const spy = spyOn(component, 'deleteComment').and.callThrough();
+
     const deleteIcon = fixture.debugElement.query(By.css('[data-angular="test-delete-icon"]'));
     deleteIcon.triggerEventHandler('click', null);
-    fixture.detectChanges();
+
     expect(spy).toHaveBeenCalledWith('1');
   });
 

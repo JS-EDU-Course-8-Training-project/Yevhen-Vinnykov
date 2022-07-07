@@ -27,7 +27,7 @@ class UsersServiceMockEmpty {
   public fetchAuthUser = () => of({} as IExistingUser)
 }
 
-describe('AppComponent', () => {
+describe('APP COMPONENT WHEN USERS SERVICE HAS AN AUTH USER', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -63,7 +63,7 @@ describe('AppComponent', () => {
 
 });
 
-describe('AppComponent', () => {
+describe('APP COMPONENT WHEN USERS SERVICE DOES NOT HAVE AN AUTH USER', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [

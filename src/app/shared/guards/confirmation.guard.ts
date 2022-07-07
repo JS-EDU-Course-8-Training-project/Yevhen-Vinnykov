@@ -9,17 +9,19 @@ import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dia
   providedIn: 'root'
 })
 export class ConfirmationGuard implements CanDeactivate<ISavedData> {
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog
+  ) { }
+
   canDeactivate(
     component: ISavedData,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      if(!component.isDataSaved()){
-          const dialogRef = this.dialog.open(ConfirmationDialogComponent);
-          return dialogRef.afterClosed();
-      }
+    if (!component.isDataSaved()) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+      return dialogRef.afterClosed();
+    }
     return of(true);
   }
-  
 }

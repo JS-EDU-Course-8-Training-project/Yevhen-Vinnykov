@@ -11,7 +11,7 @@ const mockProfile: IProfile = {
   following: false
 };
 
-describe('ProfilesService Get Method', () => {
+describe('PROFILES SERVICE > GET', () => {
   let service: ProfilesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -22,6 +22,7 @@ describe('ProfilesService Get Method', () => {
 
   it('fetchUser methods should return expected data', (done: DoneFn) => {
     httpClientSpy.get.and.returnValue(of({ profile: mockProfile }));
+
     service.fetchUser('test-username').subscribe({
       next: user => {
         expect(user).withContext('expected user').toEqual(mockProfile);
@@ -29,12 +30,12 @@ describe('ProfilesService Get Method', () => {
       },
       error: done.fail
     });
+
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
-
 });
 
-describe('ProfilesService Post Method', () => {
+describe('PROFILES SERVICE > POST', () => {
   let service: ProfilesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -45,6 +46,7 @@ describe('ProfilesService Post Method', () => {
 
   it('follow methods should return expected data', (done: DoneFn) => {
     httpClientSpy.post.and.returnValue(of({ profile: {...mockProfile, following: true} }));
+
     service.follow('test-username').subscribe({
       next: user => {
         expect(user).withContext('expected user').toEqual({...mockProfile, following: true});
@@ -52,12 +54,12 @@ describe('ProfilesService Post Method', () => {
       },
       error: done.fail
     });
+
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
-
 });
 
-describe('ProfilesService Delete Method', () => {
+describe('PROFILES SERVICE > DELETE', () => {
   let service: ProfilesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
@@ -68,6 +70,7 @@ describe('ProfilesService Delete Method', () => {
 
   it('unfollow methods should return expected data', (done: DoneFn) => {
     httpClientSpy.delete.and.returnValue(of({ profile: {...mockProfile, following: false} }));
+
     service.unfollow('test-username').subscribe({
       next: user => {
         expect(user).withContext('expected user').toEqual({...mockProfile, following: false});
@@ -75,7 +78,7 @@ describe('ProfilesService Delete Method', () => {
       },
       error: done.fail
     });
+
     expect(httpClientSpy.delete.calls.count()).toBe(1);
   });
-
 });

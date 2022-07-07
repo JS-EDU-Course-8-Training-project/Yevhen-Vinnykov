@@ -56,14 +56,17 @@ export class SignInComponent implements OnInit, OnDestroy {
     Object.keys(error.error.errors).forEach(key => {
       this.errors.push(`${key} ${error.error.errors[key][0]}`)
     });
+
     this.isPending = false;
     this.signinForm.enable();
     this.signinForm.markAsUntouched();
+
     return of({} as IExistingUser);
   }
 
   public handleSignin(): void {
     this.onSubmit();
+    
     this.usersService.signIn(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

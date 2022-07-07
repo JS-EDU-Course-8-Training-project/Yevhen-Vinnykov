@@ -49,7 +49,7 @@ class AuthorizationServiceNotAuthorizedMock {
   public isAuthorized$ = of(false);
 }
 
-describe('ArticleComponent', () => {
+describe('ARTICLE COMPONENT', () => {
   let component: ArticleListComponent;
   let fixture: ComponentFixture<ArticleListComponent>;
 
@@ -85,7 +85,7 @@ describe('ArticleComponent', () => {
 });
 
 
-describe('HandleLikeDislike Method', () => {
+describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
   let component: ArticleListComponent;
   let fixture: ComponentFixture<ArticleListComponent>;
 
@@ -110,11 +110,14 @@ describe('HandleLikeDislike Method', () => {
   it('should be invoked on button click and dislike', waitForAsync(() => {
     const inputArticle: IArticle = {...article, favorited: true};
     component.article = inputArticle;
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
     fixture.detectChanges();
+
+    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
     fixture.detectChanges();
+
     fixture.whenStable().then(() => {
       expect(component.likesCount).toBe(1);
       expect(component.isLiked).toBe(false);
@@ -125,21 +128,23 @@ describe('HandleLikeDislike Method', () => {
   it('should be invoked on button click and like', waitForAsync(() => {
     const inputArticle: IArticle = {...article, favorited: false};
     component.article = inputArticle;
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
     fixture.detectChanges();
+
+    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
     fixture.detectChanges();
+
     fixture.whenStable().then(() => {
       expect(component.likesCount).toBe(3);
       expect(component.isLiked).toBe(true);
       expect(spy).toHaveBeenCalledWith('test-slug', 'addToFavorites');
     });
   }));
-
 });
 
-describe('HandleLikeDislike Method', () => {
+describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => {
   let component: ArticleListComponent;
   let fixture: ComponentFixture<ArticleListComponent>;
 
@@ -164,16 +169,17 @@ describe('HandleLikeDislike Method', () => {
   it('should not be invoked on button because unauthorized', waitForAsync(() => {
     const inputArticle: IArticle = {...article};
     component.article = inputArticle;
+
     const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
-    fixture.detectChanges();
+
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
     fixture.detectChanges();
+  
     fixture.whenStable().then(() => {
       expect(component.likesCount).toBe(2);
       expect(component.isLiked).toBe(false);
       expect(spy).not.toHaveBeenCalled();
     });
   })); 
-
 });

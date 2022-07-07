@@ -13,7 +13,7 @@ import {
 } from './new-article-page.mocks.spec';
 
 
-describe('NewArticlePageComponent Edit Mode', () => {
+describe('NEW ARTICLE PAGE > EDIT MODE', () => {
   let component: NewArticlePageComponent;
   let fixture: ComponentFixture<NewArticlePageComponent>;
 
@@ -35,12 +35,8 @@ describe('NewArticlePageComponent Edit Mode', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should initialize in edit mode', () => {
-    expect(component.isEditMode).toBeTruthy();
+    expect(component.isEditMode).toBe(true);
     expect(component.articleForm.controls['title'].value).toBe('test-title');
     expect(component.slug).toBe('test-slug');
   });
@@ -52,11 +48,14 @@ describe('NewArticlePageComponent Edit Mode', () => {
       title: 'new-test-title',
       tagList: ['test-tag']
     };
+
     component.articleForm.controls['title'].setValue('new-test-title');
     fixture.detectChanges();
+
     const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
     submitButton.click();
     fixture.detectChanges();
+
     fixture.whenStable().then(() => {
       expect(spyHandleArticleAction).toHaveBeenCalled();
       expect(spyArticleAction).toHaveBeenCalledWith(component.slug, expectedData);
@@ -65,8 +64,7 @@ describe('NewArticlePageComponent Edit Mode', () => {
 
 });
 
-
-describe('NewArticlePageComponent Create Mode', () => {
+describe('NEW ARTICLE PAGE > CREATE MODE', () => {
   let component: NewArticlePageComponent;
   let fixture: ComponentFixture<NewArticlePageComponent>;
 
@@ -88,9 +86,8 @@ describe('NewArticlePageComponent Create Mode', () => {
     fixture.detectChanges();
   });
 
-
   it('should initialize in create mode', () => {
-    expect(component.isEditMode).toBeFalsy();
+    expect(component.isEditMode).toBe(false);
     expect(component.articleForm.controls['title'].value).toBe('');
   });
 
@@ -111,9 +108,11 @@ describe('NewArticlePageComponent Create Mode', () => {
       tagList: 'test-tag'
     };
     const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
+
     component.articleForm.setValue(newArticle);
     component.articleForm.markAllAsTouched();
     fixture.detectChanges();
+
     expect(component.articleForm.valid).toBe(true);
     expect(component.articleForm.controls['title'].value).toBe('new-test-title');
     expect(submitButton.disabled).toBe(false);
@@ -128,12 +127,15 @@ describe('NewArticlePageComponent Create Mode', () => {
       body: 'test-body',
       tagList: 'test-tag'
     };
+
     component.articleForm.setValue(newArticle);
     component.articleForm.markAllAsTouched();
     fixture.detectChanges();
+
     const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
     submitButton.click();
     fixture.detectChanges();
+
     fixture.whenStable().then(() => {
       expect(component.isDataSaved()).toBe(true);
       expect(spyHandleArticleAction).toHaveBeenCalled();
@@ -143,8 +145,7 @@ describe('NewArticlePageComponent Create Mode', () => {
 
 });
 
-
-describe('OnCatchError Method', () => {
+describe('ON CATCH ERROR METHOD', () => {
   let component: NewArticlePageComponent;
   let fixture: ComponentFixture<NewArticlePageComponent>;
 
@@ -170,6 +171,7 @@ describe('OnCatchError Method', () => {
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
     component.ngOnInit();
+    
     expect(spy).toHaveBeenCalledWith('Fetching articles failed');
   });
 

@@ -23,7 +23,7 @@ import {
 } from './buttons.mocks.spec';
 
 
-describe('ArticlePageButtonsComponent', () => {
+describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
   let component: ArticlePageButtonsComponent;
   let fixture: ComponentFixture<ArticlePageButtonsComponent>;
 
@@ -52,12 +52,7 @@ describe('ArticlePageButtonsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  describe('Initialize method', () => {
-
+  describe('INITIALIZE METHOD', () => {
     beforeEach(() => {
       component.article = article;
       component.slug = 'test-slug';
@@ -73,8 +68,7 @@ describe('ArticlePageButtonsComponent', () => {
 
   });
 
-  describe('HandleLikeDislike method', () => {
-
+  describe('HANDLE LIKE DISLIKE METHOD', () => {
     beforeEach(() => {
       fixture.detectChanges();
     });
@@ -83,9 +77,12 @@ describe('ArticlePageButtonsComponent', () => {
       const inputArticle: IArticle = { ...article, favorited: true };
       component.article = inputArticle;
       component.ngOnChanges();
+      
       const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+
       const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-like-btn"]'));
       buttonElement.triggerEventHandler('click', null);
+
       fixture.whenStable().then(() => {
         expect(component.likesCount).toBe(1);
         expect(component.isLiked).toBe(false);
@@ -97,11 +94,12 @@ describe('ArticlePageButtonsComponent', () => {
       const inputArticle: IArticle = { ...article, favorited: false };
       component.article = inputArticle;
       component.ngOnChanges();
+
       const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
-      fixture.detectChanges();
+
       const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-like-btn"]'));
       buttonElement.triggerEventHandler('click', null);
-      fixture.detectChanges();
+
       fixture.whenStable().then(() => {
         expect(component.likesCount).toBe(3);
         expect(component.isLiked).toBe(true);
@@ -111,8 +109,7 @@ describe('ArticlePageButtonsComponent', () => {
 
   });
 
-  describe('HandleFollowUnfollow method', () => {
-
+  describe('HANDLE FOLLOW UNFOLLOW METHOD', () => {
     beforeEach(() => {
       fixture.detectChanges();
     });
@@ -121,9 +118,12 @@ describe('ArticlePageButtonsComponent', () => {
       const inputArticle: IArticle = { ...article, author: { ...article.author, following: true } };
       component.article = inputArticle;
       component.ngOnChanges();
+
       const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
+
       const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-follow-btn"]'));
       buttonElement.triggerEventHandler('click', null);
+
       fixture.whenStable().then(() => {
         expect(component.isFollowed).toBe(false);
         expect(spy).toHaveBeenCalledWith('test', 'unfollow');
@@ -134,9 +134,12 @@ describe('ArticlePageButtonsComponent', () => {
       const inputArticle: IArticle = { ...article, author: { ...article.author, following: false } };
       component.article = inputArticle;
       component.ngOnChanges();
+
       const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
+
       const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-follow-btn"]'));
       buttonElement.triggerEventHandler('click', null);
+
       fixture.whenStable().then(() => {
         expect(component.isFollowed).toBe(true);
         expect(spy).toHaveBeenCalledWith('test', 'follow');
@@ -145,8 +148,7 @@ describe('ArticlePageButtonsComponent', () => {
   });
 
 
-  describe('Delete method', () => {
-
+  describe('DELETE METHOD', () => {
     beforeEach(() => {
       component.article = { ...article, author: { ...article.author, username: 'test-username' } };
       component.ngOnChanges();
@@ -155,8 +157,10 @@ describe('ArticlePageButtonsComponent', () => {
 
     it('should delete the article', waitForAsync(() => {
       const spy = spyOn(component, 'deleteArticle').and.callThrough();
+
       const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-delete-btn"]'));
       buttonElement.triggerEventHandler('click', null);
+
       fixture.whenStable().then(() => {
         expect(spy).toHaveBeenCalledWith('test-slug');
       });
@@ -164,7 +168,7 @@ describe('ArticlePageButtonsComponent', () => {
 
   });
 
-  describe('EditRedirection method', () => {
+  describe('EDIT REDIRECTION METHOD', () => {
 
     beforeEach(() => {
       component.article = { ...article, author: { ...article.author, username: 'test-username' } };
@@ -174,8 +178,10 @@ describe('ArticlePageButtonsComponent', () => {
 
     it('should redirect to edit page', waitForAsync(() => {
       const spy = spyOn(component, 'redirectToEditArticle').and.callThrough();
+
       const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-edit-btn"]'));
       buttonElement.triggerEventHandler('click', null);
+
       fixture.whenStable().then(() => {
         expect(spy).toHaveBeenCalledWith('test-slug');
       });
@@ -185,7 +191,7 @@ describe('ArticlePageButtonsComponent', () => {
 
 });
 
-describe('ArticlePageButtonsComponent', () => {
+describe('ARTICLE PAGE BUTTONS COMPONENT > UNAUTHORIZED', () => {
   let component: ArticlePageButtonsComponent;
   let fixture: ComponentFixture<ArticlePageButtonsComponent>;
 
@@ -214,10 +220,13 @@ describe('ArticlePageButtonsComponent', () => {
   it('button clicks should trigger redirection to sign-in when unauthorized', () => {
     const service = TestBed.inject(RedirectionService);
     const spy = spyOn(service, 'redirectUnauthorized');
+
     const likeButton = fixture.debugElement.query(By.css('[data-angular="test-like-btn"]'));
     likeButton.triggerEventHandler('click', null);
+
     const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-btn"]'));
     followButton.triggerEventHandler('click', null);
+
     expect(spy).toHaveBeenCalledTimes(2);
   });
 

@@ -48,12 +48,14 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
 
   private initialize(): void {
     this.username = this.article?.author?.username;
-    this.isAuthor = this.article?.author?.username === this.authUser?.username;    
+    this.isAuthor = this.article?.author?.username === this.authUser?.username;
+
     if(!this.isAuthor && this.article) {
       this.articlePageButtonsService.initialize(this.article)
       .pipe(takeUntil(this.notifier))
       .subscribe(state => this.setDataOnResponse(state));
     }
+
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized) => this.isAuthorized = isAuthorized);
@@ -69,14 +71,18 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
 
   public handleLikeDislike(slug: string): void {
     if ((!this.isAuthorized)) return this.redirectionService.redirectUnauthorized();
+
     this.articlePageButtonsService.updateState('favoriteInProgress', true);
+
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
   }
 
   public handleFollowUnfollow(username: string): void {
     if ((!this.isAuthorized)) return this.redirectionService.redirectUnauthorized();
+
     this.articlePageButtonsService.updateState('followingInProgress', true);
+    
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
   }

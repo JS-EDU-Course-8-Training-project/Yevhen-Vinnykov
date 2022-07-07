@@ -39,7 +39,7 @@ class RedirectionServiceMock {
   public redirectHome = () => new Promise<boolean>((resolve, reject) => resolve(true));
 }
 
-describe('SettingsFormComponent', () => {
+describe('SETTINGS FORM COMPONENT', () => {
   let component: SettingsFormComponent;
   let fixture: ComponentFixture<SettingsFormComponent>;
 
@@ -64,10 +64,6 @@ describe('SettingsFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should initialize correctly', () => {
     expect(component.settingsForm.controls['username'].value).toBe(component.authUser.username);
   });
@@ -76,36 +72,39 @@ describe('SettingsFormComponent', () => {
     const spyUpdateSettings = spyOn(component, 'updateSettings').and.callThrough();
     const spyCreateUserData = spyOn<any>(component, 'createUserData');
     const spyOnSubmit = spyOn<any>(component, 'onSubmit');
+
     const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
     updateButton.click();
     fixture.detectChanges();
+
     expect(spyUpdateSettings).toHaveBeenCalled();
     expect(spyCreateUserData).toHaveBeenCalled();
     expect(spyOnSubmit).toHaveBeenCalled();
   });
 
   it('should logout', () => {
-    const logoutButton = fixture.debugElement.query(By.css('[data-angular="test-logout-button"]'));
     const spy = spyOn(component, 'logout').and.callThrough();
+
+    const logoutButton = fixture.debugElement.query(By.css('[data-angular="test-logout-button"]'));
     logoutButton.triggerEventHandler('click', null);
     fixture.detectChanges();
+
     expect(spy).toHaveBeenCalled();
   });
 
   it('checkIfValid should work correctly', () => {
     const spyCheckIfValid = spyOn(component, 'checkIfValid').and.callThrough();
+
     component.settingsForm.controls['email'].setValue('wrong-email');
     component.settingsForm.markAllAsTouched();
     fixture.detectChanges();
+
     expect(spyCheckIfValid).toHaveBeenCalledWith('email');
     expect(component.checkIfValid('email')).toBe(false);
   });
-
 });
 
-
-
-describe('OnCatchError', () => {
+describe('ON CATCH ERROR METHOD', () => {
   let component: SettingsFormComponent;
   let fixture: ComponentFixture<SettingsFormComponent>;
 
@@ -130,11 +129,12 @@ describe('OnCatchError', () => {
 
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
+
     const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
     updateButton.click();
     fixture.detectChanges();
+
     expect(spy).toHaveBeenCalledWith(errorResponseMock);
     expect(component.errors).toEqual(['Error: Fetching articles failed']);
   });
-
 });

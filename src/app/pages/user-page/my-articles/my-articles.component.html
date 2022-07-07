@@ -16,7 +16,12 @@
         >
         </app-article-list>
     </div>
-    <mat-spinner [ngStyle]="{'margin': '10px auto'}" *ngIf="isLoading" diameter="50"></mat-spinner>
+    <mat-spinner
+        [ngStyle]="{'margin': '10px auto'}" 
+        *ngIf="isLoading" 
+        diameter="50"
+     >
+    </mat-spinner>
     <div class="finished" *ngIf="isFinished">
         <div>No more articles for now...</div>
     </div>
