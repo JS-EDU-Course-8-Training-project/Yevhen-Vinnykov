@@ -1,4 +1,4 @@
-describe('NOT OWN ARTICLE PAGE', () => {
+describe('ARTICLE PAGE', () => {
     beforeEach(() => {
         cy.login();
         cy.createNotOwnArticle();
