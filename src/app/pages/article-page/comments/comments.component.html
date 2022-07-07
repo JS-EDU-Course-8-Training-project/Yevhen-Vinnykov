@@ -1,5 +1,9 @@
 <section class="article-comments">
-    <mat-card class="comment" *ngFor="let comment of comments">
+    <mat-card 
+        class="comment" 
+        *ngFor="let comment of comments"
+        data-angular="comment"
+    >
         <mat-card-content>
             <p>{{comment?.body}}</p>
         </mat-card-content>

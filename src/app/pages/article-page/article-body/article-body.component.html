@@ -1,10 +1,11 @@
 <div class="article-body-container">
-    <div class="article-body">
+    <div class="article-body" data-angular="article-body">
         <p>{{article?.body}}</p>
     </div>
     <mat-chip-list>
         <mat-chip 
-            class="tag" 
+            class="tag"
+            data-angular="tag" 
             *ngFor="let tag of article?.tagList"
             [value]="tag" 
         >
@@ -13,7 +14,10 @@
     </mat-chip-list>
     <mat-divider class="devider"></mat-divider>
 </div>
-<div class="article-actions-container">
+<div 
+    class="article-actions-container"
+    data-angular="article-actions-container" 
+>
     <div class="article-author">
         <img src="{{article?.author?.image}}" alt="">
         <div>

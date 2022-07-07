@@ -1,8 +1,13 @@
 <div>
     <form [formGroup]="signupForm" (ngSubmit)="handleSignup()">
         <div class="form-group">
-            <h1>Sign Up</h1>
-            <a routerLink="/sign-in">Already have an account?</a>
+            <h2 data-angular="form-title">Sign Up</h2>
+            <a 
+                routerLink="/sign-in"
+                data-angular="sign-in-link"
+            >
+                Already have an account?
+            </a>
             <div *ngIf="errors.length">
                 <div class="form-error" *ngFor="let error of errors">{{error}}</div>
             </div>
@@ -15,7 +20,13 @@
                 formControlName="username"
                 placeholder="Username"
             >
-            <span class="form-error" *ngIf="!checkIfValid('username')">This field is required</span>
+            <span 
+                class="form-error" 
+                *ngIf="!checkIfValid('username')"
+                data-angular="form-error"
+            >
+                This field is required
+            </span>
             <input 
                 type="text" 
                 class="form-control" 
@@ -28,12 +39,14 @@
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('email') && !signupForm.get('email')?.value"
+                data-angular="form-error"
             >
                 This field is required
             </span>
             <span 
                 class="form-error" 
                 *ngIf="signupForm.get('email')?.errors?.['email']"
+                data-angular="form-error"
             >
                 Enter a valid email
             </span>
@@ -49,6 +62,7 @@
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('password')"
+                data-angular="form-error"
             >
                 Password must be at least 6 characters long
             </span>
@@ -58,6 +72,7 @@
                 type="submit"
                 mat-raised-button
                 color="primary"
+                data-angular="sign-up-button"
             >
                 <span *ngIf="!isPending">Sign Up</span>
                 <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>

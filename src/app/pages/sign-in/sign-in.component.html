@@ -1,8 +1,13 @@
 <div>
     <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
         <div class="form-group">
-            <h1>Sign In</h1>
-            <a routerLink="/sign-up">Need an account?</a>
+            <h2 data-angular="form-title">Sign In</h2>
+            <a
+                routerLink="/sign-up"
+                data-angular="sign-up-link"
+            >
+                Need an account?
+            </a>
             <div *ngIf="errors.length">
                 <div class="form-error" *ngFor="let error of errors">{{error}}</div>
             </div>
@@ -18,12 +23,14 @@
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('email') && !signinForm.get('email')?.value"
+                data-angular="form-error"
             >
                 This field is required
             </span>
             <span 
                 class="form-error" 
                 *ngIf="signinForm.get('email')?.errors?.['email']"
+                data-angular="form-error"
             >
                 Enter a valid email
             </span>
@@ -39,6 +46,7 @@
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('password')"
+                data-angular="form-error"
             >
                 Password must be at least 6 characters long
             </span>
@@ -47,6 +55,7 @@
                 align="end" 
                 type="submit"
                 mat-raised-button color="primary"
+                data-angular="sign-in-button"
             >
                 <span *ngIf="!isPending">Sign In</span>
                 <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>

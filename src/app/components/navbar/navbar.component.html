@@ -3,6 +3,7 @@
         [class]="(url$ | async) === '/' ? 'selected' : ''"
         mat-button 
         routerLink="/"
+        data-angular="home-link"
     >
         Home
     </a>
@@ -11,6 +12,7 @@
         *ngIf="!(isAuthorized$ | async)" 
         mat-button 
         routerLink="/sign-in"
+        data-angular="sign-in-link"
     >
         Sign in
     </a>
@@ -19,6 +21,7 @@
         *ngIf="!(isAuthorized$ | async)" 
         mat-button 
         routerLink="/sign-up"
+        data-angular="sign-up-link"
      >
         Sign up
     </a>
@@ -27,6 +30,7 @@
         *ngIf="isAuthorized$ | async" 
         mat-button 
         routerLink="/create-article"
+        data-angular="new-article-link"
     >
         New Article
     </a>
@@ -35,6 +39,7 @@
         *ngIf="isAuthorized$ | async" 
         mat-button 
         routerLink="/settings"
+        data-angular="settings-link"
     >
         Settings
     </a>

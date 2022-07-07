@@ -1,5 +1,9 @@
 <div *ngIf="isAuthorized">
-    <form [formGroup]="commentForm" (ngSubmit)="addComment()">
+    <form 
+        [formGroup]="commentForm" 
+        (ngSubmit)="addComment()"
+        data-angular="comment-form"
+    >
         <div class="form-group">
             <textarea 
                 type="text" 
@@ -19,6 +23,7 @@
                     type="submit" 
                     mat-raised-button
                     color="primary"
+                    data-angular="post-comment-btn"
                 >
                     <span *ngIf="!isLoading">Add</span>
                     <mat-spinner *ngIf="isLoading" diameter="25"></mat-spinner> 

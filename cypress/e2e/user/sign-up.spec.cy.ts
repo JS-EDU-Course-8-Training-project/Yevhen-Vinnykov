@@ -4,71 +4,63 @@ describe('SING UP PAGE', () => {
     });
 
     it('should have a title', () => {
-        cy.get('.form-group > h1').should('have.text', 'Sign Up');
+        cy.get('h2').should('have.text', 'Sign Up');
     });
 
     it('should have a link redirect to the sign in page', () => {
-        cy.get('.form-group > a')
-            .should('have.text', 'Already have an account?')
+        cy.get('form').find('[data-angular="sign-in-link"]')
+            .should('have.text', ' Already have an account? ')
             .and('have.attr', 'href', '/sign-in');
     });
 
     describe('SIGN-UP BUTTON', () => {
+        beforeEach(() => {
+            cy.get('[data-angular="sign-up-button"]').as('signUpBtn');
+        });
+
         it('should be disabled if the form is empty', () => {
-            cy.get('button').should('be.disabled');
+            cy.get('@signUpBtn').should('be.disabled');
         });
 
         it('should be disabled if the form is invalid', () => {
             cy.get('#email').type('invalid email');
             cy.get('#password').type('invld');
-            cy.get('button').should('be.disabled');
+
+            cy.get('@signUpBtn').should('be.disabled');
         });
 
         it('should be enabled if the form is valid', () => {
             cy.get('#username').type('John');
             cy.get('#email').type('johndoe@email.com');
             cy.get('#password').type('JohnDoe1');
-            cy.get('button').should('not.be.disabled');
+
+            cy.get('@signUpBtn').should('not.be.disabled');
         });
     });
 
     describe('SIGN-UP FORM', () => {
         it('should have a required error span if the fields are touched and empty', () => {
-            cy.get('#username').type('John').clear();
-            cy.get('#email').type('johndoe@email.com').clear();
-            cy.get('#password').type('JohnDoe1').clear().blur();
+            cy.get('#username').type('John').clear().blur();
+            cy.get('[data-angular="form-error"]').should('contain', 'This field is required');
 
-            cy.get('.form-error')
-                .eq(0)
-                .should('be.visible')
-                .and('contain', 'This field is required');
-            cy.get('.form-error')
-                .eq(1)
-                .should('be.visible')
-                .and('contain', 'This field is required');
-            cy.get('.form-error')
-                .eq(2)
-                .should('be.visible')
-                .and('contain', 'Password must be at least 6 characters long');
+            cy.get('#email').type('johndoe@email.com').clear().blur();
+            cy.get('[data-angular="form-error"]').should('contain', 'This field is required');
+
+            cy.get('#password').type('JohnDoe1').clear().blur();
+            cy.get('[data-angular="form-error"]').should('contain', 'Password must be at least 6 characters long');
         });
 
         it('should have an invalid error span if the fields are touched and invalid', () => {
-            cy.get('#email').type('invalid email');
-            cy.get('#password').type('11111').blur();
+            cy.get('#email').type('invalid email').blur();
+            cy.get('[data-angular="form-error"]').should('contain', 'Enter a valid email');
 
-            cy.get('.form-error')
-                .eq(0)
-                .should('be.visible')
-                .and('contain', 'Enter a valid email');
-            cy.get('.form-error')
-                .eq(1)
-                .should('be.visible')
-                .and('contain', 'Password must be at least 6 characters long');
+            cy.get('#password').type('11111').blur();
+            cy.get('[data-angular="form-error"]').should('contain', 'Password must be at least 6 characters long');
         });
 
         it('should have green left borders if the inputs are valid', () => {
             const [cssProp, cssValue] = ['border-left', '5px solid rgb(66, 169, 72)'];
-
+            
             cy.get('#username')
                 .type('John')
                 .blur()

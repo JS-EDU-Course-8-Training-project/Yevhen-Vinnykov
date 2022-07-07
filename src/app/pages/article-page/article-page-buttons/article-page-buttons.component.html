@@ -39,7 +39,12 @@
         color="primary"
         data-angular="test-like-btn"
     >
-        <mat-icon [color]="isLiked && 'warn'">favorite</mat-icon>
+        <mat-icon 
+            [color]="isLiked && 'warn'"
+            data-angular="likeIcon"
+        >
+            favorite
+        </mat-icon>
         Favorite Article ({{likesCount}})
     </button>
 </mat-card-actions>

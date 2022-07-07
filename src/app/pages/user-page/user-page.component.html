@@ -1,11 +1,27 @@
-<app-banner className="banner user-banner">
+<app-banner 
+    className="banner user-banner"
+    data-angular="user-page-banner"
+>
     <div>
         <img [src]="user?.image" alt="">
-        <mat-card-title class="title">{{user?.username}}</mat-card-title>
-        <mat-card-content class="subtitle">{{user?.bio}}</mat-card-content>
+        <mat-card-title 
+            class="title"
+        >
+            <h3>{{user?.username}}</h3>
+        </mat-card-title>
+        <mat-card-content 
+            class="subtitle"
+        >
+            <p>{{user?.bio}}</p>
+        </mat-card-content>
     </div>
     <div class="button-container">
-        <button *ngIf="isMyself" mat-raised-button color="primary">
+        <button 
+            *ngIf="isMyself" 
+            mat-raised-button 
+            color="primary"
+            data-angular="update-button"
+        >
             <a routerLink="/settings">Update Profile Settings</a>
         </button>
         <button 

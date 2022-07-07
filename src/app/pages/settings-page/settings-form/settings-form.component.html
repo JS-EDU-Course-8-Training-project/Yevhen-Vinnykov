@@ -22,7 +22,11 @@
                 formControlName="username"
                 placeholder="Username"
             >
-            <span class="form-error" *ngIf="!checkIfValid('username')">
+            <span 
+                class="form-error" 
+                *ngIf="!checkIfValid('username')"
+                data-angular="form-error"
+            >
                 This field is required
             </span>
             <textarea 
@@ -47,12 +51,14 @@
             <span 
                 class="form-error"
                 *ngIf="!checkIfValid('email') && !settingsForm.get('email')?.value"
+                data-angular="form-error"
              >
                 This field is required
             </span>
             <span 
                 class="form-error" 
                 *ngIf="settingsForm.get('email')?.errors?.['email']"
+                data-angular="form-error"
             >
                 Enter a valid email
             </span>

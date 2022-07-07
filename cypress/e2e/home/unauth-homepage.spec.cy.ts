@@ -9,15 +9,15 @@ describe('ANUTHORIZED HOME PAGE', () => {
   });
 
   it('should load the home page correctly', () => {
-    cy.get('.home-banner')
+    cy.get('[data-angular="home-banner"]')
       .should('be.visible')
       .and('contain', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
 
-    cy.get('div.mat-tab-labels').should('contain', 'Global Feed');
-    cy.get('div.tags').should('contain', 'Popular Tags');
-    cy.get('app-global-feed').should('be.visible');
+    cy.get('[role="tab"]').should('contain', 'Global Feed');
+    cy.get('[data-angular="tags"]').should('contain', 'Popular Tags');
+    cy.get('[data-angular="global-feed"]').should('be.visible');
 
-    cy.get('div.finished')
+    cy.get('.finished')
       .should('be.visible')
       .and('contain', 'No more articles for now...');
   });
@@ -28,7 +28,7 @@ describe('ANUTHORIZED HOME PAGE', () => {
     cy.intercept('GET', 'http://localhost:3000/api/articles/**/comments', { fixture: "comments.json" })
       .as('getComments');
 
-    cy.get('mat-card.card-container').eq(0).click();
+    cy.get('[data-angular="article-card"]').eq(0).click();
 
     cy.location('pathname').should('contain', '/article/');
   });
@@ -37,16 +37,16 @@ describe('ANUTHORIZED HOME PAGE', () => {
     cy.intercept('GET', 'http://localhost:3000/api/articles?tag=lorem&limit=5&offset=0', { fixture: "articles.json" })
       .as('getArticlesBySlug');
 
-    cy.get('.tag-item').eq(0).click();
+    cy.get('[data-angular="test-tag-div"]').eq(0).click();
 
-    cy.get('div.mat-tab-labels').as('tabs');
+    cy.get('[role="tab"]').as('tabs');
     cy.get('@tabs').should('contain', '#lorem');
-    cy.get('@tabs').find('div:first').click();
+    cy.get('@tabs').contains('Global Feed').click();
     cy.get('@tabs').should('not.contain', '#lorem');
   });
 
   it('should redirect to sign in page if the user tries to like an article', () => {
-    cy.get('.mat-card > header > button').eq(0).click();
+    cy.get('[data-angular="article-card-like-btn"]').eq(0).click();
 
     cy.location('pathname').should('contain', '/sign-in');
     cy.get('.selected').should('contain', 'Sign in');

@@ -1,4 +1,7 @@
-<app-banner className="home-banner banner">
+<app-banner 
+    className="home-banner banner"
+    data-angular="home-banner"
+>
     <mat-card-title class="title">
         Real World
     </mat-card-title>
@@ -16,12 +19,19 @@
                 *ngIf="isAuthorized" 
                 label="Your Feed"
             >
-                <app-your-feed [tabIndex]="tabIndex"></app-your-feed>
+                <app-your-feed
+                    [tabIndex]="tabIndex"
+                    data-angular="your-feed"
+                >
+                </app-your-feed>
             </mat-tab>
-            <mat-tab label="Global Feed">
+            <mat-tab 
+                label="Global Feed"
+            >
                 <app-global-feed
                     [isAuthorized]="isAuthorized" 
                     [tabIndex]="tabIndex"
+                    data-angular="global-feed"
                 >
                 </app-global-feed>
             </mat-tab>
@@ -32,6 +42,7 @@
                 <app-tagged-articles
                     [tabIndex]="tabIndex" 
                     [selectedTag]="selectedTag"
+                    data-angular="tagged-articles"
                 >
                 </app-tagged-articles>
             </mat-tab>
@@ -40,6 +51,7 @@
     <app-tags 
         [tabIndex]="tabIndex" 
         (selectedTagEmmiter)="handleSelectTag($event)"
+        data-angular="tags"
     >
     </app-tags>
 </div>

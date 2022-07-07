@@ -1,4 +1,9 @@
-<a [class]="className" mat-button routerLink="/user/{{authUser?.username}}">
+<a 
+    [class]="className" 
+    mat-button 
+    routerLink="/user/{{authUser?.username}}"
+    data-angular="user-page-link"
+>
     {{authUser?.username}}
     <img [src]="authUser?.image" alt="">
 </a>

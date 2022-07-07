@@ -1,7 +1,15 @@
 <app-banner className="article-banner banner">
     <div class="banner-container">
-        <mat-card-title class="title">{{article?.title}}</mat-card-title>
-        <div class="banner-actions">
+        <mat-card-title 
+            class="title" 
+            data-angular="article-title"
+        >
+            {{article?.title}}
+        </mat-card-title>
+        <div
+            class="banner-actions"
+            data-angular="banner-actions"
+          >
                 <a routerLink="/user/{{article?.author?.username}}">
                     <img src="{{article?.author?.image}}" alt="">
                     <div>

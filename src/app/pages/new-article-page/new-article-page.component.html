@@ -10,7 +10,12 @@
                 formControlName="title"
                 placeholder="Article Title"
             >
-            <span class="" *ngIf="!checkIfValid('title')">This field is required</span>
+            <span 
+                angular-data="invalid-form-error" 
+                *ngIf="!checkIfValid('title')"
+            >
+                This field is required
+            </span>
             <input 
                 type="text" 
                 class="form-control" 
@@ -20,7 +25,12 @@
                 formControlName="description" 
                 placeholder="What's this article about?"
             >
-            <span *ngIf="!checkIfValid('description')">This field is required</span>
+            <span 
+            angular-data="invalid-form-error" 
+            *ngIf="!checkIfValid('description')"
+            >
+            This field is required
+            </span>
             <textarea 
                 type="text" 
                 class="form-control" 
@@ -29,8 +39,13 @@
                 required 
                 formControlName="body"
                 placeholder="Write your article">
-        </textarea>
-            <span *ngIf="!checkIfValid('body')">This field is required</span>
+            </textarea>
+            <span 
+                angular-data="invalid-form-error" 
+                *ngIf="!checkIfValid('body')"
+            >
+                This field is required
+            </span>
             <input 
                 type="text" 
                 class="form-control" 
@@ -39,13 +54,19 @@
                 required 
                 formControlName="tagList"
                 placeholder="Tags">
-            <span class="" *ngIf="!checkIfValid('tagList')">This field is required</span>
+            <span 
+                angular-data="invalid-form-error" 
+                *ngIf="!checkIfValid('tagList')"
+            >
+                This field is required
+            </span>
             <button 
                 [disabled]="!articleForm.valid || !this.articleForm.touched && !isEditMode" 
                 align="end" 
                 type="submit" 
                 mat-raised-button 
                 color="primary"
+                data-angular="publish-btn"
             >
             Publish
         </button>
