@@ -28,8 +28,7 @@ describe('NEW ARTICLE PAGE', () => {
             formInputs.forEach((input, index) => {
                 cy.get('[angular-data="invalid-form-error"]')
                     .eq(index)
-                    .should('be.visible')
-                    .and('contain', 'This field is required');
+                    .should('contain.text', 'This field is required');
             });
         });
 

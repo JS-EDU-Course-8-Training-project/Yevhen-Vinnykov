@@ -22,10 +22,15 @@
                 color="primary"
                 data-angular="test-delete-icon"
             >
-                <span *ngIf="!commentsBeingDeletedIds.includes(comment.id)">delete</span>
+                <span 
+                    *ngIf="!commentsBeingDeletedIds.includes(comment.id)"
+                >
+                    delete
+                </span>
                 <mat-spinner 
                     diameter="25" 
                     *ngIf="commentsBeingDeletedIds.includes(comment.id)"
+                    data-angular="loading-spinner"
                 >
                 </mat-spinner>
             </mat-icon>

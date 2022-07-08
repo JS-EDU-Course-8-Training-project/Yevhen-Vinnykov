@@ -3,21 +3,19 @@ describe('SING IN PAGE', () => {
         cy.visit('/sign-in');
     });
 
-    it('should have a title', () => {
-        cy.get('h2').should('have.text', 'Sign In');
+    beforeEach(() => {
+        cy.get('[data-angular="sign-in-button"]').as('signInBtn');
     });
 
-    it('should have a link redirect to the sign up page', () => {
+    it('should have a title and a link redirect to the sign up page', () => {
+        cy.get('h2').should('have.text', 'Sign In');
+
         cy.get('form').find('[data-angular="sign-up-link"]')
             .should('have.text', ' Need an account? ')
             .and('have.attr', 'href', '/sign-up');
     });
 
     describe('SIGN-IN BUTTON', () => {
-        beforeEach(() => {
-            cy.get('[data-angular="sign-in-button"]').as('signInBtn');
-        });
-
         it('should be disabled if the form is empty', () => {
             cy.get('@signInBtn').should('be.disabled');
         });
@@ -31,27 +29,11 @@ describe('SING IN PAGE', () => {
         it('should be enabled if the form is valid', () => {
             cy.get('#email').type('johndoe@email.com');
             cy.get('#password').type('JohnDoe1');
-            cy.get('@signInBtn').should('not.be.disabled');
+            cy.get('@signInBtn').should('be.enabled');
         });
     });
 
     describe('SIGN-IN FORM', () => {
-        it('should have a required error span if the fields are touched and empty', () => {
-            cy.get('#email').type('johndoe@email.com').clear().blur();
-            cy.get('[data-angular="form-error"]').should('contain', 'This field is required');
-
-            cy.get('#password').type('JohnDoe1').clear().blur();
-            cy.get('[data-angular="form-error"]').should('contain', 'Password must be at least 6 characters long');
-        });
-
-        it('should have an invalid error span if the fields are touched and invalid', () => {
-            cy.get('#email').type('invalid email');
-            cy.get('[data-angular="form-error"]').should('contain', 'Enter a valid email');
-
-            cy.get('#password').type('1111').blur();
-            cy.get('[data-angular="form-error"]').should('contain', 'Password must be at least 6 characters long');
-        });
-
         it('should have green left borders if the inputs are valid', () => {
             const [cssProp, cssValue] = ['border-left', '5px solid rgb(66, 169, 72)'];
             cy.get('#email')
@@ -68,9 +50,45 @@ describe('SING IN PAGE', () => {
         it('should redirect to home if the the credentials are valid', () => {
             cy.get('#email').type('john@example.com');
             cy.get('#password').type('Password1');
-            cy.get('[data-angular="sign-in-button"]').click();
+            cy.get('@signInBtn').click();
 
             cy.location('pathname').should('eq', '/');
+        });
+
+        describe('ERRORS', () => {
+            const errorSpan = '[data-angular="form-error"]';
+
+            it('should have a required error span if the fields are touched and empty', () => {
+                cy.get('#email').type('johndoe@email.com').clear().blur();
+                cy.get(errorSpan).should('contain.text', 'This field is required');
+
+                cy.get('#password').type('JohnDoe1').clear().blur();
+                cy.get(errorSpan).should('contain.text', 'Password must be at least 6 characters long');
+            });
+
+            it('should have an invalid error span if the fields are touched and invalid', () => {
+                cy.get('#email').type('invalid email');
+                cy.get(errorSpan).should('contain.text', 'Enter a valid email');
+
+                cy.get('#password').type('1111').blur();
+                cy.get(errorSpan).should('contain.text', 'Password must be at least 6 characters long');
+            });
+
+            it('should show an error if the user doesn\'t exist', () => {
+                cy.get('#email').type('userdoesntexist@gmail.com');
+                cy.get('#password').type('Password1');
+                cy.get('@signInBtn').click();
+
+                cy.get(errorSpan).should('contain.text', ' Error:  User not found ');
+            });
+
+            it('should show an error if the password is not correct', () => {
+                cy.get('#email').type('john@example.com');
+                cy.get('#password').type('WrongPassword');
+                cy.get('@signInBtn').click();
+
+                cy.get(errorSpan).should('contain.text', ' Error:  Email or password is not valid ');
+            });
         });
     });
 });

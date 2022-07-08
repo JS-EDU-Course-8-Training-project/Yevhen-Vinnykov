@@ -91,11 +91,8 @@ describe('ARTICLE PAGE', () => {
         beforeEach(() => {
             cy.get('[data-angular="post-comment-btn"]').as('postCommentBtn')
         });
-        it('should have the comment form', () => {
+        it('should have the comment form with a textarea', () => {
             cy.get('[data-angular="comment-form"]').should('be.visible');
-        });
-
-        it('should have a textarea', () => {
             cy.get('#body').and('have.attr', 'placeholder', 'Write a comment...');
         });
 
@@ -106,14 +103,13 @@ describe('ARTICLE PAGE', () => {
         it('should add a comment', () => {
             cy.get('#body').type('Test comment');
             cy.get('@postCommentBtn').click();
-            
-            cy.get('[data-angular="comment"]')
-                .should('be.visible')
-                .and('contain.text', 'Test comment');
+
+            cy.get('[data-angular="comment"]').should('contain.text', 'Test comment');
         });
 
         it('should delete a comment', () => {
             cy.get('[data-angular="test-delete-icon"]').each((icon) => icon.click());
+            cy.get('[data-angular="loading-spinner"]').should('be.visible');
         });
     });
 });

@@ -9,17 +9,18 @@ describe('ANUTHORIZED HOME PAGE', () => {
   });
 
   it('should load the home page correctly', () => {
+    cy.get('[data-angular="loading-spinner"]').should('be.visible');
+
     cy.get('[data-angular="home-banner"]')
-      .should('be.visible')
-      .and('contain', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
+      .should('contain.text', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
 
     cy.get('[role="tab"]').should('contain', 'Global Feed');
     cy.get('[data-angular="tags"]').should('contain', 'Popular Tags');
     cy.get('[data-angular="global-feed"]').should('be.visible');
 
-    cy.get('.finished')
-      .should('be.visible')
-      .and('contain', 'No more articles for now...');
+    cy.get('.finished').should('contain.text', 'No more articles for now...');
+
+    cy.get('[data-angular="loading-spinner"]').should('not.exist');
   });
 
   it('should redirect to article page once the article card is clicked', () => {

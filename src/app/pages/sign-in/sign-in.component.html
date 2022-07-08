@@ -9,7 +9,13 @@
                 Need an account?
             </a>
             <div *ngIf="errors.length">
-                <div class="form-error" *ngFor="let error of errors">{{error}}</div>
+                <div 
+                    class="form-error" 
+                    *ngFor="let error of errors"
+                    data-angular="form-error"
+                >
+                    {{error}}  
+                </div>
             </div>
             <input 
                 type="text" 
