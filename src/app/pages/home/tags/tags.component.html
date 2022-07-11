@@ -6,7 +6,7 @@
             (click)="selectTag(tag)" 
             [class]="tag === selectedTag ? 'tag-item selected' : 'tag-item'" 
             *ngFor="let tag of tags"
-            data-angular="test-tag-div"
+            [e2e]="TestAttributes.Tag"
         >
         {{tag}}
     </div>

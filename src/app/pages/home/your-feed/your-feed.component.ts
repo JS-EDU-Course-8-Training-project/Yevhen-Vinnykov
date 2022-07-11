@@ -1,15 +1,16 @@
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { BehaviorSubject, catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
-import { 
-  Component, 
-  Input, 
-  OnChanges, 
-  OnDestroy, 
-  ViewChildren, 
-  ElementRef, 
-  QueryList, 
-  AfterViewInit, 
-  ChangeDetectionStrategy, 
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  ViewChildren,
+  ElementRef,
+  QueryList,
+  AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -22,7 +23,7 @@ import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/i
   styleUrls: ['./your-feed.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
+export class YourFeedComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
   @Input() tabIndex!: number;
 
@@ -39,9 +40,11 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
 
   constructor(
     private articlesService: ArticlesService,
-    private infiniteScroll: InfiniteScrollService, 
+    private infiniteScroll: InfiniteScrollService,
     private cdRef: ChangeDetectorRef
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.reset();
@@ -90,8 +93,8 @@ export class YourFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
     this.cdRef.detectChanges();
-    
-    return of({articles: [], articlesCount: 0});
+
+    return of({ articles: [], articlesCount: 0 });
   }
 
   private nextPage() {

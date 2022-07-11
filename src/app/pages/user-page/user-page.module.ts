@@ -11,6 +11,7 @@ import { UserPageComponent } from './user-page.component';
 import { MyArticlesComponent } from './my-articles/my-articles.component';
 import { FavoritedArticlesComponent } from './favorited-articles/favorited-articles.component';
 import { ArticleListModule } from '../../components/article-list/article-list.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { ArticleListModule } from '../../components/article-list/article-list.mo
     MatProgressSpinnerModule,
     BannerModule,
     MatButtonModule,
-    ArticleListModule
+    ArticleListModule,
+    SharedModule,
   ]
 })
 export class UserPageModule { }

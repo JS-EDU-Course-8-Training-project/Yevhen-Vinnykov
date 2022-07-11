@@ -1,9 +1,10 @@
-import {catchError, Subject, takeUntil} from 'rxjs';
-import {IArticle, IArticleResponse} from '../../shared/models/IArticle';
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ArticlesService} from 'src/app/shared/services/articles/articles.service';
-import {AuthorizationService} from 'src/app/shared/services/authorization/authorization.service';
-import {RedirectionService} from 'src/app/shared/services/redirection/redirection.service';
+import { catchError, Subject, takeUntil } from 'rxjs';
+import { IArticle, IArticleResponse } from '../../shared/models/IArticle';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
+import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-article-list',
@@ -11,7 +12,7 @@ import {RedirectionService} from 'src/app/shared/services/redirection/redirectio
   styleUrls: ['./article-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ArticleListComponent implements OnInit, OnDestroy {
+export class ArticleListComponent extends TestedComponent implements OnInit, OnDestroy {
   @Input() article!: IArticle;
   public isLiked!: boolean;
   public isPending: boolean = false;
@@ -24,7 +25,9 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     private redirectionService: RedirectionService,
     private authorizationService: AuthorizationService,
     private cdRef: ChangeDetectorRef
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.likesCount = this.article.favoritesCount;
@@ -50,10 +53,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.articlesService[method](slug).pipe(takeUntil(this.notifier))
       .pipe(catchError((err): any => console.log(err)))
       .subscribe((article: IArticleResponse | any) => {
-          this.isLiked = article.favorited;
-          this.isPending = false;
-          this.likesCount = article.favoritesCount;
-          this.cdRef.detectChanges();
+        this.isLiked = article.favorited;
+        this.isPending = false;
+        this.likesCount = article.favoritesCount;
+        this.cdRef.detectChanges();
       });
   }
 }

@@ -1,18 +1,22 @@
 <app-banner 
     className="banner user-banner"
-    data-angular="user-page-banner"
+    [e2e]="TestAttributes.UserPageBanner"
 >
     <div>
-        <img [src]="user?.image" alt="">
+        <img 
+            [src]="user?.image" 
+            alt=""
+            [e2e]="TestAttributes.UserPageImg"
+        >
         <mat-card-title 
             class="title"
         >
-            <h3>{{user?.username}}</h3>
+            <h3 [e2e]="TestAttributes.UserPageUsername">{{user?.username}}</h3>
         </mat-card-title>
         <mat-card-content 
             class="subtitle"
         >
-            <p>{{user?.bio}}</p>
+            <p [e2e]="TestAttributes.UserPageBio">{{user?.bio}}</p>
         </mat-card-content>
     </div>
     <div class="button-container">
@@ -20,7 +24,7 @@
             *ngIf="isMyself" 
             mat-raised-button 
             color="primary"
-            data-angular="update-button"
+            [e2e]="TestAttributes.UserPageUpdateBtn"
         >
             <a routerLink="/settings">Update Profile Settings</a>
         </button>
@@ -30,7 +34,7 @@
             *ngIf="!isMyself" 
             mat-raised-button 
             color="primary"
-            data-angular="test-follow-button"
+            [e2e]="TestAttributes.UserPageFollowBtn"
         >
             {{ isFollowed ? 'Unfollow' : 'Follow' }} {{user?.username}}
         </button>
@@ -41,14 +45,20 @@
         (focusChange)="this.tabIndex = $event.index"
         [selectedIndex]="tabIndex"
     >
-        <mat-tab label="My Articles">
+        <mat-tab 
+            label="My Articles"
+            [e2e]="TestAttributes.MyArticlesTab"
+        >
             <app-my-articles 
                 [tabIndex]="tabIndex" 
                 [username]="urlUsername"
             >
             </app-my-articles>
         </mat-tab>
-        <mat-tab label="Favorited Articles">
+        <mat-tab
+            label="Favorited Articles"
+            [e2e]="TestAttributes.FavoritedArticlesTab"
+        >
             <app-favorited-articles 
                 [tabIndex]="tabIndex" 
                 [username]="urlUsername"

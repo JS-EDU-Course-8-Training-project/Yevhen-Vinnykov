@@ -1,10 +1,10 @@
 <div>
     <form [formGroup]="signupForm" (ngSubmit)="handleSignup()">
         <div class="form-group">
-            <h2 data-angular="form-title">Sign Up</h2>
+            <h2 [e2e]="TestAttributes.FormTitle">Sign Up</h2>
             <a 
                 routerLink="/sign-in"
-                data-angular="sign-in-link"
+                [e2e]="TestAttributes.SignInLink"
             >
                 Already have an account?
             </a>
@@ -12,7 +12,7 @@
                 <div 
                     class="form-error" 
                     *ngFor="let error of errors"
-                    data-angular="form-error"
+                    [e2e]="TestAttributes.FormError"
                 >
                     {{error}}
                 </div>
@@ -25,12 +25,13 @@
                 required
                 formControlName="username"
                 placeholder="Username"
+                [e2e]="TestAttributes.UsernameInput"
             >
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('username')"
-                data-angular="form-error"
-            >
+                [e2e]="TestAttributes.FormError"
+                >
                 This field is required
             </span>
             <input 
@@ -41,19 +42,20 @@
                 required 
                 formControlName="email"
                 placeholder="Email"
+                [e2e]="TestAttributes.EmailInput"
             >
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('email') && !signupForm.get('email')?.value"
-                data-angular="form-error"
-            >
+                [e2e]="TestAttributes.FormError"
+                >
                 This field is required
             </span>
             <span 
                 class="form-error" 
                 *ngIf="signupForm.get('email')?.errors?.['email']"
-                data-angular="form-error"
-            >
+                [e2e]="TestAttributes.FormError"
+                >
                 Enter a valid email
             </span>
             <input 
@@ -64,12 +66,13 @@
                 required
                 formControlName="password" 
                 placeholder="Password"
+                [e2e]="TestAttributes.PasswordInput"
             >
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('password')"
-                data-angular="form-error"
-            >
+                [e2e]="TestAttributes.FormError"
+                >
                 Password must be at least 6 characters long
             </span>
             <button 
@@ -78,7 +81,7 @@
                 type="submit"
                 mat-raised-button
                 color="primary"
-                data-angular="sign-up-button"
+                [e2e]="TestAttributes.SignUpBtn"
             >
                 <span *ngIf="!isPending">Sign Up</span>
                 <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>

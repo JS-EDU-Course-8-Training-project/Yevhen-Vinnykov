@@ -9,9 +9,10 @@
                 required 
                 formControlName="title"
                 placeholder="Article Title"
+                [e2e]="TestAttributes.ArticleTitleInput"
             >
             <span 
-                angular-data="invalid-form-error" 
+                [e2e]="TestAttributes.FormError"
                 *ngIf="!checkIfValid('title')"
             >
                 This field is required
@@ -24,12 +25,13 @@
                 required
                 formControlName="description" 
                 placeholder="What's this article about?"
+                [e2e]="TestAttributes.ArticleDescriptionInput"
             >
             <span 
-            angular-data="invalid-form-error" 
-            *ngIf="!checkIfValid('description')"
+                [e2e]="TestAttributes.FormError"
+                *ngIf="!checkIfValid('description')"
             >
-            This field is required
+                This field is required
             </span>
             <textarea 
                 type="text" 
@@ -38,10 +40,12 @@
                 name="body" 
                 required 
                 formControlName="body"
-                placeholder="Write your article">
+                placeholder="Write your article"
+                [e2e]="TestAttributes.ArticleBodyInput"
+            >
             </textarea>
             <span 
-                angular-data="invalid-form-error" 
+                [e2e]="TestAttributes.FormError"
                 *ngIf="!checkIfValid('body')"
             >
                 This field is required
@@ -53,9 +57,11 @@
                 name="tagList" 
                 required 
                 formControlName="tagList"
-                placeholder="Tags">
+                placeholder="Tags"
+                [e2e]="TestAttributes.ArticleTagListInput"
+            >
             <span 
-                angular-data="invalid-form-error" 
+                [e2e]="TestAttributes.FormError" 
                 *ngIf="!checkIfValid('tagList')"
             >
                 This field is required
@@ -66,7 +72,7 @@
                 type="submit" 
                 mat-raised-button 
                 color="primary"
-                data-angular="publish-btn"
+                [e2e]="TestAttributes.PublishBtn"
             >
             Publish
         </button>

@@ -2,13 +2,14 @@ import { AuthorizationService } from 'src/app/shared/services/authorization/auth
 import { BehaviorSubject, Subject, takeUntil, filter } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent extends TestedComponent implements OnInit {
   public isAuthorized$: BehaviorSubject<boolean> = this.authorizationService.isAuthorized$;
   public url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
   private notifier: Subject<void> = new Subject<void>();
@@ -16,7 +17,9 @@ export class NavbarComponent implements OnInit {
   constructor(
     private authorizationService: AuthorizationService,
     private router: Router
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.authorizationService.checkIfAuthorized();

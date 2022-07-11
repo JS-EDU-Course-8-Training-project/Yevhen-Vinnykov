@@ -4,13 +4,14 @@ import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-my-articles',
   templateUrl: './my-articles.component.html',
   styleUrls: ['./my-articles.component.scss']
 })
-export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit {
+export class MyArticlesComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
 
   @Input() username!: string;
@@ -30,7 +31,9 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   constructor(
     private articlesService: ArticlesService,
     private infiniteScroll: InfiniteScrollService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.reset();
@@ -80,7 +83,7 @@ export class MyArticlesComponent implements OnChanges, OnDestroy, AfterViewInit 
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
-    
+
     return of({ articles: [], articlesCount: 0 });
   }
 

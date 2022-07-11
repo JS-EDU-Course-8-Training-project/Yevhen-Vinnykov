@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 type TSigninControls = 'email' | 'password';
 
@@ -14,7 +15,7 @@ type TSigninControls = 'email' | 'password';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
 })
-export class SignInComponent implements OnInit, OnDestroy {
+export class SignInComponent extends TestedComponent implements OnInit, OnDestroy {
   public signinForm!: FormGroup;
   public errors: string[] = [];
   public isPending: boolean = false;
@@ -24,7 +25,9 @@ export class SignInComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private usersService: UsersService,
     private redirectionService: RedirectionService,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.signinForm = this.fb.group({
@@ -66,7 +69,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   public handleSignin(): void {
     this.onSubmit();
-    
+
     this.usersService.signIn(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

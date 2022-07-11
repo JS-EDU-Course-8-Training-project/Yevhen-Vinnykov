@@ -2,7 +2,13 @@
     <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()">
         <div class="form-group">
             <div *ngIf="errors.length">
-                <div class="form-error" *ngFor="let error of errors">{{error}}</div>
+                <div 
+                    class="form-error" 
+                    *ngFor="let error of errors"
+                    [e2e]="TestAttributes.FormError"
+                >
+                    {{error}}
+                </div>
             </div>
             <input 
                 type="text" 
@@ -12,6 +18,7 @@
                 required 
                 formControlName="image"
                 placeholder="User photo URL"
+                [e2e]="TestAttributes.ImageInput"
             >
             <input 
                 type="text" 
@@ -21,11 +28,12 @@
                 required 
                 formControlName="username"
                 placeholder="Username"
+                [e2e]="TestAttributes.UsernameInput"
             >
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('username')"
-                data-angular="form-error"
+                [e2e]="TestAttributes.FormError"
             >
                 This field is required
             </span>
@@ -37,6 +45,7 @@
                 required 
                 formControlName="bio"
                 placeholder="Bio"
+                [e2e]="TestAttributes.BioInput"
             >
             </textarea>
             <input 
@@ -47,18 +56,19 @@
                 required 
                 formControlName="email"
                 placeholder="Email"
+                [e2e]="TestAttributes.EmailInput"
             >
             <span 
                 class="form-error"
                 *ngIf="!checkIfValid('email') && !settingsForm.get('email')?.value"
-                data-angular="form-error"
+                [e2e]="TestAttributes.FormError"
              >
                 This field is required
             </span>
             <span 
                 class="form-error" 
                 *ngIf="settingsForm.get('email')?.errors?.['email']"
-                data-angular="form-error"
+                [e2e]="TestAttributes.FormError"
             >
                 Enter a valid email
             </span>
@@ -70,6 +80,7 @@
                 required
                 formControlName="password"  
                 placeholder="New password"
+                [e2e]="TestAttributes.PasswordInput"
             >
             <div class="form-group-actions">
                 <button 
@@ -78,7 +89,7 @@
                     type="submit" 
                     mat-raised-button 
                     color="primary"
-                    data-angular="test-update-button"
+                    [e2e]="TestAttributes.SettingsUpdateBtn"
                 >
                     <span *ngIf="!isPending">Update</span>
                     <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
@@ -89,7 +100,7 @@
                     type="button" 
                     mat-raised-button 
                     color="warn"
-                    data-angular="test-logout-button"
+                    [e2e]="TestAttributes.SettingsLogoutBtn"
                 >
                     Logout
                  </button>

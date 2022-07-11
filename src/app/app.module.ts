@@ -19,6 +19,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 
 import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -42,7 +43,8 @@ import { AuthorizationInterceptor } from './shared/interceptors/authorization.in
     BannerModule,
     HomeModule,
     ArticleListModule,
-    MatDialogModule
+    MatDialogModule,
+    SharedModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true },

@@ -1,22 +1,30 @@
-<mat-card class="card-container" data-angular="article-card">
+<mat-card 
+    class="card-container" 
+    [e2e]="TestAttributes.ArticleCard"
+>
     <header>
         <div
             class="info" 
-            data-angular="article-card-info"
+            [e2e]="TestAttributes.ArticleCardInfo"
          >
             <a routerLink="/user/{{article.author.username}}">
                 <img 
                     src="{{article.author.image}}" 
                     alt="" 
+                    [e2e]="TestAttributes.ArticleCardAuthorImg"
                 >
             </a>
             <div>
                 <a routerLink="/user/{{article.author.username}}">
-                    <h3>{{article.author.username}}</h3>
+                    <h3 
+                        [e2e]="TestAttributes.ArticleCardAuthorName"
+                    >
+                        {{article.author.username}}
+                    </h3>
                 </a>
                 <p 
                     class="text-secondary"
-                    data-angular="article-card-date"
+                    [e2e]="TestAttributes.ArticleCardDate"
                 >
                     {{article.createdAt | date}}
                 </p>
@@ -26,11 +34,11 @@
             [disabled]="isPending" 
             (click)="handleLikeDislike(article.slug)" 
             mat-stroked-button
-            data-angular="article-card-like-btn"
+            [e2e]="TestAttributes.ArticleCardLikeBtn"
         >
             <mat-icon 
                 [color]="isLiked && 'warn'"
-                data-angular="article-card-like-icon"
+                [e2e]="TestAttributes.ArticleCardLikeIcon"
             >
                 favorite
             </mat-icon>
@@ -39,18 +47,28 @@
     </header>
     <div class="card-content">
         <a routerLink="/article/{{article.slug}}">
-            <h2 data-angular="article-title">
+            <h2 [e2e]="TestAttributes.ArticleCardTitle">
                 {{article.title}}
             </h2>
-            <p data-angular="article-card-description">{{article.description}}</p>
+            <p 
+                [e2e]="TestAttributes.ArticleCardDescription"
+            >
+                {{article.description}}
+            </p>
             <div 
                 class="card-footer" 
-                data-angular="article-card-footer"
+                [e2e]="TestAttributes.ArticleCardFooter"
             >
-                <a class="text-secondary" routerLink="/article/{{article.slug}}">Read more...</a>
+                <a 
+                    class="text-secondary" 
+                    routerLink="/article/{{article.slug}}"
+                    [e2e]="TestAttributes.ArticleCardReadMoreLink"
+                >
+                    Read more...
+                </a>
                 <div 
                     class="tags" 
-                    data-angular="article-card-tags"
+                    [e2e]="TestAttributes.ArticleCardTags"
                 >
                     <div class="tag" *ngFor="let tag of article.tagList">{{tag}}</div>
                 </div>

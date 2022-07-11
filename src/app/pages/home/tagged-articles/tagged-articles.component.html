@@ -17,9 +17,14 @@
         [ngStyle]="{'margin': '10px auto'}" 
         *ngIf="isLoading" 
         diameter="50"
+        [e2e]="TestAttributes.LoadingSpinner"
     >
     </mat-spinner>
-    <div class="finished" *ngIf="isFinished">
+    <div 
+        class="finished" 
+        *ngIf="isFinished"
+        [e2e]="TestAttributes.AllArticlesLoaded"
+    >
         <div>No more articles for now...</div>
     </div>
 </ng-container>

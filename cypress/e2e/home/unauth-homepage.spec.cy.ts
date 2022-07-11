@@ -1,3 +1,5 @@
+import { homepage } from './../../support/page-objects/home/homepage';
+
 describe('ANUTHORIZED HOME PAGE', () => {
   beforeEach(() => {
     cy.intercept('GET', 'http://localhost:3000/api/articles/?offset=0&limit=5', { fixture: "articles.json" })
@@ -9,18 +11,20 @@ describe('ANUTHORIZED HOME PAGE', () => {
   });
 
   it('should load the home page correctly', () => {
-    cy.get('[data-angular="loading-spinner"]').should('be.visible');
+    homepage.loadingSpinner.should('be.visible');
 
-    cy.get('[data-angular="home-banner"]')
+    cy.getByTestAttr('home-page-banner')
       .should('contain.text', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
 
-    cy.get('[role="tab"]').should('contain', 'Global Feed');
-    cy.get('[data-angular="tags"]').should('contain', 'Popular Tags');
-    cy.get('[data-angular="global-feed"]').should('be.visible');
+    homepage.globalFeedTab.should('contain.text', 'Global Feed');
+    homepage.yourFeedTab.should('not.exist');
 
-    cy.get('.finished').should('contain.text', 'No more articles for now...');
+    homepage.allTags.should('contain.text', 'Popular Tags');
+    homepage.globalFeed.should('be.visible');
 
-    cy.get('[data-angular="loading-spinner"]').should('not.exist');
+    cy.getByTestAttr('all-articles-loaded').should('contain.text', 'No more articles for now...');
+
+    homepage.loadingSpinner.should('not.exist');
   });
 
   it('should redirect to article page once the article card is clicked', () => {
@@ -29,7 +33,7 @@ describe('ANUTHORIZED HOME PAGE', () => {
     cy.intercept('GET', 'http://localhost:3000/api/articles/**/comments', { fixture: "comments.json" })
       .as('getComments');
 
-    cy.get('[data-angular="article-card"]').eq(0).click();
+    homepage.articleCard.click();
 
     cy.location('pathname').should('contain', '/article/');
   });
@@ -38,18 +42,16 @@ describe('ANUTHORIZED HOME PAGE', () => {
     cy.intercept('GET', 'http://localhost:3000/api/articles?tag=lorem&limit=5&offset=0', { fixture: "articles.json" })
       .as('getArticlesBySlug');
 
-    cy.get('[data-angular="test-tag-div"]').eq(0).click();
+    homepage.tag.eq(0).click();
 
-    cy.get('[role="tab"]').as('tabs');
-    cy.get('@tabs').should('contain', '#lorem');
-    cy.get('@tabs').contains('Global Feed').click();
-    cy.get('@tabs').should('not.contain', '#lorem');
+    homepage.taggedArticlesTab.should('contain.text', '#lorem');
+    homepage.globalFeedTab.click();
+    homepage.taggedArticlesTab.should('not.exist');
   });
 
   it('should redirect to sign in page if the user tries to like an article', () => {
-    cy.get('[data-angular="article-card-like-btn"]').eq(0).click();
+    homepage.likeButton.eq(0).click();
 
     cy.location('pathname').should('contain', '/sign-in');
-    cy.get('.selected').should('contain', 'Sign in');
   });
 })

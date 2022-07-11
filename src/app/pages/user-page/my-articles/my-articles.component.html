@@ -22,7 +22,11 @@
         diameter="50"
      >
     </mat-spinner>
-    <div class="finished" *ngIf="isFinished">
+    <div 
+        class="finished" 
+        *ngIf="isFinished"
+        [e2e]="TestAttributes.AllArticlesLoaded"
+        >
         <div>No more articles for now...</div>
     </div>
 </ng-container>

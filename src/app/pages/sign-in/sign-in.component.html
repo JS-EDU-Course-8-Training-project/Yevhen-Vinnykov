@@ -1,10 +1,10 @@
 <div>
     <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
         <div class="form-group">
-            <h2 data-angular="form-title">Sign In</h2>
+            <h2 [e2e]="TestAttributes.FormTitle">Sign In</h2>
             <a
                 routerLink="/sign-up"
-                data-angular="sign-up-link"
+                [e2e]="TestAttributes.SignUpLink"
             >
                 Need an account?
             </a>
@@ -12,7 +12,7 @@
                 <div 
                     class="form-error" 
                     *ngFor="let error of errors"
-                    data-angular="form-error"
+                    [e2e]="TestAttributes.FormError"
                 >
                     {{error}}  
                 </div>
@@ -25,18 +25,19 @@
                 required 
                 formControlName="email"
                 placeholder="Email"
+                [e2e]="TestAttributes.EmailInput"
             >
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('email') && !signinForm.get('email')?.value"
-                data-angular="form-error"
+                [e2e]="TestAttributes.FormError"
             >
                 This field is required
             </span>
             <span 
                 class="form-error" 
                 *ngIf="signinForm.get('email')?.errors?.['email']"
-                data-angular="form-error"
+                [e2e]="TestAttributes.FormError"
             >
                 Enter a valid email
             </span>
@@ -48,11 +49,12 @@
                 required
                 formControlName="password" 
                 placeholder="Password"
+                [e2e]="TestAttributes.PasswordInput"
             >
             <span 
                 class="form-error" 
                 *ngIf="!checkIfValid('password')"
-                data-angular="form-error"
+                [e2e]="TestAttributes.FormError"
             >
                 Password must be at least 6 characters long
             </span>
@@ -61,7 +63,7 @@
                 align="end" 
                 type="submit"
                 mat-raised-button color="primary"
-                data-angular="sign-in-button"
+                [e2e]="TestAttributes.SignInBtn"
             >
                 <span *ngIf="!isPending">Sign In</span>
                 <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>

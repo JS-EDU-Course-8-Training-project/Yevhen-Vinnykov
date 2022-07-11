@@ -1,3 +1,4 @@
+import { SharedModule } from './../../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -30,7 +31,8 @@ import { HomeComponent } from './home.component';
     MatTabsModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    BannerModule
+    BannerModule,
+    SharedModule,
   ],
 })
 export class HomeModule { }

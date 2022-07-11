@@ -8,6 +8,7 @@ import { SettingsPageRoutingModule } from './settings-page-routing.module';
 
 import { SettingsPageComponent } from './settings-page.component';
 import { SettingsFormComponent } from './settings-form/settings-form.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SettingsFormComponent } from './settings-form/settings-form.component';
     ReactiveFormsModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    ConfirmationDialogModule
+    ConfirmationDialogModule,
+    SharedModule,
   ]
 })
 export class SettingsPageModule { }

@@ -8,6 +8,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
   styleUrls: ['./user-page.component.scss']
 })
 
-export class UserPageComponent implements OnInit, OnDestroy {
+export class UserPageComponent extends TestedComponent implements OnInit, OnDestroy {
   public user!: IExistingUser | IProfile;
   public tabIndex: number = 0;
   public urlUsername!: string;
@@ -32,7 +33,9 @@ export class UserPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private authorizationService: AuthorizationService,
     private redirectionService: RedirectionService,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.setUserData();
@@ -79,7 +82,7 @@ export class UserPageComponent implements OnInit, OnDestroy {
     if (!this.isAuthorized) return this.redirectUnauthorized();
 
     this.followingInProgress = true;
-    
+
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
   }

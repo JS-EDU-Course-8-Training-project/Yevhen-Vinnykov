@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { INewUser } from 'src/app/shared/models/INewUser';
 import { HttpErrorResponse } from '@angular/common/http';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 type TSignupControls = 'username' | 'email' | 'password';
 
@@ -14,7 +15,7 @@ type TSignupControls = 'username' | 'email' | 'password';
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent extends TestedComponent implements OnInit {
   public signupForm!: FormGroup;
   public errors: string[] = [];
   public isPending: boolean = false;
@@ -24,7 +25,9 @@ export class SignUpComponent implements OnInit {
     private fb: FormBuilder,
     private usersService: UsersService,
     private redirectionService: RedirectionService,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
@@ -67,7 +70,7 @@ export class SignUpComponent implements OnInit {
 
   public handleSignup(): void {
     this.onSubmit();
-    
+
     this.usersService.createUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

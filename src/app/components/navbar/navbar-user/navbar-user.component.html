@@ -2,7 +2,7 @@
     [class]="className" 
     mat-button 
     routerLink="/user/{{authUser?.username}}"
-    data-angular="user-page-link"
+    [e2e]="TestAttributes.NavUserPageLink"
 >
     {{authUser?.username}}
     <img [src]="authUser?.image" alt="">

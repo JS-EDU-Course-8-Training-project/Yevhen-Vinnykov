@@ -1,3 +1,5 @@
+import { newArticlePage as editArticlePage } from './../../support/page-objects/articles/new-article-page';
+
 describe('NEW ARTICLE PAGE', () => {
     beforeEach(() => {
         cy.login();
@@ -5,31 +7,31 @@ describe('NEW ARTICLE PAGE', () => {
         cy.visit('/edit-article/MyArticle');
     });
 
-    beforeEach(() => {
-        cy.get('[data-angular="publish-btn"]').as('publishBtn');
-    });
+    it('inputs should have valid class and have values', () => {
+        editArticlePage.title
+            .should('have.class', 'ng-valid')
+            .and('contain.value', 'MyArticle');
 
-    it('should have green left borders', () => {
-        const formInputs = ['#title', '#description', '#body', '#tagList'];
-        const [cssProp, cssValue] = ['border-left', '5px solid rgb(66, 169, 72)'];
+        editArticlePage.description
+            .should('have.class', 'ng-valid')
+            .and('contain.value', 'My test article');
 
-        formInputs.forEach((input) => cy.get(input).should('have.css', cssProp, cssValue));
-    });
+        editArticlePage.body
+            .should('have.class', 'ng-valid')
+            .and('contain.value', 'My test article');
 
-    it('should have values in the inputs', () => {
-       cy.get('#title').should('contain.value', 'MyArticle');
-       cy.get('#description').should('contain.value', 'My test article');
-       cy.get('#body').should('contain.value', 'My test article');
-       cy.get('#tagList').should('contain.value', 'tag');
+        editArticlePage.tagList
+            .should('have.class', 'ng-valid')
+            .and('contain.value', 'tag');
     });
 
     it('should redirect to article page if updated successfully', () => {
         cy.intercept('PUT', 'http://localhost:3000/api/articles/MyArticle', {fixture: 'unfavoritedArticle.json'});
         cy.intercept('GET', 'http://localhost:3000/api/articles/**', {fixture: 'unfavoritedArticle.json'});
 
-        cy.get('#title').clear().type('Them and green firmament had');
-       
-        cy.get('[data-angular="publish-btn"]').click();
+        editArticlePage.title.clear().type('Them and green firmament had');
+
+        editArticlePage.publishButton.click();
         cy.location('pathname').should('contain', '/article');
      });
 });

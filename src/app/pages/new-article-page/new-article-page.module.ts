@@ -7,6 +7,7 @@ import { NewArticlePageComponent } from './new-article-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import { ConfirmationDialogModule } from 'src/app/components/confirmation-dialog/confirmation-dialog.module';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -20,7 +21,8 @@ import { ConfirmationDialogModule } from 'src/app/components/confirmation-dialog
     ReactiveFormsModule,
     MatButtonModule,
     MatDialogModule,
-    ConfirmationDialogModule
+    ConfirmationDialogModule,
+    SharedModule,
   ]
 })
 export class NewArticlePageModule { }

@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'password';
 
@@ -15,7 +16,7 @@ type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'password';
   styleUrls: ['./settings-form.component.scss']
 })
 
-export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
+export class SettingsFormComponent extends TestedComponent implements OnChanges, OnDestroy, OnInit {
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
@@ -28,7 +29,9 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
     private fb: FormBuilder,
     private usersService: UsersService,
     private redirectionService: RedirectionService,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.initializeForm();
@@ -69,7 +72,7 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
       const formDataProp = formData[key as keyof IExistingUser];
       const authUserProp = this.authUser[key as keyof IExistingUser];
 
-      if(key === 'password' && formDataProp){
+      if (key === 'password' && formDataProp) {
         updatedData[key as keyof IUpdateUser] = formData[key as keyof IUpdateUser];
         continue;
       }
@@ -100,7 +103,7 @@ export class SettingsFormComponent implements OnChanges, OnDestroy, OnInit {
 
   public updateSettings(): void {
     this.onSubmit();
-    
+
     this.usersService.updateUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

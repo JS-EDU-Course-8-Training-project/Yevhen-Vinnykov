@@ -1,6 +1,6 @@
 <app-banner 
     className="home-banner banner"
-    data-angular="home-banner"
+    [e2e]="TestAttributes.HomePageBanner"
 >
     <mat-card-title class="title">
         Real World
@@ -21,7 +21,7 @@
             >
                 <app-your-feed
                     [tabIndex]="tabIndex"
-                    data-angular="your-feed"
+                    [e2e]="TestAttributes.YourFeed"
                 >
                 </app-your-feed>
             </mat-tab>
@@ -31,8 +31,8 @@
                 <app-global-feed
                     [isAuthorized]="isAuthorized" 
                     [tabIndex]="tabIndex"
-                    data-angular="global-feed"
-                >
+                    [e2e]="TestAttributes.GlobalFeed"
+                    >
                 </app-global-feed>
             </mat-tab>
             <mat-tab 
@@ -42,7 +42,7 @@
                 <app-tagged-articles
                     [tabIndex]="tabIndex" 
                     [selectedTag]="selectedTag"
-                    data-angular="tagged-articles"
+                    [e2e]="TestAttributes.TaggedArticles"
                 >
                 </app-tagged-articles>
             </mat-tab>
@@ -51,7 +51,7 @@
     <app-tags 
         [tabIndex]="tabIndex" 
         (selectedTagEmmiter)="handleSelectTag($event)"
-        data-angular="tags"
+        [e2e]="TestAttributes.TagsContainer"
     >
     </app-tags>
 </div>

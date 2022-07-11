@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { ArticleListComponent } from './article-list.component';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 
@@ -17,7 +18,8 @@ import { RouterModule } from '@angular/router';
     MatIconModule,
     MatButtonModule,
     RouterModule,
-    MatTabsModule
+    MatTabsModule,
+    SharedModule,
   ],
   exports: [ArticleListComponent],
 

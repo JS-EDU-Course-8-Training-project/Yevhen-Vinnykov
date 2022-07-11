@@ -1,7 +1,9 @@
-<header>
+<header
+    [e2e]="TestAttributes.Header"
+>
     <a routerLink="/">
         <h1
-            data-angular="app-title"
+            [e2e]="TestAttributes.AppTitle"
         >
             Real World
         </h1>

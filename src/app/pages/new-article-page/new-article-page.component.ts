@@ -10,6 +10,7 @@ import { IArticle } from 'src/app/shared/models/IArticle';
 import { ISavedData } from 'src/app/shared/models/ISavedData';
 import { INewArticle } from 'src/app/shared/models/INewArticle';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
   styleUrls: ['./new-article-page.component.scss']
 })
 
-export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
+export class NewArticlePageComponent extends TestedComponent implements OnInit, OnDestroy, ISavedData {
   public articleForm!: FormGroup;
   public isEditMode!: boolean;
   public articleToEdit!: IArticle | null;
@@ -30,7 +31,9 @@ export class NewArticlePageComponent implements OnInit, OnDestroy, ISavedData {
     private fb: FormBuilder,
     private router: Router,
     private redirectionService: RedirectionService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.isEditMode = this.router.url !== '/create-article';

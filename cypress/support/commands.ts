@@ -10,7 +10,26 @@ declare namespace Cypress {
     interface Chainable<Subject> {
         createNotOwnArticle(): Chainable<Subject>
     }
+
+    interface Chainable<Subject> {
+        getByTestAttr(selector: string): Chainable<Element>;
+
+        findByTestAttr(selector: string): Chainable<Element>;
+    }
 }
+
+Cypress.Commands.add('getByTestAttr', selector => {
+    cy.get(`[data-test=${selector}]`);
+});
+
+
+Cypress.Commands.add(
+    'findByTestAttr',
+    { prevSubject: 'element' },
+    ($element: JQuery<HTMLElement>, selector: string) => {
+        cy.wrap($element).find(`[data-test=${selector}]`);
+    });
+    
 
 Cypress.Commands.add('login', () => {
     cy.request({
@@ -102,8 +121,8 @@ Cypress.Commands.add('createNotOwnArticle', () => {
             token = response.body.user.token;
         }
 
-    // if the article already exists, the response will have an error, but the test won't fail
-    cy.request({
+        // if the article already exists, the response will have an error, but the test won't fail
+        cy.request({
             method: 'POST',
             url: 'http://localhost:3000/api/articles',
             headers: {

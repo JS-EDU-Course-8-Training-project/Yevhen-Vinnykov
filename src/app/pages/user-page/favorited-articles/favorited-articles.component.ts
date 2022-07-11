@@ -4,13 +4,14 @@ import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-favorited-articles',
   templateUrl: './favorited-articles.component.html',
   styleUrls: ['./favorited-articles.component.scss']
 })
-export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterViewInit {
+export class FavoritedArticlesComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
 
   @Input() username!: string;
@@ -30,7 +31,9 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
   constructor(
     private articlesService: ArticlesService,
     private infiniteScroll: InfiniteScrollService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.reset();
@@ -59,7 +62,7 @@ export class FavoritedArticlesComponent implements OnChanges, OnDestroy, AfterVi
   private getArticles(): void {
     this.error = '';
     this.isLoading = true;
-    
+
     this.articlesService.fetchFavoritedArticles(this.username, this.limit, this.offset)
       .pipe(
         takeUntil(this.notifier),

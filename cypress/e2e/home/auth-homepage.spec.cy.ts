@@ -1,3 +1,5 @@
+import { homepage } from './../../support/page-objects/home/homepage';
+
 describe('AUTHORIZED HOME PAGE', () => {
   beforeEach(() => {
     cy.login();
@@ -11,18 +13,20 @@ describe('AUTHORIZED HOME PAGE', () => {
   });
 
   it('should load the home page correctly', () => {
-    cy.get('[data-angular="loading-spinner"]').should('be.visible');
+   homepage.loadingSpinner.should('be.visible');
 
-    cy.get('[data-angular="home-banner"]')
+   cy.getByTestAttr('home-page-banner')
       .should('contain', 'Lorem ipsum dolor sit amet consectetur adipisicing elit');
 
-    cy.get('[role="tab"]').should('contain', 'Your Feed').and('contain', 'Global Feed');
-    cy.get('[data-angular="tags"]').should('contain', 'Popular Tags');
-    cy.get('[data-angular="your-feed"]').should('be.visible');
+    homepage.globalFeedTab.should('contain.text', 'Global Feed');
+    homepage.yourFeedTab.should('contain.text', 'Your Feed');
 
-    cy.get('.finished').should('contain.text', 'No more articles for now...');
+    homepage.allTags.should('contain.text', 'Popular Tags');
+    homepage.yourFeed.should('be.visible');
 
-    cy.get('[data-angular="loading-spinner"]').should('not.exist');
+    cy.getByTestAttr('all-articles-loaded').should('contain.text', 'No more articles for now...');
+
+    homepage.loadingSpinner.should('not.exist');
   });
 
   it('should redirect to article page once an article card is clicked', () => {
@@ -31,8 +35,8 @@ describe('AUTHORIZED HOME PAGE', () => {
     cy.intercept('GET', 'http://localhost:3000/api/articles/**/comments', { fixture: "comments.json" })
       .as('getComments');
 
-    cy.get('[data-angular="article-card"]').eq(0).click();
-
+    homepage.articleCard.click();
+    
     cy.location('pathname').should('contain', '/article/');
   });
 
@@ -40,18 +44,14 @@ describe('AUTHORIZED HOME PAGE', () => {
     cy.intercept('GET', 'http://localhost:3000/api/articles?tag=lorem&limit=5&offset=0', { fixture: "articles.json" })
       .as('getArticlesBySlug');
 
-    cy.get('[data-angular="test-tag-div"]').eq(0).click();
+    homepage.allTags.contains('lorem').click();
 
-    cy.get('[role="tab"]').as('tabs');
-    cy.get('@tabs').should('contain', '#lorem');
-    cy.get('@tabs').contains('Your Feed').click();
-    cy.get('@tabs').should('not.contain', '#lorem');
+    homepage.taggedArticlesTab.should('contain', '#lorem');
+    homepage.yourFeedTab.click();
+    homepage.taggedArticlesTab.should('not.exist');
   });
 
   it('should like and dislike an article', () => {
-    cy.get('[data-angular="article-card-like-btn"]').eq(0).as('likeButton');
-    cy.get('[data-angular="article-card-like-icon"]').eq(0).as('likeIcon');
-
     cy.intercept(
       'POST', 'http://localhost:3000/api/articles/**/favorite',
       { fixture: 'favoritedArticle.json' }
@@ -63,12 +63,12 @@ describe('AUTHORIZED HOME PAGE', () => {
     ).as('unfavorite');
 
     // like
-    cy.get('@likeButton').click().should('contain', '1');
-    cy.get('@likeIcon').should('have.css', 'color', 'rgb(244, 67, 54)');
+    homepage.likeButton.click().should('contain', '1');
+    homepage.likeIcon.should('have.css', 'color', 'rgb(244, 67, 54)');
 
     // dislike
-    cy.get('@likeButton').click().should('contain', '0');
-    cy.get('@likeIcon').should('have.css', 'color', 'rgba(0, 0, 0, 0.87)');
+    homepage.likeButton.click().should('contain', '0');
+    homepage.likeIcon.should('have.css', 'color', 'rgba(0, 0, 0, 0.87)');
   });
 });
 

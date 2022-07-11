@@ -1,13 +1,14 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-tags',
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss']
 })
-export class TagsComponent implements OnInit, OnChanges, OnDestroy {
+export class TagsComponent extends TestedComponent implements OnInit, OnChanges, OnDestroy {
   @Input() tabIndex!: number;
   @Output() selectedTagEmmiter: EventEmitter<string> = new EventEmitter();
 
@@ -18,7 +19,9 @@ export class TagsComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private articlesService: ArticlesService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.isLoading = true;

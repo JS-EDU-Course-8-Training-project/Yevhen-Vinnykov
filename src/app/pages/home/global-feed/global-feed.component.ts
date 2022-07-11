@@ -1,4 +1,4 @@
-import {BehaviorSubject, catchError, Observable, of, Subject, takeUntil} from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, Subject, takeUntil } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import {
   Component,
@@ -9,12 +9,13 @@ import {
   ElementRef,
   QueryList,
   AfterViewInit,
-  ChangeDetectionStrategy, 
+  ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-global-feed',
@@ -22,7 +23,7 @@ import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/i
   styleUrls: ['./global-feed.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit {
+export class GlobalFeedComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
   @Input() tabIndex!: number;
   @Input() isAuthorized!: boolean;
@@ -42,14 +43,16 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
     private articlesService: ArticlesService,
     private infiniteScroll: InfiniteScrollService,
     private cdRef: ChangeDetectorRef
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.reset();
     if (this.tabIndex === 1 || !this.isAuthorized) {
       this.getArticles();
       this.infiniteScroll
-      .observeIntersection({canLoad: this.canLoad$, callback: this.getArticles.bind(this)});
+        .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
     }
   }
 
@@ -60,10 +63,10 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
 
   ngAfterViewInit(): void {
     this.lastItem.changes
-    .pipe(takeUntil(this.notifier))
-    .subscribe(change => {
-      if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
-    });
+      .pipe(takeUntil(this.notifier))
+      .subscribe(change => {
+        if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
+      });
   }
 
   private getArticles(): void {
@@ -91,11 +94,11 @@ export class GlobalFeedComponent implements OnChanges, OnDestroy, AfterViewInit 
     this.error = 'Something went wrong :(';
     this.isLoading = false;
     this.cdRef.detectChanges();
-    return of({articles: [], articlesCount: 0})
+    return of({ articles: [], articlesCount: 0 })
   }
 
   private nextPage(): void {
-    if(this.currentPage < this.pagesTotalCount){
+    if (this.currentPage < this.pagesTotalCount) {
       this.currentPage++;
       this.offset += this.limit;
     }
