@@ -21,7 +21,7 @@ import {
   authUser,
   AuthorizationServiceNotAuthMock
 } from './buttons.mocks.spec';
-import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 

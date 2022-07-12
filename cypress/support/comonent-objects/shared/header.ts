@@ -1,4 +1,4 @@
-import { TestAttributes } from "src/app/shared/tests/TestAttributes.old";
+import { TestAttributes } from "src/app/shared/tests/TestAttributes";
 import { ComponentObject } from "../component-object";
 
 class Header extends ComponentObject {

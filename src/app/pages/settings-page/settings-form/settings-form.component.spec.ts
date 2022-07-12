@@ -9,7 +9,6 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
 import { By } from '@angular/platform-browser';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
 
 const settingsMock: IExistingUser = {
   email: 'test-username@example.com',

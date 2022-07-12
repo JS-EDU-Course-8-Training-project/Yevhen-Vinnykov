@@ -9,7 +9,7 @@ import { CommentsComponent } from './comments.component';
 import { CommentsService } from '../services/comments/comments.service';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 const comments: IComment[] = [{

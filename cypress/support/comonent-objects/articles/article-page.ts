@@ -1,4 +1,4 @@
-import { TestAttributes } from "src/app/shared/tests/TestAttributes.old";
+import { TestAttributes } from "src/app/shared/tests/TestAttributes";
 
 class ArticlePage {
     get title(){

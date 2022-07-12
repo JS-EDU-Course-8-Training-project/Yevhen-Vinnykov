@@ -1,4 +1,4 @@
-import { TestAttributes } from './TestAttributes.old';
+import { TestAttributes } from './TestAttributes';
 
 export abstract class TestedComponent {
     public readonly TestAttributes = TestAttributes;

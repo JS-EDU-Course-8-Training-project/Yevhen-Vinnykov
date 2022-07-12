@@ -11,7 +11,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
 import { By } from '@angular/platform-browser';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 const mockAuthUser: IExistingUser = {

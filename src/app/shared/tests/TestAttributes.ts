@@ -124,7 +124,7 @@ enum CommonAttributes {
     AllArticlesLoaded = 'all-articles-loaded',
 }
 
-const TestAttributes = {
+export const TestAttributes = {
     ...FormAttributes,
     ...UserInputsAttributes,
     ...ArticleInputsAttributes,
@@ -142,5 +142,3 @@ const TestAttributes = {
     ...UserPageAttributes,
     ...CommonAttributes,
 };
-
-export type TestAttributes = typeof TestAttributes;
