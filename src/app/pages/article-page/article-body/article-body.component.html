@@ -1,11 +1,14 @@
 <div class="article-body-container">
-    <div class="article-body" data-angular="article-body">
+    <div
+        class="article-body" 
+        [e2e]="TestAttributes.ArticlePageBody"
+    >
         <p>{{article?.body}}</p>
     </div>
     <mat-chip-list>
         <mat-chip 
             class="tag"
-            data-angular="tag" 
+            [e2e]="TestAttributes.Tag" 
             *ngFor="let tag of article?.tagList"
             [value]="tag" 
         >
@@ -14,15 +17,24 @@
     </mat-chip-list>
     <mat-divider class="devider"></mat-divider>
 </div>
-<div 
-    class="article-actions-container"
-    data-angular="article-actions-container" 
->
+<div class="article-actions-container">
     <div class="article-author">
-        <img src="{{article?.author?.image}}" alt="">
+        <img 
+            src="{{article?.author?.image}}" 
+            alt=""
+            [e2e]="TestAttributes.ArticlePageAuthorImg"
+        >
         <div>
-            <h3>{{article?.author?.username}}</h3>
-            <p>{{article?.createdAt | date}}</p>
+            <h3
+                [e2e]="TestAttributes.ArticlePageAuthorName"
+            >
+                {{article?.author?.username}}
+            </h3>
+            <p
+                [e2e]="TestAttributes.ArticlePageDate"
+            >
+                {{article?.createdAt | date}}
+            </p>
         </div>
     </div>
     <div class="article-actions">

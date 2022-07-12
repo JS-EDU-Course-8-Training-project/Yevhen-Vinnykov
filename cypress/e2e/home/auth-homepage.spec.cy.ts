@@ -1,4 +1,4 @@
-import { homepage } from './../../support/page-objects/home/homepage';
+import { homepage } from '../../support/comonent-objects/home/homepage';
 
 describe('AUTHORIZED HOME PAGE', () => {
   beforeEach(() => {

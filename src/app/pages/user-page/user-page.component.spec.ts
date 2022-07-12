@@ -11,6 +11,8 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
 import { By } from '@angular/platform-browser';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 const mockAuthUser: IExistingUser = {
   email: 'test-auth@example.com',
@@ -63,7 +65,7 @@ describe('USER PAGE COMPONENT', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserPageComponent],
+      declarations: [UserPageComponent, TestAttributeDirective],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
@@ -84,7 +86,7 @@ describe('USER PAGE COMPONENT', () => {
 
   it('should follow a user', waitForAsync(() => {
     const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
-    const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
 
     expect(followButton.nativeElement.innerText).toBe('Follow test-username');
     expect(component.isFollowed).toBe(false);
@@ -101,7 +103,7 @@ describe('USER PAGE COMPONENT', () => {
 
   it('should unfollow a user', waitForAsync(() => {
     const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
-    const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
 
     followButton.triggerEventHandler('click', null);
 
@@ -119,13 +121,13 @@ describe('USER PAGE COMPONENT', () => {
 
 });
 
-describe('REDIRECT UNAUTHORIZED', () => {
+describe('USER PAGE > REDIRECT UNAUTHORIZED', () => {
   let component: UserPageComponent;
   let fixture: ComponentFixture<UserPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserPageComponent],
+      declarations: [UserPageComponent, TestAttributeDirective],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
@@ -146,7 +148,7 @@ describe('REDIRECT UNAUTHORIZED', () => {
 
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'redirectUnauthorized');
-    const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
 
     followButton.triggerEventHandler('click', null);
     fixture.detectChanges();
@@ -156,7 +158,7 @@ describe('REDIRECT UNAUTHORIZED', () => {
 
 });
 
-describe('UserPageComponent Myself Mode', () => {
+describe('USER PAGE > MYSELF MODE', () => {
   let component: UserPageComponent;
   let fixture: ComponentFixture<UserPageComponent>;
 
@@ -187,7 +189,7 @@ describe('UserPageComponent Myself Mode', () => {
   });
 
   it('should initialize correctly', () => {
-    const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-button"]'));
+    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
 
     expect(component.isMyself).toBe(true);
     expect(followButton).toBeFalsy();

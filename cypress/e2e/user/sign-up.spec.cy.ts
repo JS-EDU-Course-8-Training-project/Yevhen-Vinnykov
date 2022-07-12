@@ -1,4 +1,4 @@
-import { signUpPage } from "cypress/support/page-objects/user/sign-up-page";
+import { signUpPage } from "cypress/support/comonent-objects/user/sign-up-page";
 
 describe('SING UP PAGE', () => {
     beforeEach(() => {

@@ -1,4 +1,4 @@
-import { articleCard } from './../../support/component-objects/article-card';
+import { articleCard } from '../../support/comonent-objects/articles/article-card';
 
 describe('ARTICLE CARD', () => {
     beforeEach(() => {

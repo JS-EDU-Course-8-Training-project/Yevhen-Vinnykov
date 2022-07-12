@@ -2,7 +2,7 @@
     <form 
         [formGroup]="commentForm" 
         (ngSubmit)="addComment()"
-        data-angular="comment-form"
+        [e2e]="TestAttributes.CommentForm"
     >
         <div class="form-group">
             <textarea 
@@ -13,6 +13,7 @@
                 required 
                 formControlName="body"
                 placeholder="Write a comment..."
+                [e2e]="TestAttributes.CommentTextarea"
             >
             </textarea>
             <div class="footer">
@@ -23,13 +24,13 @@
                     type="submit" 
                     mat-raised-button
                     color="primary"
-                    data-angular="post-comment-btn"
+                    [e2e]="TestAttributes.CommentPostBtn"
                 >
                     <span *ngIf="!isLoading">Add</span>
                     <mat-spinner 
                         *ngIf="isLoading" 
                         diameter="25"
-                        data-angular="loading-spinner"
+                        [e2e]="TestAttributes.LoadingSpinner"
                     >
                     </mat-spinner> 
                 </button>

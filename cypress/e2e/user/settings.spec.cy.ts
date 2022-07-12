@@ -1,4 +1,4 @@
-import { settingsForm } from "cypress/support/page-objects/user/settings-form";
+import { settingsForm } from "cypress/support/comonent-objects/user/settings-form";
 
 describe('SETTINGS FORM', () => {
     beforeEach(() => {

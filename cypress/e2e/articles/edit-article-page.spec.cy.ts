@@ -1,4 +1,4 @@
-import { newArticlePage as editArticlePage } from './../../support/page-objects/articles/new-article-page';
+import { newArticlePage as editArticlePage } from '../../support/comonent-objects/articles/new-article-page';
 
 describe('NEW ARTICLE PAGE', () => {
     beforeEach(() => {

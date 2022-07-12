@@ -8,13 +8,14 @@ import { ProfilesService } from 'src/app/shared/services/profiles/profiles.servi
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-article-page-buttons',
   templateUrl: './article-page-buttons.component.html',
   styleUrls: ['./article-page-buttons.component.scss']
 })
-export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
+export class ArticlePageButtonsComponent extends TestedComponent implements OnChanges, OnDestroy {
   @Input() article!: IArticle;
   @Input() slug!: string;
   @Input() authUser!: IExistingUser;
@@ -35,7 +36,9 @@ export class ArticlePageButtonsComponent implements OnChanges, OnDestroy {
     private authorizationService: AuthorizationService,
     private articlePageButtonsService: ArticlePageButtonsService,
     private redirectionService: RedirectionService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnChanges(): void {
     this.initialize();

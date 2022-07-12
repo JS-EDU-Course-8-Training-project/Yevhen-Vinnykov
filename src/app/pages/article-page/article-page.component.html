@@ -2,19 +2,31 @@
     <div class="banner-container">
         <mat-card-title 
             class="title" 
-            data-angular="article-title"
+            [e2e]="TestAttributes.ArticleTitle"
         >
             {{article?.title}}
         </mat-card-title>
         <div
             class="banner-actions"
-            data-angular="banner-actions"
+            [e2e]="TestAttributes.BannerActions"
           >
                 <a routerLink="/user/{{article?.author?.username}}">
-                    <img src="{{article?.author?.image}}" alt="">
+                    <img 
+                        src="{{article?.author?.image}}" 
+                        alt=""
+                        [e2e]="TestAttributes.ArticlePageAuthorImg"
+                    >
                     <div>
-                        <h3>{{article?.author?.username}}</h3>
-                        <p>{{article?.createdAt | date}}</p>
+                        <h3
+                            [e2e]="TestAttributes.ArticlePageAuthorName"
+                        >
+                            {{article?.author?.username}}
+                        </h3>
+                        <p
+                           [e2e]="TestAttributes.ArticlePageDate"
+                        >
+                            {{article?.createdAt | date}}
+                        </p>
                     </div>
                 </a>
             <app-article-page-buttons 

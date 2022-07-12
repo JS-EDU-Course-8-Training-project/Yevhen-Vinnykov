@@ -1,4 +1,4 @@
-import { signInPage } from '../../support/page-objects/user/sign-in-page';
+import { signInPage } from '../../support/comonent-objects/user/sign-in-page';
 
 describe('SING IN PAGE', () => {
 

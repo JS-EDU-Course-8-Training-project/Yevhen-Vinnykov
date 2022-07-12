@@ -5,7 +5,7 @@
         class="fave-btn"  
         mat-raised-button
         color="primary"
-        data-angular="test-edit-btn"
+        [e2e]="TestAttributes.ArticleEditBtn"
     >
         Edit
     </button>
@@ -15,7 +15,7 @@
         class="fave-btn" 
         mat-raised-button
         color="primary"
-        data-angular="test-delete-btn"
+        [e2e]="TestAttributes.ArticleDeleteBtn"
     >
        Delete
     </button>
@@ -26,7 +26,7 @@
         (click)="handleFollowUnfollow(username)" 
         mat-raised-button
         color="primary"
-        data-angular="test-follow-btn"
+        [e2e]="TestAttributes.ArticleFollowBtn"
     >
         {{isFollowed ? 'Unfollow' : 'Follow'}} {{username}}
     </button>
@@ -37,11 +37,11 @@
         (click)="handleLikeDislike(slug)" 
         mat-raised-button
         color="primary"
-        data-angular="test-like-btn"
+        [e2e]="TestAttributes.ArticleLikeBtn"
     >
         <mat-icon 
             [color]="isLiked && 'warn'"
-            data-angular="likeIcon"
+            [e2e]="TestAttributes.ArticleLikeIcon"
         >
             favorite
         </mat-icon>

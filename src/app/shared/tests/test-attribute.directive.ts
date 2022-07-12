@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Input, isDevMode } from '@angular/core';
-import { TestAttributes } from './TestAttributes';
+import { TestAttributes } from './TestAttributes.old';
 
 
 @Directive({

@@ -9,6 +9,8 @@ import { CommentsComponent } from './comments.component';
 import { CommentsService } from '../services/comments/comments.service';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 const comments: IComment[] = [{
   _id: '1',
@@ -45,7 +47,7 @@ describe('COMMENTS COMPONENT', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommentsComponent ],
+      declarations: [ CommentsComponent, TestAttributeDirective ],
       imports: [MatCardModule, MatIconModule],
       providers: [
         { provide: CommentsService, useClass: CommentsServiceMock }
@@ -67,7 +69,7 @@ describe('COMMENTS COMPONENT', () => {
   it('should delete comment', () => {
     const spy = spyOn(component, 'deleteComment').and.callThrough();
 
-    const deleteIcon = fixture.debugElement.query(By.css('[data-angular="test-delete-icon"]'));
+    const deleteIcon = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.CommentDeleteBtn}]`));
     deleteIcon.triggerEventHandler('click', null);
 
     expect(spy).toHaveBeenCalledWith('1');

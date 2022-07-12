@@ -1,4 +1,4 @@
-import { TestAttributes } from "src/app/shared/tests/TestAttributes";
+import { TestAttributes } from "src/app/shared/tests/TestAttributes.old";
 
 class SignUpPage {
     get title() { 

@@ -1,4 +1,4 @@
-import { header } from "cypress/support/component-objects/header";
+import { header } from "cypress/support/comonent-objects/shared/header";
 
 describe('HEADER', () => {
     beforeEach(() => {

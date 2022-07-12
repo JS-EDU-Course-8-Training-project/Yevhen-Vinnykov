@@ -4,13 +4,14 @@ import { IComment } from 'src/app/shared/models/IComment';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommentsService } from '../services/comments/comments.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss']
 })
-export class CommentsComponent implements OnInit, OnDestroy{
+export class CommentsComponent extends TestedComponent implements OnInit, OnDestroy {
   @Input() slug!: string;
   @Input() authUser!: IExistingUser;
   @Input() requestForComments$!: Subject<void>;
@@ -22,13 +23,15 @@ export class CommentsComponent implements OnInit, OnDestroy{
 
   constructor(
     private commentsService: CommentsService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.getComments();
     this.requestForComments$
-    .pipe(takeUntil(this.notifier))
-    .subscribe(() => this.getComments());
+      .pipe(takeUntil(this.notifier))
+      .subscribe(() => this.getComments());
   }
 
   ngOnDestroy(): void {
@@ -50,7 +53,7 @@ export class CommentsComponent implements OnInit, OnDestroy{
 
   public deleteComment(id: string): void {
     const commentToBeDeletedId: string | undefined = this.comments.find(c => c.id === id)?.id;
-    if(!commentToBeDeletedId) return;
+    if (!commentToBeDeletedId) return;
 
     this.commentsBeingDeletedIds.push(commentToBeDeletedId);
 

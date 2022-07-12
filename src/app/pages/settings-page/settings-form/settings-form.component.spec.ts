@@ -9,6 +9,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
 import { By } from '@angular/platform-browser';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
 
 const settingsMock: IExistingUser = {
   email: 'test-username@example.com',
@@ -73,7 +74,8 @@ describe('SETTINGS FORM COMPONENT', () => {
     const spyCreateUserData = spyOn<any>(component, 'createUserData');
     const spyOnSubmit = spyOn<any>(component, 'onSubmit');
 
-    const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
+    const updateButton = fixture.debugElement.query(By.css('[type="submit"]')).nativeElement;
+
     updateButton.click();
     fixture.detectChanges();
 
@@ -85,7 +87,7 @@ describe('SETTINGS FORM COMPONENT', () => {
   it('should logout', () => {
     const spy = spyOn(component, 'logout').and.callThrough();
 
-    const logoutButton = fixture.debugElement.query(By.css('[data-angular="test-logout-button"]'));
+    const logoutButton = fixture.debugElement.query(By.css('[type="button"]'));
     logoutButton.triggerEventHandler('click', null);
     fixture.detectChanges();
 
@@ -130,7 +132,7 @@ describe('ON CATCH ERROR METHOD', () => {
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
 
-    const updateButton = fixture.debugElement.query(By.css('[data-angular="test-update-button"]')).nativeElement;
+    const updateButton = fixture.debugElement.query(By.css('[type="submit"]')).nativeElement;
     updateButton.click();
     fixture.detectChanges();
 

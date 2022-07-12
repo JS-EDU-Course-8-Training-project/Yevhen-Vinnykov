@@ -15,6 +15,7 @@ import { ArticlePageComponent } from './article-page.component';
 import { CommentFormComponent } from './comment-form/comment-form.component';
 import { ArticleBodyComponent } from './article-body/article-body.component';
 import { ArticlePageButtonsComponent } from './article-page-buttons/article-page-buttons.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { ArticlePageButtonsComponent } from './article-page-buttons/article-page
     MatDividerModule,
     BannerModule,
     MatButtonModule,
+    SharedModule,
   ]
 })
 export class ArticlePageModule { }

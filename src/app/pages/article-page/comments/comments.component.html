@@ -2,7 +2,7 @@
     <mat-card 
         class="comment" 
         *ngFor="let comment of comments"
-        data-angular="comment"
+        [e2e]="TestAttributes.Comment"
     >
         <mat-card-content>
             <p>{{comment?.body}}</p>
@@ -20,7 +20,7 @@
                 *ngIf="comment?.author?.username === authUser?.username"
                 class="delete-icon"
                 color="primary"
-                data-angular="test-delete-icon"
+                [e2e]="TestAttributes.CommentDeleteBtn"
             >
                 <span 
                     *ngIf="!commentsBeingDeletedIds.includes(comment.id)"
@@ -30,7 +30,7 @@
                 <mat-spinner 
                     diameter="25" 
                     *ngIf="commentsBeingDeletedIds.includes(comment.id)"
-                    data-angular="loading-spinner"
+                    [e2e]="TestAttributes.LoadingSpinner"
                 >
                 </mat-spinner>
             </mat-icon>

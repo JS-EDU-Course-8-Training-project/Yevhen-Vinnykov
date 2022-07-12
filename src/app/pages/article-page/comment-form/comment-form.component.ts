@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { CommentsService } from 'src/app/pages/article-page/services/comments/comments.service';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-comment-form',
   templateUrl: './comment-form.component.html',
   styleUrls: ['./comment-form.component.scss']
 })
-export class CommentFormComponent implements OnInit {
+export class CommentFormComponent extends TestedComponent implements OnInit {
   @Input() slug!: string;
   @Input() image!: string;
   @Output() commentEventEmmiter: EventEmitter<any> = new EventEmitter();
@@ -24,7 +25,9 @@ export class CommentFormComponent implements OnInit {
     private commentsService: CommentsService,
     private fb: FormBuilder,
     private authorizationService: AuthorizationService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.authorizationService.isAuthorized$
@@ -47,7 +50,7 @@ export class CommentFormComponent implements OnInit {
   public addComment(): void {
     this.isLoading = true;
     this.commentForm.disable();
-    
+
     this.commentsService.createComment(this.slug, this.createCommentData())
       .pipe(takeUntil(this.notifier))
       .subscribe(() => {

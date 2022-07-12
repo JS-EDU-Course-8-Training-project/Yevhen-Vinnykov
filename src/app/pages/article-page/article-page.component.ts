@@ -4,13 +4,14 @@ import { IArticle } from 'src/app/shared/models/IArticle';
 import { ActivatedRoute, Data } from '@angular/router';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-article-page',
   templateUrl: './article-page.component.html',
   styleUrls: ['./article-page.component.scss'],
 })
-export class ArticlePageComponent implements OnInit, OnDestroy {
+export class ArticlePageComponent extends TestedComponent implements OnInit, OnDestroy {
   public slug!: string;
   public article!: IArticle;
   public authUser!: IExistingUser;
@@ -20,13 +21,15 @@ export class ArticlePageComponent implements OnInit, OnDestroy {
   constructor(
     private usersService: UsersService,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe((data: Data) => {
       this.article = data['article'];
       this.slug = this.article.slug;
-  });
+    });
     this.getAuthUser();
   }
 

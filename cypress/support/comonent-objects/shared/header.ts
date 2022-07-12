@@ -1,5 +1,5 @@
-import { TestAttributes } from "src/app/shared/tests/TestAttributes";
-import { ComponentObject } from "./component-object";
+import { TestAttributes } from "src/app/shared/tests/TestAttributes.old";
+import { ComponentObject } from "../component-object";
 
 class Header extends ComponentObject {
     get title(){

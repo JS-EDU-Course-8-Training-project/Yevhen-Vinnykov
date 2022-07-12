@@ -1,4 +1,4 @@
-import { userPage } from "cypress/support/page-objects/user/user-page";
+import { userPage } from "cypress/support/comonent-objects/user/user-page";
 
 describe('USER PAGE', () => {
     beforeEach(() => {

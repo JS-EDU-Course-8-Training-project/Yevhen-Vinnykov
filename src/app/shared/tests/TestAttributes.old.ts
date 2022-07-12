@@ -1,44 +1,47 @@
-enum FormAttributes {
+
+export enum TestAttributes {
+    Header = 'header',
+    AppTitle = 'app-title',
+
+    // COMMON
+    LoadingSpinner = 'loading-spinner',
+    AllArticlesLoaded = 'all-articles-loaded',
+
+    // FORMS
     FormTitle = 'form-title',
     FormError = 'form-error',
     FormLink = 'form-link',
     FormButton = 'form-button',
-}
 
-enum UserInputsAttributes {
+    // INPUTS > USER
     UsernameInput = 'username-input',
     EmailInput = 'email-input',
     PasswordInput = 'password-input',
     BioInput = 'bio-input',
     ImageInput = 'image-input',
-}
 
-enum ArticleInputsAttributes {
+    // INPUTS > ARTICLE
     ArticleTitleInput = 'article-title-input',
     ArticleDescriptionInput = 'article-description-input',
     ArticleBodyInput = 'article-body-input',
     ArticleTagListInput = 'article-tag-list-input',
-}
 
-enum TabsAttributes {
+    // TABS
     MyArticlesTab = 'my-articles-tab',
     FavoritedArticlesTab = 'favorited-articles-tab',
     GlobalFeedTab = 'global-feed-tab',
     YourFeedTab = 'your-feed-tab',
     TaggedArticlesTab = 'tagged-articles-tab',
-}
 
-enum SignInPageAttributes {
+    // SIGN IN PAGE
     SignInBtn = 'sign-in-btn',
     SignUpLink = 'sign-up-link',
-}
 
-enum SignUpPageAttributes {
+    // SIGN UP PAGE
     SignUpBtn = 'sign-up-btn',
     SignInLink = 'sign-in-link',
-}
 
-enum ArticleCardAttributes {
+    // ARTICLE CARD
     ArticleCard = 'article-card',
     ArticleCardInfo = 'article-card-info',
     ArticleCardAuthorImg = 'article-card-author-img',
@@ -51,9 +54,8 @@ enum ArticleCardAttributes {
     ArticleCardFooter = 'article-card-footer',
     ArticleCardTags = 'article-card-tags',
     ArticleCardReadMoreLink = 'article-card-read-more-link',
-}
 
-enum ArticlePageAttributes {
+    // ARTICLE  PAGE
     ArticleTitle = 'article-title',
     ArticleActionsContainer = 'article-actions-container',
     ArticleTag = 'article-tag',
@@ -66,50 +68,44 @@ enum ArticlePageAttributes {
     ArticlePageAuthorName = 'article-page-author-name',
     ArticlePageDate = 'article-page-date',
     ArticlePageBody = 'article-page-body',
-}
 
-enum NavBarLinksAttributes {
+
+    // NAVBAR LINKS
     NavHomeLink = 'nav-home-link',
     NavSignInLink = 'nav-sign-in-link',
     NavSignUpLink = 'nav-sign-up-link',
     NavNewArticleLink = 'nav-new-article-link',
     NavUserPageLink = 'nav-user-page-link',
     NavSettingsLink = 'nav-settings-link',
-}
 
-enum BannerAttributes {
+    // BANNER
     BannerActions = 'banner-actions',
     UserPageBanner = 'user-page-banner',
     HomePageBanner = 'home-page-banner',
     ArticlePageBanner = 'article-page-banner',
-}
 
-enum CommentsAttributes {
+    // COMMENTS
     CommentForm = 'comment-form',
     CommentPostBtn = 'comment-post-btn',
     CommentDeleteBtn = 'comment-delete-btn',
     Comment = 'comment',
     CommentTextarea = 'comment-textarea',
-}
 
-enum HomePageAttributes {
+    // HOME COMPONENT
     YourFeed = 'your-feed',
     GlobalFeed = 'global-feed',
     TaggedArticles = 'tagged-articles',
     TagsContainer = 'tags-container',
     Tag = 'tag',
-}
 
-enum NewArticlePageAttributes {
+    //NEW ARTICLE PAGE
     PublishBtn = 'publish-btn',
-}
 
-enum SettingsAttributes {
+    // SETTINGS PAGE
     SettingsUpdateBtn = 'settings-update-btn',
     SettingsLogoutBtn = 'settings-logout-btn',
-}
 
-enum UserPageAttributes {
+    // USER PAGE
     UserPageUpdateBtn = 'user-page-update-btn',
     UserPageFollowBtn = 'user-page-follow-btn',
     UserPageImg = 'user-page-img',
@@ -117,30 +113,3 @@ enum UserPageAttributes {
     UserPageBio = 'user-page-bio',
 }
 
-enum CommonAttributes {
-    Header = 'header',
-    AppTitle = 'app-title',
-    LoadingSpinner = 'loading-spinner',
-    AllArticlesLoaded = 'all-articles-loaded',
-}
-
-const TestAttributes = {
-    ...FormAttributes,
-    ...UserInputsAttributes,
-    ...ArticleInputsAttributes,
-    ...TabsAttributes,
-    ...SignInPageAttributes,
-    ...SignUpPageAttributes,
-    ...ArticleCardAttributes,
-    ...ArticlePageAttributes,
-    ...NavBarLinksAttributes,
-    ...BannerAttributes,
-    ...CommentsAttributes,
-    ...HomePageAttributes,
-    ...NewArticlePageAttributes,
-    ...SettingsAttributes,
-    ...UserPageAttributes,
-    ...CommonAttributes,
-};
-
-export type TestAttributes = typeof TestAttributes;

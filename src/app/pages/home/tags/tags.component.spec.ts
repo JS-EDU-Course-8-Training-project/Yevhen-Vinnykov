@@ -4,6 +4,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TagsComponent } from './tags.component';
 import { By } from '@angular/platform-browser';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 
 class ArticlesServiceMock {
@@ -16,7 +18,7 @@ describe('TAGS COMPONENT', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TagsComponent ],
+      declarations: [ TagsComponent, TestAttributeDirective ],
       providers: [
         { provide: ArticlesService, useClass: ArticlesServiceMock}
       ]
@@ -52,7 +54,7 @@ describe('TAGS COMPONENT', () => {
   describe('SELECT TAG METHOD', () => {
     it('should select tag correctly', () => {
       const spy = spyOn(component, 'selectTag').and.callThrough();
-      const [div1, div2] = fixture.debugElement.queryAll(By.css('[data-angular="test-tag-div"]'));
+      const [div1, div2] = fixture.debugElement.queryAll(By.css(`[data-test=${TestAttributes.Tag}]`));
 
       div2.triggerEventHandler('click', null);
       fixture.detectChanges();
@@ -71,5 +73,7 @@ describe('TAGS COMPONENT', () => {
       expect(component.selectedTag).toBe('test-tag');
       expect(spy).toHaveBeenCalledTimes(2);
     });
+
   });
+
 });

@@ -21,6 +21,9 @@ import {
   authUser,
   AuthorizationServiceNotAuthMock
 } from './buttons.mocks.spec';
+import { TestAttributes } from 'src/app/shared/tests/TestAttributes.old';
+import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
+
 
 
 describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
@@ -29,7 +32,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ArticlePageButtonsComponent],
+      declarations: [ArticlePageButtonsComponent, TestAttributeDirective],
       providers: [
         { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
@@ -80,7 +83,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
       
       const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-like-btn"]'));
+      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`));
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -97,7 +100,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
 
       const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-like-btn"]'));
+      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`));
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -121,7 +124,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
 
       const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-follow-btn"]'));
+      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`));
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -137,7 +140,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
 
       const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-follow-btn"]'));
+      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`));
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -158,7 +161,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     it('should delete the article', waitForAsync(() => {
       const spy = spyOn(component, 'deleteArticle').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-delete-btn"]'));
+      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleDeleteBtn}]`));
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -179,7 +182,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     it('should redirect to edit page', waitForAsync(() => {
       const spy = spyOn(component, 'redirectToEditArticle').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css('[data-angular="test-edit-btn"]'));
+      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleEditBtn}]`));
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -197,7 +200,7 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > UNAUTHORIZED', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ArticlePageButtonsComponent],
+      declarations: [ArticlePageButtonsComponent, TestAttributeDirective],
       providers: [
         { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
@@ -221,10 +224,12 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > UNAUTHORIZED', () => {
     const service = TestBed.inject(RedirectionService);
     const spy = spyOn(service, 'redirectUnauthorized');
 
-    const likeButton = fixture.debugElement.query(By.css('[data-angular="test-like-btn"]'));
+    const likeButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`));
+    console.log(likeButton);
+    
     likeButton.triggerEventHandler('click', null);
 
-    const followButton = fixture.debugElement.query(By.css('[data-angular="test-follow-btn"]'));
+    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`));
     followButton.triggerEventHandler('click', null);
 
     expect(spy).toHaveBeenCalledTimes(2);
