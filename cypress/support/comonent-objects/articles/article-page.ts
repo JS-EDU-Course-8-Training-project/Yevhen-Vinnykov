@@ -62,7 +62,7 @@ class ArticlePage {
     }
 
     get commentDeleteButton(){
-        return cy.getByTestAttr(TestAttributes.CommentDeleteBtn);
+        return cy.getByTestAttr(TestAttributes.CommentDeleteBtn).eq(0);
     }
 
     get loadingSpinner() {

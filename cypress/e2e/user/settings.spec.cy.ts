@@ -3,14 +3,15 @@ import { settingsForm } from "cypress/support/comonent-objects/user/settings-for
 describe('SETTINGS FORM', () => {
     beforeEach(() => {
         cy.login();
+        cy.intercept('GET', 'http://localhost:3000/api/users', {fixture: 'user.json'}).as('getUser');
         cy.visit('/settings');
     });
 
     it('should have inputs filled with user information', () => {
         settingsForm.username.should('contain.value', 'John');
-        settingsForm.email.should('contain.value', 'john@example.com');
+        settingsForm.email.should('contain.value', 'john@gmail.com');
         settingsForm.image.should('contain.value', 'https://st3.depositphotos.com/2229436/13671/v/600/depositphotos_136717406-stock-illustration-flat-user-icon-member-sign.jpg');
-        settingsForm.bio.should('contain.value', 'bio');
+        settingsForm.bio.should('contain.value', 'test');
     });
 
     it('should have errors if required inputs are empty', () => {
@@ -26,6 +27,8 @@ describe('SETTINGS FORM', () => {
     });
 
     it('should redirect to user page if the user was successfully updated', () => {
+        cy.intercept('PUT', 'http://localhost:3000/api/users', {fixture: 'user.json'}).as('updateUser');
+
         settingsForm.bio.clear().type('new bio');
         settingsForm.updateButton.click();
 

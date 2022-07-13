@@ -1,15 +1,25 @@
 import { articlePage } from '../../support/comonent-objects/articles/article-page';
 
 describe('ARTICLE PAGE', () => {
+    const baseUrl = 'http://localhost:3000/api/';
+
     beforeEach(() => {
         cy.login();
-        cy.createNotOwnArticle();
-        cy.visit('/article/NotMyArticle');
+
+        cy.fixture('articles').then(res => {
+            const article = res.articles[0];
+            cy.intercept('GET', `${baseUrl}articles/Lorem`, {article} ).as('getArticle');
+        });
+
+        cy.intercept('GET', `${baseUrl}articles/Lorem/comments`, { comments: [] }).as('getComments');
+        cy.intercept('GET', `${baseUrl}users`, { fixture: 'user.json' }).as('getAuthUser');
+
+        cy.visit('/article/Lorem');
     });
 
     describe('BANNER', () => {
         it('should have a title', () => {
-            articlePage.title.should('contain.text', 'NotMyArticle');
+            articlePage.title.should('contain.text', 'Lorem');
         });
 
         it('should have a block with user image, user name and created date', () => {
@@ -20,26 +30,57 @@ describe('ARTICLE PAGE', () => {
 
         describe('NOT OWN ARTICLE > ACTIONS', () => {
             it('should like and dislike an article', () => {
-                articlePage.likeButton.click().should('contain.text', ' favorite  Favorite Article (1) ');
+                cy.intercept(
+                    'POST',
+                    `${baseUrl}articles/Lorem/favorite`,
+                    { article: { favorited: true, favoritesCount: 1 } }
+                ).as('likeArticle');
+
+                cy.intercept(
+                    'DELETE',
+                    `${baseUrl}articles/Lorem/favorite`,
+                    { article: { favorited: false, favoritesCount: 0 } }
+                ).as('dislikeArticle');
+
+                articlePage.likeButton.click();
+                articlePage.likeButton.should('contain.text', ' favorite  Favorite Article (1) ');
                 articlePage.likeIcon.should('have.css', 'color', 'rgb(244, 67, 54)');
 
-                articlePage.likeButton.click().should('contain.text', ' favorite  Favorite Article (0) ');
+                articlePage.likeButton.click();
+                articlePage.likeButton.should('contain.text', ' favorite  Favorite Article (0) ');
                 articlePage.likeIcon.should('have.css', 'color', 'rgb(255, 255, 255)');
             });
 
             it('should follow and unfollow a user', () => {
-                articlePage.followButton
-                    .click()
-                    .should('contain.text', ' Unfollow Jane ')
-                    .click()
-                    .should('contain.text', ' Follow Jane ');
+                cy.intercept(
+                    'POST',
+                    `${baseUrl}profiles/Jane/follow`,
+                    { profile: { following: true } }
+                ).as('followProfile');
+
+                cy.intercept(
+                    'DELETE',
+                    `${baseUrl}profiles/Jane/follow`,
+                    { profile: { following: false } }
+                ).as('unfollowProfile');
+
+                articlePage.followButton.click();
+                articlePage.followButton.should('contain.text', ' Unfollow Jane ');
+
+                articlePage.followButton.click();
+                articlePage.followButton.should('contain.text', ' Follow Jane ');
             });
         });
 
         describe('OWN ARTICLE > ACTIONS', () => {
             beforeEach(() => {
-                cy.createOwnArticle();
-                cy.visit('/article/MyArticle');
+                cy.fixture('articles').then(res => {
+                    const article = res.articles[0];  // change the article's author's name  
+                    article.author.username = 'John'; // so it matches the authorized user's name 
+
+                    cy.intercept('GET', `${baseUrl}articles/Lorem`, {article} ).as('getArticle');
+                });
+                cy.visit('/article/Lorem');
             });
 
             it('should redirect to edit article page', () => {
@@ -49,41 +90,49 @@ describe('ARTICLE PAGE', () => {
             });
     
             it('should delete an article and redirect to home page', () => {
+                cy.intercept('DELETE', `${baseUrl}articles/Lorem`, {} ).as('deleteArticle');
+
                 articlePage.deleteButton.should('contain', 'Delete').click();
     
                 cy.location('pathname').should('eq', '/');
             });
-        });
-
+        })
     });
 
     describe('BODY', () => {
         it('should have an article body and tags', () => {
             articlePage.body.should('be.visible');
-            articlePage.tags.should('be.visible');
+            articlePage.tags.should('contain.text', 'lorem');
         });
     });
 
     describe('COMMENT FORM', () => {
-        it('should have the comment form with a textarea', () => {
-            articlePage.commentForm.should('be.visible');
-            articlePage.commentTextarea.should('have.attr', 'placeholder', 'Write a comment...');
+        beforeEach(() => {
+            cy.intercept('GET', `${baseUrl}articles/Lorem/comments`, { fixture: 'comments.json' })
+                .as('getComments');
         });
 
-        it('button should be disabled if the form is empty', () => {
+        it('should have the comment form with a textarea and a button', () => {
+            articlePage.commentForm.should('be.visible');
+            articlePage.commentTextarea.should('have.attr', 'placeholder', 'Write a comment...');
             articlePage.commentPostButton.should('be.disabled');
         });
 
         it('should add a comment', () => {
-            articlePage.commentTextarea.type('Test comment');
+            cy.intercept('POST', `${baseUrl}articles/Lorem/comments`).as('postComment');
+
+            articlePage.commentTextarea.type('This is my test comment');
             articlePage.commentPostButton.click();
 
-            articlePage.comment.should('contain.text', 'Test comment');
+            cy.wait('@postComment').its('request.body.comment.body').should('eq', 'This is my test comment');
         });
 
         it('should delete a comment', () => {
-            articlePage.commentDeleteButton.each((btn) => btn.click());
-            articlePage.loadingSpinner.should('be.visible');
+            cy.intercept('DELETE', `${baseUrl}articles/Lorem/comments/**`, {response: {}}).as('deleteComment');
+
+            articlePage.commentDeleteButton.click();
+
+            cy.wait('@deleteComment').its('response.statusCode').should('eq', 200);
         });
     });
 });

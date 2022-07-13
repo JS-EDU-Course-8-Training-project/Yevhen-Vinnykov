@@ -27,7 +27,11 @@ class ArticleCard extends ComponentObject {
     }
 
     get likeButton(){
-        return cy.getByTestAttr(TestAttributes.ArticleCardLikeBtn);
+        return cy.getByTestAttr(TestAttributes.ArticleCardLikeBtn).eq(0);
+    }
+
+    get likeIcon() {
+        return cy.getByTestAttr(TestAttributes.ArticleCardLikeIcon).eq(0);
     }
 
     get articleTags(){

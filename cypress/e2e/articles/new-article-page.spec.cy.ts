@@ -35,8 +35,11 @@ describe('NEW ARTICLE PAGE', () => {
         });
 
         it('should redirect to article page if the article has been created', () => {
-            cy.intercept('POST', 'http://localhost:3000/api/articles', { fixture: 'unfavoritedArticle.json' });
-            cy.intercept('GET', 'http://localhost:3000/api/articles/**', { fixture: 'unfavoritedArticle.json' });
+            cy.fixture('articles').then(res => {
+                const article = res.articles[0];
+                cy.intercept('POST', 'http://localhost:3000/api/articles', { article }).as('createArticle');
+                cy.intercept('GET', 'http://localhost:3000/api/articles/**', { article }).as('getArticle');
+            });
 
             fillFormInputs();
             newArticlePage.publishButton.click();
@@ -47,10 +50,10 @@ describe('NEW ARTICLE PAGE', () => {
 });
 
 const fillFormInputs = () => {
-    newArticlePage.title.type('test');
-    newArticlePage.description.type('test');
-    newArticlePage.body.type('test');
-    newArticlePage.tagList.type('test');
+    newArticlePage.title.type('lorem');
+    newArticlePage.description.type('lorem');
+    newArticlePage.body.type('lorem');
+    newArticlePage.tagList.type('lorem');
 }
 
 const clearFormInputs = () => {

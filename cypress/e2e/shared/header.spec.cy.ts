@@ -51,6 +51,7 @@ describe('HEADER', () => {
 
         beforeEach(() => {
             cy.login();
+            cy.intercept('GET', 'http://localhost:3000/api/users', {fixture: 'user.json'});
             cy.visit('/');
         });
     

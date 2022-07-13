@@ -32,38 +32,40 @@ Cypress.Commands.add(
     
 
 Cypress.Commands.add('login', () => {
-    cy.request({
-        method: 'POST',
-        url: 'http://localhost:3000/api/users/login',
-        failOnStatusCode: false,
-        body: {
-            user: {
-                email: 'john@example.com',
-                password: 'Password1'
-            }
-        }
-    }).then(response => {
-        if (response.status === 404) {
-            // if the user doesn't exist, seed the db
-            cy.request({
-                method: 'POST',
-                url: 'http://localhost:3000/api/users/signup',
-                body: {
-                    user: {
-                        username: 'John',
-                        email: 'john@example.com',
-                        password: 'Password1'
-                    }
-                }
-            }).then(response => {
-                window.localStorage.setItem('authorized', 'true');
-                window.localStorage.setItem('token', response.body.user.token);
-            });
-            return;
-        }
-        window.localStorage.setItem('authorized', 'true');
-        window.localStorage.setItem('token', response.body.user.token);
-    });
+    window.localStorage.setItem('authorized', 'true');
+    window.localStorage.setItem('token', 'token');
+    // cy.request({
+    //     method: 'POST',
+    //     url: 'http://localhost:3000/api/users/login',
+    //     failOnStatusCode: false,
+    //     body: {
+    //         user: {
+    //             email: 'john@example.com',
+    //             password: 'Password1'
+    //         }
+    //     }
+    // }).then(response => {
+    //     if (response.status === 404) {
+    //         // if the user doesn't exist, seed the db
+    //         cy.request({
+    //             method: 'POST',
+    //             url: 'http://localhost:3000/api/users/signup',
+    //             body: {
+    //                 user: {
+    //                     username: 'John',
+    //                     email: 'john@example.com',
+    //                     password: 'Password1'
+    //                 }
+    //             }
+    //         }).then(response => {
+    //             window.localStorage.setItem('authorized', 'true');
+    //             window.localStorage.setItem('token', response.body.user.token);
+    //         });
+    //         return;
+    //     }
+    //     window.localStorage.setItem('authorized', 'true');
+    //     window.localStorage.setItem('token', response.body.user.token);
+    // });
 });
 
 Cypress.Commands.add('createOwnArticle', () => {

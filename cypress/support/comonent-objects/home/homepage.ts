@@ -26,14 +26,6 @@ class HomePage {
         return cy.getByTestAttr(TestAttributes.ArticleCard).eq(0);
     }
 
-    get likeButton() {
-        return cy.getByTestAttr(TestAttributes.ArticleCardLikeBtn).eq(0);
-    }
-
-    get likeIcon() {
-        return cy.getByTestAttr(TestAttributes.ArticleCardLikeIcon).eq(0);
-    }
-
     get allTags(){
         return cy.getByTestAttr(TestAttributes.TagsContainer);
     }

@@ -3,6 +3,7 @@ import { signInPage } from '../../support/comonent-objects/user/sign-in-page';
 describe('SING IN PAGE', () => {
 
     beforeEach(() => {
+        cy.intercept('POST', 'http://localhost:3000/api/users/login', { fixture: 'user.json' }).as('getUser');
         cy.visit('/sign-in');
     });
 
@@ -71,6 +72,8 @@ describe('SING IN PAGE', () => {
             });
 
             it('should show an error if the user doesn\'t exist', () => {
+                cy.intercept('POST', 'http://localhost:3000/api/users/login', { error: { 'Error: ': 'User does not exist' } }).as('getUser');
+
                 signIn('userdoesntexist@gmail.com', 'Password1');
 
                 signInPage.formError.should('contain.text', ' Error:  User not found ');
@@ -88,6 +91,6 @@ describe('SING IN PAGE', () => {
 const signIn = (email: string, password: string) => {
     signInPage.email.clear().type(email);
     signInPage.password.clear().type(password);
-    
+
     signInPage.signInButton.click();
 }

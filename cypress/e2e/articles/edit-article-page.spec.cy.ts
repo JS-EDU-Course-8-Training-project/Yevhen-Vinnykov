@@ -3,35 +3,49 @@ import { newArticlePage as editArticlePage } from '../../support/comonent-object
 describe('NEW ARTICLE PAGE', () => {
     beforeEach(() => {
         cy.login();
-        cy.createOwnArticle();
-        cy.visit('/edit-article/MyArticle');
+        
+        cy.fixture('articles').then(res => {
+            const article = res.articles[0];
+            cy.intercept('GET', 'http://localhost:3000/api/articles/Lorem', {article}).as('getArticle');
+        });
+
+        cy.visit('/edit-article/Lorem');
     });
 
     it('inputs should have valid class and have values', () => {
         editArticlePage.title
             .should('have.class', 'ng-valid')
-            .and('contain.value', 'MyArticle');
+            .and('contain.value', 'Lorem');
 
         editArticlePage.description
             .should('have.class', 'ng-valid')
-            .and('contain.value', 'My test article');
+            .and('contain.value', 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u');
 
         editArticlePage.body
             .should('have.class', 'ng-valid')
-            .and('contain.value', 'My test article');
+            .and('include.value', 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.');
 
         editArticlePage.tagList
             .should('have.class', 'ng-valid')
-            .and('contain.value', 'tag');
+            .and('contain.value', 'lorem');
     });
 
     it('should redirect to article page if updated successfully', () => {
-        cy.intercept('PUT', 'http://localhost:3000/api/articles/MyArticle', {fixture: 'unfavoritedArticle.json'});
-        cy.intercept('GET', 'http://localhost:3000/api/articles/**', {fixture: 'unfavoritedArticle.json'});
+        cy.fixture('articles').then(res => {
+            const article = res.articles[0];  
+            cy.intercept('PUT', 'http://localhost:3000/api/articles/Lorem', {article}).as('editArticle');        
+        });
 
-        editArticlePage.title.clear().type('Them and green firmament had');
+        cy.fixture('articles').then(res => {
+            const article = res.articles[0];
+            article.title = 'My new title';
 
+            cy.intercept('GET', 'http://localhost:3000/api/articles/**', {article}).as('getArticle');
+        });
+
+        editArticlePage.title.clear().type('My new title');
         editArticlePage.publishButton.click();
+        
         cy.location('pathname').should('contain', '/article');
      });
 });
