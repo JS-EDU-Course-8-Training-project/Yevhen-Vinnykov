@@ -55,7 +55,7 @@ describe('SING UP PAGE', () => {
         it('should redirect to home if the the credentials are valid', () => {
             cy.intercept('POST', 'http://localhost:3000/api/users/signup', {fixture: 'authUser.json'}).as('signUp');
             
-            signUpPage.signUp('Jane', 'janedoe@gmail.com', 'JaneDoe1');
+            signUp('Jane', 'janedoe@gmail.com', 'JaneDoe1');
 
             cy.location('pathname').should('eq', '/');
         });
@@ -81,28 +81,36 @@ describe('SING UP PAGE', () => {
             });
 
             it('should show an error if the username is taken', () => {
-                signUpPage.signUp('John', 'johndoe@email.com', '111111');
+                signUp('John', 'johndoe@email.com', '111111');
                 
                 signUpPage.formError.should('contain.text', ' Error:  User with this username already exists ');
             });
 
             it('should show an error if the email is taken', () => {
-                signUpPage.signUp('Jack', 'john@example.com', '111111');
+                signUp('Jack', 'john@example.com', '111111');
 
                 signUpPage.formError.should('contain.text', ' Error:  User with this email already exists ');
             });
 
             it('should show an error if the password does not contain at least one digit', () => {
-                signUpPage.signUp('Joey', 'joey@email.com', 'password');
+                signUp('Joey', 'joey@email.com', 'password');
 
                 signUpPage.formError.should('contain.text', ' Error:  Password must contain at least one digit ');
             });
 
             it('should show an error if the password does not contain at least one capital letter', () => {
-                signUpPage.signUp('Joey', 'joey@email.com', 'password1');
+                signUp('Joey', 'joey@email.com', 'password1');
 
                 signUpPage.formError.should('contain.text', ' Error:  Password must contain at least one capital letter ');
             });
         });
     });
 });
+
+const signUp = (username: string, email: string, password: string) => {
+    signUpPage.username.clear().type(username);
+    signUpPage.email.clear().type(email);
+    signUpPage.password.clear().type(password);
+
+    signUpPage.signUpButton.click();
+}

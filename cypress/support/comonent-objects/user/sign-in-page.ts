@@ -24,12 +24,6 @@ class SignInPage {
     get formError(){
         return cy.getByTestAttr(TestAttributes.FormError);
     }
-
-    signIn(email: string, password: string){
-        this.email.clear().type(email);
-        this.password.clear().type(password);
-        this.signInButton.click();
-    }
 }
 
 export const signInPage = new SignInPage();

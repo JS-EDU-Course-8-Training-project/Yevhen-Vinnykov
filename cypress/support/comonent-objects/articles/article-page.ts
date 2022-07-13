@@ -68,7 +68,6 @@ class ArticlePage {
     get loadingSpinner() {
         return cy.getByTestAttr(TestAttributes.LoadingSpinner);
     }
-
 }
 
 export const articlePage = new ArticlePage();

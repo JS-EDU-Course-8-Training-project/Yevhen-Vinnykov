@@ -24,20 +24,6 @@ class NewArticlePage {
     get publishButton() {
         return cy.getByTestAttr(TestAttributes.PublishBtn);
     }
-
-    fillInputs() {
-        this.title.type('test');
-        this.description.type('test');
-        this.body.type('test');
-        this.tagList.type('test');
-    }
-
-    clearInputs() {
-        this.title.clear();
-        this.description.clear();
-        this.body.clear();
-        this.tagList.clear();
-    }
 }
 
 export const newArticlePage = new NewArticlePage();

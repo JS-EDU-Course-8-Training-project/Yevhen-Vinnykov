@@ -48,7 +48,7 @@ describe('SING IN PAGE', () => {
         });
 
         it('should redirect to home if the the credentials are valid', () => {
-            signInPage.signIn('john@example.com', 'Password1');
+            signIn('john@example.com', 'Password1');
 
             cy.location('pathname').should('eq', '/');
         });
@@ -71,16 +71,23 @@ describe('SING IN PAGE', () => {
             });
 
             it('should show an error if the user doesn\'t exist', () => {
-                signInPage.signIn('userdoesntexist@gmail.com', 'Password1');
+                signIn('userdoesntexist@gmail.com', 'Password1');
 
                 signInPage.formError.should('contain.text', ' Error:  User not found ');
             });
 
             it('should show an error if the password is not correct', () => {
-                signInPage.signIn('john@example.com', 'WrongPassword');
+                signIn('john@example.com', 'WrongPassword');
 
                 signInPage.formError.should('contain.text', ' Error:  Email or password is not valid ');
             });
         });
     });
 });
+
+const signIn = (email: string, password: string) => {
+    signInPage.email.clear().type(email);
+    signInPage.password.clear().type(password);
+    
+    signInPage.signInButton.click();
+}
