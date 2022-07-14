@@ -6,13 +6,13 @@ describe('USER PAGE', () => {
         cy.intercept('GET', `${apiBaseUrl}users`, { fixture: 'user.json' })
             .as('getAuthUser');
 
-        cy.intercept('GET', `${apiBaseUrl}articles?author=John&limit=5&offset=0`, { fixture: 'articles.json' })
+        cy.intercept('GET', `${apiBaseUrl}articles?author=John&**`, { fixture: 'articles.json' })
             .as('getUserArticles');
             
-        cy.intercept('GET', `${apiBaseUrl}articles?favorited=John&limit=5&offset=0`, { fixture: 'articles.json' })
+        cy.intercept('GET', `${apiBaseUrl}articles?favorited=John&**`, { fixture: 'articles.json' })
             .as('getFavoritedArticles');
 
-        cy.login();
+        cy.addTokenToLocalStorage();
         cy.visit('/user/John');
     });
 
@@ -32,6 +32,8 @@ describe('USER PAGE', () => {
     });
 
     it('if all articles have been loaded, finished div should be visible', () => {
+        cy.scrollTo('bottom');
+
         cy.getByTestAttr('all-articles-loaded').should('be.visible');
     });
 

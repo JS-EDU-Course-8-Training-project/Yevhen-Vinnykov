@@ -21,9 +21,11 @@ describe('HOME PAGE', () => {
 
         homepage.allTags.should('contain.text', 'Popular Tags');
 
-        cy.getByTestAttr('all-articles-loaded').should('contain.text', 'No more articles for now...');
-
         homepage.loadingSpinner.should('not.exist');
+
+        cy.scrollTo('bottom');
+
+        cy.getByTestAttr('all-articles-loaded').should('contain.text', 'No more articles for now...');
     });
 
     it('should redirect to article page once an article card is clicked', () => {
@@ -64,7 +66,7 @@ describe('HOME PAGE', () => {
             cy.intercept('GET', `${apiBaseUrl}articles/feed/**`, { fixture: "articles.json" })
                 .as('getFeed');
 
-            cy.login();
+            cy.addTokenToLocalStorage();
             cy.visit('/');
         });
 
