@@ -51,7 +51,7 @@ describe('HEADER', () => {
         const authUser = {username: 'John'};
 
         beforeEach(() => {
-            cy.login();
+            cy.addTokenToLocalStorage();
             cy.intercept('GET', `${apiBaseUrl}users`, {fixture: 'user.json'});
             cy.visit('/');
         });

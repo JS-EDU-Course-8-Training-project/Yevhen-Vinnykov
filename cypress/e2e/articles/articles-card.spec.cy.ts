@@ -39,7 +39,7 @@ describe('ARTICLE CARD', () => {
                     { article: { favorited: false, favoritesCount: 0 } }
                 ).as('dislikeArticle');
 
-                cy.login();
+                cy.addTokenToLocalStorage();
                 cy.visit('/');
             });
 

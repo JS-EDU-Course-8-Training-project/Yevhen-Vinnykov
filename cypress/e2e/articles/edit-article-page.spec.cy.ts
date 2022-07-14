@@ -3,7 +3,7 @@ import { newArticlePage as editArticlePage } from '../../support/comonent-object
 
 describe('NEW ARTICLE PAGE', () => {
     beforeEach(() => {
-        cy.login();
+        cy.addTokenToLocalStorage();
         
         cy.fixture('articles').then(res => {
             const article = res.articles[0];

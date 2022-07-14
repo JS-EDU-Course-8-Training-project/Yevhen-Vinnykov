@@ -1,6 +1,6 @@
 declare namespace Cypress {
     interface Chainable<Subject> {
-        login(): Chainable<Subject>
+        addTokenToLocalStorage(): Chainable<Subject>
     }
 
     interface Chainable<Subject> {
@@ -23,7 +23,7 @@ Cypress.Commands.add(
     });
     
 
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('addTokenToLocalStorage', () => {
     window.localStorage.setItem('authorized', 'true');
     window.localStorage.setItem('token', 'token');
 });

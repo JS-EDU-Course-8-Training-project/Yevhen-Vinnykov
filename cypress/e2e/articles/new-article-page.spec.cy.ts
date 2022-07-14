@@ -3,7 +3,7 @@ import { newArticlePage } from '../../support/comonent-objects/articles/new-arti
 
 describe('NEW ARTICLE PAGE', () => {
     beforeEach(() => {
-        cy.login();
+        cy.addTokenToLocalStorage();
         cy.visit('/create-article');
     });
 

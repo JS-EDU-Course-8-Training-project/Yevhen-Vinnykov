@@ -3,7 +3,7 @@ import { settingsForm } from "cypress/support/comonent-objects/user/settings-for
 
 describe('SETTINGS FORM', () => {
     beforeEach(() => {
-        cy.login();
+        cy.addTokenToLocalStorage();
         cy.intercept('GET', `${apiBaseUrl}users`, {fixture: 'user.json'}).as('getUser');
         cy.visit('/settings');
     });
