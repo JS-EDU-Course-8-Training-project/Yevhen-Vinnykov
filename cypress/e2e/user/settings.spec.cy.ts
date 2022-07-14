@@ -1,9 +1,10 @@
+import { apiBaseUrl } from "cypress/support/apiBaseUrl";
 import { settingsForm } from "cypress/support/comonent-objects/user/settings-form";
 
 describe('SETTINGS FORM', () => {
     beforeEach(() => {
         cy.login();
-        cy.intercept('GET', 'http://localhost:3000/api/users', {fixture: 'user.json'}).as('getUser');
+        cy.intercept('GET', `${apiBaseUrl}users`, {fixture: 'user.json'}).as('getUser');
         cy.visit('/settings');
     });
 
@@ -27,7 +28,7 @@ describe('SETTINGS FORM', () => {
     });
 
     it('should redirect to user page if the user was successfully updated', () => {
-        cy.intercept('PUT', 'http://localhost:3000/api/users', {fixture: 'user.json'}).as('updateUser');
+        cy.intercept('PUT', `${apiBaseUrl}users`, {fixture: 'user.json'}).as('updateUser');
 
         settingsForm.bio.clear().type('new bio');
         settingsForm.updateButton.click();

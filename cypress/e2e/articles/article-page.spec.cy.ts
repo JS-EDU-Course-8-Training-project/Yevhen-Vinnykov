@@ -1,18 +1,17 @@
+import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { articlePage } from '../../support/comonent-objects/articles/article-page';
 
 describe('ARTICLE PAGE', () => {
-    const baseUrl = 'http://localhost:3000/api/';
-
     beforeEach(() => {
         cy.login();
 
         cy.fixture('articles').then(res => {
             const article = res.articles[0];
-            cy.intercept('GET', `${baseUrl}articles/Lorem`, {article} ).as('getArticle');
+            cy.intercept('GET', `${apiBaseUrl}articles/Lorem`, {article} ).as('getArticle');
         });
 
-        cy.intercept('GET', `${baseUrl}articles/Lorem/comments`, { comments: [] }).as('getComments');
-        cy.intercept('GET', `${baseUrl}users`, { fixture: 'user.json' }).as('getAuthUser');
+        cy.intercept('GET', `${apiBaseUrl}articles/Lorem/comments`, { comments: [] }).as('getComments');
+        cy.intercept('GET', `${apiBaseUrl}users`, { fixture: 'user.json' }).as('getAuthUser');
 
         cy.visit('/article/Lorem');
     });
@@ -32,13 +31,13 @@ describe('ARTICLE PAGE', () => {
             it('should like and dislike an article', () => {
                 cy.intercept(
                     'POST',
-                    `${baseUrl}articles/Lorem/favorite`,
+                    `${apiBaseUrl}articles/Lorem/favorite`,
                     { article: { favorited: true, favoritesCount: 1 } }
                 ).as('likeArticle');
 
                 cy.intercept(
                     'DELETE',
-                    `${baseUrl}articles/Lorem/favorite`,
+                    `${apiBaseUrl}articles/Lorem/favorite`,
                     { article: { favorited: false, favoritesCount: 0 } }
                 ).as('dislikeArticle');
 
@@ -54,13 +53,13 @@ describe('ARTICLE PAGE', () => {
             it('should follow and unfollow a user', () => {
                 cy.intercept(
                     'POST',
-                    `${baseUrl}profiles/Jane/follow`,
+                    `${apiBaseUrl}profiles/Jane/follow`,
                     { profile: { following: true } }
                 ).as('followProfile');
 
                 cy.intercept(
                     'DELETE',
-                    `${baseUrl}profiles/Jane/follow`,
+                    `${apiBaseUrl}profiles/Jane/follow`,
                     { profile: { following: false } }
                 ).as('unfollowProfile');
 
@@ -78,7 +77,7 @@ describe('ARTICLE PAGE', () => {
                     const article = res.articles[0];  // change the article's author's name  
                     article.author.username = 'John'; // so it matches the authorized user's name 
 
-                    cy.intercept('GET', `${baseUrl}articles/Lorem`, {article} ).as('getArticle');
+                    cy.intercept('GET', `${apiBaseUrl}articles/Lorem`, {article} ).as('getArticle');
                 });
                 cy.visit('/article/Lorem');
             });
@@ -90,7 +89,7 @@ describe('ARTICLE PAGE', () => {
             });
     
             it('should delete an article and redirect to home page', () => {
-                cy.intercept('DELETE', `${baseUrl}articles/Lorem`, {} ).as('deleteArticle');
+                cy.intercept('DELETE', `${apiBaseUrl}articles/Lorem`, {} ).as('deleteArticle');
 
                 articlePage.deleteButton.should('contain', 'Delete').click();
     
@@ -108,7 +107,7 @@ describe('ARTICLE PAGE', () => {
 
     describe('COMMENT FORM', () => {
         beforeEach(() => {
-            cy.intercept('GET', `${baseUrl}articles/Lorem/comments`, { fixture: 'comments.json' })
+            cy.intercept('GET', `${apiBaseUrl}articles/Lorem/comments`, { fixture: 'comments.json' })
                 .as('getComments');
         });
 
@@ -119,7 +118,7 @@ describe('ARTICLE PAGE', () => {
         });
 
         it('should add a comment', () => {
-            cy.intercept('POST', `${baseUrl}articles/Lorem/comments`).as('postComment');
+            cy.intercept('POST', `${apiBaseUrl}articles/Lorem/comments`).as('postComment');
 
             articlePage.commentTextarea.type('This is my test comment');
             articlePage.commentPostButton.click();
@@ -128,7 +127,7 @@ describe('ARTICLE PAGE', () => {
         });
 
         it('should delete a comment', () => {
-            cy.intercept('DELETE', `${baseUrl}articles/Lorem/comments/**`, {response: {}}).as('deleteComment');
+            cy.intercept('DELETE', `${apiBaseUrl}articles/Lorem/comments/**`, {response: {}}).as('deleteComment');
 
             articlePage.commentDeleteButton.click();
 

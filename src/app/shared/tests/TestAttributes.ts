@@ -20,14 +20,6 @@ enum ArticleInputsAttributes {
     ArticleTagListInput = 'article-tag-list-input',
 }
 
-enum TabsAttributes {
-    MyArticlesTab = 'my-articles-tab',
-    FavoritedArticlesTab = 'favorited-articles-tab',
-    GlobalFeedTab = 'global-feed-tab',
-    YourFeedTab = 'your-feed-tab',
-    TaggedArticlesTab = 'tagged-articles-tab',
-}
-
 enum SignInPageAttributes {
     SignInBtn = 'sign-in-btn',
     SignUpLink = 'sign-up-link',
@@ -128,7 +120,6 @@ export const TestAttributes = {
     ...FormAttributes,
     ...UserInputsAttributes,
     ...ArticleInputsAttributes,
-    ...TabsAttributes,
     ...SignInPageAttributes,
     ...SignUpPageAttributes,
     ...ArticleCardAttributes,

@@ -5,20 +5,20 @@ class HomePage {
         return cy.getByTestAttr(TestAttributes.LoadingSpinner);
     }
 
+    get banner() {
+        return cy.getByTestAttr(TestAttributes.HomePageBanner);
+    }
+
     get globalFeedTab() {
-        // return cy.getByTestAttr(TestAttributes.GlobalFeedTab);    // TODO: data test attributes are not attached for some reason
-        return cy.contains('Global Feed');
+        return cy.get('[role=tab]').contains('Global Feed');
     }
 
     get yourFeedTab() {
-        // return cy.getByTestAttr(TestAttributes.YourFeedTab);
-        return cy.contains('Your Feed');
-
+        return cy.get('[role=tab]').contains('Your Feed');
     }
 
     get taggedArticlesTab() {
-        // return cy.getByTestAttr(TestAttributes.TaggedArticlesTab);
-        return cy.contains('#');
+        return cy.get('[role=tab]').contains('#');
 
     }
 

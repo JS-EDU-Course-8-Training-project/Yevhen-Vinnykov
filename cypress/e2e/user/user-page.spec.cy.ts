@@ -1,7 +1,17 @@
+import { apiBaseUrl } from "cypress/support/apiBaseUrl";
 import { userPage } from "cypress/support/comonent-objects/user/user-page";
 
 describe('USER PAGE', () => {
     beforeEach(() => {
+        cy.intercept('GET', `${apiBaseUrl}users`, { fixture: 'user.json' })
+            .as('getAuthUser');
+
+        cy.intercept('GET', `${apiBaseUrl}articles?author=John&limit=5&offset=0`, { fixture: 'articles.json' })
+            .as('getUserArticles');
+            
+        cy.intercept('GET', `${apiBaseUrl}articles?favorited=John&limit=5&offset=0`, { fixture: 'articles.json' })
+            .as('getFavoritedArticles');
+
         cy.login();
         cy.visit('/user/John');
     });

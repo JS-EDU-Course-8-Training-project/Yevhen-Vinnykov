@@ -1,3 +1,4 @@
+import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { newArticlePage } from '../../support/comonent-objects/articles/new-article-page';
 
 describe('NEW ARTICLE PAGE', () => {
@@ -37,8 +38,8 @@ describe('NEW ARTICLE PAGE', () => {
         it('should redirect to article page if the article has been created', () => {
             cy.fixture('articles').then(res => {
                 const article = res.articles[0];
-                cy.intercept('POST', 'http://localhost:3000/api/articles', { article }).as('createArticle');
-                cy.intercept('GET', 'http://localhost:3000/api/articles/**', { article }).as('getArticle');
+                cy.intercept('POST', `${apiBaseUrl}articles`, { article }).as('createArticle');
+                cy.intercept('GET', `${apiBaseUrl}articles/**`, { article }).as('getArticle');
             });
 
             fillFormInputs();

@@ -1,3 +1,4 @@
+import { apiBaseUrl } from "cypress/support/apiBaseUrl";
 import { header } from "cypress/support/comonent-objects/shared/header";
 
 describe('HEADER', () => {
@@ -51,7 +52,7 @@ describe('HEADER', () => {
 
         beforeEach(() => {
             cy.login();
-            cy.intercept('GET', 'http://localhost:3000/api/users', {fixture: 'user.json'});
+            cy.intercept('GET', `${apiBaseUrl}users`, {fixture: 'user.json'});
             cy.visit('/');
         });
     

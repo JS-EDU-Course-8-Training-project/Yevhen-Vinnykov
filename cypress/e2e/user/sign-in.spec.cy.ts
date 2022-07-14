@@ -1,9 +1,9 @@
+import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { signInPage } from '../../support/comonent-objects/user/sign-in-page';
 
 describe('SING IN PAGE', () => {
-
     beforeEach(() => {
-        cy.intercept('POST', 'http://localhost:3000/api/users/login', { fixture: 'user.json' }).as('getUser');
+        cy.intercept('POST', `${apiBaseUrl}users/login`, { fixture: 'user.json' }).as('getUser');
         cy.visit('/sign-in');
     });
 
@@ -49,6 +49,8 @@ describe('SING IN PAGE', () => {
         });
 
         it('should redirect to home if the the credentials are valid', () => {
+            cy.intercept('POST', `${apiBaseUrl}users/login`, { fixture: 'user.json' }).as('login');
+            
             signIn('john@example.com', 'Password1');
 
             cy.location('pathname').should('eq', '/');
@@ -72,14 +74,16 @@ describe('SING IN PAGE', () => {
             });
 
             it('should show an error if the user doesn\'t exist', () => {
-                cy.intercept('POST', 'http://localhost:3000/api/users/login', { error: { 'Error: ': 'User does not exist' } }).as('getUser');
+                interceptSignInWithError('User does not exist');
 
                 signIn('userdoesntexist@gmail.com', 'Password1');
 
-                signInPage.formError.should('contain.text', ' Error:  User not found ');
+                signInPage.formError.should('contain.text', ' User does not exist ');
             });
 
             it('should show an error if the password is not correct', () => {
+                interceptSignInWithError('Email or password is not valid');
+
                 signIn('john@example.com', 'WrongPassword');
 
                 signInPage.formError.should('contain.text', ' Error:  Email or password is not valid ');
@@ -93,4 +97,13 @@ const signIn = (email: string, password: string) => {
     signInPage.password.clear().type(password);
 
     signInPage.signInButton.click();
+}
+
+const interceptSignInWithError = (errorMessage: string) => {
+    cy.intercept('POST', `${apiBaseUrl}users/login`,
+        {
+            statusCode: 400,
+            body: { errors: { 'Error: ': [errorMessage] } }
+        }
+    ).as('failedLogin');
 }

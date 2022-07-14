@@ -1,3 +1,4 @@
+import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { newArticlePage as editArticlePage } from '../../support/comonent-objects/articles/new-article-page';
 
 describe('NEW ARTICLE PAGE', () => {
@@ -6,7 +7,7 @@ describe('NEW ARTICLE PAGE', () => {
         
         cy.fixture('articles').then(res => {
             const article = res.articles[0];
-            cy.intercept('GET', 'http://localhost:3000/api/articles/Lorem', {article}).as('getArticle');
+            cy.intercept('GET', `${apiBaseUrl}articles/Lorem`, {article}).as('getArticle');
         });
 
         cy.visit('/edit-article/Lorem');
@@ -33,14 +34,14 @@ describe('NEW ARTICLE PAGE', () => {
     it('should redirect to article page if updated successfully', () => {
         cy.fixture('articles').then(res => {
             const article = res.articles[0];  
-            cy.intercept('PUT', 'http://localhost:3000/api/articles/Lorem', {article}).as('editArticle');        
+            cy.intercept('PUT', `${apiBaseUrl}articles/Lorem`, {article}).as('editArticle');        
         });
 
         cy.fixture('articles').then(res => {
             const article = res.articles[0];
             article.title = 'My new title';
 
-            cy.intercept('GET', 'http://localhost:3000/api/articles/**', {article}).as('getArticle');
+            cy.intercept('GET', `${apiBaseUrl}articles/**`, {article}).as('getArticle');
         });
 
         editArticlePage.title.clear().type('My new title');

@@ -1,13 +1,12 @@
+import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { articleCard } from '../../support/comonent-objects/articles/article-card';
 
 describe('ARTICLE CARD', () => {
-    const baseUrl = 'http://localhost:3000/api/';
-
     beforeEach(() => {
-        cy.intercept('GET', `${baseUrl}articles/?offset=0&limit=5`, { fixture: "articles.json" })
+        cy.intercept('GET', `${apiBaseUrl}articles/?offset=0&limit=5`, { fixture: "articles.json" })
             .as('getArticles');
 
-        cy.intercept('GET', `${baseUrl}tags`, { fixture: "tags.json" })
+        cy.intercept('GET', `${apiBaseUrl}tags`, { fixture: "tags.json" })
             .as('getTags');
 
         cy.visit('/');
@@ -24,19 +23,19 @@ describe('ARTICLE CARD', () => {
             beforeEach(() => {
                 cy.intercept(
                     'GET',
-                    `${baseUrl}articles/feed/?offset=0&limit=5`,
+                    `${apiBaseUrl}articles/feed/?offset=0&limit=5`,
                     { fixture: "articles.json" }
                 ).as('getFeed');
 
                 cy.intercept(
                     'POST',
-                    `${baseUrl}articles/Lorem/favorite`,
+                    `${apiBaseUrl}articles/Lorem/favorite`,
                     { article: { favorited: true, favoritesCount: 1 } }
                 ).as('likeArticle');
 
                 cy.intercept(
                     'DELETE',
-                    `${baseUrl}articles/Lorem/favorite`,
+                    `${apiBaseUrl}articles/Lorem/favorite`,
                     { article: { favorited: false, favoritesCount: 0 } }
                 ).as('dislikeArticle');
 
@@ -95,7 +94,7 @@ describe('ARTICLE CARD', () => {
         it('should redirect to article page when read more is clicked', () => {
             cy.fixture('articles').then(res => {
                 const article = res.articles[0];
-                cy.intercept('GET', `${baseUrl}articles/**`, { article });
+                cy.intercept('GET', `${apiBaseUrl}articles/**`, { article });
             });
 
             articleCard.readMoreLink.click();

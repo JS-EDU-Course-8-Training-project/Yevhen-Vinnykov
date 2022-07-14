@@ -45,20 +45,14 @@
         (focusChange)="this.tabIndex = $event.index"
         [selectedIndex]="tabIndex"
     >
-        <mat-tab 
-            label="My Articles"
-            [e2e]="TestAttributes.MyArticlesTab"
-        >
+        <mat-tab label="My Articles">
             <app-my-articles 
                 [tabIndex]="tabIndex" 
                 [username]="urlUsername"
             >
             </app-my-articles>
         </mat-tab>
-        <mat-tab
-            label="Favorited Articles"
-            [e2e]="TestAttributes.FavoritedArticlesTab"
-        >
+        <mat-tab label="Favorited Articles">
             <app-favorited-articles 
                 [tabIndex]="tabIndex" 
                 [username]="urlUsername"

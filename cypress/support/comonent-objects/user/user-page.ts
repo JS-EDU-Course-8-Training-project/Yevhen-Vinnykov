@@ -14,12 +14,10 @@ class UserPage {
     }
 
     get myArticlesTab() {
-        // return cy.getByTestAttr(TestAttributes.MyArticlesTab);           // TODO: data test attributes are not attached for some reason
         return cy.get('[role="tab"]').eq(0);
     }
 
     get favoritedArticlesTab() {
-        // return cy.getByTestAttr(TestAttributes.FavoritedArticlesTab);
         return cy.get('[role="tab"]').eq(1);
     }
 
