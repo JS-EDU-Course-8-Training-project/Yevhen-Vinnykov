@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace Cypress {
-  interface Chainable<Subject> {
-    addTokenToLocalStorage(): Chainable<Subject>;
+  interface Chainable {
+    addTokenToLocalStorage(): void;
   }
 
-  interface Chainable<Subject> {
+  interface Chainable {
     getByTestAttr(selector: string): Chainable<Element>;
 
     findByTestAttr(selector: string): Chainable<Element>;
