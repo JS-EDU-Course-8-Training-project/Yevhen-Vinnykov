@@ -1,3 +1,3 @@
 export interface ISavedData {
-    isDataSaved(): boolean;
+  isDataSaved(): boolean;
 }

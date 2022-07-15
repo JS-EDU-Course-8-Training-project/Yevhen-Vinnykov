@@ -12,19 +12,21 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
-const comments: IComment[] = [{
-  id: '1',
-  createdAt: Date.now().toString(),
-  updatedAt: Date.now().toString(),
-  body: 'test-comment',
-  author: {
-    username: 'test-username',
-    bio: 'test-bio',
-    image: 'test-image',
-    following: false,
+const comments: IComment[] = [
+  {
+    id: '1',
+    createdAt: Date.now().toString(),
+    updatedAt: Date.now().toString(),
+    body: 'test-comment',
+    author: {
+      username: 'test-username',
+      bio: 'test-bio',
+      image: 'test-image',
+      following: false,
+    },
+    article: '1',
   },
-  article: '1'
-}];
+];
 
 const authUser: IExistingUser = {
   id: '1',
@@ -33,13 +35,12 @@ const authUser: IExistingUser = {
   bio: 'test-bio',
   image: 'test-image',
   token: 'test-token',
-  password: 'test-password'
+  password: 'test-password',
 };
 
-
 class CommentsServiceMock {
-  public fetchArticleComments = (slug: string): Observable<IComment[]> => of(comments);
-  public removeComment = (slug: string, id: number): Observable<IComment> => of(comments[0]);
+  public fetchArticleComments = (): Observable<IComment[]> => of(comments);
+  public removeComment = (): Observable<IComment> => of(comments[0]);
 }
 
 describe('COMMENTS COMPONENT', () => {
@@ -48,14 +49,11 @@ describe('COMMENTS COMPONENT', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommentsComponent, TestAttributeDirective ],
+      declarations: [CommentsComponent, TestAttributeDirective],
       imports: [MatCardModule, MatIconModule],
-      providers: [
-        { provide: CommentsService, useClass: CommentsServiceMock }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+      providers: [{ provide: CommentsService, useClass: CommentsServiceMock }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -70,7 +68,9 @@ describe('COMMENTS COMPONENT', () => {
   it('should delete comment', () => {
     const spy = spyOn(component, 'deleteComment').and.callThrough();
 
-    const deleteIcon = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.CommentDeleteBtn}]`));
+    const deleteIcon = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.CommentDeleteBtn}]`)
+    );
     deleteIcon.triggerEventHandler('click', null);
 
     expect(spy).toHaveBeenCalledWith('1');
@@ -87,5 +87,4 @@ describe('COMMENTS COMPONENT', () => {
     component.requestForComments$.next();
     expect(spy).toHaveBeenCalledTimes(1);
   });
-
 });

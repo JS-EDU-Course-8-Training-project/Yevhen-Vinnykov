@@ -5,16 +5,12 @@ import { CommonModule } from '@angular/common';
 import { NewArticlePageRoutingModule } from './new-article-page-routing.module';
 import { NewArticlePageComponent } from './new-article-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { ConfirmationDialogModule } from 'src/app/components/confirmation-dialog/confirmation-dialog.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
-
 @NgModule({
-  declarations: [
-    NewArticlePageComponent,
-  ],
+  declarations: [NewArticlePageComponent],
   imports: [
     CommonModule,
     NewArticlePageRoutingModule,
@@ -23,6 +19,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatDialogModule,
     ConfirmationDialogModule,
     SharedModule,
-  ]
+  ],
 })
-export class NewArticlePageModule { }
+export class NewArticlePageModule {}

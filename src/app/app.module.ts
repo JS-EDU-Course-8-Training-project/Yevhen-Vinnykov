@@ -2,7 +2,10 @@ import { SignUpModule } from './pages/sign-up/sign-up.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+} from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatDialogModule } from '@angular/material/dialog';
@@ -20,8 +23,6 @@ import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user
 
 import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
 import { SharedModule } from './shared/shared.module';
-
-
 
 @NgModule({
   declarations: [
@@ -47,8 +48,12 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

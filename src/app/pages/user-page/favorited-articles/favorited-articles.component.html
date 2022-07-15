@@ -1,31 +1,32 @@
 <p *ngIf="!favoritedArticles.length && !isLoading && !error.length">
-    No articles are here... yet.
+  No articles are here... yet.
 </p>
-<p *ngIf="error.length">{{error}}</p>
+<p *ngIf="error.length">{{ error }}</p>
 <ng-container>
-    <div *ngFor="let article of favoritedArticles; let i = index">
-        <app-article-list 
-            [article]="article" 
-            *ngIf="i + 1 !== favoritedArticles.length"
-        >
-        </app-article-list>
-        <app-article-list 
-            [article]="article" 
-            *ngIf="i + 1 === favoritedArticles.length" #lastItem
-        >
-        </app-article-list>
-    </div>
-    <mat-spinner
-        [ngStyle]="{'margin': '10px auto'}" 
-        *ngIf="isLoading" 
-        diameter="50"
+  <div *ngFor="let article of favoritedArticles; let i = index">
+    <app-article-list
+      [article]="article"
+      *ngIf="i + 1 !== favoritedArticles.length"
     >
-    </mat-spinner>
-    <div 
-        class="finished" 
-        *ngIf="isFinished"
-        [e2e]="TestAttributes.AllArticlesLoaded"
+    </app-article-list>
+    <app-article-list
+      [article]="article"
+      *ngIf="i + 1 === favoritedArticles.length"
+      #lastItem
     >
-        <div>No more articles for now...</div>
-    </div>
+    </app-article-list>
+  </div>
+  <mat-spinner
+    [ngStyle]="{ margin: '10px auto' }"
+    *ngIf="isLoading"
+    diameter="50"
+  >
+  </mat-spinner>
+  <div
+    class="finished"
+    *ngIf="isFinished"
+    [e2e]="TestAttributes.AllArticlesLoaded"
+  >
+    <div>No more articles for now...</div>
+  </div>
 </ng-container>

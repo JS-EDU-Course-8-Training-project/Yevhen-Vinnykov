@@ -1,31 +1,41 @@
 import { Subject, takeUntil } from 'rxjs';
-import { Component, Input, OnInit, Output, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnChanges,
+  OnDestroy,
+} from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-tags',
   templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss']
+  styleUrls: ['./tags.component.scss'],
 })
-export class TagsComponent extends TestedComponent implements OnInit, OnChanges, OnDestroy {
+export class TagsComponent
+  extends TestedComponent
+  implements OnInit, OnChanges, OnDestroy
+{
   @Input() tabIndex!: number;
   @Output() selectedTagEmmiter: EventEmitter<string> = new EventEmitter();
 
   public tags: string[] = [];
-  public isLoading: boolean = false;
+  public isLoading = false;
   public selectedTag!: string | null;
   private notifier: Subject<void> = new Subject<void>();
 
-  constructor(
-    private articlesService: ArticlesService
-  ) {
+  constructor(private articlesService: ArticlesService) {
     super();
   }
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.articlesService.fetchTags()
+    this.articlesService
+      .fetchTags()
       .pipe(takeUntil(this.notifier))
       .subscribe((tags: string[] | any) => {
         if (tags as string[]) {

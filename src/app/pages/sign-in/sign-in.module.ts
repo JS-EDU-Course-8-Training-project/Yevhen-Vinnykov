@@ -8,11 +8,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
 @NgModule({
-  declarations: [
-    SignInComponent,
-  ],
+  declarations: [SignInComponent],
   imports: [
     CommonModule,
     SignInRoutingModule,
@@ -20,7 +17,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatProgressSpinnerModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
-export class SignInModule { }
+export class SignInModule {}

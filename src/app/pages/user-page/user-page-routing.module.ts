@@ -7,12 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: UserPageComponent,
-    canActivate: [AuthorizationGuard]
-  }
+    canActivate: [AuthorizationGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UserPageRoutingModule { }
+export class UserPageRoutingModule {}

@@ -5,8 +5,8 @@ import { catchError, of, throwError } from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GlobalFeedComponent } from './global-feed.component';
-import { InfiniteScrollService } from "../../../shared/services/infinite-scroll/infinite-scroll.service";
-import { ElementRef, NO_ERRORS_SCHEMA, QueryList } from "@angular/core";
+import { InfiniteScrollService } from '../../../shared/services/infinite-scroll/infinite-scroll.service';
+import { ElementRef, NO_ERRORS_SCHEMA, QueryList } from '@angular/core';
 
 const expectedData: IArticleResponse = {
   articles: [
@@ -26,24 +26,23 @@ const expectedData: IArticleResponse = {
         bio: 'test-bio',
         image: 'test-image',
         following: false,
-      }
+      },
     },
   ],
-  articlesCount: 10
+  articlesCount: 10,
 };
 
-
 class ArticlesServiceMock {
-  public fetchArticles = (offset: number, limit: number) => of(expectedData);
+  public fetchArticles = () => of(expectedData);
 }
 
 class ArticlesServiceMockWithError {
-  public fetchArticles = (offset: number, limit: number) => throwError(() => HttpErrorResponse);
+  public fetchArticles = () => throwError(() => HttpErrorResponse);
 }
 
 class InfiniteScrollServiceMock {
   public observeIntersection = () => of([]);
-  public observer = { observe: () => { } };
+  public observer = { observe: () => ({}) };
 }
 
 describe('GLOBAL FEED COMPONENT', () => {
@@ -56,11 +55,13 @@ describe('GLOBAL FEED COMPONENT', () => {
         declarations: [GlobalFeedComponent],
         providers: [
           { provide: ArticlesService, useClass: ArticlesServiceMock },
-          { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock }
+          {
+            provide: InfiniteScrollService,
+            useClass: InfiniteScrollServiceMock,
+          },
         ],
-        schemas: [NO_ERRORS_SCHEMA]
-      })
-        .compileComponents();
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     });
 
     beforeEach(() => {
@@ -90,7 +91,6 @@ describe('GLOBAL FEED COMPONENT', () => {
         expect(data.articles).toEqual(expectedData.articles);
       });
     }));
-
   });
 
   describe('WHEN ERROR IS THROWN', () => {
@@ -102,13 +102,13 @@ describe('GLOBAL FEED COMPONENT', () => {
         declarations: [GlobalFeedComponent],
         providers: [
           { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-          { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock }
-
+          {
+            provide: InfiniteScrollService,
+            useClass: InfiniteScrollServiceMock,
+          },
         ],
-        schemas: [NO_ERRORS_SCHEMA]
-
-      })
-        .compileComponents();
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     });
 
     beforeEach(() => {

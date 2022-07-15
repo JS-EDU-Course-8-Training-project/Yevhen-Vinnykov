@@ -1,35 +1,35 @@
 div {
-    text-align: center;
-    height: 250px;
-    h3 {
-        font-size: 25px;
-        font-weight: bold;
-    }
-    p {
-        font-size: 18px;
-    }
-    img {
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        margin-bottom: 15px;
-    }
+  text-align: center;
+  height: 250px;
+  h3 {
+    font-size: 25px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 18px;
+  }
+  img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+  }
 }
 .button-container {
-    width: 60%;
-    height: 40px;
-    display: flex;
-    justify-content: end;
-    button {
-        width: 190px;
-    }
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
+  width: 60%;
+  height: 40px;
+  display: flex;
+  justify-content: end;
+  button {
+    width: 190px;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
 section {
-    width: 60%;
-    margin: 0 auto;
+  width: 60%;
+  margin: 0 auto;
 }

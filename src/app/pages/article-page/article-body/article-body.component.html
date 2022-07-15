@@ -1,48 +1,41 @@
 <div class="article-body-container">
-    <div
-        class="article-body" 
-        [e2e]="TestAttributes.ArticlePageBody"
+  <div class="article-body" [e2e]="TestAttributes.ArticlePageBody">
+    <p>{{ article?.body }}</p>
+  </div>
+  <mat-chip-list>
+    <mat-chip
+      class="tag"
+      [e2e]="TestAttributes.Tag"
+      *ngFor="let tag of article?.tagList"
+      [value]="tag"
     >
-        <p>{{article?.body}}</p>
-    </div>
-    <mat-chip-list>
-        <mat-chip 
-            class="tag"
-            [e2e]="TestAttributes.Tag" 
-            *ngFor="let tag of article?.tagList"
-            [value]="tag" 
-        >
-            {{tag}}
-        </mat-chip>
-    </mat-chip-list>
-    <mat-divider class="devider"></mat-divider>
+      {{ tag }}
+    </mat-chip>
+  </mat-chip-list>
+  <mat-divider class="devider"></mat-divider>
 </div>
 <div class="article-actions-container">
-    <div class="article-author">
-        <img 
-            src="{{article?.author?.image}}" 
-            alt=""
-            [e2e]="TestAttributes.ArticlePageAuthorImg"
-        >
-        <div>
-            <h3
-                [e2e]="TestAttributes.ArticlePageAuthorName"
-            >
-                {{article?.author?.username}}
-            </h3>
-            <p
-                [e2e]="TestAttributes.ArticlePageDate"
-            >
-                {{article?.createdAt | date}}
-            </p>
-        </div>
+  <div class="article-author">
+    <img
+      src="{{ article?.author?.image }}"
+      alt=""
+      [e2e]="TestAttributes.ArticlePageAuthorImg"
+    />
+    <div>
+      <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
+        {{ article?.author?.username }}
+      </h3>
+      <p [e2e]="TestAttributes.ArticlePageDate">
+        {{ article?.createdAt | date }}
+      </p>
     </div>
-    <div class="article-actions">
-        <app-article-page-buttons 
-            [authUser]="authUser" 
-            [article]="article" 
-            [slug]="slug"
-        >
-        </app-article-page-buttons>
-    </div>
+  </div>
+  <div class="article-actions">
+    <app-article-page-buttons
+      [authUser]="authUser"
+      [article]="article"
+      [slug]="slug"
+    >
+    </app-article-page-buttons>
+  </div>
 </div>

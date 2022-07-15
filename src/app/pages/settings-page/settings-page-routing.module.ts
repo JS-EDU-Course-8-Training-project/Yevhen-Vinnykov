@@ -9,12 +9,12 @@ const routes: Routes = [
     path: '',
     component: SettingsPageComponent,
     canActivate: [AuthorizationGuard],
-    canDeactivate: [ConfirmationGuard]
-  }
+    canDeactivate: [ConfirmationGuard],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SettingsPageRoutingModule { }
+export class SettingsPageRoutingModule {}

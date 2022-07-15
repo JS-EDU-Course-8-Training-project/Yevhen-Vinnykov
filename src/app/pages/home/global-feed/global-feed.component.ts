@@ -1,4 +1,11 @@
-import { BehaviorSubject, catchError, Observable, of, Subject, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  Observable,
+  of,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import {
   Component,
@@ -10,7 +17,7 @@ import {
   QueryList,
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,23 +28,29 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
   selector: 'app-global-feed',
   templateUrl: './global-feed.component.html',
   styleUrls: ['./global-feed.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GlobalFeedComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
+export class GlobalFeedComponent
+  extends TestedComponent
+  implements OnChanges, OnDestroy, AfterViewInit
+{
+  @ViewChildren('lastItem', { read: ElementRef })
+  lastItem!: QueryList<ElementRef>;
   @Input() tabIndex!: number;
   @Input() isAuthorized!: boolean;
 
   public globalArticles: IArticle[] = [];
-  public isLoading: boolean = false;
+  public isLoading = false;
   private notifier: Subject<void> = new Subject<void>();
   public isFinished!: boolean;
-  private offset: number = 0;
-  private currentPage: number = 1;
+  private offset = 0;
+  private currentPage = 1;
   private pagesTotalCount!: number;
-  private limit: number = 5;
-  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public error: string = '';
+  private limit = 5;
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
+  public error = '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -51,8 +64,10 @@ export class GlobalFeedComponent extends TestedComponent implements OnChanges, O
     this.reset();
     if (this.tabIndex === 1 || !this.isAuthorized) {
       this.getArticles();
-      this.infiniteScroll
-        .observeIntersection({ canLoad: this.canLoad$, callback: this.getArticles.bind(this) });
+      this.infiniteScroll.observeIntersection({
+        canLoad: this.canLoad$,
+        callback: this.getArticles.bind(this),
+      });
     }
   }
 
@@ -62,22 +77,25 @@ export class GlobalFeedComponent extends TestedComponent implements OnChanges, O
   }
 
   ngAfterViewInit(): void {
-    this.lastItem.changes
-      .pipe(takeUntil(this.notifier))
-      .subscribe(change => {
-        if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
-      });
+    this.lastItem.changes.pipe(takeUntil(this.notifier)).subscribe((change) => {
+      if (change.last)
+        this.infiniteScroll.observer.observe(change.last.nativeElement);
+    });
   }
 
   private getArticles(): void {
     this.error = '';
     this.isLoading = true;
     this.cdRef.detectChanges();
-    this.articlesService.fetchArticles(this.offset, this.limit)
+    this.articlesService
+      .fetchArticles(this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
-      .subscribe((response: IArticleResponse | any) => this.setDataOnResponse(response));
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+      )
+      .subscribe((response: IArticleResponse | any) =>
+        this.setDataOnResponse(response)
+      );
   }
 
   private setDataOnResponse(response: IArticleResponse): void {
@@ -90,11 +108,12 @@ export class GlobalFeedComponent extends TestedComponent implements OnChanges, O
     this.cdRef.detectChanges();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
     this.cdRef.detectChanges();
-    return of({ articles: [], articlesCount: 0 })
+    return of({ articles: [], articlesCount: 0 });
   }
 
   private nextPage(): void {
@@ -112,5 +131,4 @@ export class GlobalFeedComponent extends TestedComponent implements OnChanges, O
     this.currentPage = 1;
     this.cdRef.detectChanges();
   }
-
 }

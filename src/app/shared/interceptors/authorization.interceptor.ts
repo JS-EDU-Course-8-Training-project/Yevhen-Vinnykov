@@ -4,29 +4,30 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AuthorizationService } from '../services/authorization/authorization.service';
 
 @Injectable()
 export class AuthorizationInterceptor implements HttpInterceptor {
-  private isAuthorized: boolean = false;
+  private isAuthorized = false;
 
-  constructor(
-    readonly authorizationService: AuthorizationService
-  ) { }
+  constructor(readonly authorizationService: AuthorizationService) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
     this.authorizationService.checkIfAuthorized();
     this.isAuthorized = this.authorizationService.isAuthorized$.getValue();
 
     if (this.isAuthorized) {
       //const token: string = `Bearer ${localStorage.getItem('token')}`;
-      const token: string = `${localStorage.getItem('token')}`;
+      const token = `${localStorage.getItem('token')}`;
       request = request.clone({
-       // headers: request.headers.append('Authorization', token)
-       headers: request.headers.append('x-access-token', token)
+        // headers: request.headers.append('Authorization', token)
+        headers: request.headers.append('x-access-token', token),
       });
     }
     return next.handle(request).pipe(
@@ -40,7 +41,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
           console.log('This is server side error');
           errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
         }
-        
+
         return throwError(() => error);
       })
     );

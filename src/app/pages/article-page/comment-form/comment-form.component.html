@@ -1,40 +1,40 @@
 <div *ngIf="isAuthorized">
-    <form 
-        [formGroup]="commentForm" 
-        (ngSubmit)="addComment()"
-        [e2e]="TestAttributes.CommentForm"
-    >
-        <div class="form-group">
-            <textarea 
-                type="text" 
-                class="form-control" 
-                id="body" 
-                name="body" 
-                required 
-                formControlName="body"
-                placeholder="Write a comment..."
-                [e2e]="TestAttributes.CommentTextarea"
-            >
-            </textarea>
-            <div class="footer">
-                <img [src]="image" />
-                <button
-                    [disabled]="!commentForm.valid"
-                    align="end" 
-                    type="submit" 
-                    mat-raised-button
-                    color="primary"
-                    [e2e]="TestAttributes.CommentPostBtn"
-                >
-                    <span *ngIf="!isLoading">Add</span>
-                    <mat-spinner 
-                        *ngIf="isLoading" 
-                        diameter="25"
-                        [e2e]="TestAttributes.LoadingSpinner"
-                    >
-                    </mat-spinner> 
-                </button>
-            </div>
-        </div>
-    </form>
+  <form
+    [formGroup]="commentForm"
+    (ngSubmit)="addComment()"
+    [e2e]="TestAttributes.CommentForm"
+  >
+    <div class="form-group">
+      <textarea
+        type="text"
+        class="form-control"
+        id="body"
+        name="body"
+        required
+        formControlName="body"
+        placeholder="Write a comment..."
+        [e2e]="TestAttributes.CommentTextarea"
+      >
+      </textarea>
+      <div class="footer">
+        <img [src]="image" />
+        <button
+          [disabled]="!commentForm.valid"
+          align="end"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [e2e]="TestAttributes.CommentPostBtn"
+        >
+          <span *ngIf="!isLoading">Add</span>
+          <mat-spinner
+            *ngIf="isLoading"
+            diameter="25"
+            [e2e]="TestAttributes.LoadingSpinner"
+          >
+          </mat-spinner>
+        </button>
+      </div>
+    </div>
+  </form>
 </div>

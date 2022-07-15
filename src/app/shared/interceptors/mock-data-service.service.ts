@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-
 @Injectable()
 export class MockDataService {
   ROOT_URL = `http://jsonplaceholder.typicode.com`;

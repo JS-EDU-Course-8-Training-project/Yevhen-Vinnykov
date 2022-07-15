@@ -13,18 +13,18 @@ type TSignupControls = 'username' | 'email' | 'password';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss']
+  styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent extends TestedComponent implements OnInit {
   public signupForm!: FormGroup;
   public errors: string[] = [];
-  public isPending: boolean = false;
+  public isPending = false;
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private redirectionService: RedirectionService,
+    private redirectionService: RedirectionService
   ) {
     super();
   }
@@ -33,7 +33,7 @@ export class SignUpComponent extends TestedComponent implements OnInit {
     this.signupForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -43,7 +43,10 @@ export class SignUpComponent extends TestedComponent implements OnInit {
   }
 
   public checkIfValid(formControl: TSignupControls): boolean {
-    return !(this.signupForm.controls[formControl].touched && this.signupForm.controls[formControl].invalid);
+    return !(
+      this.signupForm.controls[formControl].touched &&
+      this.signupForm.controls[formControl].invalid
+    );
   }
 
   private createUserData(): INewUser {
@@ -57,9 +60,9 @@ export class SignUpComponent extends TestedComponent implements OnInit {
   }
 
   private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
-    Object.keys(error.error.errors).forEach(key => {
-      this.errors.push(`${key} ${error.error.errors[key][0]}`)
-    })
+    Object.keys(error.error.errors).forEach((key) => {
+      this.errors.push(`${key} ${error.error.errors[key][0]}`);
+    });
 
     this.isPending = false;
     this.signupForm.enable();
@@ -71,11 +74,13 @@ export class SignUpComponent extends TestedComponent implements OnInit {
   public handleSignup(): void {
     this.onSubmit();
 
-    this.usersService.createUser(this.createUserData())
+    this.usersService
+      .createUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
-      .subscribe((user: IExistingUser | any) => {
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+      )
+      .subscribe(() => {
         this.isPending = false;
         if (!this.errors.length) this.redirectionService.redirectHome();
       });

@@ -1,5 +1,8 @@
 import { Subject, takeUntil } from 'rxjs';
-import { ArticlePageButtonsService, IButtonsState } from '../services/buttons/article-page-buttons.service';
+import {
+  ArticlePageButtonsService,
+  IButtonsState,
+} from '../services/buttons/article-page-buttons.service';
 import { AuthorizationService } from '../../../shared/services/authorization/authorization.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
@@ -13,9 +16,12 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-article-page-buttons',
   templateUrl: './article-page-buttons.component.html',
-  styleUrls: ['./article-page-buttons.component.scss']
+  styleUrls: ['./article-page-buttons.component.scss'],
 })
-export class ArticlePageButtonsComponent extends TestedComponent implements OnChanges, OnDestroy {
+export class ArticlePageButtonsComponent
+  extends TestedComponent
+  implements OnChanges, OnDestroy
+{
   @Input() article!: IArticle;
   @Input() slug!: string;
   @Input() authUser!: IExistingUser;
@@ -53,18 +59,19 @@ export class ArticlePageButtonsComponent extends TestedComponent implements OnCh
     this.username = this.article?.author?.username;
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
 
-    if(!this.isAuthor && this.article) {
-      this.articlePageButtonsService.initialize(this.article)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(state => this.setDataOnResponse(state));
+    if (!this.isAuthor && this.article) {
+      this.articlePageButtonsService
+        .initialize(this.article)
+        .pipe(takeUntil(this.notifier))
+        .subscribe((state) => this.setDataOnResponse(state));
     }
 
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
-      .subscribe((isAuthorized) => this.isAuthorized = isAuthorized);
+      .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
   }
 
-  private setDataOnResponse(state: IButtonsState){
+  private setDataOnResponse(state: IButtonsState) {
     this.followingInProgress = state.followingInProgress;
     this.favoriteInProgress = state.favoriteInProgress;
     this.isFollowed = state.isFollowed;
@@ -73,7 +80,8 @@ export class ArticlePageButtonsComponent extends TestedComponent implements OnCh
   }
 
   public handleLikeDislike(slug: string): void {
-    if ((!this.isAuthorized)) return this.redirectionService.redirectUnauthorized();
+    if (!this.isAuthorized)
+      return this.redirectionService.redirectUnauthorized();
 
     this.articlePageButtonsService.updateState('favoriteInProgress', true);
 
@@ -82,39 +90,62 @@ export class ArticlePageButtonsComponent extends TestedComponent implements OnCh
   }
 
   public handleFollowUnfollow(username: string): void {
-    if ((!this.isAuthorized)) return this.redirectionService.redirectUnauthorized();
+    if (!this.isAuthorized)
+      return this.redirectionService.redirectUnauthorized();
 
     this.articlePageButtonsService.updateState('followingInProgress', true);
-    
+
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
   }
 
-  private likeHandler(slug: string, method: 'addToFavorites' | 'removeFromFavorites'): void {
+  private likeHandler(
+    slug: string,
+    method: 'addToFavorites' | 'removeFromFavorites'
+  ): void {
     this.articlesService[method](slug)
       .pipe(takeUntil(this.notifier))
-      .subscribe(article => {
+      .subscribe((article) => {
         if (!(article instanceof HttpErrorResponse)) {
-          this.articlePageButtonsService.updateState('isLiked', article.favorited);
-          this.articlePageButtonsService.updateState('likesCount' ,article.favoritesCount);
-          this.articlePageButtonsService.updateState('favoriteInProgress', false);
+          this.articlePageButtonsService.updateState(
+            'isLiked',
+            article.favorited
+          );
+          this.articlePageButtonsService.updateState(
+            'likesCount',
+            article.favoritesCount
+          );
+          this.articlePageButtonsService.updateState(
+            'favoriteInProgress',
+            false
+          );
         }
       });
   }
 
-  private followingHandler(username: string, method: 'follow' | 'unfollow'): void {
+  private followingHandler(
+    username: string,
+    method: 'follow' | 'unfollow'
+  ): void {
     this.profilesService[method](username)
       .pipe(takeUntil(this.notifier))
-      .subscribe((profile => {
+      .subscribe((profile) => {
         if (!(profile instanceof HttpErrorResponse)) {
-          this.articlePageButtonsService.updateState('isFollowed', profile.following);
-          this.articlePageButtonsService.updateState('followingInProgress', false);
+          this.articlePageButtonsService.updateState(
+            'isFollowed',
+            profile.following
+          );
+          this.articlePageButtonsService.updateState(
+            'followingInProgress',
+            false
+          );
         }
-      }));
+      });
   }
 
   public deleteArticle(slug: string): void {
-    this.articlesService.deleteArticle(slug)
+    this.articlesService
+      .deleteArticle(slug)
       .pipe(takeUntil(this.notifier))
       .subscribe(() => this.redirectionService.redirectHome());
   }

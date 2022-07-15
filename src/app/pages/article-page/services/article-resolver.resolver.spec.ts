@@ -22,11 +22,11 @@ const expectedData: IArticle = {
     bio: 'test-bio',
     image: 'test-image',
     following: false,
-  }
+  },
 };
 
 class ArticleServiceStub {
-  public fetchArticle = (slug: string) => of(expectedData);
+  public fetchArticle = () => of(expectedData);
 }
 
 describe('ARTICLE RESOLVER', () => {
@@ -36,9 +36,7 @@ describe('ARTICLE RESOLVER', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        { provide: ArticlesService, useClass: ArticleServiceStub }
-      ]
+      providers: [{ provide: ArticlesService, useClass: ArticleServiceStub }],
     });
     resolver = TestBed.inject(ArticleResolver);
     route = new ActivatedRouteSnapshot();
@@ -46,9 +44,8 @@ describe('ARTICLE RESOLVER', () => {
   });
 
   it('should return correct data', () => {
-    resolver.resolve(route, routerState).subscribe(article => {
+    resolver.resolve(route, routerState).subscribe((article) => {
       expect(article).toEqual(expectedData);
     });
   });
-
 });

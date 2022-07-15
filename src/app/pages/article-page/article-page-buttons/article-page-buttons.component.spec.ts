@@ -19,12 +19,10 @@ import {
   AuthorizationServiceMock,
   article,
   authUser,
-  AuthorizationServiceNotAuthMock
+  AuthorizationServiceNotAuthMock,
 } from './buttons.mocks.spec';
 import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
-
-
 
 describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
   let component: ArticlePageButtonsComponent;
@@ -37,13 +35,15 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
         { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: ArticlePageButtonsService, useClass: ArticlePageButtonsServiceMock },
+        {
+          provide: ArticlePageButtonsService,
+          useClass: ArticlePageButtonsServiceMock,
+        },
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
       ],
       imports: [MatCardModule, MatIconModule],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -64,11 +64,10 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     });
 
     it('should initialize', () => {
-      const spy = spyOn<any>(component, 'initialize')
+      const spy = spyOn<any>(component, 'initialize');
       component.ngOnChanges();
       expect(spy).toHaveBeenCalled();
     });
-
   });
 
   describe('HANDLE LIKE DISLIKE METHOD', () => {
@@ -80,10 +79,12 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
       const inputArticle: IArticle = { ...article, favorited: true };
       component.article = inputArticle;
       component.ngOnChanges();
-      
+
       const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`));
+      const buttonElement = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`)
+      );
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -100,7 +101,9 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
 
       const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`));
+      const buttonElement = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`)
+      );
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -109,7 +112,6 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
         expect(spy).toHaveBeenCalledWith('test-slug', 'addToFavorites');
       });
     }));
-
   });
 
   describe('HANDLE FOLLOW UNFOLLOW METHOD', () => {
@@ -118,13 +120,18 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     });
 
     it('should be invoked on button click and unfollow', waitForAsync(() => {
-      const inputArticle: IArticle = { ...article, author: { ...article.author, following: true } };
+      const inputArticle: IArticle = {
+        ...article,
+        author: { ...article.author, following: true },
+      };
       component.article = inputArticle;
       component.ngOnChanges();
 
       const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`));
+      const buttonElement = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`)
+      );
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -134,13 +141,18 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     }));
 
     it('should be invoked on button click and follow', waitForAsync(() => {
-      const inputArticle: IArticle = { ...article, author: { ...article.author, following: false } };
+      const inputArticle: IArticle = {
+        ...article,
+        author: { ...article.author, following: false },
+      };
       component.article = inputArticle;
       component.ngOnChanges();
 
       const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`));
+      const buttonElement = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`)
+      );
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
@@ -150,10 +162,12 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     }));
   });
 
-
   describe('DELETE METHOD', () => {
     beforeEach(() => {
-      component.article = { ...article, author: { ...article.author, username: 'test-username' } };
+      component.article = {
+        ...article,
+        author: { ...article.author, username: 'test-username' },
+      };
       component.ngOnChanges();
       fixture.detectChanges();
     });
@@ -161,20 +175,23 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     it('should delete the article', waitForAsync(() => {
       const spy = spyOn(component, 'deleteArticle').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleDeleteBtn}]`));
+      const buttonElement = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.ArticleDeleteBtn}]`)
+      );
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
         expect(spy).toHaveBeenCalledWith('test-slug');
       });
     }));
-
   });
 
   describe('EDIT REDIRECTION METHOD', () => {
-
     beforeEach(() => {
-      component.article = { ...article, author: { ...article.author, username: 'test-username' } };
+      component.article = {
+        ...article,
+        author: { ...article.author, username: 'test-username' },
+      };
       component.ngOnChanges();
       fixture.detectChanges();
     });
@@ -182,16 +199,16 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > AUTHORIZED', () => {
     it('should redirect to edit page', waitForAsync(() => {
       const spy = spyOn(component, 'redirectToEditArticle').and.callThrough();
 
-      const buttonElement = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleEditBtn}]`));
+      const buttonElement = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.ArticleEditBtn}]`)
+      );
       buttonElement.triggerEventHandler('click', null);
 
       fixture.whenStable().then(() => {
         expect(spy).toHaveBeenCalledWith('test-slug');
       });
     }));
-
   });
-
 });
 
 describe('ARTICLE PAGE BUTTONS COMPONENT > UNAUTHORIZED', () => {
@@ -205,13 +222,18 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > UNAUTHORIZED', () => {
         { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: ArticlePageButtonsService, useClass: ArticlePageButtonsServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceNotAuthMock },
+        {
+          provide: ArticlePageButtonsService,
+          useClass: ArticlePageButtonsServiceMock,
+        },
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceNotAuthMock,
+        },
       ],
       imports: [MatCardModule, MatIconModule],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -224,15 +246,18 @@ describe('ARTICLE PAGE BUTTONS COMPONENT > UNAUTHORIZED', () => {
     const service = TestBed.inject(RedirectionService);
     const spy = spyOn(service, 'redirectUnauthorized');
 
-    const likeButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`));
+    const likeButton = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.ArticleLikeBtn}]`)
+    );
     console.log(likeButton);
-    
+
     likeButton.triggerEventHandler('click', null);
 
-    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`));
+    const followButton = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.ArticleFollowBtn}]`)
+    );
     followButton.triggerEventHandler('click', null);
 
     expect(spy).toHaveBeenCalledTimes(2);
   });
-
 });

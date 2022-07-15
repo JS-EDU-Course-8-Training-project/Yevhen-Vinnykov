@@ -1,63 +1,49 @@
-<app-banner 
-    className="banner user-banner"
-    [e2e]="TestAttributes.UserPageBanner"
+<app-banner
+  className="banner user-banner"
+  [e2e]="TestAttributes.UserPageBanner"
 >
-    <div>
-        <img 
-            [src]="user?.image" 
-            alt=""
-            [e2e]="TestAttributes.UserPageImg"
-        >
-        <mat-card-title 
-            class="title"
-        >
-            <h3 [e2e]="TestAttributes.UserPageUsername">{{user?.username}}</h3>
-        </mat-card-title>
-        <mat-card-content 
-            class="subtitle"
-        >
-            <p [e2e]="TestAttributes.UserPageBio">{{user?.bio}}</p>
-        </mat-card-content>
-    </div>
-    <div class="button-container">
-        <button 
-            *ngIf="isMyself" 
-            mat-raised-button 
-            color="primary"
-            [e2e]="TestAttributes.UserPageUpdateBtn"
-        >
-            <a routerLink="/settings">Update Profile Settings</a>
-        </button>
-        <button 
-            [disabled]="followingInProgress" 
-            (click)="handleFollowUnfollow(user.username)" 
-            *ngIf="!isMyself" 
-            mat-raised-button 
-            color="primary"
-            [e2e]="TestAttributes.UserPageFollowBtn"
-        >
-            {{ isFollowed ? 'Unfollow' : 'Follow' }} {{user?.username}}
-        </button>
-    </div>
+  <div>
+    <img [src]="user?.image" alt="" [e2e]="TestAttributes.UserPageImg" />
+    <mat-card-title class="title">
+      <h3 [e2e]="TestAttributes.UserPageUsername">{{ user?.username }}</h3>
+    </mat-card-title>
+    <mat-card-content class="subtitle">
+      <p [e2e]="TestAttributes.UserPageBio">{{ user?.bio }}</p>
+    </mat-card-content>
+  </div>
+  <div class="button-container">
+    <button
+      *ngIf="isMyself"
+      mat-raised-button
+      color="primary"
+      [e2e]="TestAttributes.UserPageUpdateBtn"
+    >
+      <a routerLink="/settings">Update Profile Settings</a>
+    </button>
+    <button
+      [disabled]="followingInProgress"
+      (click)="handleFollowUnfollow(user.username)"
+      *ngIf="!isMyself"
+      mat-raised-button
+      color="primary"
+      [e2e]="TestAttributes.UserPageFollowBtn"
+    >
+      {{ isFollowed ? "Unfollow" : "Follow" }} {{ user?.username }}
+    </button>
+  </div>
 </app-banner>
 <section>
-    <mat-tab-group 
-        (focusChange)="this.tabIndex = $event.index"
-        [selectedIndex]="tabIndex"
-    >
-        <mat-tab label="My Articles">
-            <app-my-articles 
-                [tabIndex]="tabIndex" 
-                [username]="urlUsername"
-            >
-            </app-my-articles>
-        </mat-tab>
-        <mat-tab label="Favorited Articles">
-            <app-favorited-articles 
-                [tabIndex]="tabIndex" 
-                [username]="urlUsername"
-            >
-            </app-favorited-articles>
-        </mat-tab>
-    </mat-tab-group>
+  <mat-tab-group
+    (focusChange)="this.tabIndex = $event.index"
+    [selectedIndex]="tabIndex"
+  >
+    <mat-tab label="My Articles">
+      <app-my-articles [tabIndex]="tabIndex" [username]="urlUsername">
+      </app-my-articles>
+    </mat-tab>
+    <mat-tab label="Favorited Articles">
+      <app-favorited-articles [tabIndex]="tabIndex" [username]="urlUsername">
+      </app-favorited-articles>
+    </mat-tab>
+  </mat-tab-group>
 </section>

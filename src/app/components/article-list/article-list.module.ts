@@ -8,8 +8,6 @@ import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
-
 @NgModule({
   declarations: [ArticleListComponent],
   imports: [
@@ -22,6 +20,5 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SharedModule,
   ],
   exports: [ArticleListComponent],
-
 })
-export class ArticleListModule { }
+export class ArticleListModule {}

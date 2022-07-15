@@ -26,20 +26,28 @@ const article: IArticle = {
     bio: 'test-bio',
     image: '',
     following: false,
-  }
+  },
 };
 
 class AricleServiceMock {
-  
-  public addToFavorites = (slug: string) => of(
-    { ...article, favorited: true, favoritesCount: article.favoritesCount + 1 });
+  public addToFavorites = () =>
+    of({
+      ...article,
+      favorited: true,
+      favoritesCount: article.favoritesCount + 1,
+    });
 
-  public removeFromFavorites = (slug: string) => of(
-    { ...article, favorited: false, favoritesCount: article.favoritesCount - 1 });
+  public removeFromFavorites = () =>
+    of({
+      ...article,
+      favorited: false,
+      favoritesCount: article.favoritesCount - 1,
+    });
 }
 
 class RedirectionServiceMock {
-  public redirectUnauthorized = () => new Promise<boolean>((resolve, reject) => resolve(true));
+  public redirectUnauthorized = () =>
+    new Promise<boolean>((resolve) => resolve(true));
 }
 
 class AuthorizationServiceAuthorizedMock {
@@ -60,11 +68,13 @@ describe('ARTICLE COMPONENT', () => {
       providers: [
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceAuthorizedMock }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceAuthorizedMock,
+        },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -82,9 +92,7 @@ describe('ARTICLE COMPONENT', () => {
   it('should initialize correctly', async () => {
     expect(component.likesCount).toBe(2);
   });
-
 });
-
 
 describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
   let component: ArticleListComponent;
@@ -96,11 +104,13 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
       providers: [
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceAuthorizedMock }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceAuthorizedMock,
+        },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -109,7 +119,7 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
   });
 
   it('should be invoked on button click and dislike', waitForAsync(() => {
-    const inputArticle: IArticle = {...article, favorited: true};
+    const inputArticle: IArticle = { ...article, favorited: true };
     component.article = inputArticle;
     fixture.detectChanges();
 
@@ -124,10 +134,10 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
       expect(component.isLiked).toBe(false);
       expect(spy).toHaveBeenCalledWith('test-slug', 'removeFromFavorites');
     });
-  })); 
+  }));
 
   it('should be invoked on button click and like', waitForAsync(() => {
-    const inputArticle: IArticle = {...article, favorited: false};
+    const inputArticle: IArticle = { ...article, favorited: false };
     component.article = inputArticle;
     fixture.detectChanges();
 
@@ -155,11 +165,13 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => 
       providers: [
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceNotAuthorizedMock }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceNotAuthorizedMock,
+        },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -168,7 +180,7 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => 
   });
 
   it('should not be invoked on button because unauthorized', waitForAsync(() => {
-    const inputArticle: IArticle = {...article};
+    const inputArticle: IArticle = { ...article };
     component.article = inputArticle;
 
     const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
@@ -176,11 +188,11 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => 
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
     fixture.detectChanges();
-  
+
     fixture.whenStable().then(() => {
       expect(component.likesCount).toBe(2);
       expect(component.isLiked).toBe(false);
       expect(spy).not.toHaveBeenCalled();
     });
-  })); 
+  }));
 });

@@ -1,4 +1,11 @@
-import { BehaviorSubject, catchError, Observable, Subject, takeUntil, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  Observable,
+  Subject,
+  takeUntil,
+  of,
+} from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import {
   AfterViewInit,
@@ -10,7 +17,7 @@ import {
   QueryList,
   ViewChildren,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,24 +28,30 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
   selector: 'app-tagged-articles',
   templateUrl: './tagged-articles.component.html',
   styleUrls: ['./tagged-articles.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaggedArticlesComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
+export class TaggedArticlesComponent
+  extends TestedComponent
+  implements OnChanges, OnDestroy, AfterViewInit
+{
+  @ViewChildren('lastItem', { read: ElementRef })
+  lastItem!: QueryList<ElementRef>;
 
-  @Input() isAuthorized: boolean = false;
+  @Input() isAuthorized = false;
   @Input() selectedTag!: string | null;
   @Input() tabIndex!: number;
 
   public articlesSelectedByTag: IArticle[] = [];
-  public isLoading: boolean = false;
+  public isLoading = false;
   private notifier: Subject<void> = new Subject<void>();
   public isFinished!: boolean;
-  private offset: number = 0;
+  private offset = 0;
   private pagesTotalCount!: number;
-  private limit: number = 5;
-  private currentPage: number = 1;
-  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  private limit = 5;
+  private currentPage = 1;
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
   public error = '';
 
   constructor(
@@ -53,8 +66,10 @@ export class TaggedArticlesComponent extends TestedComponent implements OnChange
     this.reset();
     if (this.tabIndex !== 2) return;
     this.getTaggedArticles();
-    this.infiniteScroll
-      .observeIntersection({ canLoad: this.canLoad$, callback: this.getTaggedArticles.bind(this) });
+    this.infiniteScroll.observeIntersection({
+      canLoad: this.canLoad$,
+      callback: this.getTaggedArticles.bind(this),
+    });
   }
 
   ngOnDestroy(): void {
@@ -63,11 +78,10 @@ export class TaggedArticlesComponent extends TestedComponent implements OnChange
   }
 
   ngAfterViewInit(): void {
-    this.lastItem.changes
-      .pipe(takeUntil(this.notifier))
-      .subscribe(change => {
-        if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
-      });
+    this.lastItem.changes.pipe(takeUntil(this.notifier)).subscribe((change) => {
+      if (change.last)
+        this.infiniteScroll.observer.observe(change.last.nativeElement);
+    });
   }
 
   private getTaggedArticles() {
@@ -79,21 +93,24 @@ export class TaggedArticlesComponent extends TestedComponent implements OnChange
       .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),
-        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+        catchError((err: HttpErrorResponse): any => this.onCatchError(err))
+      )
       .subscribe((res: IArticleResponse | any) => this.setDataOnResponse(res));
-
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
     this.cdRef.detectChanges();
     return of({ articles: [], articlesCount: 0 });
-
   }
 
   private setDataOnResponse(response: IArticleResponse): void {
-    this.articlesSelectedByTag = [...this.articlesSelectedByTag, ...response.articles];
+    this.articlesSelectedByTag = [
+      ...this.articlesSelectedByTag,
+      ...response.articles,
+    ];
     this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
     this.isFinished = this.currentPage === this.pagesTotalCount;
     this.isLoading = false;

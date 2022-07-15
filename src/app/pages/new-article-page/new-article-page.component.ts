@@ -12,14 +12,15 @@ import { INewArticle } from 'src/app/shared/models/INewArticle';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
-
 @Component({
   selector: 'app-new-article-page',
   templateUrl: './new-article-page.component.html',
-  styleUrls: ['./new-article-page.component.scss']
+  styleUrls: ['./new-article-page.component.scss'],
 })
-
-export class NewArticlePageComponent extends TestedComponent implements OnInit, OnDestroy, ISavedData {
+export class NewArticlePageComponent
+  extends TestedComponent
+  implements OnInit, OnDestroy, ISavedData
+{
   public articleForm!: FormGroup;
   public isEditMode!: boolean;
   public articleToEdit!: IArticle | null;
@@ -42,10 +43,12 @@ export class NewArticlePageComponent extends TestedComponent implements OnInit, 
     this.initializeForm();
 
     if (this.isEditMode) {
-      this.articlesService.fetchArticle(this.slug)
+      this.articlesService
+        .fetchArticle(this.slug)
         .pipe(
           takeUntil(this.notifier),
-          catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+          catchError((err: HttpErrorResponse): any => this.onCatchError(err))
+        )
         .subscribe((article: IArticle | any) => {
           this.articleToEdit = article;
           this.initializeForm();
@@ -62,9 +65,15 @@ export class NewArticlePageComponent extends TestedComponent implements OnInit, 
   private initializeForm(): void {
     this.articleForm = this.fb.group({
       title: [this.articleToEdit?.title || '', [Validators.required]],
-      description: [this.articleToEdit?.description || '', [Validators.required]],
+      description: [
+        this.articleToEdit?.description || '',
+        [Validators.required],
+      ],
       body: [this.articleToEdit?.body || '', [Validators.required]],
-      tagList: [this.articleToEdit?.tagList?.join(',') || '', [Validators.required]],
+      tagList: [
+        this.articleToEdit?.tagList?.join(',') || '',
+        [Validators.required],
+      ],
     });
   }
 
@@ -74,23 +83,28 @@ export class NewArticlePageComponent extends TestedComponent implements OnInit, 
   }
 
   public checkIfValid(formControl: string): boolean {
-    return !(this.articleForm.controls[formControl].touched && this.articleForm.controls[formControl].invalid);
+    return !(
+      this.articleForm.controls[formControl].touched &&
+      this.articleForm.controls[formControl].invalid
+    );
   }
 
   private createArticleData(): INewArticle | IUpdateArticle {
     const formData = this.articleForm.getRawValue();
-    formData.tagList = formData.tagList.split(',').map((tag: string) => tag.trim());
+    formData.tagList = formData.tagList
+      .split(',')
+      .map((tag: string) => tag.trim());
     const articleData = {} as INewArticle | IUpdateArticle;
 
-    Object.keys(formData).forEach(key => {
-      const isFieldChanged = this.articleToEdit?.[key as keyof IUpdateArticle] !== formData[key];
+    Object.keys(formData).forEach((key) => {
+      const isFieldChanged =
+        this.articleToEdit?.[key as keyof IUpdateArticle] !== formData[key];
       if (isFieldChanged) {
         articleData[key as keyof IUpdateArticle] = formData[key];
       }
     });
 
     return articleData;
-
   }
 
   public handleArticleAction(): void {
@@ -98,15 +112,21 @@ export class NewArticlePageComponent extends TestedComponent implements OnInit, 
     this.articleForm.reset();
   }
 
-  private articleAction(slug: string, newArticle: INewArticle | IUpdateArticle) {
-    const subscription: Observable<INewArticle | HttpErrorResponse> = this.isEditMode
+  private articleAction(
+    slug: string,
+    newArticle: INewArticle | IUpdateArticle
+  ) {
+    const subscription: Observable<INewArticle | HttpErrorResponse> = this
+      .isEditMode
       ? this.articlesService.updateArticle(slug, newArticle as IUpdateArticle)
       : this.articlesService.createArticle(newArticle as INewArticle);
 
     subscription
       .pipe(takeUntil(this.notifier))
       .subscribe((article: INewArticle | any) => {
-        this.redirectionService.redirectByUrl(`article/${article.article.slug}`);
+        this.redirectionService.redirectByUrl(
+          `article/${article.article.slug}`
+        );
       });
   }
 

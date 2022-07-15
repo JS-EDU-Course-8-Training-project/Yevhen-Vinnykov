@@ -1,5 +1,12 @@
 import { IUpdateUser } from './../../../shared/models/IUpdateUser';
-import { Subject, takeUntil, BehaviorSubject, catchError, of, Observable } from 'rxjs';
+import {
+  Subject,
+  takeUntil,
+  BehaviorSubject,
+  catchError,
+  of,
+  Observable,
+} from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,10 +20,12 @@ type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'password';
 @Component({
   selector: 'app-settings-form',
   templateUrl: './settings-form.component.html',
-  styleUrls: ['./settings-form.component.scss']
+  styleUrls: ['./settings-form.component.scss'],
 })
-
-export class SettingsFormComponent extends TestedComponent implements OnChanges, OnDestroy, OnInit {
+export class SettingsFormComponent
+  extends TestedComponent
+  implements OnChanges, OnDestroy, OnInit
+{
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
@@ -28,7 +37,7 @@ export class SettingsFormComponent extends TestedComponent implements OnChanges,
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private redirectionService: RedirectionService,
+    private redirectionService: RedirectionService
   ) {
     super();
   }
@@ -61,7 +70,10 @@ export class SettingsFormComponent extends TestedComponent implements OnChanges,
   }
 
   public checkIfValid(formControl: TSettingsControls): boolean {
-    return !(this.settingsForm.controls[formControl].touched && this.settingsForm.controls[formControl].invalid);
+    return !(
+      this.settingsForm.controls[formControl].touched &&
+      this.settingsForm.controls[formControl].invalid
+    );
   }
 
   private createUserData(): IUpdateUser {
@@ -73,11 +85,13 @@ export class SettingsFormComponent extends TestedComponent implements OnChanges,
       const authUserProp = this.authUser[key as keyof IExistingUser];
 
       if (key === 'password' && formDataProp) {
-        updatedData[key as keyof IUpdateUser] = formData[key as keyof IUpdateUser];
+        updatedData[key as keyof IUpdateUser] =
+          formData[key as keyof IUpdateUser];
         continue;
       }
       if (key !== 'password' && formDataProp !== authUserProp) {
-        updatedData[key as keyof IUpdateUser] = formData[key as keyof IUpdateUser];
+        updatedData[key as keyof IUpdateUser] =
+          formData[key as keyof IUpdateUser];
       }
     }
     return updatedData;
@@ -90,8 +104,8 @@ export class SettingsFormComponent extends TestedComponent implements OnChanges,
   }
 
   private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
-    Object.keys(error.error.errors).forEach(key => {
-      this.errors.push(`${key} ${error.error.errors[key][0]}`)
+    Object.keys(error.error.errors).forEach((key) => {
+      this.errors.push(`${key} ${error.error.errors[key][0]}`);
     });
 
     this.isPending = false;
@@ -104,10 +118,12 @@ export class SettingsFormComponent extends TestedComponent implements OnChanges,
   public updateSettings(): void {
     this.onSubmit();
 
-    this.usersService.updateUser(this.createUserData())
+    this.usersService
+      .updateUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+      )
       .subscribe((user: IExistingUser | any) => {
         this.isModified$.next(false);
         if (!this.errors.length) {

@@ -1,42 +1,42 @@
 .tags-container {
-    max-width: 300px;
-    box-sizing: border-box;
-    flex: 0 1 auto;
-    margin: 0 0 0 30px;
-    .tags {
-        text-align: center;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 15px;
-        background-color: rgb(238, 238, 238);
-        border-radius: 8px;
-        p {
-            width: 100%;
-            font-size: 1rem;
-            margin: 0 0 10px 0;
-        }
-        .tag-item {
-            background-color: rgb(202, 202, 202);
-            border-radius: 999999px;
-            padding: 5px;
-            margin: 5px;
-            flex: 1 1 auto;
-            min-width: 80px;
-            cursor: pointer;
-            &:hover{
-                filter: brightness(0.9);
-            }
-            &.selected{
-                filter: brightness(0.7);
-            }
-        }
+  max-width: 300px;
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  margin: 0 0 0 30px;
+  .tags {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+    background-color: rgb(238, 238, 238);
+    border-radius: 8px;
+    p {
+      width: 100%;
+      font-size: 1rem;
+      margin: 0 0 10px 0;
     }
+    .tag-item {
+      background-color: rgb(202, 202, 202);
+      border-radius: 999999px;
+      padding: 5px;
+      margin: 5px;
+      flex: 1 1 auto;
+      min-width: 80px;
+      cursor: pointer;
+      &:hover {
+        filter: brightness(0.9);
+      }
+      &.selected {
+        filter: brightness(0.7);
+      }
+    }
+  }
 }
 @media (max-width: 768px) {
-    .tags-container{
-        max-width: 100%;
-        padding: 10px;
-        margin: 0;
-    }
+  .tags-container {
+    max-width: 100%;
+    padding: 10px;
+    margin: 0;
+  }
 }

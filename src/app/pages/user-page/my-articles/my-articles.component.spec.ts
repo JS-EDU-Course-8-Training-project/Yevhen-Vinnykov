@@ -6,7 +6,6 @@ import { MyArticlesComponent } from './my-articles.component';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-
 const expectedData: IArticleResponse = {
   articles: [
     {
@@ -25,10 +24,10 @@ const expectedData: IArticleResponse = {
         bio: 'test-bio',
         image: 'test-image',
         following: true,
-      }
+      },
     },
   ],
-  articlesCount: 10
+  articlesCount: 10,
 };
 
 class ArticlesServiceMock {
@@ -36,9 +35,9 @@ class ArticlesServiceMock {
 }
 
 class ArticlesServiceMockWithError {
-  public fetchUserArticles = () => throwError(() => Error('Fetching articles failed'));
+  public fetchUserArticles = () =>
+    throwError(() => Error('Fetching articles failed'));
 }
-
 
 describe('MY ARTICLES COMPONENT', () => {
   let component: MyArticlesComponent;
@@ -47,12 +46,9 @@ describe('MY ARTICLES COMPONENT', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MyArticlesComponent],
-      providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMock }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      providers: [{ provide: ArticlesService, useClass: ArticlesServiceMock }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -88,9 +84,7 @@ describe('MY ARTICLES COMPONENT', () => {
     expect(spy).toHaveBeenCalledWith(expectedData);
     expect(component.myArticles).toEqual(expectedData.articles);
   });
-
 });
-
 
 describe('ON CATCH ERROR METHOD', () => {
   let component: MyArticlesComponent;
@@ -100,10 +94,9 @@ describe('ON CATCH ERROR METHOD', () => {
     await TestBed.configureTestingModule({
       declarations: [MyArticlesComponent],
       providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMockWithError }
-      ]
-    })
-      .compileComponents();
+        { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

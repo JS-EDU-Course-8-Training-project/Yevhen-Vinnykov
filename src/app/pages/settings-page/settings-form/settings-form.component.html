@@ -1,110 +1,110 @@
 <div>
-    <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()">
-        <div class="form-group">
-            <div *ngIf="errors.length">
-                <div 
-                    class="form-error" 
-                    *ngFor="let error of errors"
-                    [e2e]="TestAttributes.FormError"
-                >
-                    {{error}}
-                </div>
-            </div>
-            <input 
-                type="text" 
-                class="form-control" 
-                id="image" 
-                name="image" 
-                required 
-                formControlName="image"
-                placeholder="User photo URL"
-                [e2e]="TestAttributes.ImageInput"
-            >
-            <input 
-                type="text" 
-                class="form-control" 
-                id="username" 
-                name="username" 
-                required 
-                formControlName="username"
-                placeholder="Username"
-                [e2e]="TestAttributes.UsernameInput"
-            >
-            <span 
-                class="form-error" 
-                *ngIf="!checkIfValid('username')"
-                [e2e]="TestAttributes.FormError"
-            >
-                This field is required
-            </span>
-            <textarea 
-                type="text" 
-                class="form-control" 
-                id="bio" 
-                name="bio" 
-                required 
-                formControlName="bio"
-                placeholder="Bio"
-                [e2e]="TestAttributes.BioInput"
-            >
-            </textarea>
-            <input 
-                type="text" 
-                class="form-control" 
-                id="email" 
-                name="email" 
-                required 
-                formControlName="email"
-                placeholder="Email"
-                [e2e]="TestAttributes.EmailInput"
-            >
-            <span 
-                class="form-error"
-                *ngIf="!checkIfValid('email') && !settingsForm.get('email')?.value"
-                [e2e]="TestAttributes.FormError"
-             >
-                This field is required
-            </span>
-            <span 
-                class="form-error" 
-                *ngIf="settingsForm.get('email')?.errors?.['email']"
-                [e2e]="TestAttributes.FormError"
-            >
-                Enter a valid email
-            </span>
-            <input 
-                type="password" 
-                class="form-control" 
-                id="password" 
-                name="password" 
-                required
-                formControlName="password"  
-                placeholder="New password"
-                [e2e]="TestAttributes.PasswordInput"
-            >
-            <div class="form-group-actions">
-                <button 
-                    [disabled]="isPending" 
-                    align="end" 
-                    type="submit" 
-                    mat-raised-button 
-                    color="primary"
-                    [e2e]="TestAttributes.SettingsUpdateBtn"
-                >
-                    <span *ngIf="!isPending">Update</span>
-                    <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
-                </button>
-                <button 
-                    (click)="logout()" 
-                    align="end" 
-                    type="button" 
-                    mat-raised-button 
-                    color="warn"
-                    [e2e]="TestAttributes.SettingsLogoutBtn"
-                >
-                    Logout
-                 </button>
-            </div>
+  <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()">
+    <div class="form-group">
+      <div *ngIf="errors.length">
+        <div
+          class="form-error"
+          *ngFor="let error of errors"
+          [e2e]="TestAttributes.FormError"
+        >
+          {{ error }}
         </div>
-    </form>
+      </div>
+      <input
+        type="text"
+        class="form-control"
+        id="image"
+        name="image"
+        required
+        formControlName="image"
+        placeholder="User photo URL"
+        [e2e]="TestAttributes.ImageInput"
+      />
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        required
+        formControlName="username"
+        placeholder="Username"
+        [e2e]="TestAttributes.UsernameInput"
+      />
+      <span
+        class="form-error"
+        *ngIf="!checkIfValid('username')"
+        [e2e]="TestAttributes.FormError"
+      >
+        This field is required
+      </span>
+      <textarea
+        type="text"
+        class="form-control"
+        id="bio"
+        name="bio"
+        required
+        formControlName="bio"
+        placeholder="Bio"
+        [e2e]="TestAttributes.BioInput"
+      >
+      </textarea>
+      <input
+        type="text"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+        formControlName="email"
+        placeholder="Email"
+        [e2e]="TestAttributes.EmailInput"
+      />
+      <span
+        class="form-error"
+        *ngIf="!checkIfValid('email') && !settingsForm.get('email')?.value"
+        [e2e]="TestAttributes.FormError"
+      >
+        This field is required
+      </span>
+      <span
+        class="form-error"
+        *ngIf="settingsForm.get('email')?.errors?.['email']"
+        [e2e]="TestAttributes.FormError"
+      >
+        Enter a valid email
+      </span>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        required
+        formControlName="password"
+        placeholder="New password"
+        [e2e]="TestAttributes.PasswordInput"
+      />
+      <div class="form-group-actions">
+        <button
+          [disabled]="isPending"
+          align="end"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [e2e]="TestAttributes.SettingsUpdateBtn"
+        >
+          <span *ngIf="!isPending">Update</span>
+          <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
+        </button>
+        <button
+          (click)="logout()"
+          align="end"
+          type="button"
+          mat-raised-button
+          color="warn"
+          [e2e]="TestAttributes.SettingsLogoutBtn"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </form>
 </div>

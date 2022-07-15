@@ -9,9 +9,12 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
-  styleUrls: ['./comments.component.scss']
+  styleUrls: ['./comments.component.scss'],
 })
-export class CommentsComponent extends TestedComponent implements OnInit, OnDestroy {
+export class CommentsComponent
+  extends TestedComponent
+  implements OnInit, OnDestroy
+{
   @Input() slug!: string;
   @Input() authUser!: IExistingUser;
   @Input() requestForComments$!: Subject<void>;
@@ -21,9 +24,7 @@ export class CommentsComponent extends TestedComponent implements OnInit, OnDest
   private notifier: Subject<void> = new Subject<void>();
   public isLoaded!: boolean;
 
-  constructor(
-    private commentsService: CommentsService
-  ) {
+  constructor(private commentsService: CommentsService) {
     super();
   }
 
@@ -41,7 +42,8 @@ export class CommentsComponent extends TestedComponent implements OnInit, OnDest
 
   public getComments(): void {
     this.isLoaded = false;
-    this.commentsService.fetchArticleComments(this.slug)
+    this.commentsService
+      .fetchArticleComments(this.slug)
       .pipe(takeUntil(this.notifier))
       .subscribe((comments) => {
         if (!(comments instanceof HttpErrorResponse)) {
@@ -52,17 +54,19 @@ export class CommentsComponent extends TestedComponent implements OnInit, OnDest
   }
 
   public deleteComment(id: string): void {
-    const commentToBeDeletedId: string | undefined = this.comments.find(c => c.id === id)?.id;
+    const commentToBeDeletedId: string | undefined = this.comments.find(
+      (c) => c.id === id
+    )?.id;
     if (!commentToBeDeletedId) return;
 
     this.commentsBeingDeletedIds.push(commentToBeDeletedId);
 
-    this.commentsService.removeComment(this.slug, id)
+    this.commentsService
+      .removeComment(this.slug, id)
       .pipe(takeUntil(this.notifier))
       .subscribe(() => {
         this.getComments();
         this.commentsBeingDeletedIds.pop();
       });
   }
-
 }

@@ -1,7 +1,23 @@
-import { Subject, takeUntil, BehaviorSubject, catchError, of, Observable } from 'rxjs';
+import {
+  Subject,
+  takeUntil,
+  BehaviorSubject,
+  catchError,
+  of,
+  Observable,
+} from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
-import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  ViewChildren,
+  ElementRef,
+  QueryList,
+  AfterViewInit,
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
@@ -9,24 +25,30 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-my-articles',
   templateUrl: './my-articles.component.html',
-  styleUrls: ['./my-articles.component.scss']
+  styleUrls: ['./my-articles.component.scss'],
 })
-export class MyArticlesComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
+export class MyArticlesComponent
+  extends TestedComponent
+  implements OnChanges, OnDestroy, AfterViewInit
+{
+  @ViewChildren('lastItem', { read: ElementRef })
+  lastItem!: QueryList<ElementRef>;
 
   @Input() username!: string;
   @Input() tabIndex!: number;
 
   public myArticles: IArticle[] = [];
-  public isLoading: boolean = false;
+  public isLoading = false;
   private notifier: Subject<void> = new Subject<void>();
   public isFinished!: boolean;
-  private offset: number = 0;
+  private offset = 0;
   private pagesTotalCount!: number;
-  private limit: number = 5;
-  private currentPage: number = 1;
-  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public error: string = '';
+  private limit = 5;
+  private currentPage = 1;
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
+  public error = '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -44,9 +66,8 @@ export class MyArticlesComponent extends TestedComponent implements OnChanges, O
 
     this.infiniteScroll.observeIntersection({
       canLoad: this.canLoad$,
-      callback: this.getArticles.bind(this)
+      callback: this.getArticles.bind(this),
     });
-
   }
 
   ngOnDestroy(): void {
@@ -55,8 +76,9 @@ export class MyArticlesComponent extends TestedComponent implements OnChanges, O
   }
 
   ngAfterViewInit(): void {
-    this.lastItem.changes.subscribe(change => {
-      if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
+    this.lastItem.changes.subscribe((change) => {
+      if (change.last)
+        this.infiniteScroll.observer.observe(change.last.nativeElement);
     });
   }
 
@@ -64,10 +86,12 @@ export class MyArticlesComponent extends TestedComponent implements OnChanges, O
     this.error = '';
     this.isLoading = true;
 
-    this.articlesService.fetchUserArticles(this.username, this.limit, this.offset)
+    this.articlesService
+      .fetchUserArticles(this.username, this.limit, this.offset)
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+      )
       .subscribe((res: IArticleResponse | any) => this.setData(res));
   }
 
@@ -80,6 +104,7 @@ export class MyArticlesComponent extends TestedComponent implements OnChanges, O
     this.nextPage();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;

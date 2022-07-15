@@ -1,45 +1,49 @@
-import { HttpErrorResponse, HttpHeaders, HttpEventType } from "@angular/common/http";
-import { of, throwError } from "rxjs";
-import { IExistingUser } from "src/app/shared/models/IExistingUser";
-import { IUserData } from "src/app/shared/models/IUserData";
+import {
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpEventType,
+} from '@angular/common/http';
+import { of, throwError } from 'rxjs';
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { IUserData } from 'src/app/shared/models/IUserData';
 
 export const dataMock: IUserData = {
-    email: 'test-user@example.com',
-    password: 'test-password'
+  email: 'test-user@example.com',
+  password: 'test-password',
 };
 
 export const userMock: IExistingUser = {
-    id: '1',
-    email: 'test-user@example.com',
-    password: 'test-password',
-    image: '',
-    username: 'test-username'
+  id: '1',
+  email: 'test-user@example.com',
+  password: 'test-password',
+  image: '',
+  username: 'test-username',
 };
 
 export const mockError: HttpErrorResponse = {
-    error: {
-        errors: {
-            'email': ['is wrong']
-        }
+  error: {
+    errors: {
+      email: ['is wrong'],
     },
-    name: 'HttpErrorResponse',
-    message: '',
-    ok: false,
-    headers: new HttpHeaders,
-    status: 0,
-    statusText: '',
-    url: null,
-    type: HttpEventType.ResponseHeader
+  },
+  name: 'HttpErrorResponse',
+  message: '',
+  ok: false,
+  headers: new HttpHeaders(),
+  status: 0,
+  statusText: '',
+  url: null,
+  type: HttpEventType.ResponseHeader,
 };
 
 export class RedirectionServiceMock {
-    public redirectHome = () => new Promise<boolean>((resolve, reject) => resolve(true));
+  public redirectHome = () => new Promise<boolean>((resolve) => resolve(true));
 }
 
 export class UsersServiceMock {
-    public signIn = (data: IUserData) => of(userMock);
+  public signIn = () => of(userMock);
 }
 
 export class UsersServiceMockWithError {
-    public signIn = (data: IUserData) => throwError(() => mockError);
+  public signIn = () => throwError(() => mockError);
 }

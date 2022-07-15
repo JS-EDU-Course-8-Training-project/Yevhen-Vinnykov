@@ -13,7 +13,6 @@ import { FavoritedArticlesComponent } from './favorited-articles/favorited-artic
 import { ArticleListModule } from '../../components/article-list/article-list.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
-
 @NgModule({
   declarations: [
     UserPageComponent,
@@ -30,6 +29,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     MatButtonModule,
     ArticleListModule,
     SharedModule,
-  ]
+  ],
 })
-export class UserPageModule { }
+export class UserPageModule {}

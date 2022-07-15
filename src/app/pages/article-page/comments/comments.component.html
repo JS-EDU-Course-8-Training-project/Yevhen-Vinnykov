@@ -1,39 +1,37 @@
 <section class="article-comments">
-    <mat-card 
-        class="comment" 
-        *ngFor="let comment of comments"
-        [e2e]="TestAttributes.Comment"
-    >
-        <mat-card-content>
-            <p>{{comment?.body}}</p>
-        </mat-card-content>
-        <mat-card-footer class="footer">
-            <div>
-                <img src="{{comment?.author?.image}}" alt="">
-                <div>
-                    <p>{{comment?.author?.username}}</p>
-                    <p>{{comment?.createdAt | date}}</p>
-                </div>
-            </div>
-            <mat-icon 
-                (click)="deleteComment(comment.id)" 
-                *ngIf="comment?.author?.username === authUser?.username"
-                class="delete-icon"
-                color="primary"
-                [e2e]="TestAttributes.CommentDeleteBtn"
-            >
-                <span 
-                    *ngIf="!commentsBeingDeletedIds.includes(comment.id)"
-                >
-                    delete
-                </span>
-                <mat-spinner 
-                    diameter="25" 
-                    *ngIf="commentsBeingDeletedIds.includes(comment.id)"
-                    [e2e]="TestAttributes.LoadingSpinner"
-                >
-                </mat-spinner>
-            </mat-icon>
-        </mat-card-footer>
-    </mat-card>
+  <mat-card
+    class="comment"
+    *ngFor="let comment of comments"
+    [e2e]="TestAttributes.Comment"
+  >
+    <mat-card-content>
+      <p>{{ comment?.body }}</p>
+    </mat-card-content>
+    <mat-card-footer class="footer">
+      <div>
+        <img src="{{ comment?.author?.image }}" alt="" />
+        <div>
+          <p>{{ comment?.author?.username }}</p>
+          <p>{{ comment?.createdAt | date }}</p>
+        </div>
+      </div>
+      <mat-icon
+        (click)="deleteComment(comment.id)"
+        *ngIf="comment?.author?.username === authUser?.username"
+        class="delete-icon"
+        color="primary"
+        [e2e]="TestAttributes.CommentDeleteBtn"
+      >
+        <span *ngIf="!commentsBeingDeletedIds.includes(comment.id)">
+          delete
+        </span>
+        <mat-spinner
+          diameter="25"
+          *ngIf="commentsBeingDeletedIds.includes(comment.id)"
+          [e2e]="TestAttributes.LoadingSpinner"
+        >
+        </mat-spinner>
+      </mat-icon>
+    </mat-card-footer>
+  </mat-card>
 </section>

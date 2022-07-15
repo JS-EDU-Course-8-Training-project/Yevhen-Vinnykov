@@ -1,57 +1,44 @@
-<app-banner 
-    className="home-banner banner"
-    [e2e]="TestAttributes.HomePageBanner"
+<app-banner
+  className="home-banner banner"
+  [e2e]="TestAttributes.HomePageBanner"
 >
-    <mat-card-title class="title">
-        Real World
-    </mat-card-title>
-    <mat-card-content class="subtitle">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit
-    </mat-card-content>
+  <mat-card-title class="title"> Real World </mat-card-title>
+  <mat-card-content class="subtitle">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit
+  </mat-card-content>
 </app-banner>
 <div class="container">
-    <section class="section">
-        <mat-tab-group
-            (focusChange)="handleTabChange($event.index)"
-            [selectedIndex]="tabIndex"
-        >
-            <mat-tab 
-                *ngIf="isAuthorized" 
-                label="Your Feed"
-            >
-                <app-your-feed
-                    [tabIndex]="tabIndex"
-                    [e2e]="TestAttributes.YourFeed"
-                >
-                </app-your-feed>
-            </mat-tab>
-            <mat-tab 
-                label="Global Feed"
-            >
-                <app-global-feed
-                    [isAuthorized]="isAuthorized" 
-                    [tabIndex]="tabIndex"
-                    [e2e]="TestAttributes.GlobalFeed"
-                    >
-                </app-global-feed>
-            </mat-tab>
-            <mat-tab 
-                *ngIf="selectedTag" 
-                label="#{{selectedTag}}"
-            >
-                <app-tagged-articles
-                    [tabIndex]="tabIndex" 
-                    [selectedTag]="selectedTag"
-                    [e2e]="TestAttributes.TaggedArticles"
-                >
-                </app-tagged-articles>
-            </mat-tab>
-        </mat-tab-group>
-    </section>
-    <app-tags 
-        [tabIndex]="tabIndex" 
-        (selectedTagEmmiter)="handleSelectTag($event)"
-        [e2e]="TestAttributes.TagsContainer"
+  <section class="section">
+    <mat-tab-group
+      (focusChange)="handleTabChange($event.index)"
+      [selectedIndex]="tabIndex"
     >
-    </app-tags>
+      <mat-tab *ngIf="isAuthorized" label="Your Feed">
+        <app-your-feed [tabIndex]="tabIndex" [e2e]="TestAttributes.YourFeed">
+        </app-your-feed>
+      </mat-tab>
+      <mat-tab label="Global Feed">
+        <app-global-feed
+          [isAuthorized]="isAuthorized"
+          [tabIndex]="tabIndex"
+          [e2e]="TestAttributes.GlobalFeed"
+        >
+        </app-global-feed>
+      </mat-tab>
+      <mat-tab *ngIf="selectedTag" label="#{{ selectedTag }}">
+        <app-tagged-articles
+          [tabIndex]="tabIndex"
+          [selectedTag]="selectedTag"
+          [e2e]="TestAttributes.TaggedArticles"
+        >
+        </app-tagged-articles>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
+  <app-tags
+    [tabIndex]="tabIndex"
+    (selectedTagEmmiter)="handleSelectTag($event)"
+    [e2e]="TestAttributes.TagsContainer"
+  >
+  </app-tags>
 </div>

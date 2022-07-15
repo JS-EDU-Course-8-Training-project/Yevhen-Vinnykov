@@ -9,7 +9,7 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-comment-form',
   templateUrl: './comment-form.component.html',
-  styleUrls: ['./comment-form.component.scss']
+  styleUrls: ['./comment-form.component.scss'],
 })
 export class CommentFormComponent extends TestedComponent implements OnInit {
   @Input() slug!: string;
@@ -19,7 +19,7 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
   public commentForm!: FormGroup;
   public isAuthorized!: boolean;
   private notifier: Subject<void> = new Subject<void>();
-  public isLoading: boolean = false;
+  public isLoading = false;
 
   constructor(
     private commentsService: CommentsService,
@@ -32,9 +32,9 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
   ngOnInit(): void {
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
-      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+      .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
     this.commentForm = this.fb.group({
-      body: ['', [Validators.required]]
+      body: ['', [Validators.required]],
     });
   }
 
@@ -51,7 +51,8 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
     this.isLoading = true;
     this.commentForm.disable();
 
-    this.commentsService.createComment(this.slug, this.createCommentData())
+    this.commentsService
+      .createComment(this.slug, this.createCommentData())
       .pipe(takeUntil(this.notifier))
       .subscribe(() => {
         this.commentEventEmmiter.emit();
@@ -61,6 +62,3 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
       });
   }
 }
-
-
-

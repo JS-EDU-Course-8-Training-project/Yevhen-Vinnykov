@@ -11,9 +11,8 @@ import {
   RedirectionServiceMock,
   dataMock,
   UsersServiceMockWithError,
-  mockError
+  mockError,
 } from './sign-up.mocks.spec';
-
 
 describe('SIGN UP COMPONENT', () => {
   let component: SignUpComponent;
@@ -25,11 +24,10 @@ describe('SIGN UP COMPONENT', () => {
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock }
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -39,14 +37,18 @@ describe('SIGN UP COMPONENT', () => {
   });
 
   it('form should be invalid and button disabled on first render', () => {
-    const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const signinButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
 
     expect(component.signupForm.valid).toBe(false);
     expect(signinButton.disabled).toBe(true);
   });
 
   it('form should be valid and button enabled on data input', () => {
-    const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const signinButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
 
     component.signupForm.setValue(dataMock);
     fixture.detectChanges();
@@ -56,10 +58,15 @@ describe('SIGN UP COMPONENT', () => {
   });
 
   it('should sign up', () => {
-    const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const signinButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
     const spyHandleSignin = spyOn(component, 'handleSignup').and.callThrough();
     const spyOnSubmit = spyOn<any>(component, 'onSubmit').and.callThrough();
-    const spyCreateUserData = spyOn<any>(component, 'createUserData').and.callThrough();
+    const spyCreateUserData = spyOn<any>(
+      component,
+      'createUserData'
+    ).and.callThrough();
 
     component.signupForm.setValue(dataMock);
     fixture.detectChanges();
@@ -81,9 +88,7 @@ describe('SIGN UP COMPONENT', () => {
     expect(spyCheckIfValid).toHaveBeenCalledWith('email');
     expect(component.checkIfValid('email')).toBe(false);
   });
-
 });
-
 
 describe('ON CATCH ERROR METHOD', () => {
   let component: SignUpComponent;
@@ -95,10 +100,9 @@ describe('ON CATCH ERROR METHOD', () => {
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
         { provide: UsersService, useClass: UsersServiceMockWithError },
-        { provide: RedirectionService, useClass: RedirectionServiceMock }
-      ]
-    })
-      .compileComponents();
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -108,7 +112,9 @@ describe('ON CATCH ERROR METHOD', () => {
   });
 
   it('should be invoked', () => {
-    const signinButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const signinButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
 
     component.signupForm.setValue(dataMock);

@@ -10,12 +10,12 @@ const mockAuthUser: IExistingUser = {
   id: '1',
   email: 'test-email',
   username: 'test-username',
-  image: 'test-image'
+  image: 'test-image',
 };
 
 class UsersServiceMock {
   public authUser$ = of(mockAuthUser);
-};
+}
 
 describe('NavbarUserComponent', () => {
   let component: NavbarUserComponent;
@@ -24,12 +24,9 @@ describe('NavbarUserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NavbarUserComponent],
-      providers: [
-        { provide: UsersService, useClass: UsersServiceMock }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      providers: [{ provide: UsersService, useClass: UsersServiceMock }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

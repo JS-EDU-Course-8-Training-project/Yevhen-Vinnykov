@@ -13,18 +13,21 @@ type TSigninControls = 'email' | 'password';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  styleUrls: ['./sign-in.component.scss'],
 })
-export class SignInComponent extends TestedComponent implements OnInit, OnDestroy {
+export class SignInComponent
+  extends TestedComponent
+  implements OnInit, OnDestroy
+{
   public signinForm!: FormGroup;
   public errors: string[] = [];
-  public isPending: boolean = false;
+  public isPending = false;
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private redirectionService: RedirectionService,
+    private redirectionService: RedirectionService
   ) {
     super();
   }
@@ -32,7 +35,7 @@ export class SignInComponent extends TestedComponent implements OnInit, OnDestro
   ngOnInit(): void {
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -42,7 +45,10 @@ export class SignInComponent extends TestedComponent implements OnInit, OnDestro
   }
 
   public checkIfValid(formControl: TSigninControls): boolean {
-    return !(this.signinForm.controls[formControl].touched && this.signinForm.controls[formControl].invalid);
+    return !(
+      this.signinForm.controls[formControl].touched &&
+      this.signinForm.controls[formControl].invalid
+    );
   }
 
   private createUserData(): IUserData {
@@ -56,8 +62,8 @@ export class SignInComponent extends TestedComponent implements OnInit, OnDestro
   }
 
   private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
-    Object.keys(error.error.errors).forEach(key => {
-      this.errors.push(`${key} ${error.error.errors[key][0]}`)
+    Object.keys(error.error.errors).forEach((key) => {
+      this.errors.push(`${key} ${error.error.errors[key][0]}`);
     });
 
     this.isPending = false;
@@ -70,15 +76,15 @@ export class SignInComponent extends TestedComponent implements OnInit, OnDestro
   public handleSignin(): void {
     this.onSubmit();
 
-    this.usersService.signIn(this.createUserData())
+    this.usersService
+      .signIn(this.createUserData())
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error)))
-      .subscribe((user: IExistingUser | any) => {
+        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+      )
+      .subscribe(() => {
         this.isPending = false;
-        if (!this.errors.length) this.redirectionService.redirectHome();;
+        if (!this.errors.length) this.redirectionService.redirectHome();
       });
   }
 }
-
-

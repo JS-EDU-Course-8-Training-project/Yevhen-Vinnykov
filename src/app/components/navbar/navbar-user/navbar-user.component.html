@@ -1,9 +1,9 @@
-<a 
-    [class]="className" 
-    mat-button 
-    routerLink="/user/{{authUser?.username}}"
-    [e2e]="TestAttributes.NavUserPageLink"
+<a
+  [class]="className"
+  mat-button
+  routerLink="/user/{{ authUser?.username }}"
+  [e2e]="TestAttributes.NavUserPageLink"
 >
-    {{authUser?.username}}
-    <img [src]="authUser?.image" alt="">
+  {{ authUser?.username }}
+  <img [src]="authUser?.image" alt="" />
 </a>

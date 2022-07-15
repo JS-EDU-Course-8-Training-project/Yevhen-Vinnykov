@@ -2,12 +2,12 @@ import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthorizationService {
-  public isAuthorized$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  
-  constructor() { }
+  public isAuthorized$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
 
   public checkIfAuthorized(): void {
     const isAuth: boolean = localStorage.getItem('authorized') === 'true';

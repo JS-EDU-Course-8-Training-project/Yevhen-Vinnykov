@@ -1,37 +1,37 @@
 .form-group {
+  display: flex;
+  flex-direction: column;
+  max-width: 50%;
+  margin: 4rem auto;
+  .form-control {
+    border: 1px solid rgb(175, 175, 175);
+    border-radius: 8px;
+    margin: 5px 0;
+    height: 1.5rem;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+  #bio {
+    height: 8rem;
+    resize: none;
+    font-family: inherit;
+  }
+  .form-group-actions {
     display: flex;
-    flex-direction: column;
-    max-width: 50%;
-    margin: 4rem auto;
-    .form-control {
-        border: 1px solid rgb(175, 175, 175);
-        border-radius: 8px;
-        margin: 5px 0;
-        height: 1.5rem;
-        padding: 10px;
-        font-size: 1rem;
-        font-family: inherit;
+    justify-content: end;
+    button {
+      width: 12rem;
+      height: 3rem;
+      align-self: end;
+      font-size: 1rem;
+      margin: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    #bio {
-        height: 8rem;
-        resize: none;
-        font-family: inherit;
-    }
-    .form-group-actions {
-        display: flex;
-        justify-content: end;
-        button {
-            width: 12rem;
-            height: 3rem;
-            align-self: end;
-            font-size: 1rem;
-            margin: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    }
-    .form-error {
-        color: red;
-    }
+  }
+  .form-error {
+    color: red;
+  }
 }

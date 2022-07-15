@@ -17,22 +17,20 @@ class AuthorizationServiceMock {
 
 class UsersServiceMock {
   public authUser$ = of({ username: 'user' });
-  public fetchAuthUser = () => of({} as IExistingUser)
+  public fetchAuthUser = () => of({} as IExistingUser);
 }
 
 class UsersServiceMockEmpty {
   public authUser$ = {
-    getValue: () => ({username: ''})
+    getValue: () => ({ username: '' }),
   };
-  public fetchAuthUser = () => of({} as IExistingUser)
+  public fetchAuthUser = () => of({} as IExistingUser);
 }
 
 describe('APP COMPONENT WHEN USERS SERVICE HAS AN AUTH USER', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
+      imports: [RouterTestingModule],
       declarations: [
         AppComponent,
         NavbarComponent,
@@ -41,9 +39,9 @@ describe('APP COMPONENT WHEN USERS SERVICE HAS AN AUTH USER', () => {
       ],
       providers: [
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
-        { provide: UsersService, useClass: UsersServiceMock }
+        { provide: UsersService, useClass: UsersServiceMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
@@ -60,23 +58,18 @@ describe('APP COMPONENT WHEN USERS SERVICE HAS AN AUTH USER', () => {
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   });
-
 });
 
 describe('APP COMPONENT WHEN USERS SERVICE DOES NOT HAVE AN AUTH USER', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent,
-      ],
+      imports: [RouterTestingModule],
+      declarations: [AppComponent],
       providers: [
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
-        { provide: UsersService, useClass: UsersServiceMockEmpty }
+        { provide: UsersService, useClass: UsersServiceMockEmpty },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
 
@@ -87,5 +80,4 @@ describe('APP COMPONENT WHEN USERS SERVICE DOES NOT HAVE AN AUTH USER', () => {
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   });
-  
 });

@@ -16,22 +16,23 @@ class AuthorizationServiceMock {
 
 describe('AUTHORIZATION GUARD > UNAUTHORIZED', () => {
   let guard: any;
-  let authorizationService: AuthorizationServiceMockNotAuth;
-  let routeMock: any = { snapshot: {} };
-  let routeStateMock: any = { snapshot: {}, url: '/create-article' };
-  let routerMock = { createUrlTree: jasmine.createSpy('navigate') }
+  const routeMock: any = { snapshot: {} };
+  const routeStateMock: any = { snapshot: {}, url: '/create-article' };
+  const routerMock = { createUrlTree: jasmine.createSpy('navigate') };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         AuthorizationGuard,
-        { provide: AuthorizationService, useClass: AuthorizationServiceMockNotAuth },
-        { provide: Router, useValue: routerMock }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceMockNotAuth,
+        },
+        { provide: Router, useValue: routerMock },
       ],
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
     });
     guard = TestBed.inject(AuthorizationGuard);
-    authorizationService = TestBed.inject(AuthorizationService);
   });
 
   it('should redirect an unauthorized user to the login route', waitForAsync(() => {
@@ -41,25 +42,22 @@ describe('AUTHORIZATION GUARD > UNAUTHORIZED', () => {
   }));
 });
 
-
 describe('AUTHORIZATION GUARD > AUTHORIZED', () => {
   let guard: any;
-  let authorizationService: AuthorizationServiceMock;
-  let routeMock: any = { snapshot: {} };
-  let routeStateMock: any = { snapshot: {}, url: '/create-article' };
-  let routerMock = { createUrlTree: jasmine.createSpy('navigate') }
+  const routeMock: any = { snapshot: {} };
+  const routeStateMock: any = { snapshot: {}, url: '/create-article' };
+  const routerMock = { createUrlTree: jasmine.createSpy('navigate') };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         AuthorizationGuard,
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
-        { provide: Router, useValue: routerMock }
+        { provide: Router, useValue: routerMock },
       ],
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
     });
     guard = TestBed.inject(AuthorizationGuard);
-    authorizationService = TestBed.inject(AuthorizationService);
   });
 
   it('should allow the authenticated user to access new article page', waitForAsync(() => {

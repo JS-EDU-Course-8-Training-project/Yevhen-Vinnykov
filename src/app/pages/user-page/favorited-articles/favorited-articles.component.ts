@@ -1,7 +1,23 @@
-import { Subject, takeUntil, BehaviorSubject, catchError, Observable, of } from 'rxjs';
+import {
+  Subject,
+  takeUntil,
+  BehaviorSubject,
+  catchError,
+  Observable,
+  of,
+} from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
-import { Component, Input, OnChanges, OnDestroy, ViewChildren, ElementRef, QueryList, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  ViewChildren,
+  ElementRef,
+  QueryList,
+  AfterViewInit,
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
@@ -9,24 +25,30 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-favorited-articles',
   templateUrl: './favorited-articles.component.html',
-  styleUrls: ['./favorited-articles.component.scss']
+  styleUrls: ['./favorited-articles.component.scss'],
 })
-export class FavoritedArticlesComponent extends TestedComponent implements OnChanges, OnDestroy, AfterViewInit {
-  @ViewChildren('lastItem', { read: ElementRef }) lastItem!: QueryList<ElementRef>;
+export class FavoritedArticlesComponent
+  extends TestedComponent
+  implements OnChanges, OnDestroy, AfterViewInit
+{
+  @ViewChildren('lastItem', { read: ElementRef })
+  lastItem!: QueryList<ElementRef>;
 
   @Input() username!: string;
   @Input() tabIndex!: number;
 
   public favoritedArticles: IArticle[] = [];
-  public isLoading: boolean = false;
+  public isLoading = false;
   private notifier: Subject<void> = new Subject<void>();
   public isFinished!: boolean;
-  private offset: number = 0;
+  private offset = 0;
   private pagesTotalCount!: number;
-  private limit: number = 5;
-  private currentPage: number = 1;
-  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public error: string = '';
+  private limit = 5;
+  private currentPage = 1;
+  public canLoad$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    true
+  );
+  public error = '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -44,7 +66,7 @@ export class FavoritedArticlesComponent extends TestedComponent implements OnCha
 
     this.infiniteScroll.observeIntersection({
       canLoad: this.canLoad$,
-      callback: this.getArticles.bind(this)
+      callback: this.getArticles.bind(this),
     });
   }
 
@@ -54,8 +76,9 @@ export class FavoritedArticlesComponent extends TestedComponent implements OnCha
   }
 
   ngAfterViewInit(): void {
-    this.lastItem.changes.subscribe(change => {
-      if (change.last) this.infiniteScroll.observer.observe(change.last.nativeElement);
+    this.lastItem.changes.subscribe((change) => {
+      if (change.last)
+        this.infiniteScroll.observer.observe(change.last.nativeElement);
     });
   }
 
@@ -63,10 +86,12 @@ export class FavoritedArticlesComponent extends TestedComponent implements OnCha
     this.error = '';
     this.isLoading = true;
 
-    this.articlesService.fetchFavoritedArticles(this.username, this.limit, this.offset)
+    this.articlesService
+      .fetchFavoritedArticles(this.username, this.limit, this.offset)
       .pipe(
         takeUntil(this.notifier),
-        catchError((err: HttpErrorResponse): any => this.onCatchError(err)))
+        catchError((err: HttpErrorResponse): any => this.onCatchError(err))
+      )
       .subscribe((res: IArticleResponse | any) => this.setData(res));
   }
 
@@ -80,6 +105,7 @@ export class FavoritedArticlesComponent extends TestedComponent implements OnCha
     this.nextPage();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
     this.error = 'Something went wrong :(';
     this.isLoading = false;
@@ -101,4 +127,3 @@ export class FavoritedArticlesComponent extends TestedComponent implements OnCha
     this.pagesTotalCount = 0;
   }
 }
-

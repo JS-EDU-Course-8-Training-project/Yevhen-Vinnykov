@@ -21,14 +21,14 @@ const mockAuthUser: IExistingUser = {
   bio: 'test-auth-bio',
   image: 'test-auth-image',
   token: 'test-auth--token',
-  password: 'test-auth-password'
-}
+  password: 'test-auth-password',
+};
 
 const mockUser: IProfile = {
   username: 'test-username',
   bio: '',
   image: 'test-image',
-  following: false
+  following: false,
 };
 
 class UsersServiceMock {
@@ -36,11 +36,11 @@ class UsersServiceMock {
 }
 
 class ProfilesServiceMock {
-  public follow = (username: string) => of({ following: true });
+  public follow = () => of({ following: true });
 
-  public unfollow = (username: string) => of({ following: false });
+  public unfollow = () => of({ following: false });
 
-  public fetchUser = (username: string) => of(mockUser);
+  public fetchUser = () => of(mockUser);
 }
 
 class RouterMock {
@@ -49,7 +49,8 @@ class RouterMock {
 }
 
 class RedirectionServiceMock {
-  public redirectUnauthorized = () => new Promise<boolean>((resolve, reject) => resolve(true));
+  public redirectUnauthorized = () =>
+    new Promise<boolean>((resolve) => resolve(true));
 }
 
 class AuthorizationServiceMock {
@@ -72,11 +73,10 @@ describe('USER PAGE COMPONENT', () => {
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceMock }
+        { provide: AuthorizationService, useClass: AuthorizationServiceMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -87,7 +87,9 @@ describe('USER PAGE COMPONENT', () => {
 
   it('should follow a user', waitForAsync(() => {
     const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
-    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
+    const followButton = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`)
+    );
 
     expect(followButton.nativeElement.innerText).toBe('Follow test-username');
     expect(component.isFollowed).toBe(false);
@@ -97,14 +99,18 @@ describe('USER PAGE COMPONENT', () => {
 
     fixture.whenStable().then(() => {
       expect(component.isFollowed).toBe(true);
-      expect(followButton.nativeElement.innerText).toBe('Unfollow test-username');
+      expect(followButton.nativeElement.innerText).toBe(
+        'Unfollow test-username'
+      );
       expect(spy).toHaveBeenCalledWith('test-username', 'follow');
-    })
+    });
   }));
 
   it('should unfollow a user', waitForAsync(() => {
     const spy = spyOn<any>(component, 'followingHandler').and.callThrough();
-    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
+    const followButton = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`)
+    );
 
     followButton.triggerEventHandler('click', null);
 
@@ -117,9 +123,8 @@ describe('USER PAGE COMPONENT', () => {
       expect(component.isFollowed).toBe(false);
       expect(followButton.nativeElement.innerText).toBe('Follow test-username');
       expect(spy).toHaveBeenCalledWith('test-username', 'unfollow');
-    })
+    });
   }));
-
 });
 
 describe('USER PAGE > REDIRECT UNAUTHORIZED', () => {
@@ -134,11 +139,13 @@ describe('USER PAGE > REDIRECT UNAUTHORIZED', () => {
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceMockNotAuth }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceMockNotAuth,
+        },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -149,14 +156,15 @@ describe('USER PAGE > REDIRECT UNAUTHORIZED', () => {
 
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'redirectUnauthorized');
-    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
+    const followButton = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`)
+    );
 
     followButton.triggerEventHandler('click', null);
     fixture.detectChanges();
 
     expect(spy).toHaveBeenCalled();
   });
-
 });
 
 describe('USER PAGE > MYSELF MODE', () => {
@@ -176,11 +184,10 @@ describe('USER PAGE > MYSELF MODE', () => {
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthorizationServiceMock }
+        { provide: AuthorizationService, useClass: AuthorizationServiceMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -190,7 +197,9 @@ describe('USER PAGE > MYSELF MODE', () => {
   });
 
   it('should initialize correctly', () => {
-    const followButton = fixture.debugElement.query(By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`));
+    const followButton = fixture.debugElement.query(
+      By.css(`[data-test=${TestAttributes.UserPageFollowBtn}]`)
+    );
 
     expect(component.isMyself).toBe(true);
     expect(followButton).toBeFalsy();

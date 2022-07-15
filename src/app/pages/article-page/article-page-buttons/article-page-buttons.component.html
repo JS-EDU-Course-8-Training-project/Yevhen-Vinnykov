@@ -1,51 +1,50 @@
 <mat-card-actions align="end">
-    <button 
-        (click)="redirectToEditArticle(slug)" 
-        *ngIf="isAuthor" 
-        class="fave-btn"  
-        mat-raised-button
-        color="primary"
-        [e2e]="TestAttributes.ArticleEditBtn"
+  <button
+    (click)="redirectToEditArticle(slug)"
+    *ngIf="isAuthor"
+    class="fave-btn"
+    mat-raised-button
+    color="primary"
+    [e2e]="TestAttributes.ArticleEditBtn"
+  >
+    Edit
+  </button>
+  <button
+    (click)="deleteArticle(slug)"
+    *ngIf="isAuthor"
+    class="fave-btn"
+    mat-raised-button
+    color="primary"
+    [e2e]="TestAttributes.ArticleDeleteBtn"
+  >
+    Delete
+  </button>
+  <button
+    *ngIf="!isAuthor"
+    class="fave-btn"
+    [disabled]="followingInProgress"
+    (click)="handleFollowUnfollow(username)"
+    mat-raised-button
+    color="primary"
+    [e2e]="TestAttributes.ArticleFollowBtn"
+  >
+    {{ isFollowed ? "Unfollow" : "Follow" }} {{ username }}
+  </button>
+  <button
+    *ngIf="!isAuthor"
+    class="fave-btn"
+    [disabled]="favoriteInProgress"
+    (click)="handleLikeDislike(slug)"
+    mat-raised-button
+    color="primary"
+    [e2e]="TestAttributes.ArticleLikeBtn"
+  >
+    <mat-icon
+      [color]="isLiked && 'warn'"
+      [e2e]="TestAttributes.ArticleLikeIcon"
     >
-        Edit
-    </button>
-    <button 
-        (click)="deleteArticle(slug)" 
-        *ngIf="isAuthor" 
-        class="fave-btn" 
-        mat-raised-button
-        color="primary"
-        [e2e]="TestAttributes.ArticleDeleteBtn"
-    >
-       Delete
-    </button>
-    <button 
-        *ngIf="!isAuthor" 
-        class="fave-btn" 
-        [disabled]="followingInProgress" 
-        (click)="handleFollowUnfollow(username)" 
-        mat-raised-button
-        color="primary"
-        [e2e]="TestAttributes.ArticleFollowBtn"
-    >
-        {{isFollowed ? 'Unfollow' : 'Follow'}} {{username}}
-    </button>
-    <button 
-        *ngIf="!isAuthor" 
-        class="fave-btn" 
-        [disabled]="favoriteInProgress" 
-        (click)="handleLikeDislike(slug)" 
-        mat-raised-button
-        color="primary"
-        [e2e]="TestAttributes.ArticleLikeBtn"
-    >
-        <mat-icon 
-            [color]="isLiked && 'warn'"
-            [e2e]="TestAttributes.ArticleLikeIcon"
-        >
-            favorite
-        </mat-icon>
-        Favorite Article ({{likesCount}})
-    </button>
+      favorite
+    </mat-icon>
+    Favorite Article ({{ likesCount }})
+  </button>
 </mat-card-actions>
-

@@ -24,10 +24,10 @@ const expectedData: IArticleResponse = {
         bio: 'test-bio',
         image: 'test-image',
         following: true,
-      }
+      },
     },
   ],
-  articlesCount: 10
+  articlesCount: 10,
 };
 
 class ArticlesServiceMock {
@@ -35,7 +35,8 @@ class ArticlesServiceMock {
 }
 
 class ArticlesServiceMockWithError {
-  public fetchFavoritedArticles = () => throwError(() => Error('Fetching articles failed'));
+  public fetchFavoritedArticles = () =>
+    throwError(() => Error('Fetching articles failed'));
 }
 
 describe('FAVORITED ARTICLES COMPONENT', () => {
@@ -45,12 +46,9 @@ describe('FAVORITED ARTICLES COMPONENT', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FavoritedArticlesComponent],
-      providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMock }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      providers: [{ provide: ArticlesService, useClass: ArticlesServiceMock }],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -84,7 +82,6 @@ describe('FAVORITED ARTICLES COMPONENT', () => {
     expect(spy).toHaveBeenCalledWith(expectedData);
     expect(component.favoritedArticles).toEqual(expectedData.articles);
   });
-
 });
 
 describe('ON CATCH ERROR METHOD', () => {
@@ -95,10 +92,9 @@ describe('ON CATCH ERROR METHOD', () => {
     await TestBed.configureTestingModule({
       declarations: [FavoritedArticlesComponent],
       providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMockWithError }
-      ]
-    })
-      .compileComponents();
+        { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
-
 const mockUser: IExistingUser = {
   id: '1',
   email: 'test@example.com',
@@ -17,12 +16,12 @@ const mockUser: IExistingUser = {
   bio: 'test-bio',
   image: 'test-image',
   token: 'test-token',
-  password: 'test-password'
-}
+  password: 'test-password',
+};
 
 class RedirectionServiceMock {
-  public redirectByUrl = () => new Promise<boolean>((resolve, reject) => resolve(true));
-  public redirectHome = () => new Promise<boolean>((resolve, reject) => resolve(true));
+  public redirectByUrl = () => new Promise<boolean>((resolve) => resolve(true));
+  public redirectHome = () => new Promise<boolean>((resolve) => resolve(true));
 }
 
 class UsersServiceMock {
@@ -39,11 +38,10 @@ describe('SETTINGS PAGE COMPONENT', () => {
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock }
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {

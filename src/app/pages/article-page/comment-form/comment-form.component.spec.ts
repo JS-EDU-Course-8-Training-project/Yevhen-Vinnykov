@@ -1,6 +1,6 @@
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IComment } from 'src/app/shared/models/IComment';
 
 import { CommentFormComponent } from './comment-form.component';
@@ -8,7 +8,6 @@ import { AuthorizationService } from 'src/app/shared/services/authorization/auth
 import { CommentsService } from '../services/comments/comments.service';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-
 
 const returnComment: IComment = {
   id: '1',
@@ -21,11 +20,11 @@ const returnComment: IComment = {
     image: 'test-image',
     following: false,
   },
-  article: '1'
+  article: '1',
 };
 
 class CommentsServiceMock {
-  public createComment = (slug: string, comment: {body: string}): Observable<IComment> => of(returnComment);
+  public createComment = (): Observable<IComment> => of(returnComment);
 }
 
 class AuthorizationServiceMock {
@@ -41,15 +40,19 @@ describe('COMMENT FORM COMPONENT', () => {
       declarations: [CommentFormComponent],
       providers: [FormBuilder],
       imports: [ReactiveFormsModule, FormsModule],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    }).overrideComponent(CommentFormComponent, {
-      set: {
-        providers: [
-          { provide: CommentsService, useClass: CommentsServiceMock },
-          { provide: AuthorizationService, useClass: AuthorizationServiceMock }
-        ],
-      }
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     })
+      .overrideComponent(CommentFormComponent, {
+        set: {
+          providers: [
+            { provide: CommentsService, useClass: CommentsServiceMock },
+            {
+              provide: AuthorizationService,
+              useClass: AuthorizationServiceMock,
+            },
+          ],
+        },
+      })
       .compileComponents();
   });
 
@@ -63,7 +66,7 @@ describe('COMMENT FORM COMPONENT', () => {
   it('AddComment method should not be called because the form is empty', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
     component.commentForm.controls['body'].setValue('');
-   
+
     const button = fixture.debugElement.query(By.css('button')).nativeElement;
     expect(button.disabled).toBe(true);
 
@@ -74,7 +77,10 @@ describe('COMMENT FORM COMPONENT', () => {
 
   it('AddComment method should be called', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
-    const spyCreateCommentData = spyOn<any>(component, 'createCommentData').and.callThrough();
+    const spyCreateCommentData = spyOn<any>(
+      component,
+      'createCommentData'
+    ).and.callThrough();
 
     component.commentForm.controls['body'].setValue('test-comment');
     fixture.detectChanges();
@@ -95,8 +101,4 @@ describe('COMMENT FORM COMPONENT', () => {
     expect(spy).toHaveBeenCalled();
     expect(spyCreateCommentData).toHaveBeenCalled();
   });
-
 });
-
-
-

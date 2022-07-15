@@ -1,47 +1,50 @@
 <div class="navbar-container">
-    <a 
-        [class]="(url$ | async) === '/' ? 'selected' : ''"
-        mat-button 
-        routerLink="/"
-        [e2e]="TestAttributes.NavHomeLink"
-    >
-        Home
-    </a>
-    <a 
-        [class]="(url$ | async) === '/sign-in' ? 'selected' : ''" 
-        *ngIf="!(isAuthorized$ | async)" 
-        mat-button 
-        routerLink="/sign-in"
-        [e2e]="TestAttributes.NavSignInLink"
-    >
-        Sign in
-    </a>
-    <a 
-        [class]="(url$ | async) === '/sign-up' ? 'selected' : ''"
-        *ngIf="!(isAuthorized$ | async)" 
-        mat-button 
-        routerLink="/sign-up"
-        [e2e]="TestAttributes.NavSignUpLink"
-     >
-        Sign up
-    </a>
-    <a 
-        [class]="(url$ | async) === '/create-article' ? 'selected' : ''" 
-        *ngIf="isAuthorized$ | async" 
-        mat-button 
-        routerLink="/create-article"
-        [e2e]="TestAttributes.NavNewArticleLink"
-    >
-        New Article
-    </a>
-    <a 
-        [class]="(url$ | async) === '/settings' ? 'selected' : ''"
-        *ngIf="isAuthorized$ | async" 
-        mat-button 
-        routerLink="/settings"
-        [e2e]="TestAttributes.NavSettingsLink"
-    >
-        Settings
-    </a>
-    <app-navbar-user [url$]="url$" *ngIf="isAuthorized$ | async"></app-navbar-user>
+  <a
+    [class]="(url$ | async) === '/' ? 'selected' : ''"
+    mat-button
+    routerLink="/"
+    [e2e]="TestAttributes.NavHomeLink"
+  >
+    Home
+  </a>
+  <a
+    [class]="(url$ | async) === '/sign-in' ? 'selected' : ''"
+    *ngIf="!(isAuthorized$ | async)"
+    mat-button
+    routerLink="/sign-in"
+    [e2e]="TestAttributes.NavSignInLink"
+  >
+    Sign in
+  </a>
+  <a
+    [class]="(url$ | async) === '/sign-up' ? 'selected' : ''"
+    *ngIf="!(isAuthorized$ | async)"
+    mat-button
+    routerLink="/sign-up"
+    [e2e]="TestAttributes.NavSignUpLink"
+  >
+    Sign up
+  </a>
+  <a
+    [class]="(url$ | async) === '/create-article' ? 'selected' : ''"
+    *ngIf="isAuthorized$ | async"
+    mat-button
+    routerLink="/create-article"
+    [e2e]="TestAttributes.NavNewArticleLink"
+  >
+    New Article
+  </a>
+  <a
+    [class]="(url$ | async) === '/settings' ? 'selected' : ''"
+    *ngIf="isAuthorized$ | async"
+    mat-button
+    routerLink="/settings"
+    [e2e]="TestAttributes.NavSettingsLink"
+  >
+    Settings
+  </a>
+  <app-navbar-user
+    [url$]="url$"
+    *ngIf="isAuthorized$ | async"
+  ></app-navbar-user>
 </div>

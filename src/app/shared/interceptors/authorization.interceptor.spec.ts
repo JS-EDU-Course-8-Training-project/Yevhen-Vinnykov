@@ -5,30 +5,29 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { 
-  HTTP_INTERCEPTORS, 
-  HttpHeaders, 
-  HttpEventType, 
+import {
+  HTTP_INTERCEPTORS,
+  HttpHeaders,
+  HttpEventType,
   HttpErrorResponse,
-  HttpRequest, 
-  HttpHandler 
+  HttpRequest,
+  HttpHandler,
 } from '@angular/common/http';
 
 import { AuthorizationInterceptor } from './authorization.interceptor';
 import { MockDataService } from './mock-data-service.service';
 
 class AuthorizationServiceMock {
-  public checkIfAuthorized = () => { };
+  public checkIfAuthorized = () => ({});
   public isAuthorized$ = new BehaviorSubject<boolean>(true);
 }
 
 class AuthorizationServiceMockNotAuth {
-  public checkIfAuthorized = () => { };
+  public checkIfAuthorized = () => ({});
   public isAuthorized$ = new BehaviorSubject<boolean>(false);
 }
 
 describe('AUTHORIZATION INERCEPTOR > ADDING AUTHORIZATION', () => {
-  let interceptor: AuthorizationInterceptor;
   let httpMock: HttpTestingController;
   let service: MockDataService;
 
@@ -38,30 +37,29 @@ describe('AUTHORIZATION INERCEPTOR > ADDING AUTHORIZATION', () => {
         AuthorizationInterceptor,
         MockDataService,
         { provide: AuthorizationService, useClass: AuthorizationServiceMock },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthorizationInterceptor,
+          multi: true,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
-    interceptor = TestBed.inject(AuthorizationInterceptor);
     service = TestBed.inject(MockDataService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should add an Authorization header', () => {
-    service.getPosts().subscribe(response => {
+    service.getPosts().subscribe((response) => {
       expect(response).toBeTruthy();
     });
     const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
     expect(httpRequest.request.url).toBe(`${service.ROOT_URL}/posts`);
     expect(httpRequest.request.headers.has('x-access-token')).toBeTrue();
   });
-
 });
 
 describe('AUTHORIZATION INERCEPTOR > NOT ADDING AUTHORIZATION', () => {
-  let interceptor: AuthorizationInterceptor;
   let httpMock: HttpTestingController;
   let service: MockDataService;
 
@@ -70,43 +68,45 @@ describe('AUTHORIZATION INERCEPTOR > NOT ADDING AUTHORIZATION', () => {
       providers: [
         AuthorizationInterceptor,
         MockDataService,
-        { provide: AuthorizationService, useClass: AuthorizationServiceMockNotAuth },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceMockNotAuth,
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthorizationInterceptor,
+          multi: true,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
-    interceptor = TestBed.inject(AuthorizationInterceptor);
     service = TestBed.inject(MockDataService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should not add an authorization header', () => {
-    service.getPosts().subscribe(response => {
+    service.getPosts().subscribe((response) => {
       expect(response).toBeTruthy();
     });
     const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
     expect(httpRequest.request.headers.has('Authorization')).toBeFalse();
   });
-
 });
-
 
 const mockError: HttpErrorResponse = {
   error: {
     errors: {
-      'email': ['is wrong']
-    }
+      email: ['is wrong'],
+    },
   },
   name: 'HttpErrorResponse',
   message: '',
   ok: false,
-  headers: new HttpHeaders,
+  headers: new HttpHeaders(),
   status: 0,
   statusText: '',
   url: null,
-  type: HttpEventType.ResponseHeader
+  type: HttpEventType.ResponseHeader,
 };
 
 describe('AUTHORIZATION INERCEPTOR > ERROR HANDLING', () => {
@@ -118,12 +118,17 @@ describe('AUTHORIZATION INERCEPTOR > ERROR HANDLING', () => {
     TestBed.configureTestingModule({
       providers: [
         AuthorizationInterceptor,
-        { provide: AuthorizationService, useClass: AuthorizationServiceMockNotAuth },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthorizationInterceptor, multi: true }
+        {
+          provide: AuthorizationService,
+          useClass: AuthorizationServiceMockNotAuth,
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: AuthorizationInterceptor,
+          multi: true,
+        },
       ],
-      imports: [
-        HttpClientTestingModule
-      ]
+      imports: [HttpClientTestingModule],
     });
     interceptor = TestBed.inject(AuthorizationInterceptor);
     httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter']);
@@ -133,25 +138,20 @@ describe('AUTHORIZATION INERCEPTOR > ERROR HANDLING', () => {
   it('should return server side error', () => {
     httpHandlerSpy.handle.and.returnValue(throwError(() => mockError));
 
-    interceptor.intercept(httpRequestSpy, httpHandlerSpy)
-      .subscribe({
-        next: result => console.log('good', result),
-        error: err => expect(err).toEqual(mockError)
-      });
+    interceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe({
+      next: (result) => console.log('good', result),
+      error: (err) => expect(err).toEqual(mockError),
+    });
   });
 
   it('should return client side error', () => {
     const mockError = {
-      error: new ErrorEvent('Error')
+      error: new ErrorEvent('Error'),
     };
     httpHandlerSpy.handle.and.returnValue(throwError(() => mockError));
-    interceptor.intercept(httpRequestSpy, httpHandlerSpy)
-      .subscribe({
-        next: result => console.log('good', result),
-        error: err => expect(err.error).toBeInstanceOf(ErrorEvent)
-      });
+    interceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe({
+      next: (result) => console.log('good', result),
+      error: (err) => expect(err.error).toBeInstanceOf(ErrorEvent),
+    });
   });
 });
-
-
-

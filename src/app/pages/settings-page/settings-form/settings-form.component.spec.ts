@@ -14,30 +14,33 @@ const settingsMock: IExistingUser = {
   id: '1',
   email: 'test-username@example.com',
   username: 'test-username',
-  image: 'test-image'
+  image: 'test-image',
 };
 
 const errorResponseMock = {
   error: {
     errors: {
-      'Error:': ['Fetching articles failed']
-    }
-  }
+      'Error:': ['Fetching articles failed'],
+    },
+  },
 };
 
 class UsersServiceMockWithError {
-  public updateUser = (settings: IExistingUser) => throwError(() => errorResponseMock);
+  public updateUser = (settings: IExistingUser) =>
+    throwError(() => errorResponseMock);
 }
 
 class UsersServiceMock {
-  public updateUser = (settings: IExistingUser) => of({ ...settingsMock, username: 'updated-user-name' });
-  public signOut = () => { };
-
+  public updateUser = (settings: IExistingUser) =>
+    of({ ...settingsMock, username: 'updated-user-name' });
+  public signOut = () => {};
 }
 
 class RedirectionServiceMock {
-  public redirectByUrl = () => new Promise<boolean>((resolve, reject) => resolve(true));
-  public redirectHome = () => new Promise<boolean>((resolve, reject) => resolve(true));
+  public redirectByUrl = () =>
+    new Promise<boolean>((resolve, reject) => resolve(true));
+  public redirectHome = () =>
+    new Promise<boolean>((resolve, reject) => resolve(true));
 }
 
 describe('SETTINGS FORM COMPONENT', () => {
@@ -50,11 +53,10 @@ describe('SETTINGS FORM COMPONENT', () => {
       imports: [ReactiveFormsModule, FormsModule, MatProgressSpinnerModule],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock }
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -66,15 +68,22 @@ describe('SETTINGS FORM COMPONENT', () => {
   });
 
   it('should initialize correctly', () => {
-    expect(component.settingsForm.controls['username'].value).toBe(component.authUser.username);
+    expect(component.settingsForm.controls['username'].value).toBe(
+      component.authUser.username
+    );
   });
 
   it('should update correctly', () => {
-    const spyUpdateSettings = spyOn(component, 'updateSettings').and.callThrough();
+    const spyUpdateSettings = spyOn(
+      component,
+      'updateSettings'
+    ).and.callThrough();
     const spyCreateUserData = spyOn<any>(component, 'createUserData');
     const spyOnSubmit = spyOn<any>(component, 'onSubmit');
 
-    const updateButton = fixture.debugElement.query(By.css('[type="submit"]')).nativeElement;
+    const updateButton = fixture.debugElement.query(
+      By.css('[type="submit"]')
+    ).nativeElement;
 
     updateButton.click();
     fixture.detectChanges();
@@ -116,10 +125,9 @@ describe('ON CATCH ERROR METHOD', () => {
       imports: [ReactiveFormsModule, FormsModule, MatProgressSpinnerModule],
       providers: [
         { provide: UsersService, useClass: UsersServiceMockWithError },
-        { provide: RedirectionService, useClass: RedirectionServiceMock }
-      ]
-    })
-      .compileComponents();
+        { provide: RedirectionService, useClass: RedirectionServiceMock },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -132,7 +140,9 @@ describe('ON CATCH ERROR METHOD', () => {
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
 
-    const updateButton = fixture.debugElement.query(By.css('[type="submit"]')).nativeElement;
+    const updateButton = fixture.debugElement.query(
+      By.css('[type="submit"]')
+    ).nativeElement;
     updateButton.click();
     fixture.detectChanges();
 

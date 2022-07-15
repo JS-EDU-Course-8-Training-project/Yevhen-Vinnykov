@@ -14,8 +14,6 @@ import { YourFeedComponent } from './your-feed/your-feed.component';
 import { TaggedArticlesComponent } from './tagged-articles/tagged-articles.component';
 import { HomeComponent } from './home.component';
 
-
-
 @NgModule({
   declarations: [
     GlobalFeedComponent,
@@ -35,4 +33,4 @@ import { HomeComponent } from './home.component';
     SharedModule,
   ],
 })
-export class HomeModule { }
+export class HomeModule {}

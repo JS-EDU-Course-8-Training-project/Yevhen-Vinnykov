@@ -7,10 +7,11 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent extends TestedComponent implements OnInit {
-  public isAuthorized$: BehaviorSubject<boolean> = this.authorizationService.isAuthorized$;
+  public isAuthorized$: BehaviorSubject<boolean> =
+    this.authorizationService.isAuthorized$;
   public url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
   private notifier: Subject<void> = new Subject<void>();
 
@@ -25,8 +26,9 @@ export class NavbarComponent extends TestedComponent implements OnInit {
     this.authorizationService.checkIfAuthorized();
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntil(this.notifier))
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.notifier)
+      )
       .subscribe(() => this.url$.next(this.router.url));
   }
 

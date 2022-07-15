@@ -19,7 +19,7 @@ const article: IArticle = {
     bio: 'test-bio',
     image: 'test-author',
     following: false,
-  }
+  },
 };
 
 describe('ARTICLE PAGE BUTTONS SERVICE', () => {
@@ -36,7 +36,7 @@ describe('ARTICLE PAGE BUTTONS SERVICE', () => {
       favoriteInProgress: false,
       isLiked: article.favorited,
       isFollowed: article.author.following,
-      likesCount: article.favoritesCount
+      likesCount: article.favoritesCount,
     };
 
     const spy = spyOn(service, 'createInitialState').and.callThrough();
@@ -56,13 +56,9 @@ describe('ARTICLE PAGE BUTTONS SERVICE', () => {
     expect(service.initialize(article)).toEqual(service.ButtonsState$);
   });
 
-
   it('UpdateState method should be called', () => {
     const spy = spyOn(service, 'updateState').and.callThrough();
     service.updateState('isFollowed', true);
     expect(spy).toHaveBeenCalled();
   });
-
 });
-
-

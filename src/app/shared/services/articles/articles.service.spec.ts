@@ -24,10 +24,10 @@ const expectedData: IArticleResponse = {
         bio: 'test-bio',
         image: 'test-image',
         following: false,
-      }
+      },
     },
   ],
-  articlesCount: 10
+  articlesCount: 10,
 };
 
 describe('ARTICLES SERVICE > GET METHODS', () => {
@@ -42,25 +42,27 @@ describe('ARTICLES SERVICE > GET METHODS', () => {
   it('getArticles methods should return expected data', () => {
     httpClientSpy.get.and.returnValue(of(expectedData));
 
-    articlesService.fetchArticles().subscribe(articles => {
+    articlesService.fetchArticles().subscribe((articles) => {
       expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchFollowedArticles().subscribe(articles => {
+    articlesService.fetchFollowedArticles().subscribe((articles) => {
       expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchArticlesByTag('test-tag').subscribe(articles => {
+    articlesService.fetchArticlesByTag('test-tag').subscribe((articles) => {
       expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchUserArticles('test-username').subscribe(articles => {
+    articlesService.fetchUserArticles('test-username').subscribe((articles) => {
       expect(articles).toEqual(expectedData);
     });
 
-    articlesService.fetchFavoritedArticles('test-username').subscribe(articles => {
-      expect(articles).toEqual(expectedData);
-    });
+    articlesService
+      .fetchFavoritedArticles('test-username')
+      .subscribe((articles) => {
+        expect(articles).toEqual(expectedData);
+      });
 
     expect(httpClientSpy.get.calls.count()).toBe(5);
   });
@@ -69,7 +71,7 @@ describe('ARTICLES SERVICE > GET METHODS', () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.get.and.returnValue(of(expectedArticle));
 
-    articlesService.fetchArticle('test-slug').subscribe(article => {
+    articlesService.fetchArticle('test-slug').subscribe((article) => {
       expect(article).toEqual(expectedArticle.article);
     });
 
@@ -80,15 +82,13 @@ describe('ARTICLES SERVICE > GET METHODS', () => {
     const expectedTags = { tags: ['test-tag'] };
     httpClientSpy.get.and.returnValue(of(expectedTags));
 
-    articlesService.fetchTags().subscribe(tags => {
+    articlesService.fetchTags().subscribe((tags) => {
       expect(tags).toEqual(expectedTags.tags);
     });
 
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
-
 });
-
 
 describe('ARTICLES SERVICE > POST METHODS', () => {
   let articlesService: ArticlesService;
@@ -105,12 +105,12 @@ describe('ARTICLES SERVICE > POST METHODS', () => {
       title: 'test-title',
       description: 'test-description',
       body: 'test-body',
-      tagList: ['test-tag']
+      tagList: ['test-tag'],
     };
 
     httpClientSpy.post.and.returnValue(of(expectedArticle));
 
-    articlesService.createArticle(newArticleMock).subscribe(article => {
+    articlesService.createArticle(newArticleMock).subscribe((article) => {
       expect(article).toEqual(expectedArticle);
     });
 
@@ -121,13 +121,12 @@ describe('ARTICLES SERVICE > POST METHODS', () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.post.and.returnValue(of(expectedArticle));
 
-    articlesService.addToFavorites('test-slug').subscribe(article => {
+    articlesService.addToFavorites('test-slug').subscribe((article) => {
       expect(article).toEqual(expectedArticle.article);
     });
 
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
-
 });
 
 describe('ARTICLES SERVICE > PUT METHODS', () => {
@@ -148,14 +147,15 @@ describe('ARTICLES SERVICE > PUT METHODS', () => {
       description: 'test-description',
       body: 'test-body',
     };
-    
-    articlesService.updateArticle('test-slug', updateArticleMock).subscribe(article => {
-      expect(article).toEqual(expectedArticle);
-    });
+
+    articlesService
+      .updateArticle('test-slug', updateArticleMock)
+      .subscribe((article) => {
+        expect(article).toEqual(expectedArticle);
+      });
 
     expect(httpClientSpy.put.calls.count()).toBe(1);
   });
-
 });
 
 describe('ARTICLES SERVICE > DELETE METHODS', () => {

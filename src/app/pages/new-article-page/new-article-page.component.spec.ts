@@ -5,13 +5,12 @@ import { ArticlesService } from 'src/app/shared/services/articles/articles.servi
 import { By } from '@angular/platform-browser';
 
 import { NewArticlePageComponent } from './new-article-page.component';
-import { 
-  ArticlesServiceMock, 
-  ArticlesServiceMockWithError, 
-  RouterMockCreateMode, 
-  RouterMockEditMode 
+import {
+  ArticlesServiceMock,
+  ArticlesServiceMockWithError,
+  RouterMockCreateMode,
+  RouterMockEditMode,
 } from './new-article-page.mocks.spec';
-
 
 describe('NEW ARTICLE PAGE > EDIT MODE', () => {
   let component: NewArticlePageComponent;
@@ -23,10 +22,9 @@ describe('NEW ARTICLE PAGE > EDIT MODE', () => {
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
         { provide: ArticlesService, useClass: ArticlesServiceMock },
-        { provide: Router, useClass: RouterMockEditMode }
-      ]
-    })
-      .compileComponents();
+        { provide: Router, useClass: RouterMockEditMode },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -42,26 +40,33 @@ describe('NEW ARTICLE PAGE > EDIT MODE', () => {
   });
 
   it('should update an article', waitForAsync(() => {
-    const spyHandleArticleAction = spyOn(component, 'handleArticleAction').and.callThrough();
+    const spyHandleArticleAction = spyOn(
+      component,
+      'handleArticleAction'
+    ).and.callThrough();
     const spyArticleAction = spyOn<any>(component, 'articleAction');
     const expectedData = {
       title: 'new-test-title',
-      tagList: ['test-tag']
+      tagList: ['test-tag'],
     };
 
     component.articleForm.controls['title'].setValue('new-test-title');
     fixture.detectChanges();
 
-    const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const submitButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
     submitButton.click();
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
       expect(spyHandleArticleAction).toHaveBeenCalled();
-      expect(spyArticleAction).toHaveBeenCalledWith(component.slug, expectedData);
+      expect(spyArticleAction).toHaveBeenCalledWith(
+        component.slug,
+        expectedData
+      );
     });
   }));
-
 });
 
 describe('NEW ARTICLE PAGE > CREATE MODE', () => {
@@ -74,10 +79,9 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
         { provide: ArticlesService, useClass: ArticlesServiceMock },
-        { provide: Router, useClass: RouterMockCreateMode }
-      ]
-    })
-      .compileComponents();
+        { provide: Router, useClass: RouterMockCreateMode },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -96,7 +100,9 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
   });
 
   it('button should be disabled on first render', () => {
-    const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const submitButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
     expect(submitButton.disabled).toBe(true);
   });
 
@@ -105,44 +111,55 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
       title: 'new-test-title',
       description: 'test-description',
       body: 'test-body',
-      tagList: 'test-tag'
+      tagList: 'test-tag',
     };
-    const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const submitButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
 
     component.articleForm.setValue(newArticle);
     component.articleForm.markAllAsTouched();
     fixture.detectChanges();
 
     expect(component.articleForm.valid).toBe(true);
-    expect(component.articleForm.controls['title'].value).toBe('new-test-title');
+    expect(component.articleForm.controls['title'].value).toBe(
+      'new-test-title'
+    );
     expect(submitButton.disabled).toBe(false);
   });
 
   it('should create an article', waitForAsync(() => {
-    const spyHandleArticleAction = spyOn(component, 'handleArticleAction').and.callThrough();
+    const spyHandleArticleAction = spyOn(
+      component,
+      'handleArticleAction'
+    ).and.callThrough();
     const spyArticleAction = spyOn<any>(component, 'articleAction');
     const newArticle = {
       title: 'new-test-title',
       description: 'test-description',
       body: 'test-body',
-      tagList: 'test-tag'
+      tagList: 'test-tag',
     };
 
     component.articleForm.setValue(newArticle);
     component.articleForm.markAllAsTouched();
     fixture.detectChanges();
 
-    const submitButton = fixture.debugElement.query(By.css('button')).nativeElement;
+    const submitButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
     submitButton.click();
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
       expect(component.isDataSaved()).toBe(true);
       expect(spyHandleArticleAction).toHaveBeenCalled();
-      expect(spyArticleAction).toHaveBeenCalledWith(component.slug, { ...newArticle, tagList: ['test-tag'] });
+      expect(spyArticleAction).toHaveBeenCalledWith(component.slug, {
+        ...newArticle,
+        tagList: ['test-tag'],
+      });
     });
   }));
-
 });
 
 describe('ON CATCH ERROR METHOD', () => {
@@ -155,10 +172,9 @@ describe('ON CATCH ERROR METHOD', () => {
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
         { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-        { provide: Router, useClass: RouterMockEditMode }
-      ]
-    })
-      .compileComponents();
+        { provide: Router, useClass: RouterMockEditMode },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -167,13 +183,10 @@ describe('ON CATCH ERROR METHOD', () => {
     fixture.detectChanges();
   });
 
-
   it('should be invoked', () => {
     const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
     component.ngOnInit();
-    
+
     expect(spy).toHaveBeenCalledWith('Fetching articles failed');
   });
-
 });
-

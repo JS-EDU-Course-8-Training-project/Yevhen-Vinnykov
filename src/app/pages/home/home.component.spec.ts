@@ -9,12 +9,10 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent ],
-      imports: [
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+      declarations: [HomeComponent],
+      imports: [],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -52,5 +50,4 @@ describe('HomeComponent', () => {
     expect(component.selectedTag).toBe(null);
     expect(spy).toHaveBeenCalledOnceWith(1);
   });
-
 });

@@ -6,24 +6,26 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent extends TestedComponent implements OnInit, OnDestroy {
-  public isLoading: boolean = false;
-  public tabIndex: number = 0;
-  public isAuthorized: boolean = false;
+export class HomeComponent
+  extends TestedComponent
+  implements OnInit, OnDestroy
+{
+  public isLoading = false;
+  public tabIndex = 0;
+  public isAuthorized = false;
   public selectedTag!: string | null;
   private authSubscription!: Subscription;
 
-  constructor(
-    private authorizationService: AuthorizationService
-  ) {
+  constructor(private authorizationService: AuthorizationService) {
     super();
   }
 
   ngOnInit(): void {
-    this.authSubscription = this.authorizationService.isAuthorized$
-      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
+    this.authSubscription = this.authorizationService.isAuthorized$.subscribe(
+      (isAuthorized) => (this.isAuthorized = isAuthorized)
+    );
   }
 
   ngOnDestroy(): void {

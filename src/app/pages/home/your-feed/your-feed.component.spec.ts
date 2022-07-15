@@ -25,24 +25,24 @@ const expectedData: IArticleResponse = {
         bio: 'test-bio',
         image: 'test-image',
         following: true,
-      }
+      },
     },
   ],
-  articlesCount: 10
+  articlesCount: 10,
 };
 
 class ArticlesServiceMock {
-  public fetchFollowedArticles = (tag: string, offset: number, limit: number) => of(expectedData);
+  public fetchFollowedArticles = () => of(expectedData);
 }
 
 class ArticlesServiceMockWithError {
-  public fetchFollowedArticles = (offset: number, limit: number) => throwError(() => new Error('Fetching articles failed'));
+  public fetchFollowedArticles = () =>
+    throwError(() => new Error('Fetching articles failed'));
 }
-
 
 class InfiniteScrollServiceMock {
   public observeIntersection = () => of([]);
-  public observer = { observe: () => {} };
+  public observer = { observe: () => ({}) };
 }
 
 describe('YOUR FEED COMPONENT', () => {
@@ -55,11 +55,13 @@ describe('YOUR FEED COMPONENT', () => {
         declarations: [YourFeedComponent],
         providers: [
           { provide: ArticlesService, useClass: ArticlesServiceMock },
-          { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock }
+          {
+            provide: InfiniteScrollService,
+            useClass: InfiniteScrollServiceMock,
+          },
         ],
-        schemas: [NO_ERRORS_SCHEMA]
-      })
-        .compileComponents();
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     });
 
     beforeEach(() => {
@@ -89,13 +91,13 @@ describe('YOUR FEED COMPONENT', () => {
         declarations: [YourFeedComponent],
         providers: [
           { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-          { provide: InfiniteScrollService, useClass: InfiniteScrollServiceMock }
-
+          {
+            provide: InfiniteScrollService,
+            useClass: InfiniteScrollServiceMock,
+          },
         ],
-        schemas: [NO_ERRORS_SCHEMA]
-
-      })
-        .compileComponents();
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     });
 
     beforeEach(() => {
@@ -114,7 +116,8 @@ describe('YOUR FEED COMPONENT', () => {
         catchError(() => {
           expect(component.error).toBe('Something went wrong :(');
           return of({ articles: [], articlesCount: 0 });
-        }));
+        })
+      );
     }));
   });
 });

@@ -13,13 +13,13 @@ const mockUser: IExistingUser = {
   username: 'test-username',
   image: 'test-image',
   token: 'test-token',
-  password: 'test-password'
+  password: 'test-password',
 };
 
 const mockNewUser: INewUser = {
   email: 'test-email',
   username: 'test-username',
-  password: 'test-password'
+  password: 'test-password',
 };
 
 describe('USERS SERVICE', () => {
@@ -30,15 +30,22 @@ describe('USERS SERVICE', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post', 'put']);
-    authorizationServiceSpy = jasmine.createSpyObj('AuthorizationService', ['authorize', 'removeAuthorization']);
+    authorizationServiceSpy = jasmine.createSpyObj('AuthorizationService', [
+      'authorize',
+      'removeAuthorization',
+    ]);
     routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
-    service = new UsersService(httpClientSpy, authorizationServiceSpy, routerSpy);
+    service = new UsersService(
+      httpClientSpy,
+      authorizationServiceSpy,
+      routerSpy
+    );
   });
 
   it('createUser should create a user and return correct data', () => {
     httpClientSpy.post.and.returnValue(of({ user: mockUser }));
 
-    service.createUser(mockNewUser).subscribe(newUser => {
+    service.createUser(mockNewUser).subscribe((newUser) => {
       expect(newUser).toEqual(mockUser);
     });
 
@@ -49,10 +56,12 @@ describe('USERS SERVICE', () => {
     httpClientSpy.post.and.returnValue(of({ user: mockUser }));
     const spy = spyOn(service.authUser$, 'next');
 
-    service.signIn({ email: 'test-email', password: 'test-password' }).subscribe(user => {
-      expect(user).toEqual(mockUser);
-      expect(spy).toHaveBeenCalledWith(mockUser);
-    });
+    service
+      .signIn({ email: 'test-email', password: 'test-password' })
+      .subscribe((user) => {
+        expect(user).toEqual(mockUser);
+        expect(spy).toHaveBeenCalledWith(mockUser);
+      });
 
     expect(authorizationServiceSpy.authorize.calls.count()).toBe(1);
   });
@@ -61,7 +70,7 @@ describe('USERS SERVICE', () => {
     httpClientSpy.get.and.returnValue(of({ user: mockUser }));
     const spy = spyOn(service.authUser$, 'next');
 
-    service.fetchAuthUser().subscribe(user => {
+    service.fetchAuthUser().subscribe((user) => {
       expect(user).toEqual(mockUser);
       expect(spy).toHaveBeenCalledWith(mockUser);
     });
@@ -71,7 +80,7 @@ describe('USERS SERVICE', () => {
     httpClientSpy.put.and.returnValue(of({ user: mockUser }));
     const spy = spyOn(service.authUser$, 'next');
 
-    service.updateUser(mockUser).subscribe(user => {
+    service.updateUser(mockUser).subscribe((user) => {
       expect(user).toEqual(mockUser);
       expect(spy).toHaveBeenCalledWith(mockUser);
     });

@@ -1,78 +1,59 @@
-<mat-card 
-    class="card-container" 
-    [e2e]="TestAttributes.ArticleCard"
->
-    <header>
-        <div
-            class="info" 
-            [e2e]="TestAttributes.ArticleCardInfo"
-         >
-            <a routerLink="/user/{{article.author.username}}">
-                <img 
-                    src="{{article.author.image}}" 
-                    alt="" 
-                    [e2e]="TestAttributes.ArticleCardAuthorImg"
-                >
-            </a>
-            <div>
-                <a routerLink="/user/{{article.author.username}}">
-                    <h3 
-                        [e2e]="TestAttributes.ArticleCardAuthorName"
-                    >
-                        {{article.author.username}}
-                    </h3>
-                </a>
-                <p 
-                    class="text-secondary"
-                    [e2e]="TestAttributes.ArticleCardDate"
-                >
-                    {{article.createdAt | date}}
-                </p>
-            </div>
-        </div>
-        <button 
-            [disabled]="isPending" 
-            (click)="handleLikeDislike(article.slug)" 
-            mat-stroked-button
-            [e2e]="TestAttributes.ArticleCardLikeBtn"
-        >
-            <mat-icon 
-                [color]="isLiked && 'warn'"
-                [e2e]="TestAttributes.ArticleCardLikeIcon"
-            >
-                favorite
-            </mat-icon>
-            {{likesCount}}
-        </button>
-    </header>
-    <div class="card-content">
-        <a routerLink="/article/{{article.slug}}">
-            <h2 [e2e]="TestAttributes.ArticleCardTitle">
-                {{article.title}}
-            </h2>
-            <p 
-                [e2e]="TestAttributes.ArticleCardDescription"
-            >
-                {{article.description}}
-            </p>
-            <div 
-                class="card-footer" 
-                [e2e]="TestAttributes.ArticleCardFooter"
-            >
-                <a 
-                    class="text-secondary" 
-                    routerLink="/article/{{article.slug}}"
-                    [e2e]="TestAttributes.ArticleCardReadMoreLink"
-                >
-                    Read more...
-                </a>
-                <div 
-                    class="tags" 
-                    [e2e]="TestAttributes.ArticleCardTags"
-                >
-                    <div class="tag" *ngFor="let tag of article.tagList">{{tag}}</div>
-                </div>
-            </div>
+<mat-card class="card-container" [e2e]="TestAttributes.ArticleCard">
+  <header>
+    <div class="info" [e2e]="TestAttributes.ArticleCardInfo">
+      <a routerLink="/user/{{ article.author.username }}">
+        <img
+          src="{{ article.author.image }}"
+          alt=""
+          [e2e]="TestAttributes.ArticleCardAuthorImg"
+        />
+      </a>
+      <div>
+        <a routerLink="/user/{{ article.author.username }}">
+          <h3 [e2e]="TestAttributes.ArticleCardAuthorName">
+            {{ article.author.username }}
+          </h3>
         </a>
+        <p class="text-secondary" [e2e]="TestAttributes.ArticleCardDate">
+          {{ article.createdAt | date }}
+        </p>
+      </div>
     </div>
+    <button
+      [disabled]="isPending"
+      (click)="handleLikeDislike(article.slug)"
+      mat-stroked-button
+      [e2e]="TestAttributes.ArticleCardLikeBtn"
+    >
+      <mat-icon
+        [color]="isLiked && 'warn'"
+        [e2e]="TestAttributes.ArticleCardLikeIcon"
+      >
+        favorite
+      </mat-icon>
+      {{ likesCount }}
+    </button>
+  </header>
+  <div class="card-content">
+    <a routerLink="/article/{{ article.slug }}">
+      <h2 [e2e]="TestAttributes.ArticleCardTitle">
+        {{ article.title }}
+      </h2>
+      <p [e2e]="TestAttributes.ArticleCardDescription">
+        {{ article.description }}
+      </p>
+      <div class="card-footer" [e2e]="TestAttributes.ArticleCardFooter">
+        <a
+          class="text-secondary"
+          routerLink="/article/{{ article.slug }}"
+          [e2e]="TestAttributes.ArticleCardReadMoreLink"
+        >
+          Read more...
+        </a>
+        <div class="tags" [e2e]="TestAttributes.ArticleCardTags">
+          <div class="tag" *ngFor="let tag of article.tagList">{{ tag }}</div>
+        </div>
+      </div>
+    </a>
+  </div>
 </mat-card>

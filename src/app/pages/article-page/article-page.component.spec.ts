@@ -15,8 +15,8 @@ class UsersServiceMock {
 
 class ActivatedRouteMock {
   public data = of({
-    article: {} as IArticle
-  })
+    article: {} as IArticle,
+  });
 }
 
 describe('ArticlePageComponent', () => {
@@ -25,19 +25,14 @@ describe('ArticlePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        ArticlePageComponent,
-      ],
-      imports: [
-        MatCardModule
-      ],
+      declarations: [ArticlePageComponent],
+      imports: [MatCardModule],
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
-        { provide: ActivatedRoute, useClass: ActivatedRouteMock }
+        { provide: ActivatedRoute, useClass: ActivatedRouteMock },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -55,5 +50,4 @@ describe('ArticlePageComponent', () => {
     component.reuestComments();
     expect(spy).toHaveBeenCalled();
   });
-
 });

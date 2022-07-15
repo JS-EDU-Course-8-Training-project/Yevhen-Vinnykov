@@ -11,7 +11,10 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
   templateUrl: './article-page.component.html',
   styleUrls: ['./article-page.component.scss'],
 })
-export class ArticlePageComponent extends TestedComponent implements OnInit, OnDestroy {
+export class ArticlePageComponent
+  extends TestedComponent
+  implements OnInit, OnDestroy
+{
   public slug!: string;
   public article!: IArticle;
   public authUser!: IExistingUser;
@@ -45,6 +48,6 @@ export class ArticlePageComponent extends TestedComponent implements OnInit, OnD
   private getAuthUser(): void {
     this.usersService.authUser$
       .pipe(takeUntil(this.notifier))
-      .subscribe(user => this.authUser = user);
+      .subscribe((user) => (this.authUser = user));
   }
 }

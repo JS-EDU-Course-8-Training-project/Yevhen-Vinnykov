@@ -12,7 +12,9 @@ describe('REDIRECTION SERVICE', () => {
   });
 
   it('methods should return a promise that resolves', () => {
-    routerSpy.navigateByUrl.and.returnValue(new Promise<boolean>((resolve, reject) => resolve(true)));
+    routerSpy.navigateByUrl.and.returnValue(
+      new Promise<boolean>((resolve) => resolve(true))
+    );
 
     service.redirectUnauthorized();
     service.redirectToEditArticle('test-slug');
@@ -23,7 +25,9 @@ describe('REDIRECTION SERVICE', () => {
   });
 
   it('methods should return a promise that rejects', () => {
-    routerSpy.navigateByUrl.and.returnValue(new Promise<boolean>((resolve, reject) => reject('Error')));
+    routerSpy.navigateByUrl.and.returnValue(
+      new Promise<boolean>((resolve, reject) => reject('Error'))
+    );
 
     service.redirectUnauthorized();
     service.redirectByUrl('/test-url');
@@ -33,5 +37,3 @@ describe('REDIRECTION SERVICE', () => {
     expect(routerSpy.navigateByUrl.calls.count()).toBe(4);
   });
 });
-
-

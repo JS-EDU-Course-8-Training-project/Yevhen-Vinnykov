@@ -7,9 +7,8 @@ import { By } from '@angular/platform-browser';
 import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
-
 class ArticlesServiceMock {
-  public fetchTags = (tag: string, offset: number, limit: number) => of(['test-tag', 'foo']);
+  public fetchTags = () => of(['test-tag', 'foo']);
 }
 
 describe('TAGS COMPONENT', () => {
@@ -18,12 +17,9 @@ describe('TAGS COMPONENT', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TagsComponent, TestAttributeDirective ],
-      providers: [
-        { provide: ArticlesService, useClass: ArticlesServiceMock}
-      ]
-    })
-    .compileComponents();
+      declarations: [TagsComponent, TestAttributeDirective],
+      providers: [{ provide: ArticlesService, useClass: ArticlesServiceMock }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -54,7 +50,9 @@ describe('TAGS COMPONENT', () => {
   describe('SELECT TAG METHOD', () => {
     it('should select tag correctly', () => {
       const spy = spyOn(component, 'selectTag').and.callThrough();
-      const [div1, div2] = fixture.debugElement.queryAll(By.css(`[data-test=${TestAttributes.Tag}]`));
+      const [div1, div2] = fixture.debugElement.queryAll(
+        By.css(`[data-test=${TestAttributes.Tag}]`)
+      );
 
       div2.triggerEventHandler('click', null);
       fixture.detectChanges();
@@ -73,7 +71,5 @@ describe('TAGS COMPONENT', () => {
       expect(component.selectedTag).toBe('test-tag');
       expect(spy).toHaveBeenCalledTimes(2);
     });
-
   });
-
 });

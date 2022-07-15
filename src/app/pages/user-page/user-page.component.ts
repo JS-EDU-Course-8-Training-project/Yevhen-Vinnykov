@@ -10,16 +10,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
-
 @Component({
   selector: 'app-user-page',
   templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.scss']
+  styleUrls: ['./user-page.component.scss'],
 })
-
-export class UserPageComponent extends TestedComponent implements OnInit, OnDestroy {
+export class UserPageComponent
+  extends TestedComponent
+  implements OnInit, OnDestroy
+{
   public user!: IExistingUser | IProfile;
-  public tabIndex: number = 0;
+  public tabIndex = 0;
   public urlUsername!: string;
   public isMyself!: boolean;
   public followingInProgress!: boolean;
@@ -32,7 +33,7 @@ export class UserPageComponent extends TestedComponent implements OnInit, OnDest
     private profilesService: ProfilesService,
     private router: Router,
     private authorizationService: AuthorizationService,
-    private redirectionService: RedirectionService,
+    private redirectionService: RedirectionService
   ) {
     super();
   }
@@ -42,12 +43,13 @@ export class UserPageComponent extends TestedComponent implements OnInit, OnDest
 
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
-      .subscribe((isAuthorized => this.isAuthorized = isAuthorized));
+      .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
 
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntil(this.notifier))
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.notifier)
+      )
       .subscribe(() => this.setUserData());
   }
 
@@ -65,11 +67,13 @@ export class UserPageComponent extends TestedComponent implements OnInit, OnDest
         this.tabIndex = 0;
         this.isMyself = authUser.username === this.urlUsername;
 
-        if (this.isMyself) return this.user = this.usersService.authUser$.getValue();
+        if (this.isMyself)
+          return (this.user = this.usersService.authUser$.getValue());
 
-        this.profilesService.fetchUser(this.urlUsername)
+        this.profilesService
+          .fetchUser(this.urlUsername)
           .pipe(takeUntil(this.notifier))
-          .subscribe(user => {
+          .subscribe((user) => {
             if (!(user instanceof HttpErrorResponse)) {
               this.user = user;
               this.isFollowed = user.following;
@@ -87,13 +91,16 @@ export class UserPageComponent extends TestedComponent implements OnInit, OnDest
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
   }
 
-  private followingHandler(username: string, method: 'follow' | 'unfollow'): void {
-    this.profilesService[method](username).subscribe((profile => {
+  private followingHandler(
+    username: string,
+    method: 'follow' | 'unfollow'
+  ): void {
+    this.profilesService[method](username).subscribe((profile) => {
       if (!(profile instanceof HttpErrorResponse)) {
         this.isFollowed = profile.following;
         this.followingInProgress = false;
       }
-    }));
+    });
   }
 
   private redirectUnauthorized(): void {

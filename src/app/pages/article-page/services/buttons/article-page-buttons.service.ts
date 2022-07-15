@@ -10,21 +10,25 @@ export interface IButtonsState {
   likesCount: number;
 }
 
-type TField = 'favoriteInProgress' | 'followingInProgress' | 'isLiked' | 'isFollowed' | 'likesCount';
+type TField =
+  | 'favoriteInProgress'
+  | 'followingInProgress'
+  | 'isLiked'
+  | 'isFollowed'
+  | 'likesCount';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ArticlePageButtonsService {
-  public ButtonsState$: BehaviorSubject<IButtonsState> = new BehaviorSubject<IButtonsState>({
-    favoriteInProgress: false,
-    followingInProgress: false,
-    isLiked: false,
-    isFollowed: false,
-    likesCount: 0
-  });
-
-  constructor() { }
+  public ButtonsState$: BehaviorSubject<IButtonsState> =
+    new BehaviorSubject<IButtonsState>({
+      favoriteInProgress: false,
+      followingInProgress: false,
+      isLiked: false,
+      isFollowed: false,
+      likesCount: 0,
+    });
 
   public createInitialState(article: IArticle): IButtonsState {
     return {
@@ -32,7 +36,7 @@ export class ArticlePageButtonsService {
       favoriteInProgress: false,
       isLiked: article.favorited,
       isFollowed: article.author.following,
-      likesCount: article.favoritesCount
+      likesCount: article.favoritesCount,
     };
   }
 
@@ -42,6 +46,9 @@ export class ArticlePageButtonsService {
   }
 
   public updateState(field: TField, value: number | boolean): void {
-    this.ButtonsState$.next({...this.ButtonsState$.getValue(), [field]: value});
+    this.ButtonsState$.next({
+      ...this.ButtonsState$.getValue(),
+      [field]: value,
+    });
   }
 }
