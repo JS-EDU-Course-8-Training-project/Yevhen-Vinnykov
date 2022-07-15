@@ -93,7 +93,7 @@ describe('SING UP PAGE', () => {
 
         signUpPage.formError.should(
           'contain.text',
-          ' Error:  User with this username already exists '
+          ' User with this username already exists '
         );
       });
 
@@ -104,7 +104,7 @@ describe('SING UP PAGE', () => {
 
         signUpPage.formError.should(
           'contain.text',
-          ' Error:  User with this email already exists '
+          ' User with this email already exists '
         );
       });
 
@@ -115,7 +115,7 @@ describe('SING UP PAGE', () => {
 
         signUpPage.formError.should(
           'contain.text',
-          ' Error:  Password must contain at least one digit '
+          ' Password must contain at least one digit '
         );
       });
 
@@ -128,7 +128,7 @@ describe('SING UP PAGE', () => {
 
         signUpPage.formError.should(
           'contain.text',
-          ' Error:  Password must contain at least one capital letter '
+          ' Password must contain at least one capital letter '
         );
       });
     });

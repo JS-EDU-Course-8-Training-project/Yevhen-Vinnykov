@@ -96,7 +96,7 @@ describe('SING IN PAGE', () => {
 
         signInPage.formError.should(
           'contain.text',
-          ' Error:  Email or password is not valid '
+          ' Email or password is not valid '
         );
       });
     });
