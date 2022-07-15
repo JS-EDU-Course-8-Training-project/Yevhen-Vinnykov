@@ -13,7 +13,6 @@ import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 const comments: IComment[] = [{
-  _id: '1',
   id: '1',
   createdAt: Date.now().toString(),
   updatedAt: Date.now().toString(),
@@ -23,10 +22,12 @@ const comments: IComment[] = [{
     bio: 'test-bio',
     image: 'test-image',
     following: false,
-  }
+  },
+  article: '1'
 }];
 
 const authUser: IExistingUser = {
+  id: '1',
   email: 'test@example.com',
   username: 'test-username',
   bio: 'test-bio',

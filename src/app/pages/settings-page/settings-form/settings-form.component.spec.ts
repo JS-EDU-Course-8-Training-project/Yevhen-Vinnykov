@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const settingsMock: IExistingUser = {
+  id: '1',
   email: 'test-username@example.com',
   username: 'test-username',
   image: 'test-image'

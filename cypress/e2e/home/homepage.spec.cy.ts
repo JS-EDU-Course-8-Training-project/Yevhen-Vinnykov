@@ -1,14 +1,16 @@
 import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { homepage } from '../../support/comonent-objects/home/homepage';
 
+import {tags} from 'cypress/fixtures/tags';
+import {user} from 'cypress/fixtures/user';
+import {comments} from 'cypress/fixtures/comments';
+import {articlesResponse, ownArticle} from 'cypress/fixtures/articles';
+
+
 describe('HOME PAGE', () => {
     beforeEach(() => {
-        cy.intercept('GET', `${apiBaseUrl}tags`, { fixture: "tags.json" })
-            .as('getTags');
-
-        cy.intercept('GET', `${apiBaseUrl}articles/**`, { fixture: "articles.json" })
-            .as('getArticles');
-
+        cy.intercept('GET', `${apiBaseUrl}tags`, { tags });
+        cy.intercept('GET', `${apiBaseUrl}articles/**`, articlesResponse);
         cy.visit('/');
     });
 
@@ -29,13 +31,8 @@ describe('HOME PAGE', () => {
     });
 
     it('should redirect to article page once an article card is clicked', () => {
-        cy.fixture('articles').then(res => {
-            const article = res.articles[0];
-            cy.intercept('GET', `${apiBaseUrl}articles/**`, { article }).as('getArticle');
-        });
-
-        cy.intercept('GET', `${apiBaseUrl}articles/**/comments`, { fixture: "comments.json" })
-            .as('getComments');
+        cy.intercept('GET', `${apiBaseUrl}articles/**`, { article: ownArticle });
+        cy.intercept('GET', `${apiBaseUrl}articles/**/comments`, { comments });
 
         homepage.articleCard.click();
 
@@ -43,8 +40,7 @@ describe('HOME PAGE', () => {
     });
 
     it('should toggle tagged articles tab', () => {
-        cy.intercept('GET', `${apiBaseUrl}articles?tag=lorem&limit=5&offset=0`, { fixture: "articles.json" })
-            .as('getTaggedArticles');
+        cy.intercept('GET', `${apiBaseUrl}articles?tag=lorem&limit=5&offset=0`, articlesResponse);
 
         homepage.allTags.contains('lorem').click();
 
@@ -60,12 +56,8 @@ describe('HOME PAGE', () => {
 
     describe('AUTHORIZED', () => {
         beforeEach(() => {
-            cy.intercept('GET', `${apiBaseUrl}users`, { fixture: "user.json" })
-                .as('getAuthUser');
-
-            cy.intercept('GET', `${apiBaseUrl}articles/feed/**`, { fixture: "articles.json" })
-                .as('getFeed');
-
+            cy.intercept('GET', `${apiBaseUrl}users`, {user});
+            cy.intercept('GET', `${apiBaseUrl}articles/feed/**`, articlesResponse);
             cy.addTokenToLocalStorage();
             cy.visit('/');
         });

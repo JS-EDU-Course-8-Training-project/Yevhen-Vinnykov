@@ -11,7 +11,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 const returnComment: IComment = {
-  _id: '1',
   id: '1',
   createdAt: Date.now().toLocaleString(),
   updatedAt: Date.now().toLocaleString(),
@@ -21,7 +20,8 @@ const returnComment: IComment = {
     bio: 'test-bio',
     image: 'test-image',
     following: false,
-  }
+  },
+  article: '1'
 };
 
 class CommentsServiceMock {

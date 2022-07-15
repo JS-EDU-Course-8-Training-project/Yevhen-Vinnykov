@@ -9,6 +9,7 @@ export const dataMock: IUserData = {
 };
 
 export const userMock: IExistingUser = {
+    id: '1',
     email: 'test-user@example.com',
     password: 'test-password',
     image: '',

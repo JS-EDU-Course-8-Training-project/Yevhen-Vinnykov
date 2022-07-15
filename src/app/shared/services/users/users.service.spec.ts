@@ -8,6 +8,7 @@ import { INewUser } from '../../models/INewUser';
 import { Router } from '@angular/router';
 
 const mockUser: IExistingUser = {
+  id: '1',
   email: 'test-email',
   username: 'test-username',
   image: 'test-image',

@@ -1,4 +1,5 @@
 export interface IExistingUser{
+        id: string;
         email: string;
         username: string;
         bio?: string;

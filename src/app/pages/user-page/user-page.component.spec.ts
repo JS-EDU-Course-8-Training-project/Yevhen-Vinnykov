@@ -15,6 +15,7 @@ import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 
 const mockAuthUser: IExistingUser = {
+  id: '1',
   email: 'test-auth@example.com',
   username: 'test-auth-username',
   bio: 'test-auth-bio',

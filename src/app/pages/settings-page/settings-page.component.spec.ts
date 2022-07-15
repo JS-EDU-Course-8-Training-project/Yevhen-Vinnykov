@@ -11,6 +11,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 
 const mockUser: IExistingUser = {
+  id: '1',
   email: 'test@example.com',
   username: 'test-username',
   bio: 'test-bio',

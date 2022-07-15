@@ -9,6 +9,7 @@ import { IUpdateArticle } from '../../models/IUpdateArticle';
 const expectedData: IArticleResponse = {
   articles: [
     {
+      id: '1',
       slug: 'test-slug',
       title: 'test-title',
       description: 'test-description',

@@ -1,18 +1,20 @@
 import { apiBaseUrl } from "cypress/support/apiBaseUrl";
 import { settingsForm } from "cypress/support/comonent-objects/user/settings-form";
 
+import { user } from "cypress/fixtures/user";
+
 describe('SETTINGS FORM', () => {
     beforeEach(() => {
         cy.addTokenToLocalStorage();
-        cy.intercept('GET', `${apiBaseUrl}users`, {fixture: 'user.json'}).as('getUser');
+        cy.intercept('GET', `${apiBaseUrl}users`, { user });
         cy.visit('/settings');
     });
 
     it('should have inputs filled with user information', () => {
-        settingsForm.username.should('contain.value', 'John');
-        settingsForm.email.should('contain.value', 'john@gmail.com');
-        settingsForm.image.should('contain.value', 'https://st3.depositphotos.com/2229436/13671/v/600/depositphotos_136717406-stock-illustration-flat-user-icon-member-sign.jpg');
-        settingsForm.bio.should('contain.value', 'test');
+        settingsForm.username.should('contain.value', user.username);
+        settingsForm.email.should('contain.value', user.email);
+        settingsForm.image.should('contain.value', user.image);
+        settingsForm.bio.should('contain.value', user.bio);
     });
 
     it('should have errors if required inputs are empty', () => {
@@ -28,12 +30,12 @@ describe('SETTINGS FORM', () => {
     });
 
     it('should redirect to user page if the user was successfully updated', () => {
-        cy.intercept('PUT', `${apiBaseUrl}users`, {fixture: 'user.json'}).as('updateUser');
+        cy.intercept('PUT', `${apiBaseUrl}users`, { user });
 
         settingsForm.bio.clear().type('new bio');
         settingsForm.updateButton.click();
 
-        cy.location('pathname').should('contain', '/user');
+        cy.location('pathname').should('eq', `/user/${user.username}`);
     });
 
     it('should logout and redirect to home page', () => {

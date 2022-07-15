@@ -7,6 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { ArticleResolver } from './article-resolver.resolver';
 
 const expectedData: IArticle = {
+  id: '1',
   slug: 'test-slug',
   title: 'test-title',
   description: 'test-description',

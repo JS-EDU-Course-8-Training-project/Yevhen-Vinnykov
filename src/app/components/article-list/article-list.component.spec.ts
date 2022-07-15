@@ -11,6 +11,7 @@ import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const article: IArticle = {
+  id: '1',
   slug: 'test-slug',
   title: '',
   description: '',

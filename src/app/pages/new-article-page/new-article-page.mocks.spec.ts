@@ -5,6 +5,7 @@ import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
 
 
 export const expectedData: IArticle = {
+    id: '1',
     slug: 'test-slug',
     title: 'test-title',
     description: 'test-description',

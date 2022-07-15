@@ -26,6 +26,7 @@ export class UsersService {
   private tokenExpirationTimerId!: number | null;
 
   public authUser$: BehaviorSubject<IExistingUser> = new BehaviorSubject<IExistingUser>({
+    id: '',
     email: '',
     username: '',
     bio: '',

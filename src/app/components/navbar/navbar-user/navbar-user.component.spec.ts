@@ -7,6 +7,7 @@ import { NavbarUserComponent } from './navbar-user.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const mockAuthUser: IExistingUser = {
+  id: '1',
   email: 'test-email',
   username: 'test-username',
   image: 'test-image'

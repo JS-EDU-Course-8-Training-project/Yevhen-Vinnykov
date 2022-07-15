@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { ArticlePageButtonsService } from './article-page-buttons.service';
 
 const article: IArticle = {
+  id: '1',
   slug: 'test-slug',
   title: 'test-tile',
   description: 'test-description',

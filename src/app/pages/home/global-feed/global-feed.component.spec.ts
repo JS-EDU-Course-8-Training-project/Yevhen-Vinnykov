@@ -11,6 +11,7 @@ import { ElementRef, NO_ERRORS_SCHEMA, QueryList } from "@angular/core";
 const expectedData: IArticleResponse = {
   articles: [
     {
+      id: '1',
       slug: 'test-slug',
       title: 'test-title',
       description: 'test-description',

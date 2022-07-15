@@ -76,6 +76,7 @@ export class AuthorizationServiceNotAuthMock {
 }
 
 export const article: IArticle = {
+    id: '1',
     slug: 'test-slug',
     title: 'test-tile',
     description: 'test-description',
@@ -94,6 +95,7 @@ export const article: IArticle = {
 };
 
 export const authUser: IExistingUser = {
+    id: '1',
     email: 'test@example.com',
     username: 'test-username',
     bio: 'test-bio',

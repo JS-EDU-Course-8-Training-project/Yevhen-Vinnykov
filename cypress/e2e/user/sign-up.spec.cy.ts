@@ -1,6 +1,9 @@
 import { apiBaseUrl } from "cypress/support/apiBaseUrl";
 import { signUpPage } from "cypress/support/comonent-objects/user/sign-up-page";
 
+import { user } from "cypress/fixtures/user";
+
+
 describe('SING UP PAGE', () => {
     beforeEach(() => {
         cy.visit('/sign-up');
@@ -54,7 +57,7 @@ describe('SING UP PAGE', () => {
         });
 
         it('should redirect to home if the the credentials are valid', () => {
-            cy.intercept('POST', `${apiBaseUrl}users/signup`, { fixture: 'user.json' }).as('signUp');
+            cy.intercept('POST', `${apiBaseUrl}users/signup`, { user });
 
             signUp('Jane', 'janedoe@gmail.com', 'JaneDoe1');
 
@@ -130,5 +133,5 @@ const interceptSignUpWithError = (errorMessage: string) => {
             statusCode: 400,
             body: { errors: { 'Error: ': [errorMessage] } }
         }
-    ).as('failedSignUp');
+    );
 }

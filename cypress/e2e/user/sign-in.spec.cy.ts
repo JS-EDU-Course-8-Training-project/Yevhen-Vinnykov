@@ -1,9 +1,12 @@
 import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { signInPage } from '../../support/comonent-objects/user/sign-in-page';
 
+import { user } from "cypress/fixtures/user";
+
+
 describe('SING IN PAGE', () => {
     beforeEach(() => {
-        cy.intercept('POST', `${apiBaseUrl}users/login`, { fixture: 'user.json' }).as('getUser');
+        cy.intercept('POST', `${apiBaseUrl}users/login`, { user });
         cy.visit('/sign-in');
     });
 
@@ -49,8 +52,8 @@ describe('SING IN PAGE', () => {
         });
 
         it('should redirect to home if the the credentials are valid', () => {
-            cy.intercept('POST', `${apiBaseUrl}users/login`, { fixture: 'user.json' }).as('login');
-            
+            cy.intercept('POST', `${apiBaseUrl}users/login`, { user });
+
             signIn('john@example.com', 'Password1');
 
             cy.location('pathname').should('eq', '/');
@@ -74,7 +77,7 @@ describe('SING IN PAGE', () => {
             });
 
             it('should show an error if the user doesn\'t exist', () => {
-                interceptSignInWithError('User does not exist');
+                interceptSignInWithError('User does not exist', 404);
 
                 signIn('userdoesntexist@gmail.com', 'Password1');
 
@@ -99,11 +102,11 @@ const signIn = (email: string, password: string) => {
     signInPage.signInButton.click();
 }
 
-const interceptSignInWithError = (errorMessage: string) => {
+const interceptSignInWithError = (errorMessage: string, statusCode: number = 400) => {
     cy.intercept('POST', `${apiBaseUrl}users/login`,
         {
-            statusCode: 400,
+            statusCode,
             body: { errors: { 'Error: ': [errorMessage] } }
         }
-    ).as('failedLogin');
+    );
 }

@@ -6,6 +6,7 @@ export interface IArticleAuthor {
 }
 
 export interface IArticle {
+    id: string;
     slug: string;
     title: string;
     description: string;

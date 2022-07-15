@@ -10,6 +10,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 const expectedData: IArticleResponse = {
   articles: [
     {
+      id: '1',
       slug: 'test-slug',
       title: 'test-title',
       description: 'test-description',

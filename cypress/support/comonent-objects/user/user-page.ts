@@ -24,6 +24,14 @@ class UserPage {
     get updateButton() {
         return cy.getByTestAttr(TestAttributes.UserPageUpdateBtn);
     }
+
+    get banner() {
+        return cy.getByTestAttr('user-page-banner');
+    }
+
+    get articlesLoadedDiv() {
+        return cy.getByTestAttr('all-articles-loaded');
+    }
 }
 
 export const userPage = new UserPage();

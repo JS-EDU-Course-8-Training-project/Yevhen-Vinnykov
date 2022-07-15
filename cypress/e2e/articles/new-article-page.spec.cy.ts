@@ -1,6 +1,9 @@
 import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { newArticlePage } from '../../support/comonent-objects/articles/new-article-page';
 
+import { ownArticle } from 'cypress/fixtures/articles';
+
+
 describe('NEW ARTICLE PAGE', () => {
     beforeEach(() => {
         cy.addTokenToLocalStorage();
@@ -23,7 +26,7 @@ describe('NEW ARTICLE PAGE', () => {
             fillFormInputs();
             clearFormInputs();
 
-           newArticlePage.formError.should('contain.text', 'This field is required');
+            newArticlePage.formError.should('contain.text', 'This field is required');
         });
 
         it('inputs should have valid class if they are valid', () => {
@@ -36,25 +39,22 @@ describe('NEW ARTICLE PAGE', () => {
         });
 
         it('should redirect to article page if the article has been created', () => {
-            cy.fixture('articles').then(res => {
-                const article = res.articles[0];
-                cy.intercept('POST', `${apiBaseUrl}articles`, { article }).as('createArticle');
-                cy.intercept('GET', `${apiBaseUrl}articles/**`, { article }).as('getArticle');
-            });
+            cy.intercept('POST', `${apiBaseUrl}articles`, { article: ownArticle });
+            cy.intercept('GET', `${apiBaseUrl}articles/**`, { article: ownArticle });
 
             fillFormInputs();
             newArticlePage.publishButton.click();
 
-            cy.location('pathname').should('contain', '/article');
+            cy.location('pathname').should('eq', '/article/Lorem');
         });
     });
 });
 
 const fillFormInputs = () => {
-    newArticlePage.title.type('lorem');
-    newArticlePage.description.type('lorem');
-    newArticlePage.body.type('lorem');
-    newArticlePage.tagList.type('lorem');
+    newArticlePage.title.type(ownArticle.title);
+    newArticlePage.description.type(ownArticle.description);
+    newArticlePage.body.type(ownArticle.body);
+    newArticlePage.tagList.type(ownArticle.tagList.join(', '));
 }
 
 const clearFormInputs = () => {

@@ -1,14 +1,14 @@
 import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { articleCard } from '../../support/comonent-objects/articles/article-card';
 
+import { likedArticle, dislikedArticle, articlesResponse } from 'cypress/fixtures/articles';
+import { tags } from 'cypress/fixtures/tags';
+
+
 describe('ARTICLE CARD', () => {
     beforeEach(() => {
-        cy.intercept('GET', `${apiBaseUrl}articles/?offset=0&limit=5`, { fixture: "articles.json" })
-            .as('getArticles');
-
-        cy.intercept('GET', `${apiBaseUrl}tags`, { fixture: "tags.json" })
-            .as('getTags');
-
+        cy.intercept('GET', `${apiBaseUrl}articles/**`, articlesResponse);
+        cy.intercept('GET', `${apiBaseUrl}tags`, { tags });
         cy.visit('/');
     });
 
@@ -21,42 +21,36 @@ describe('ARTICLE CARD', () => {
 
         describe('HEADER > AUTHORIZED', () => {
             beforeEach(() => {
-                cy.intercept(
-                    'GET',
-                    `${apiBaseUrl}articles/feed/?offset=0&limit=5`,
-                    { fixture: "articles.json" }
-                ).as('getFeed');
-
-                cy.intercept(
-                    'POST',
-                    `${apiBaseUrl}articles/Lorem/favorite`,
-                    { article: { favorited: true, favoritesCount: 1 } }
-                ).as('likeArticle');
-
-                cy.intercept(
-                    'DELETE',
-                    `${apiBaseUrl}articles/Lorem/favorite`,
-                    { article: { favorited: false, favoritesCount: 0 } }
-                ).as('dislikeArticle');
-
                 cy.addTokenToLocalStorage();
                 cy.visit('/');
             });
 
-            it('should like and dislike an article', () => {
-                // like
-                articleCard.likeButton.click().should('contain', '1');
-                articleCard.likeIcon.should('have.css', 'color', 'rgb(244, 67, 54)');
+            it('should like an article', () => {
+                cy.intercept(
+                    'POST',
+                    `${apiBaseUrl}articles/Lorem/favorite`,
+                    { article: likedArticle }
+                );
 
-                // dislike
-                articleCard.likeButton.click().should('contain', '0');
+                articleCard.likeButton(0).click().should('contain', '1');
+                articleCard.likeIcon.should('have.css', 'color', 'rgb(244, 67, 54)');
+            });
+
+            it('should dislike an article', () => {
+                cy.intercept(
+                    'DELETE',
+                    `${apiBaseUrl}articles/Lorem/favorite`,
+                    { article: dislikedArticle }
+                );
+
+                articleCard.likeButton(1).click().should('contain', '0');
                 articleCard.likeIcon.should('have.css', 'color', 'rgba(0, 0, 0, 0.87)');
             });
         });
 
         describe('HEADER > UNAUTHORIZED', () => {
             it('click on like button should redirect to login page', () => {
-                articleCard.likeButton.click();
+                articleCard.likeButton(0).click();
 
                 cy.location('pathname').should('contain', '/sign-in');
             });
@@ -92,10 +86,7 @@ describe('ARTICLE CARD', () => {
         });
 
         it('should redirect to article page when read more is clicked', () => {
-            cy.fixture('articles').then(res => {
-                const article = res.articles[0];
-                cy.intercept('GET', `${apiBaseUrl}articles/**`, { article });
-            });
+            cy.intercept('GET', `${apiBaseUrl}articles/Lorem`, { article: dislikedArticle });
 
             articleCard.readMoreLink.click();
 

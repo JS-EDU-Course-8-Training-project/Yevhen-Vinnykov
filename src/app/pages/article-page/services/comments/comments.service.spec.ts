@@ -5,7 +5,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CommentsService } from './comments.service';
 
 const expectedData: IComment[] = [{
-  _id: '1',
   id: '1',
   createdAt: Date.now().toString(),
   updatedAt: Date.now().toString(),
@@ -15,7 +14,8 @@ const expectedData: IComment[] = [{
     bio: 'test-bio',
     image: 'test-image',
     following: false,
-  }
+  },
+  article: '1'
 }];
 
 describe('COMMENTS SERVICE', () => {

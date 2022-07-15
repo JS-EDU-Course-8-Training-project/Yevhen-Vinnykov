@@ -26,10 +26,6 @@ class ArticleCard extends ComponentObject {
         return cy.getByTestAttr(TestAttributes.ArticleCardFooter);
     }
 
-    get likeButton(){
-        return cy.getByTestAttr(TestAttributes.ArticleCardLikeBtn).eq(0);
-    }
-
     get likeIcon() {
         return cy.getByTestAttr(TestAttributes.ArticleCardLikeIcon).eq(0);
     }
@@ -42,6 +38,9 @@ class ArticleCard extends ComponentObject {
         return cy.getByTestAttr(TestAttributes.ArticleCardReadMoreLink).eq(0);
     }
 
+    likeButton(index: number){
+        return cy.getByTestAttr(TestAttributes.ArticleCardLikeBtn).eq(index);
+    }
 }
 
 export const articleCard = new ArticleCard(TestAttributes.ArticleCard);
