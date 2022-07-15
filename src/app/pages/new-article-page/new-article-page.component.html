@@ -1,6 +1,9 @@
 <div>
   <form [formGroup]="articleForm" (ngSubmit)="handleArticleAction()">
     <div class="form-group">
+      <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
+        {{ error }}
+      </div>
       <input
         type="text"
         class="form-control"

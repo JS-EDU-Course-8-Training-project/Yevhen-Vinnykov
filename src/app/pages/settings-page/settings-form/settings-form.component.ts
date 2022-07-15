@@ -11,7 +11,6 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -29,7 +28,7 @@ export class SettingsFormComponent
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
-  public errors: string[] = [];
+  public error!: string;
   public isPending!: boolean;
   public settingsForm!: FormGroup;
   private notifier: Subject<void> = new Subject<void>();
@@ -84,12 +83,7 @@ export class SettingsFormComponent
       const formDataProp = formData[key as keyof IExistingUser];
       const authUserProp = this.authUser[key as keyof IExistingUser];
 
-      if (key === 'password' && formDataProp) {
-        updatedData[key as keyof IUpdateUser] =
-          formData[key as keyof IUpdateUser];
-        continue;
-      }
-      if (key !== 'password' && formDataProp !== authUserProp) {
+      if (formDataProp !== authUserProp) {
         updatedData[key as keyof IUpdateUser] =
           formData[key as keyof IUpdateUser];
       }
@@ -100,14 +94,11 @@ export class SettingsFormComponent
   private onSubmit(): void {
     this.isPending = true;
     this.settingsForm.disable();
-    this.errors = [];
+    this.error = '';
   }
 
-  private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
-    Object.keys(error.error.errors).forEach((key) => {
-      this.errors.push(`${key} ${error.error.errors[key][0]}`);
-    });
-
+  private onCatchError(error: string): Observable<IExistingUser> {
+    this.error = error;
     this.isPending = false;
     this.settingsForm.enable();
     this.settingsForm.markAsUntouched();
@@ -122,11 +113,11 @@ export class SettingsFormComponent
       .updateUser(this.createUserData())
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+        catchError((error: string) => this.onCatchError(error))
       )
       .subscribe((user: IExistingUser | any) => {
         this.isModified$.next(false);
-        if (!this.errors.length) {
+        if (!this.error) {
           this.redirectionService.redirectByUrl(`user/${user.username}`);
         }
       });

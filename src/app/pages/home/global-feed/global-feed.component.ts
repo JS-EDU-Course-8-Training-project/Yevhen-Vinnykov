@@ -91,7 +91,7 @@ export class GlobalFeedComponent
       .fetchArticles(this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+        catchError((error: string) => this.onCatchError(error))
       )
       .subscribe((response: IArticleResponse | any) =>
         this.setDataOnResponse(response)
@@ -108,9 +108,8 @@ export class GlobalFeedComponent
     this.cdRef.detectChanges();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
-    this.error = 'Something went wrong :(';
+  private onCatchError(error: string): Observable<IArticleResponse> {
+    this.error = error;
     this.isLoading = false;
     this.cdRef.detectChanges();
     return of({ articles: [], articlesCount: 0 });

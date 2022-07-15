@@ -17,30 +17,21 @@ const settingsMock: IExistingUser = {
   image: 'test-image',
 };
 
-const errorResponseMock = {
-  error: {
-    errors: {
-      'Error:': ['Fetching articles failed'],
-    },
-  },
-};
-
 class UsersServiceMockWithError {
-  public updateUser = (settings: IExistingUser) =>
-    throwError(() => errorResponseMock);
+  public updateUser = () => throwError(() => 'Fetching articles failed');
 }
 
 class UsersServiceMock {
-  public updateUser = (settings: IExistingUser) =>
+  public updateUser = () =>
     of({ ...settingsMock, username: 'updated-user-name' });
-  public signOut = () => {};
+  public signOut = () => ({});
 }
 
 class RedirectionServiceMock {
   public redirectByUrl = () =>
-    new Promise<boolean>((resolve, reject) => resolve(true));
+    new Promise<boolean>((resolve) => resolve(true));
   public redirectHome = () =>
-    new Promise<boolean>((resolve, reject) => resolve(true));
+    new Promise<boolean>((resolve) => resolve(true));
 }
 
 describe('SETTINGS FORM COMPONENT', () => {
@@ -146,7 +137,7 @@ describe('ON CATCH ERROR METHOD', () => {
     updateButton.click();
     fixture.detectChanges();
 
-    expect(spy).toHaveBeenCalledWith(errorResponseMock);
-    expect(component.errors).toEqual(['Error: Fetching articles failed']);
+    expect(spy).toHaveBeenCalledWith('Fetching articles failed');
+    expect(component.error).toEqual('Fetching articles failed');
   });
 });

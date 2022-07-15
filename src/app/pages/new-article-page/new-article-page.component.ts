@@ -22,6 +22,8 @@ export class NewArticlePageComponent
   implements OnInit, OnDestroy, ISavedData
 {
   public articleForm!: FormGroup;
+  public error!: string;
+  public isLoading = false;
   public isEditMode!: boolean;
   public articleToEdit!: IArticle | null;
   public slug!: string;
@@ -47,7 +49,7 @@ export class NewArticlePageComponent
         .fetchArticle(this.slug)
         .pipe(
           takeUntil(this.notifier),
-          catchError((err: HttpErrorResponse): any => this.onCatchError(err))
+          catchError((err: string) => this.onCatchError(err))
         )
         .subscribe((article: IArticle | any) => {
           this.articleToEdit = article;
@@ -77,9 +79,24 @@ export class NewArticlePageComponent
     });
   }
 
-  private onCatchError(error: HttpErrorResponse): Observable<IArticle> {
-    console.error(error);
+  private onCatchError(error: string): Observable<IArticle> {
+    this.error = error;
+    this.isLoading = false;
+    this.articleForm.enable();
+    
+    if (error === 'Article with this title already exists') {
+      this.articleForm.controls['title'].setErrors({
+        notUnique: true,
+      });
+    }
+
     return of({} as IArticle);
+  }
+
+  private onSubmit(): void {
+    this.error = '';
+    this.articleForm.disable();
+    this.isLoading = true;
   }
 
   public checkIfValid(formControl: string): boolean {
@@ -109,7 +126,7 @@ export class NewArticlePageComponent
 
   public handleArticleAction(): void {
     this.articleAction(this.slug, this.createArticleData());
-    this.articleForm.reset();
+    this.onSubmit();
   }
 
   private articleAction(
@@ -122,11 +139,17 @@ export class NewArticlePageComponent
       : this.articlesService.createArticle(newArticle as INewArticle);
 
     subscription
-      .pipe(takeUntil(this.notifier))
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: string) => this.onCatchError(err))
+      )
       .subscribe((article: INewArticle | any) => {
-        this.redirectionService.redirectByUrl(
-          `article/${article.article.slug}`
-        );
+        if (!this.error) {
+          this.articleForm.reset();
+          this.redirectionService.redirectByUrl(
+            `article/${article.article.slug}`
+          );
+        }
       });
   }
 
