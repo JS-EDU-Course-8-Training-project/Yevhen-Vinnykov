@@ -8,7 +8,6 @@ import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   dataMock,
-  mockError,
   RedirectionServiceMock,
   UsersServiceMock,
   UsersServiceMockWithError,
@@ -122,7 +121,7 @@ describe('ON CATCH ERROR METHOD', () => {
 
     signinButton.click();
 
-    expect(spy).toHaveBeenCalledWith(mockError);
-    expect(component.errors).toEqual(['email is wrong']);
+    expect(spy).toHaveBeenCalledWith('Email is wrong');
+    expect(component.error).toEqual('Email is wrong');
   });
 });

@@ -31,7 +31,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
       });
     }
     return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse): Observable<HttpEvent<unknown>> => {
+      catchError((error: HttpErrorResponse): Observable<HttpEvent<string>> => {
         let errorMsg = '';
 
         if (error.error instanceof ErrorEvent) {
@@ -39,10 +39,10 @@ export class AuthorizationInterceptor implements HttpInterceptor {
           errorMsg = `Error: ${error.error.message}`;
         } else {
           console.log('This is server side error');
-          errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
+          [errorMsg] = error.error.errors['Error: '];
         }
 
-        return throwError(() => error);
+        return throwError(() => errorMsg);
       })
     );
   }

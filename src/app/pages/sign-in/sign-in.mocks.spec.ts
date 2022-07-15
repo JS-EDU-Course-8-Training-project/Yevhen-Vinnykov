@@ -45,5 +45,5 @@ export class UsersServiceMock {
 }
 
 export class UsersServiceMockWithError {
-  public signIn = () => throwError(() => mockError);
+  public signIn = () => throwError(() => 'Email is wrong');
 }

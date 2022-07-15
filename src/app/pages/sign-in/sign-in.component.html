@@ -5,14 +5,8 @@
       <a routerLink="/sign-up" [e2e]="TestAttributes.SignUpLink">
         Need an account?
       </a>
-      <div *ngIf="errors.length">
-        <div
-          class="form-error"
-          *ngFor="let error of errors"
-          [e2e]="TestAttributes.FormError"
-        >
-          {{ error }}
-        </div>
+      <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
+        {{ error }}
       </div>
       <input
         type="text"

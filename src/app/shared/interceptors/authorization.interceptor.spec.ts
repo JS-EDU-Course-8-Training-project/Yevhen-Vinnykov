@@ -1,18 +1,11 @@
 import { AuthorizationService } from './../services/authorization/authorization.service';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import {
-  HTTP_INTERCEPTORS,
-  HttpHeaders,
-  HttpEventType,
-  HttpErrorResponse,
-  HttpRequest,
-  HttpHandler,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AuthorizationInterceptor } from './authorization.interceptor';
 import { MockDataService } from './mock-data-service.service';
@@ -90,68 +83,5 @@ describe('AUTHORIZATION INERCEPTOR > NOT ADDING AUTHORIZATION', () => {
     });
     const httpRequest = httpMock.expectOne(`${service.ROOT_URL}/posts`);
     expect(httpRequest.request.headers.has('Authorization')).toBeFalse();
-  });
-});
-
-const mockError: HttpErrorResponse = {
-  error: {
-    errors: {
-      email: ['is wrong'],
-    },
-  },
-  name: 'HttpErrorResponse',
-  message: '',
-  ok: false,
-  headers: new HttpHeaders(),
-  status: 0,
-  statusText: '',
-  url: null,
-  type: HttpEventType.ResponseHeader,
-};
-
-describe('AUTHORIZATION INERCEPTOR > ERROR HANDLING', () => {
-  let interceptor: AuthorizationInterceptor;
-  let httpRequestSpy: jasmine.SpyObj<HttpRequest<any>>;
-  let httpHandlerSpy: jasmine.SpyObj<HttpHandler>;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        AuthorizationInterceptor,
-        {
-          provide: AuthorizationService,
-          useClass: AuthorizationServiceMockNotAuth,
-        },
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: AuthorizationInterceptor,
-          multi: true,
-        },
-      ],
-      imports: [HttpClientTestingModule],
-    });
-    interceptor = TestBed.inject(AuthorizationInterceptor);
-    httpRequestSpy = jasmine.createSpyObj('HttpRequest', ['doesNotMatter']);
-    httpHandlerSpy = jasmine.createSpyObj('HttpHandler', ['handle']);
-  });
-
-  it('should return server side error', () => {
-    httpHandlerSpy.handle.and.returnValue(throwError(() => mockError));
-
-    interceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe({
-      next: (result) => console.log('good', result),
-      error: (err) => expect(err).toEqual(mockError),
-    });
-  });
-
-  it('should return client side error', () => {
-    const mockError = {
-      error: new ErrorEvent('Error'),
-    };
-    httpHandlerSpy.handle.and.returnValue(throwError(() => mockError));
-    interceptor.intercept(httpRequestSpy, httpHandlerSpy).subscribe({
-      next: (result) => console.log('good', result),
-      error: (err) => expect(err.error).toBeInstanceOf(ErrorEvent),
-    });
   });
 });

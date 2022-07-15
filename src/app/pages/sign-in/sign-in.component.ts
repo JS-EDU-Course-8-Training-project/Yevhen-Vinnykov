@@ -5,7 +5,6 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { HttpErrorResponse } from '@angular/common/http';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 type TSigninControls = 'email' | 'password';
@@ -20,7 +19,7 @@ export class SignInComponent
   implements OnInit, OnDestroy
 {
   public signinForm!: FormGroup;
-  public errors: string[] = [];
+  public error!: string;
   public isPending = false;
   private notifier: Subject<void> = new Subject<void>();
 
@@ -57,15 +56,12 @@ export class SignInComponent
 
   private onSubmit(): void {
     this.signinForm.disable();
-    this.errors = [];
+    this.error = '';
     this.isPending = true;
   }
 
-  private onCatchError(error: HttpErrorResponse): Observable<IExistingUser> {
-    Object.keys(error.error.errors).forEach((key) => {
-      this.errors.push(`${key} ${error.error.errors[key][0]}`);
-    });
-
+  private onCatchError(error: string): Observable<IExistingUser> {
+    this.error = error;
     this.isPending = false;
     this.signinForm.enable();
     this.signinForm.markAsUntouched();
@@ -80,11 +76,11 @@ export class SignInComponent
       .signIn(this.createUserData())
       .pipe(
         takeUntil(this.notifier),
-        catchError((error: HttpErrorResponse): any => this.onCatchError(error))
+        catchError((error: string) => this.onCatchError(error))
       )
       .subscribe(() => {
         this.isPending = false;
-        if (!this.errors.length) this.redirectionService.redirectHome();
+        if (!this.error) this.redirectionService.redirectHome();
       });
   }
 }
