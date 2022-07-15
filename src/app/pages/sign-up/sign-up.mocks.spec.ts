@@ -16,14 +16,6 @@ export const userMock: IExistingUser = {
   username: 'test-username',
 };
 
-export const mockError = {
-  error: {
-    errors: {
-      email: ['is wrong'],
-    },
-  },
-};
-
 export class RedirectionServiceMock {
   public redirectHome = () => new Promise<boolean>((resolve) => resolve(true));
 }
@@ -33,5 +25,5 @@ export class UsersServiceMock {
 }
 
 export class UsersServiceMockWithError {
-  public createUser = () => throwError(() => mockError);
+  public createUser = () => throwError(() => 'Email is invalid');
 }

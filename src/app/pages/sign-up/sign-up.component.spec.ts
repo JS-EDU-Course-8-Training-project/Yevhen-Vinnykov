@@ -11,7 +11,6 @@ import {
   RedirectionServiceMock,
   dataMock,
   UsersServiceMockWithError,
-  mockError,
 } from './sign-up.mocks.spec';
 
 describe('SIGN UP COMPONENT', () => {
@@ -122,7 +121,7 @@ describe('ON CATCH ERROR METHOD', () => {
 
     signinButton.click();
 
-    expect(spy).toHaveBeenCalledWith(mockError);
-    expect(component.errors).toEqual(['email is wrong']);
+    expect(spy).toHaveBeenCalledWith('Email is invalid');
+    expect(component.error).toEqual('Email is invalid');
   });
 });
