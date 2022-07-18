@@ -1,16 +1,22 @@
+import { of } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
-describe('HomeComponent', () => {
+class AuthServiceMock {
+  public isAuthorized$ = of(true);
+}
+
+describe('HOME COMPONENT', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HomeComponent],
-      imports: [],
+      providers: [{ provide: AuthorizationService, useClass: AuthServiceMock }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

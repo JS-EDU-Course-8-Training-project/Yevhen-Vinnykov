@@ -6,10 +6,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ArticlePageComponent } from './article-page.component';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { UsersService } from 'src/app/shared/services/users/users.service';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
-class UsersServiceMock {
+class AuthServiceMock {
   public authUser$ = of({} as IExistingUser);
 }
 
@@ -28,7 +28,7 @@ describe('ArticlePageComponent', () => {
       declarations: [ArticlePageComponent],
       imports: [MatCardModule],
       providers: [
-        { provide: UsersService, useClass: UsersServiceMock },
+        { provide: AuthorizationService, useClass: AuthServiceMock },
         { provide: ActivatedRoute, useClass: ActivatedRouteMock },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],

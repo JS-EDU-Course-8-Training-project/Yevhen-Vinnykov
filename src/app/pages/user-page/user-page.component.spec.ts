@@ -1,6 +1,5 @@
 import { IProfile } from './../../shared/models/IProfile';
 import { ProfilesService } from './../../shared/services/profiles/profiles.service';
-import { UsersService } from './../../shared/services/users/users.service';
 import { IExistingUser } from './../../shared/models/IExistingUser';
 import { of } from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
@@ -31,10 +30,6 @@ const mockUser: IProfile = {
   following: false,
 };
 
-class UsersServiceMock {
-  public authUser$ = of(mockAuthUser);
-}
-
 class ProfilesServiceMock {
   public follow = () => of({ following: true });
 
@@ -55,10 +50,12 @@ class RedirectionServiceMock {
 
 class AuthorizationServiceMock {
   public isAuthorized$ = of(true);
+  public authUser$ = of(mockAuthUser);
 }
 
 class AuthorizationServiceMockNotAuth {
   public isAuthorized$ = of(false);
+  public authUser$ = of({});
 }
 
 describe('USER PAGE COMPONENT', () => {
@@ -69,7 +66,6 @@ describe('USER PAGE COMPONENT', () => {
     await TestBed.configureTestingModule({
       declarations: [UserPageComponent, TestAttributeDirective],
       providers: [
-        { provide: UsersService, useClass: UsersServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
@@ -135,7 +131,6 @@ describe('USER PAGE > REDIRECT UNAUTHORIZED', () => {
     await TestBed.configureTestingModule({
       declarations: [UserPageComponent, TestAttributeDirective],
       providers: [
-        { provide: UsersService, useClass: UsersServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
@@ -180,7 +175,6 @@ describe('USER PAGE > MYSELF MODE', () => {
     await TestBed.configureTestingModule({
       declarations: [UserPageComponent],
       providers: [
-        { provide: UsersService, useClass: UsersServiceMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: Router, useClass: RouterMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },

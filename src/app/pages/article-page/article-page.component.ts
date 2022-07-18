@@ -2,9 +2,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { ActivatedRoute, Data } from '@angular/router';
-import { UsersService } from 'src/app/shared/services/users/users.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-article-page',
@@ -22,7 +22,7 @@ export class ArticlePageComponent
   public requestForComments$: Subject<void> = new Subject<void>();
 
   constructor(
-    private usersService: UsersService,
+    private authService: AuthorizationService,
     private route: ActivatedRoute
   ) {
     super();
@@ -46,7 +46,7 @@ export class ArticlePageComponent
   }
 
   private getAuthUser(): void {
-    this.usersService.authUser$
+    this.authService.authUser$
       .pipe(takeUntil(this.notifier))
       .subscribe((user) => (this.authUser = user));
   }

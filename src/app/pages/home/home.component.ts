@@ -18,12 +18,12 @@ export class HomeComponent
   public selectedTag!: string | null;
   private authSubscription!: Subscription;
 
-  constructor(private authorizationService: AuthorizationService) {
+  constructor(private authService: AuthorizationService) {
     super();
   }
 
   ngOnInit(): void {
-    this.authSubscription = this.authorizationService.isAuthorized$.subscribe(
+    this.authSubscription = this.authService.isAuthorized$.subscribe(
       (isAuthorized) => (this.isAuthorized = isAuthorized)
     );
   }

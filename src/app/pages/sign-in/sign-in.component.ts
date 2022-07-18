@@ -1,11 +1,11 @@
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { IUserData } from '../../shared/models/IUserData';
-import { UsersService } from 'src/app/shared/services/users/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 type TSigninControls = 'email' | 'password';
 
@@ -25,8 +25,8 @@ export class SignInComponent
 
   constructor(
     private fb: FormBuilder,
-    private usersService: UsersService,
-    private redirectionService: RedirectionService
+    private redirectionService: RedirectionService,
+    private authService: AuthorizationService
   ) {
     super();
   }
@@ -72,7 +72,7 @@ export class SignInComponent
   public handleSignin(): void {
     this.onSubmit();
 
-    this.usersService
+    this.authService
       .signIn(this.createUserData())
       .pipe(
         takeUntil(this.notifier),

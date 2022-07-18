@@ -11,19 +11,18 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 })
 export class NavbarComponent extends TestedComponent implements OnInit {
   public isAuthorized$: BehaviorSubject<boolean> =
-    this.authorizationService.isAuthorized$;
+    this.authService.isAuthorized$;
   public url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
-    private authorizationService: AuthorizationService,
+    private authService: AuthorizationService,
     private router: Router
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.authorizationService.checkIfAuthorized();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

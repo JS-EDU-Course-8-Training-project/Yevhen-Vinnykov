@@ -1,7 +1,6 @@
 import { take } from 'rxjs';
 import { Component } from '@angular/core';
 import { AuthorizationService } from './shared/services/authorization/authorization.service';
-import { UsersService } from './shared/services/users/users.service';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +9,7 @@ import { UsersService } from './shared/services/users/users.service';
 })
 export class AppComponent {
   constructor(
-    private usersService: UsersService,
-    private authorizationService: AuthorizationService
+    private authService: AuthorizationService
   ) {}
 
   ngOnInit() {
@@ -19,12 +17,16 @@ export class AppComponent {
   }
 
   private initialize(): void {
-    this.authorizationService.checkIfAuthorized();
-    this.authorizationService.isAuthorized$
+    this.authService.checkIfAuthorized();
+
+    this.authService.isAuthorized$
       .pipe(take(1))
       .subscribe((isAuthorized) => {
-        if (isAuthorized && !this.usersService.authUser$.getValue().username) {
-          this.usersService.fetchAuthUser().pipe(take(1)).subscribe();
+        if (
+          isAuthorized &&
+          !this.authService.authUser$.getValue().username
+        ) {
+          this.authService.fetchAuthUser().pipe(take(1)).subscribe();
         }
       });
   }

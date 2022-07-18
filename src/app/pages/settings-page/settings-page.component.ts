@@ -1,8 +1,8 @@
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { ISavedData } from 'src/app/shared/models/ISavedData';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-settings-page',
@@ -16,10 +16,10 @@ export class SettingsPageComponent implements OnInit, OnDestroy, ISavedData {
   public authUser!: IExistingUser;
   private notifier: Subject<void> = new Subject<void>();
 
-  constructor(private usersService: UsersService) {}
+  constructor(private authService: AuthorizationService) {}
 
   ngOnInit(): void {
-    this.usersService.authUser$
+    this.authService.authUser$
       .pipe(takeUntil(this.notifier))
       .subscribe((authUser) => (this.authUser = authUser));
   }

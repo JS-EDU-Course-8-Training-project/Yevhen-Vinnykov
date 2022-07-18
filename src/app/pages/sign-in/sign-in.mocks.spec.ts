@@ -40,10 +40,10 @@ export class RedirectionServiceMock {
   public redirectHome = () => new Promise<boolean>((resolve) => resolve(true));
 }
 
-export class UsersServiceMock {
+export class AuthServiceMock {
   public signIn = () => of(userMock);
 }
 
-export class UsersServiceMockWithError {
+export class AuthServiceMockWithError {
   public signIn = () => throwError(() => 'Email is wrong');
 }

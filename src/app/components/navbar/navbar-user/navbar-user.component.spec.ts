@@ -1,10 +1,10 @@
-import { UsersService } from './../../../shared/services/users/users.service';
 import { BehaviorSubject, of } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 
 import { NavbarUserComponent } from './navbar-user.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 const mockAuthUser: IExistingUser = {
   id: '1',
@@ -13,7 +13,7 @@ const mockAuthUser: IExistingUser = {
   image: 'test-image',
 };
 
-class UsersServiceMock {
+class AuthServiceMock {
   public authUser$ = of(mockAuthUser);
 }
 
@@ -24,7 +24,7 @@ describe('NavbarUserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NavbarUserComponent],
-      providers: [{ provide: UsersService, useClass: UsersServiceMock }],
+      providers: [{ provide: AuthorizationService, useClass: AuthServiceMock }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

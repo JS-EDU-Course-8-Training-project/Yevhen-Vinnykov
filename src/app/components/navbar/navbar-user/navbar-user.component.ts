@@ -1,8 +1,8 @@
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { UsersService } from 'src/app/shared/services/users/users.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 @Component({
   selector: 'app-navbar-user',
@@ -19,12 +19,12 @@ export class NavbarUserComponent
   public authUser!: IExistingUser;
   public className!: string;
 
-  constructor(private usersService: UsersService) {
+  constructor(private authService: AuthorizationService) {
     super();
   }
 
   ngOnInit(): void {
-    this.usersService.authUser$
+    this.authService.authUser$
       .pipe(takeUntil(this.notifier))
       .subscribe((user) => (this.authUser = user));
     this.url$.pipe(takeUntil(this.notifier)).subscribe((path) => {

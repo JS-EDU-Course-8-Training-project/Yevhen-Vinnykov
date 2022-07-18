@@ -9,6 +9,7 @@ import { RedirectionService } from 'src/app/shared/services/redirection/redirect
 import { By } from '@angular/platform-browser';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 const settingsMock: IExistingUser = {
   id: '1',
@@ -24,14 +25,15 @@ class UsersServiceMockWithError {
 class UsersServiceMock {
   public updateUser = () =>
     of({ ...settingsMock, username: 'updated-user-name' });
+}
+
+class AuthServiceMock {
   public signOut = () => ({});
 }
 
 class RedirectionServiceMock {
-  public redirectByUrl = () =>
-    new Promise<boolean>((resolve) => resolve(true));
-  public redirectHome = () =>
-    new Promise<boolean>((resolve) => resolve(true));
+  public redirectByUrl = () => new Promise<boolean>((resolve) => resolve(true));
+  public redirectHome = () => new Promise<boolean>((resolve) => resolve(true));
 }
 
 describe('SETTINGS FORM COMPONENT', () => {
@@ -45,6 +47,7 @@ describe('SETTINGS FORM COMPONENT', () => {
       providers: [
         { provide: UsersService, useClass: UsersServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
+        { provide: AuthorizationService, useClass: AuthServiceMock },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -106,7 +109,7 @@ describe('SETTINGS FORM COMPONENT', () => {
   });
 });
 
-describe('ON CATCH ERROR METHOD', () => {
+describe('SETTINGS FORM COMPONENT > ON CATCH ERROR METHOD', () => {
   let component: SettingsFormComponent;
   let fixture: ComponentFixture<SettingsFormComponent>;
 
@@ -117,6 +120,7 @@ describe('ON CATCH ERROR METHOD', () => {
       providers: [
         { provide: UsersService, useClass: UsersServiceMockWithError },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
+        { provide: AuthorizationService, useClass: AuthServiceMock },
       ],
     }).compileComponents();
   });

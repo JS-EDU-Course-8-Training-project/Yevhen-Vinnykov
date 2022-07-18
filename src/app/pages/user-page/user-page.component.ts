@@ -2,7 +2,6 @@ import { IProfile } from '../../shared/models/IProfile';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
@@ -28,10 +27,9 @@ export class UserPageComponent
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
-    private usersService: UsersService,
     private profilesService: ProfilesService,
     private router: Router,
-    private authorizationService: AuthorizationService,
+    private authService: AuthorizationService,
     private redirectionService: RedirectionService
   ) {
     super();
@@ -40,7 +38,7 @@ export class UserPageComponent
   ngOnInit(): void {
     this.setUserData();
 
-    this.authorizationService.isAuthorized$
+    this.authService.isAuthorized$
       .pipe(takeUntil(this.notifier))
       .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
 
@@ -60,14 +58,14 @@ export class UserPageComponent
   private setUserData(): void {
     this.urlUsername = this.router.url.split('/')[2];
 
-    this.usersService.authUser$
+    this.authService.authUser$
       .pipe(takeUntil(this.notifier))
       .subscribe((authUser) => {
         this.tabIndex = 0;
         this.isMyself = authUser.username === this.urlUsername;
 
         if (this.isMyself) {
-          this.user = this.usersService.authUser$.getValue();
+          this.user = this.authService.authUser$.getValue();
           return;
         }
 
@@ -75,8 +73,8 @@ export class UserPageComponent
           .fetchUser(this.urlUsername)
           .pipe(takeUntil(this.notifier))
           .subscribe((profile: IProfile) => {
-              this.user = profile;
-              this.isFollowed = profile.following;
+            this.user = profile;
+            this.isFollowed = profile.following;
           });
       });
   }

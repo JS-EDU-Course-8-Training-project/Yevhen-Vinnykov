@@ -1,4 +1,3 @@
-import { UsersService } from './../../shared/services/users/users.service';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -9,9 +8,10 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   dataMock,
   RedirectionServiceMock,
-  UsersServiceMock,
-  UsersServiceMockWithError,
+  AuthServiceMock,
+  AuthServiceMockWithError,
 } from './sign-in.mocks.spec';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 describe('SIGN IN COMPONENT', () => {
   let component: SignInComponent;
@@ -22,7 +22,7 @@ describe('SIGN IN COMPONENT', () => {
       declarations: [SignInComponent],
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
-        { provide: UsersService, useClass: UsersServiceMock },
+        { provide: AuthorizationService, useClass: AuthServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
@@ -98,7 +98,7 @@ describe('ON CATCH ERROR METHOD', () => {
       declarations: [SignInComponent],
       imports: [ReactiveFormsModule, FormsModule],
       providers: [
-        { provide: UsersService, useClass: UsersServiceMockWithError },
+        { provide: AuthorizationService, useClass: AuthServiceMockWithError },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
       ],
     }).compileComponents();

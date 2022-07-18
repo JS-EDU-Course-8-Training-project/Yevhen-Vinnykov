@@ -4,10 +4,15 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { NavbarComponent } from './navbar.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 class RouterMock {
   public events = of(NavigationEnd);
   public url = 'test/url';
+}
+
+class AuthServiceMock {
+  public isAuthorized$ = of(true);
 }
 
 describe('NavbarComponent', () => {
@@ -17,7 +22,10 @@ describe('NavbarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NavbarComponent],
-      providers: [{ provide: Router, useClass: RouterMock }],
+      providers: [
+        { provide: Router, useClass: RouterMock },
+        { provide: AuthorizationService, useClass: AuthServiceMock },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
 type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'password';
 
@@ -36,7 +37,8 @@ export class SettingsFormComponent
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private redirectionService: RedirectionService
+    private redirectionService: RedirectionService,
+    private authService: AuthorizationService
   ) {
     super();
   }
@@ -115,7 +117,7 @@ export class SettingsFormComponent
         takeUntil(this.notifier),
         catchError((error: string) => this.onCatchError(error))
       )
-      .subscribe(({username}: IExistingUser) => {
+      .subscribe(({ username }: IExistingUser) => {
         this.isModified$.next(false);
         if (!this.error) {
           this.redirectionService.redirectByUrl(`user/${username}`);
@@ -124,7 +126,7 @@ export class SettingsFormComponent
   }
 
   public logout(): void {
-    this.usersService.signOut();
+    this.authService.signOut();
     this.redirectionService.redirectHome();
   }
 }
