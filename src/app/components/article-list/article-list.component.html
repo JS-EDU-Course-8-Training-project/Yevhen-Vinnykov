@@ -22,8 +22,9 @@
     <button
       [disabled]="isPending"
       (click)="handleLikeDislike(article.slug)"
-      mat-stroked-button
+      mat-icon-button
       [e2e]="TestAttributes.ArticleCardLikeBtn"
+      [color]="isLiked && 'warn'"
     >
       <mat-icon
         [color]="isLiked && 'warn'"
@@ -31,7 +32,7 @@
       >
         favorite
       </mat-icon>
-      {{ likesCount }}
+      <span>{{ likesCount }}</span>
     </button>
   </header>
   <div class="card-content">

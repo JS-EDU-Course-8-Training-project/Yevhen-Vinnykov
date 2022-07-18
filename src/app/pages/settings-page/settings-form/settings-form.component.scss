@@ -1,15 +1,29 @@
+form {
+  background-color: rgb(250, 250, 250);
+  max-height: 70vh;
+  min-height: 60vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .card {
+    width: 50%;
+    max-height: 50vh;
+    border-radius: 8px;
+  }
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
-  max-width: 50%;
-  margin: 4rem auto;
   .form-control {
-    border: 1px solid rgb(175, 175, 175);
+    border: 1px solid rgb(234, 230, 230);
     border-radius: 8px;
-    margin: 5px 0;
+    margin: 6px 0;
     height: 1.5rem;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    font-weight: 300;
     font-family: inherit;
   }
   #bio {
@@ -20,12 +34,11 @@
   .form-group-actions {
     display: flex;
     justify-content: end;
+    margin: 8px 0;
     button {
-      width: 12rem;
-      height: 3rem;
       align-self: end;
       font-size: 1rem;
-      margin: 5px;
+      margin: 10px 5px;
       display: flex;
       justify-content: center;
       align-items: center;

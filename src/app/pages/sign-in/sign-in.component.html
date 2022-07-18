@@ -1,65 +1,74 @@
 <div>
   <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
-    <div class="form-group">
-      <h2 [e2e]="TestAttributes.FormTitle">Sign In</h2>
-      <a routerLink="/sign-up" [e2e]="TestAttributes.SignUpLink">
-        Need an account?
-      </a>
-      <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
-        {{ error }}
+    <mat-card class="card">
+      <div class="form-group">
+        <h2 [e2e]="TestAttributes.FormTitle">Sign In</h2>
+        <a routerLink="/sign-up" [e2e]="TestAttributes.SignUpLink">
+          Need an account?
+        </a>
+        <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
+          {{ error }}
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+          required
+          formControlName="email"
+          placeholder="Email"
+          [e2e]="TestAttributes.EmailInput"
+        />
+        <span
+          class="form-error"
+          *ngIf="!checkIfValid('email') && !signinForm.get('email')?.value"
+          [e2e]="TestAttributes.FormError"
+        >
+          This field is required
+        </span>
+        <span
+          class="form-error"
+          *ngIf="signinForm.get('email')?.errors?.['email']"
+          [e2e]="TestAttributes.FormError"
+        >
+          Enter a valid email
+        </span>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          required
+          formControlName="password"
+          placeholder="Password"
+          [e2e]="TestAttributes.PasswordInput"
+        />
+        <span
+          class="form-error"
+          *ngIf="!checkIfValid('password')"
+          [e2e]="TestAttributes.FormError"
+        >
+          Password must be at least 6 characters long
+        </span>
+        <button
+          [disabled]="!signinForm.valid || isPending"
+          align="end"
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [e2e]="TestAttributes.SignInBtn"
+        >
+        Sign In
+          <!-- <span *ngIf="!isPending">Sign In</span>
+          <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner> -->
+        </button>
       </div>
-      <input
-        type="text"
-        class="form-control"
-        id="email"
-        name="email"
-        required
-        formControlName="email"
-        placeholder="Email"
-        [e2e]="TestAttributes.EmailInput"
-      />
-      <span
-        class="form-error"
-        *ngIf="!checkIfValid('email') && !signinForm.get('email')?.value"
-        [e2e]="TestAttributes.FormError"
-      >
-        This field is required
-      </span>
-      <span
-        class="form-error"
-        *ngIf="signinForm.get('email')?.errors?.['email']"
-        [e2e]="TestAttributes.FormError"
-      >
-        Enter a valid email
-      </span>
-      <input
-        type="password"
-        class="form-control"
-        id="password"
-        name="password"
-        required
-        formControlName="password"
-        placeholder="Password"
-        [e2e]="TestAttributes.PasswordInput"
-      />
-      <span
-        class="form-error"
-        *ngIf="!checkIfValid('password')"
-        [e2e]="TestAttributes.FormError"
-      >
-        Password must be at least 6 characters long
-      </span>
-      <button
-        [disabled]="!signinForm.valid || isPending"
-        align="end"
-        type="submit"
-        mat-raised-button
-        color="primary"
-        [e2e]="TestAttributes.SignInBtn"
-      >
-        <span *ngIf="!isPending">Sign In</span>
-        <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner>
-      </button>
-    </div>
+      <mat-card-footer>
+        <mat-progress-bar
+          *ngIf="isPending"
+          mode="indeterminate"
+        ></mat-progress-bar>
+      </mat-card-footer>
+    </mat-card>
   </form>
 </div>

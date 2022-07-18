@@ -1,77 +1,84 @@
 <div>
   <form [formGroup]="articleForm" (ngSubmit)="handleArticleAction()">
-    <div class="form-group">
-      <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
-        {{ error }}
+    <mat-card class="card">
+      <div class="form-group">
+        <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
+          {{ error }}
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          required
+          formControlName="title"
+          placeholder="Article Title"
+          [e2e]="TestAttributes.ArticleTitleInput"
+        />
+        <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('title')">
+          This field is required
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          name="description"
+          required
+          formControlName="description"
+          placeholder="What's this article about?"
+          [e2e]="TestAttributes.ArticleDescriptionInput"
+        />
+        <span
+          [e2e]="TestAttributes.FormError"
+          *ngIf="!checkIfValid('description')"
+        >
+          This field is required
+        </span>
+        <textarea
+          type="text"
+          class="form-control"
+          id="body"
+          name="body"
+          required
+          formControlName="body"
+          placeholder="Write your article"
+          [e2e]="TestAttributes.ArticleBodyInput"
+        >
+        </textarea>
+        <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('body')">
+          This field is required
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          id="tagList"
+          name="tagList"
+          required
+          formControlName="tagList"
+          placeholder="Tags"
+          [e2e]="TestAttributes.ArticleTagListInput"
+        />
+        <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('tagList')">
+          This field is required
+        </span>
+        <button
+          [disabled]="
+            !articleForm.valid || (!this.articleForm.touched && !isEditMode)
+          "
+          type="submit"
+          mat-flat-button
+          color="primary"
+          [e2e]="TestAttributes.PublishBtn"
+        >
+          Publish
+        </button>
       </div>
-      <input
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        required
-        formControlName="title"
-        placeholder="Article Title"
-        [e2e]="TestAttributes.ArticleTitleInput"
-      />
-      <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('title')">
-        This field is required
-      </span>
-      <input
-        type="text"
-        class="form-control"
-        id="description"
-        name="description"
-        required
-        formControlName="description"
-        placeholder="What's this article about?"
-        [e2e]="TestAttributes.ArticleDescriptionInput"
-      />
-      <span
-        [e2e]="TestAttributes.FormError"
-        *ngIf="!checkIfValid('description')"
-      >
-        This field is required
-      </span>
-      <textarea
-        type="text"
-        class="form-control"
-        id="body"
-        name="body"
-        required
-        formControlName="body"
-        placeholder="Write your article"
-        [e2e]="TestAttributes.ArticleBodyInput"
-      >
-      </textarea>
-      <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('body')">
-        This field is required
-      </span>
-      <input
-        type="text"
-        class="form-control"
-        id="tagList"
-        name="tagList"
-        required
-        formControlName="tagList"
-        placeholder="Tags"
-        [e2e]="TestAttributes.ArticleTagListInput"
-      />
-      <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('tagList')">
-        This field is required
-      </span>
-      <button
-        [disabled]="
-          !articleForm.valid || (!this.articleForm.touched && !isEditMode)
-        "
-        align="end"
-        type="submit"
-        mat-raised-button
-        color="primary"
-        [e2e]="TestAttributes.PublishBtn"
-      >
-        Publish
-      </button>
-    </div>
+      <mat-card-footer>
+        <mat-progress-bar
+          *ngIf="isLoading"
+          mode="indeterminate"
+        ></mat-progress-bar>
+      </mat-card-footer>
+    </mat-card>
   </form>
 </div>
