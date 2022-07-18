@@ -1,11 +1,10 @@
-import { MatCardModule } from '@angular/material/card';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { BannerComponent } from './banner.component';
+import { SharedModule } from 'src/app/shared/modules/shared.module';
 
 @NgModule({
   declarations: [BannerComponent],
-  imports: [CommonModule, MatCardModule],
+  imports: [SharedModule],
   exports: [BannerComponent],
 })
 export class BannerModule {}

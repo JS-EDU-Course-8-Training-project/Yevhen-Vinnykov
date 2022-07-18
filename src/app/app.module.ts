@@ -6,7 +6,6 @@ import {
   BrowserAnimationsModule,
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +21,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 
 import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
-import { SharedModule } from './shared/shared.module';
+import { SharedModule } from './shared/modules/shared.module';
 
 @NgModule({
   declarations: [
@@ -36,15 +35,12 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     HttpClientModule,
     NoopAnimationsModule,
-    MatButtonModule,
+    BrowserAnimationsModule,
+    BannerModule,
     SignUpModule,
     SignInModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    BannerModule,
     HomeModule,
     ArticleListModule,
-    MatDialogModule,
     SharedModule,
   ],
   providers: [

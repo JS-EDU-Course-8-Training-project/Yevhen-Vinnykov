@@ -1,10 +1,5 @@
-import { SharedModule } from './../../shared/shared.module';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/modules/shared.module';
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
 import { BannerModule } from '../../components/banner/banner.module';
 
 import { TagsComponent } from './tags/tags.component';
@@ -23,12 +18,7 @@ import { HomeComponent } from './home.component';
     TagsComponent,
   ],
   imports: [
-    CommonModule,
     ArticleListModule,
-    MatCardModule,
-    MatTabsModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
     BannerModule,
     SharedModule,
   ],

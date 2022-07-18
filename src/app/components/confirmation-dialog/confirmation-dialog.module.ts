@@ -1,11 +1,9 @@
-import { MatButtonModule } from '@angular/material/button';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { SharedModule } from 'src/app/shared/modules/shared.module';
 
 @NgModule({
   declarations: [ConfirmationDialogComponent],
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
+  imports: [SharedModule],
 })
 export class ConfirmationDialogModule {}
