@@ -1,3 +1,4 @@
+import { IProfile } from './../../../shared/models/IProfile';
 import { Subject, takeUntil } from 'rxjs';
 import {
   ArticlePageButtonsService,
@@ -9,7 +10,6 @@ import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -40,7 +40,7 @@ export class ArticlePageButtonsComponent
     private articlesService: ArticlesService,
     private profilesService: ProfilesService,
     private authorizationService: AuthorizationService,
-    private articlePageButtonsService: ArticlePageButtonsService,
+    private buttonsService: ArticlePageButtonsService,
     private redirectionService: RedirectionService
   ) {
     super();
@@ -60,7 +60,7 @@ export class ArticlePageButtonsComponent
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
 
     if (!this.isAuthor && this.article) {
-      this.articlePageButtonsService
+      this.buttonsService
         .initialize(this.article)
         .pipe(takeUntil(this.notifier))
         .subscribe((state) => this.setDataOnResponse(state));
@@ -83,7 +83,7 @@ export class ArticlePageButtonsComponent
     if (!this.isAuthorized)
       return this.redirectionService.redirectUnauthorized();
 
-    this.articlePageButtonsService.updateState('favoriteInProgress', true);
+    this.buttonsService.updateState('favoriteInProgress', true);
 
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
@@ -93,7 +93,7 @@ export class ArticlePageButtonsComponent
     if (!this.isAuthorized)
       return this.redirectionService.redirectUnauthorized();
 
-    this.articlePageButtonsService.updateState('followingInProgress', true);
+    this.buttonsService.updateState('followingInProgress', true);
 
     if (this.isFollowed) return this.followingHandler(username, 'unfollow');
     if (!this.isFollowed) return this.followingHandler(username, 'follow');
@@ -105,21 +105,10 @@ export class ArticlePageButtonsComponent
   ): void {
     this.articlesService[method](slug)
       .pipe(takeUntil(this.notifier))
-      .subscribe((article) => {
-        if (!(article instanceof HttpErrorResponse)) {
-          this.articlePageButtonsService.updateState(
-            'isLiked',
-            article.favorited
-          );
-          this.articlePageButtonsService.updateState(
-            'likesCount',
-            article.favoritesCount
-          );
-          this.articlePageButtonsService.updateState(
-            'favoriteInProgress',
-            false
-          );
-        }
+      .subscribe(({ favorited, favoritesCount }: IArticle) => {
+        this.buttonsService.updateState('isLiked', favorited);
+        this.buttonsService.updateState('likesCount', favoritesCount);
+        this.buttonsService.updateState('favoriteInProgress', false);
       });
   }
 
@@ -129,17 +118,9 @@ export class ArticlePageButtonsComponent
   ): void {
     this.profilesService[method](username)
       .pipe(takeUntil(this.notifier))
-      .subscribe((profile) => {
-        if (!(profile instanceof HttpErrorResponse)) {
-          this.articlePageButtonsService.updateState(
-            'isFollowed',
-            profile.following
-          );
-          this.articlePageButtonsService.updateState(
-            'followingInProgress',
-            false
-          );
-        }
+      .subscribe(({ following }: IProfile) => {
+        this.buttonsService.updateState('isFollowed', following);
+        this.buttonsService.updateState('followingInProgress', false);
       });
   }
 

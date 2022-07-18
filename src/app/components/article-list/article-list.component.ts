@@ -1,5 +1,6 @@
-import { catchError, Subject, takeUntil } from 'rxjs';
-import { IArticle, IArticleResponse } from '../../shared/models/IArticle';
+import { MatDialog } from '@angular/material/dialog';
+import { catchError, Observable, of, Subject, takeUntil } from 'rxjs';
+import { IArticle } from '../../shared/models/IArticle';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,6 +13,7 @@ import { ArticlesService } from 'src/app/shared/services/articles/articles.servi
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-article-list',
@@ -34,7 +36,8 @@ export class ArticleListComponent
     private articlesService: ArticlesService,
     private redirectionService: RedirectionService,
     private authorizationService: AuthorizationService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
     super();
   }
@@ -67,12 +70,19 @@ export class ArticleListComponent
   ): void {
     this.articlesService[method](slug)
       .pipe(takeUntil(this.notifier))
-      .pipe(catchError((err): any => console.log(err)))
-      .subscribe((article: IArticleResponse | any) => {
-        this.isLiked = article.favorited;
+      .pipe(catchError((err: string) => this.onCatchError(err)))
+      .subscribe(({ favorited, favoritesCount }: IArticle) => {
+        this.isLiked = favorited;
         this.isPending = false;
-        this.likesCount = article.favoritesCount;
+        this.likesCount = favoritesCount;
         this.cdRef.detectChanges();
       });
+  }
+
+  private onCatchError(error: string): Observable<IArticle> {
+    this.isPending = false;
+    this.dialog.open(ErrorDialogComponent, { data: error });
+
+    return of(this.article);
   }
 }

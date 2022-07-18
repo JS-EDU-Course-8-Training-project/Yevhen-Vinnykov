@@ -18,7 +18,6 @@ import {
   QueryList,
   AfterViewInit,
 } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -90,9 +89,9 @@ export class FavoritedArticlesComponent
       .fetchFavoritedArticles(this.username, this.limit, this.offset)
       .pipe(
         takeUntil(this.notifier),
-        catchError((err: HttpErrorResponse): any => this.onCatchError(err))
+        catchError((err: string) => this.onCatchError(err))
       )
-      .subscribe((res: IArticleResponse | any) => this.setData(res));
+      .subscribe((res: IArticleResponse) => this.setData(res));
   }
 
   private setData(response: IArticleResponse): void {
@@ -105,10 +104,10 @@ export class FavoritedArticlesComponent
     this.nextPage();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
-    this.error = 'Something went wrong :(';
+  private onCatchError(error: string): Observable<IArticleResponse> {
+    this.error = error;
     this.isLoading = false;
+
     return of({ articles: [], articlesCount: 0 });
   }
 

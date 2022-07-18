@@ -37,11 +37,9 @@ export class TagsComponent
     this.articlesService
       .fetchTags()
       .pipe(takeUntil(this.notifier))
-      .subscribe((tags: string[] | any) => {
-        if (tags as string[]) {
-          this.tags = tags;
-          this.isLoading = false;
-        }
+      .subscribe((tags: string[]) => {
+        this.tags = tags;
+        this.isLoading = false;
       });
   }
 

@@ -20,7 +20,6 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -93,16 +92,16 @@ export class TaggedArticlesComponent
       .fetchArticlesByTag(this.selectedTag, this.offset, this.limit)
       .pipe(
         takeUntil(this.notifier),
-        catchError((err: HttpErrorResponse): any => this.onCatchError(err))
+        catchError((err: string) => this.onCatchError(err))
       )
-      .subscribe((res: IArticleResponse | any) => this.setDataOnResponse(res));
+      .subscribe((res: IArticleResponse) => this.setDataOnResponse(res));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private onCatchError(error: HttpErrorResponse): Observable<IArticleResponse> {
-    this.error = 'Something went wrong :(';
+  private onCatchError(error: string): Observable<IArticleResponse> {
+    this.error = error;
     this.isLoading = false;
     this.cdRef.detectChanges();
+
     return of({ articles: [], articlesCount: 0 });
   }
 

@@ -1,5 +1,4 @@
 import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil, Observable, catchError, of } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -51,7 +50,7 @@ export class NewArticlePageComponent
           takeUntil(this.notifier),
           catchError((err: string) => this.onCatchError(err))
         )
-        .subscribe((article: IArticle | any) => {
+        .subscribe((article: IArticle) => {
           this.articleToEdit = article;
           this.initializeForm();
           this.articleForm.markAllAsTouched();
@@ -77,20 +76,6 @@ export class NewArticlePageComponent
         [Validators.required],
       ],
     });
-  }
-
-  private onCatchError(error: string): Observable<IArticle> {
-    this.error = error;
-    this.isLoading = false;
-    this.articleForm.enable();
-    
-    if (error === 'Article with this title already exists') {
-      this.articleForm.controls['title'].setErrors({
-        notUnique: true,
-      });
-    }
-
-    return of({} as IArticle);
   }
 
   private onSubmit(): void {
@@ -125,16 +110,15 @@ export class NewArticlePageComponent
   }
 
   public handleArticleAction(): void {
-    this.articleAction(this.slug, this.createArticleData());
     this.onSubmit();
+    this.articleAction(this.slug, this.createArticleData());
   }
 
   private articleAction(
     slug: string,
     newArticle: INewArticle | IUpdateArticle
   ) {
-    const subscription: Observable<INewArticle | HttpErrorResponse> = this
-      .isEditMode
+    const subscription: Observable<IArticle> = this.isEditMode
       ? this.articlesService.updateArticle(slug, newArticle as IUpdateArticle)
       : this.articlesService.createArticle(newArticle as INewArticle);
 
@@ -143,14 +127,26 @@ export class NewArticlePageComponent
         takeUntil(this.notifier),
         catchError((err: string) => this.onCatchError(err))
       )
-      .subscribe((article: INewArticle | any) => {
+      .subscribe(({ slug }: IArticle) => {
         if (!this.error) {
           this.articleForm.reset();
-          this.redirectionService.redirectByUrl(
-            `article/${article.article.slug}`
-          );
+          this.redirectionService.redirectByUrl(`article/${slug}`);
         }
       });
+  }
+
+  private onCatchError(error: string): Observable<IArticle> {
+    this.error = error;
+    this.isLoading = false;
+    this.articleForm.enable();
+
+    if (error === 'Article with this title already exists') {
+      this.articleForm.controls['title'].setErrors({
+        notUnique: true,
+      });
+    }
+
+    return of({} as IArticle);
   }
 
   public isDataSaved(): boolean {

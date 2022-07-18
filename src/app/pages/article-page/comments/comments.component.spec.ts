@@ -11,6 +11,7 @@ import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const comments: IComment[] = [
   {
@@ -50,7 +51,7 @@ describe('COMMENTS COMPONENT', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CommentsComponent, TestAttributeDirective],
-      imports: [MatCardModule, MatIconModule],
+      imports: [MatCardModule, MatIconModule, MatDialogModule],
       providers: [{ provide: CommentsService, useClass: CommentsServiceMock }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();

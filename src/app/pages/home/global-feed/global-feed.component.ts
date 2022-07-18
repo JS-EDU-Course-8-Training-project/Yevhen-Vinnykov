@@ -20,7 +20,6 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -93,7 +92,7 @@ export class GlobalFeedComponent
         takeUntil(this.notifier),
         catchError((error: string) => this.onCatchError(error))
       )
-      .subscribe((response: IArticleResponse | any) =>
+      .subscribe((response: IArticleResponse) =>
         this.setDataOnResponse(response)
       );
   }

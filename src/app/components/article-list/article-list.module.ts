@@ -7,6 +7,7 @@ import { ArticleListComponent } from './article-list.component';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ErrorDialogModule } from '../error-dialog/error-dialog.module';
 
 @NgModule({
   declarations: [ArticleListComponent],
@@ -18,6 +19,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RouterModule,
     MatTabsModule,
     SharedModule,
+    ErrorDialogModule
   ],
   exports: [ArticleListComponent],
 })

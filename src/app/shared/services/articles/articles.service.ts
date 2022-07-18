@@ -45,22 +45,29 @@ export class ArticlesService {
   }
 
   public createArticle(article: INewArticle): Observable<IArticle> {
-    return this.http.post<IArticle>(this.baseURL, { article }, httpOptions);
+    return this.http
+      .post<{ article: IArticle }>(this.baseURL, { article }, httpOptions)
+      .pipe(pluck('article'));
   }
 
-  public deleteArticle(slug: string): Observable<Object> {
-    return this.http.delete(`${this.baseURL}/${slug}`, httpOptions);
+  public deleteArticle(slug: string): Observable<Record<string, never>> {
+    return this.http.delete<Record<string, never>>(
+      `${this.baseURL}/${slug}`,
+      httpOptions
+    );
   }
 
   public updateArticle(
     slug: string,
     article: IUpdateArticle
   ): Observable<IArticle> {
-    return this.http.put<IArticle>(
-      `${this.baseURL}/${slug}`,
-      { article },
-      httpOptions
-    );
+    return this.http
+      .put<{ article: IArticle }>(
+        `${this.baseURL}/${slug}`,
+        { article },
+        httpOptions
+      )
+      .pipe(pluck('article'));
   }
 
   public fetchTags(): Observable<string[]> {

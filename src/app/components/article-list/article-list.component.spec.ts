@@ -9,6 +9,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatCard } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import {
+  MatDialog,
+  MatDialogModule,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 const article: IArticle = {
   id: '1',
@@ -64,8 +70,18 @@ describe('ARTICLE COMPONENT', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ArticleListComponent, MatIcon, MatCard],
+      declarations: [
+        ArticleListComponent,
+        MatIcon,
+        MatCard,
+        ErrorDialogComponent,
+      ],
+      imports: [MatDialogModule],
       providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: { data: { error: 'Something went wrong :(' } },
+        },
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         {
@@ -100,8 +116,18 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ArticleListComponent, MatIcon, MatCard],
+      declarations: [
+        ArticleListComponent,
+        MatIcon,
+        MatCard,
+        ErrorDialogComponent,
+      ],
+      imports: [MatDialogModule],
       providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: { data: { error: 'Something went wrong :(' } },
+        },
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         {
@@ -161,8 +187,18 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => 
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ArticleListComponent, MatIcon, MatCard],
+      declarations: [
+        ArticleListComponent,
+        MatIcon,
+        MatCard,
+        ErrorDialogComponent,
+      ],
+      imports: [MatDialogModule],
       providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: { data: { error: 'Something went wrong :(' } },
+        },
         { provide: ArticlesService, useClass: AricleServiceMock },
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         {

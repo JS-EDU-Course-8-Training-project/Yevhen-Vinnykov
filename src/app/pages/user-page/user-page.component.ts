@@ -6,7 +6,6 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -63,21 +62,21 @@ export class UserPageComponent
 
     this.usersService.authUser$
       .pipe(takeUntil(this.notifier))
-      .subscribe((authUser): any => {
+      .subscribe((authUser) => {
         this.tabIndex = 0;
         this.isMyself = authUser.username === this.urlUsername;
 
-        if (this.isMyself)
-          return (this.user = this.usersService.authUser$.getValue());
+        if (this.isMyself) {
+          this.user = this.usersService.authUser$.getValue();
+          return;
+        }
 
         this.profilesService
           .fetchUser(this.urlUsername)
           .pipe(takeUntil(this.notifier))
-          .subscribe((user) => {
-            if (!(user instanceof HttpErrorResponse)) {
-              this.user = user;
-              this.isFollowed = user.following;
-            }
+          .subscribe((profile: IProfile) => {
+              this.user = profile;
+              this.isFollowed = profile.following;
           });
       });
   }
@@ -95,11 +94,9 @@ export class UserPageComponent
     username: string,
     method: 'follow' | 'unfollow'
   ): void {
-    this.profilesService[method](username).subscribe((profile) => {
-      if (!(profile instanceof HttpErrorResponse)) {
-        this.isFollowed = profile.following;
-        this.followingInProgress = false;
-      }
+    this.profilesService[method](username).subscribe((profile: IProfile) => {
+      this.isFollowed = profile.following;
+      this.followingInProgress = false;
     });
   }
 

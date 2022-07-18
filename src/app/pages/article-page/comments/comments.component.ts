@@ -1,10 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { takeUntil, Subject } from 'rxjs';
+import { takeUntil, Subject, Observable, of, catchError } from 'rxjs';
 import { IComment } from 'src/app/shared/models/IComment';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommentsService } from '../services/comments/comments.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from 'src/app/components/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-comments',
@@ -22,9 +23,12 @@ export class CommentsComponent
   public comments!: IComment[];
   public commentsBeingDeletedIds: string[] = [];
   private notifier: Subject<void> = new Subject<void>();
-  public isLoaded!: boolean;
+  public isLoading!: boolean;
 
-  constructor(private commentsService: CommentsService) {
+  constructor(
+    private commentsService: CommentsService,
+    private dialog: MatDialog
+  ) {
     super();
   }
 
@@ -41,32 +45,38 @@ export class CommentsComponent
   }
 
   public getComments(): void {
-    this.isLoaded = false;
+    this.isLoading = true;
     this.commentsService
       .fetchArticleComments(this.slug)
-      .pipe(takeUntil(this.notifier))
-      .subscribe((comments) => {
-        if (!(comments instanceof HttpErrorResponse)) {
-          this.comments = comments;
-          this.isLoaded = true;
-        }
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: string) => this.onCatchError(err))
+      )
+      .subscribe((comments: IComment[]) => {
+        this.comments = comments;
+        this.isLoading = false;
       });
   }
 
   public deleteComment(id: string): void {
-    const commentToBeDeletedId: string | undefined = this.comments.find(
-      (c) => c.id === id
-    )?.id;
-    if (!commentToBeDeletedId) return;
-
-    this.commentsBeingDeletedIds.push(commentToBeDeletedId);
+    this.commentsBeingDeletedIds.push(id);
 
     this.commentsService
       .removeComment(this.slug, id)
-      .pipe(takeUntil(this.notifier))
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: string) => this.onCatchError(err))
+      )
       .subscribe(() => {
         this.getComments();
         this.commentsBeingDeletedIds.pop();
       });
+  }
+
+  private onCatchError(error: string): Observable<IComment[]> {
+    this.isLoading = false;
+    this.dialog.open(ErrorDialogComponent, { data: error });
+
+    return of([]);
   }
 }

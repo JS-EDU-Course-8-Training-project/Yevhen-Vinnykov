@@ -2,13 +2,9 @@ import { IUpdateUser } from './../../models/IUpdateUser';
 import { environment } from '../../../../environments/environment';
 import { IExistingUser } from '../../models/IExistingUser';
 import { IUserData } from '../../models/IUserData';
-import { Observable, pluck, map, BehaviorSubject, filter } from 'rxjs';
+import { Observable, pluck, map, BehaviorSubject } from 'rxjs';
 import { INewUser } from '../../models/INewUser';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthorizationService } from '../authorization/authorization.service';
 import { Router } from '@angular/router';
@@ -43,9 +39,7 @@ export class UsersService {
     private router: Router
   ) {}
 
-  public createUser(
-    user: INewUser
-  ): Observable<IExistingUser | HttpErrorResponse> {
+  public createUser(user: INewUser): Observable<IExistingUser> {
     return this.http
       .post<{ user: IExistingUser }>(
         `${this.baseURL}/users/signup`,
@@ -61,9 +55,7 @@ export class UsersService {
       );
   }
 
-  public signIn(
-    user: IUserData
-  ): Observable<IExistingUser | HttpErrorResponse> {
+  public signIn(user: IUserData): Observable<IExistingUser> {
     return this.http
       .post<{ user: IExistingUser }>(
         `${this.baseURL}/users/login`,
@@ -79,12 +71,11 @@ export class UsersService {
       );
   }
 
-  public fetchAuthUser(): Observable<IExistingUser | HttpErrorResponse> {
+  public fetchAuthUser(): Observable<IExistingUser> {
     return this.http
       .get<{ user: IExistingUser }>(`${this.baseURL}/users`, httpOptions)
       .pipe(
         pluck('user'),
-        filter((res) => !(res instanceof HttpErrorResponse)),
         map((user) => {
           this.authUser$.next(user);
           return user;
@@ -92,9 +83,7 @@ export class UsersService {
       );
   }
 
-  public updateUser(
-    settings: IUpdateUser
-  ): Observable<IExistingUser | HttpErrorResponse> {
+  public updateUser(settings: IUpdateUser): Observable<IExistingUser> {
     return this.http
       .put<{ user: IExistingUser }>(
         `${this.baseURL}/users`,

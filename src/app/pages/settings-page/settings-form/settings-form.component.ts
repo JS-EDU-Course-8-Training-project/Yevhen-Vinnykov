@@ -115,10 +115,10 @@ export class SettingsFormComponent
         takeUntil(this.notifier),
         catchError((error: string) => this.onCatchError(error))
       )
-      .subscribe((user: IExistingUser | any) => {
+      .subscribe(({username}: IExistingUser) => {
         this.isModified$.next(false);
         if (!this.error) {
-          this.redirectionService.redirectByUrl(`user/${user.username}`);
+          this.redirectionService.redirectByUrl(`user/${username}`);
         }
       });
   }

@@ -108,7 +108,7 @@ describe('ARTICLES SERVICE > POST METHODS', () => {
       tagList: ['test-tag'],
     };
 
-    httpClientSpy.post.and.returnValue(of(expectedArticle));
+    httpClientSpy.post.and.returnValue(of({article: expectedArticle}));
 
     articlesService.createArticle(newArticleMock).subscribe((article) => {
       expect(article).toEqual(expectedArticle);
@@ -140,7 +140,7 @@ describe('ARTICLES SERVICE > PUT METHODS', () => {
 
   it('updateArticle should update an article and return correct data', () => {
     const expectedArticle = expectedData.articles[0];
-    httpClientSpy.put.and.returnValue(of(expectedArticle));
+    httpClientSpy.put.and.returnValue(of({article: expectedArticle}));
 
     const updateArticleMock: IUpdateArticle = {
       title: 'test-title',
