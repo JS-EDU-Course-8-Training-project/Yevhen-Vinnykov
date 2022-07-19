@@ -1,9 +1,14 @@
 header {
+  position: fixed;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-around;
   align-items: center;
   min-height: 4rem;
   flex-wrap: wrap;
+  width: 100%;
+  background-color: #335C81;
 }
 
 h1 {
