@@ -2,12 +2,12 @@
   className="banner user-banner"
   [e2e]="TestAttributes.UserPageBanner"
 >
-  <div>
+  <div class="user-info">
     <img [src]="user?.image" alt="" [e2e]="TestAttributes.UserPageImg" />
-    <mat-card-title class="title">
+    <mat-card-title class="banner-title">
       <h3 [e2e]="TestAttributes.UserPageUsername">{{ user?.username }}</h3>
     </mat-card-title>
-    <mat-card-content class="subtitle">
+    <mat-card-content class="banner-subtitle">
       <p [e2e]="TestAttributes.UserPageBio">{{ user?.bio }}</p>
     </mat-card-content>
   </div>

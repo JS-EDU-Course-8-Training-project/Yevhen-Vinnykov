@@ -1,4 +1,4 @@
-div {
+.user-info {
   text-align: center;
   height: 250px;
   h3 {
@@ -15,14 +15,12 @@ div {
     margin-bottom: 15px;
   }
 }
+
 .button-container {
   width: 60%;
   height: 40px;
   display: flex;
   justify-content: end;
-  button {
-    width: 190px;
-  }
   a {
     text-decoration: none;
     color: inherit;
@@ -32,4 +30,12 @@ div {
 section {
   width: 60%;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  section {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
 }

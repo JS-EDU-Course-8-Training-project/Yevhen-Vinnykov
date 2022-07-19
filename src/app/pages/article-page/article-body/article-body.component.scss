@@ -20,7 +20,7 @@
 .article-actions-container {
   display: flex;
   justify-content: space-between;
-  height: 3rem;
+  min-height: 3rem;
   margin: 0 auto;
   width: 50%;
   margin-bottom: 40px;
@@ -39,6 +39,17 @@
   }
   .article-actions {
     display: flex;
+    justify-content: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-body-container,
+  .article-actions-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0;
     justify-content: start;
   }
 }

@@ -1,6 +1,16 @@
-.fave-btn {
-  min-width: 170px;
-  &[disabled] {
-    background-color: rgba(91, 91, 216, 0.376);
+.btn {
+  margin: 0 5px;
+}
+
+.icon-buttons {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    display: none;
+  }
+  .icon-buttons {
+    display: block;
   }
 }

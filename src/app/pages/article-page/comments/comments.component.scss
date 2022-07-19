@@ -32,3 +32,11 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .article-comments {
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+}

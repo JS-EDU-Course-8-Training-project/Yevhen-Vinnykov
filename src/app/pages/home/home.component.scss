@@ -1,12 +1,13 @@
-.title,
-.subtitle {
-  font-size: 60px;
+.banner-title,
+.banner-subtitle {
+  font-size: clamp(1rem, 10vw, 3rem);
   color: rgb(255, 255, 255);
   font-weight: bold;
   margin-bottom: 25px;
+  text-align: center;
 }
-.subtitle {
-  font-size: 20px;
+.banner-subtitle {
+  font-size: clamp(0.5rem, 5vw, 1.5rem);
 }
 
 .container {
@@ -26,5 +27,11 @@
 @media (max-width: 768px) {
   .container {
     flex-direction: column-reverse;
+    min-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    section {
+      margin: 0;
+    }
   }
 }

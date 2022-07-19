@@ -1,41 +1,41 @@
-<mat-card-actions align="end">
+<mat-card-actions>
   <button
+    class="btn"
     (click)="redirectToEditArticle(slug)"
     *ngIf="isAuthor"
-    class="fave-btn"
-    mat-raised-button
+    mat-flat-button
     color="primary"
     [e2e]="TestAttributes.ArticleEditBtn"
   >
     Edit
   </button>
   <button
+    class="btn"
     (click)="deleteArticle(slug)"
     *ngIf="isAuthor"
-    class="fave-btn"
-    mat-raised-button
+    mat-flat-button
     color="primary"
     [e2e]="TestAttributes.ArticleDeleteBtn"
   >
     Delete
   </button>
   <button
+    class="btn"
     *ngIf="!isAuthor"
-    class="fave-btn"
     [disabled]="followingInProgress"
     (click)="handleFollowUnfollow(username)"
-    mat-raised-button
+    mat-flat-button
     color="primary"
     [e2e]="TestAttributes.ArticleFollowBtn"
   >
     {{ isFollowed ? "Unfollow" : "Follow" }} {{ username }}
   </button>
   <button
+    class="btn"
     *ngIf="!isAuthor"
-    class="fave-btn"
     [disabled]="favoriteInProgress"
     (click)="handleLikeDislike(slug)"
-    mat-raised-button
+    mat-flat-button
     color="primary"
     [e2e]="TestAttributes.ArticleLikeBtn"
   >
@@ -47,4 +47,43 @@
     </mat-icon>
     Favorite Article ({{ likesCount }})
   </button>
+  <div class="icon-buttons">
+    <!-- BUTTONS FOR SMALLER SCREENS -->
+    <button
+      (click)="redirectToEditArticle(slug)"
+      *ngIf="isAuthor"
+      mat-icon-button
+      [e2e]="TestAttributes.ArticleEditBtn"
+    >
+      <mat-icon>edit_note</mat-icon>
+    </button>
+    <button
+      (click)="deleteArticle(slug)"
+      *ngIf="isAuthor"
+      mat-icon-button
+      [e2e]="TestAttributes.ArticleDeleteBtn"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [e2e]="TestAttributes.ArticleLikeIcon"
+      *ngIf="!isAuthor"
+      (click)="handleLikeDislike(slug)"
+      [disabled]="favoriteInProgress"
+    >
+      <mat-icon [color]="isLiked && 'warn'"> favorite </mat-icon>
+      {{ likesCount }}
+    </button>
+    <button
+      mat-icon-button
+      *ngIf="!isAuthor"
+      [disabled]="followingInProgress"
+      (click)="handleFollowUnfollow(username)"
+      [e2e]="TestAttributes.ArticleFollowBtn"
+    >
+      <mat-icon *ngIf="!isFollowed">turned_in</mat-icon>
+      <mat-icon *ngIf="isFollowed">bookmark_added</mat-icon>
+    </button>
+  </div>
 </mat-card-actions>
