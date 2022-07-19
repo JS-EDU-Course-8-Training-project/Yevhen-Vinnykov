@@ -61,8 +61,10 @@ export class ArticlesServiceMockWithError {
 
 export class RouterMockEditMode {
   public url = 'localhost:3000/article/test-slug';
+  public navigateByUrl = () => ({ catch: () => {} });
 }
 
 export class RouterMockCreateMode {
   public url = '/create-article';
+  public navigateByUrl = () => ({ catch: () => {} });
 }

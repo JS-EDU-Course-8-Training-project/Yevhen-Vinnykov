@@ -54,7 +54,7 @@ describe('NEW ARTICLE PAGE > EDIT MODE', () => {
     fixture.detectChanges();
 
     const submitButton = fixture.debugElement.query(
-      By.css('button')
+      By.css('[type=submit]')
     ).nativeElement;
     submitButton.click();
     fixture.detectChanges();
@@ -101,7 +101,7 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
 
   it('button should be disabled on first render', () => {
     const submitButton = fixture.debugElement.query(
-      By.css('button')
+      By.css('[type=submit]')
     ).nativeElement;
     expect(submitButton.disabled).toBe(true);
   });
@@ -111,10 +111,10 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
       title: 'new-test-title',
       description: 'test-description',
       body: 'test-body',
-      tagList: 'test-tag',
+      tagList: [{ tag: 'test-tag' }],
     };
     const submitButton = fixture.debugElement.query(
-      By.css('button')
+      By.css('[type=submit]')
     ).nativeElement;
 
     component.articleForm.setValue(newArticle);
@@ -133,12 +133,16 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
       component,
       'handleArticleAction'
     ).and.callThrough();
-    const spyArticleAction = spyOn<any>(component, 'articleAction');
+    const spyArticleAction = spyOn<any>(
+      component,
+      'articleAction'
+    ).and.callThrough();
+
     const newArticle = {
       title: 'new-test-title',
       description: 'test-description',
       body: 'test-body',
-      tagList: 'test-tag',
+      tagList: [{ tag: 'test-tag' }],
     };
 
     component.articleForm.setValue(newArticle);
@@ -146,7 +150,7 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
     fixture.detectChanges();
 
     const submitButton = fixture.debugElement.query(
-      By.css('button')
+      By.css('[type=submit]')
     ).nativeElement;
     submitButton.click();
     fixture.detectChanges();
@@ -162,7 +166,7 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
   }));
 });
 
-describe('ON CATCH ERROR METHOD', () => {
+describe('NEW ARTICLE PAGE > ON CATCH ERROR METHOD', () => {
   let component: NewArticlePageComponent;
   let fixture: ComponentFixture<NewArticlePageComponent>;
 

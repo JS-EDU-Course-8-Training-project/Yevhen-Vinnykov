@@ -1,7 +1,7 @@
 import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
 import { Subject, takeUntil, Observable, catchError, of } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -35,6 +35,10 @@ export class NewArticlePageComponent
     private redirectionService: RedirectionService
   ) {
     super();
+  }
+
+  get tags() {
+    return (<FormArray>this.articleForm.controls['tagList']).controls;
   }
 
   ngOnInit(): void {
@@ -71,11 +75,35 @@ export class NewArticlePageComponent
         [Validators.required],
       ],
       body: [this.articleToEdit?.body || '', [Validators.required]],
-      tagList: [
-        this.articleToEdit?.tagList?.join(',') || '',
-        [Validators.required],
-      ],
+      tagList: this.initializeTagsFormArray(),
     });
+  }
+
+  private initializeTagsFormArray(): FormArray {
+    const tagList = new FormArray([]);
+    
+    if (!this.articleToEdit?.tagList?.length) {
+      const tagForm = this.fb.group({ tag: [''] });
+      tagList.push(tagForm);
+      return tagList;
+    }
+
+    for (const tag of this.articleToEdit.tagList) {
+      const tagForm = this.fb.group({ tag: [tag] });
+      tagList.push(tagForm);
+    }
+
+    return tagList;
+  }
+
+  public onAddTag(): void {
+    (<FormArray>this.articleForm.get('tagList')).push(
+      this.fb.group({ tag: [''] })
+    );
+  }
+
+  public onDeleteTag(i: number): void {
+    (<FormArray>this.articleForm.get('tagList')).removeAt(i);
   }
 
   private onSubmit(): void {
@@ -91,27 +119,29 @@ export class NewArticlePageComponent
     );
   }
 
-  private createArticleData(): INewArticle | IUpdateArticle {
+  private prepareDataForSubmit(): INewArticle | IUpdateArticle {
     const formData = this.articleForm.getRawValue();
+
     formData.tagList = formData.tagList
-      .split(',')
-      .map((tag: string) => tag.trim());
-    const articleData = {} as INewArticle | IUpdateArticle;
+      .map(({ tag }: { tag: string }) => tag)
+      .filter((tag: string) => tag); // filter out empty tags
+
+    const submitData = {} as INewArticle | IUpdateArticle;
 
     Object.keys(formData).forEach((key) => {
       const isFieldChanged =
         this.articleToEdit?.[key as keyof IUpdateArticle] !== formData[key];
       if (isFieldChanged) {
-        articleData[key as keyof IUpdateArticle] = formData[key];
+        submitData[key as keyof IUpdateArticle] = formData[key];
       }
     });
 
-    return articleData;
+    return submitData;
   }
 
   public handleArticleAction(): void {
     this.onSubmit();
-    this.articleAction(this.slug, this.createArticleData());
+    this.articleAction(this.slug, this.prepareDataForSubmit());
   }
 
   private articleAction(

@@ -57,23 +57,41 @@
         >
           This field is required
         </span>
-        <input
-          type="text"
-          class="form-control"
-          id="tagList"
-          name="tagList"
-          required
-          formControlName="tagList"
-          placeholder="Tags"
-          [e2e]="TestAttributes.ArticleTagListInput"
-        />
-        <span
-          [e2e]="TestAttributes.FormError"
-          class="form-error"
-          *ngIf="!checkIfValid('tagList')"
-        >
-          This field is required
-        </span>
+        <div formArrayName="tagList">
+          <div
+            class="tag-input"
+            *ngFor="let tag of tags; let i = index"
+            [formGroupName]="i"
+          >
+            <input
+              placeholder="tag"
+              type="text"
+              class="form-control"
+              formControlName="tag"
+              [e2e]="TestAttributes.ArticleTagListInput"
+            />
+            <div>
+              <button
+                *ngIf="i === tags.length - 1"
+                class="tag-button"
+                mat-icon-button
+                type="button"
+                (click)="onAddTag()"
+              >
+                <mat-icon>add_circle_outline</mat-icon>
+              </button>
+              <button
+                *ngIf="tags.length !== 1"
+                class="tag-button"
+                mat-icon-button
+                type="button"
+                (click)="onDeleteTag(i)"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
         <button
           [disabled]="
             !articleForm.valid || (!this.articleForm.touched && !isEditMode)
