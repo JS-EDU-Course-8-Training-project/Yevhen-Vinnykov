@@ -1,6 +1,6 @@
-<div>
-  <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
-    <mat-card class="card">
+<div class="container">
+  <mat-card class="background-card">
+    <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
       <div class="form-group">
         <h2 [e2e]="TestAttributes.FormTitle">Sign In</h2>
         <a routerLink="/sign-up" [e2e]="TestAttributes.SignUpLink">
@@ -58,9 +58,7 @@
           color="primary"
           [e2e]="TestAttributes.SignInBtn"
         >
-        Sign In
-          <!-- <span *ngIf="!isPending">Sign In</span>
-          <mat-spinner *ngIf="isPending" diameter="30"></mat-spinner> -->
+          Sign In
         </button>
       </div>
       <mat-card-footer>
@@ -69,6 +67,6 @@
           mode="indeterminate"
         ></mat-progress-bar>
       </mat-card-footer>
-    </mat-card>
-  </form>
+    </form>
+  </mat-card>
 </div>

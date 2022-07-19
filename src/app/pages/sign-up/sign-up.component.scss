@@ -1,58 +1,67 @@
-form {
-  background-color: rgb(250, 250, 250);
-  min-height: 50vh;
+.container {
   width: 100%;
+  background-color: rgb(250, 250, 250);
+  min-height: 40vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  .card {
-    min-width: 25%;
+  padding: 20px;
+  .background-card {
+    display: flex;
+    justify-content: center;
+    width: 30%;
+    min-height: 40%;
     border-radius: 8px;
+    padding: 20px;
+    form {
+      width: 100%;
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        h2 {
+          font-size: 2rem;
+          align-self: center;
+        }
+        a {
+          align-self: center;
+          text-decoration: none;
+          font-size: 1rem;
+          margin-bottom: 1rem;
+          color: blue;
+        }
+        .form-control {
+          border: 1px solid rgb(234, 230, 230);
+          border-radius: 8px;
+          margin: 5px 0;
+          height: 1.5rem;
+          padding: 10px;
+          font-size: 1rem;
+        }
+        button {
+          width: 100%;
+          align-self: end;
+          font-size: 1rem;
+          margin: 5px 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .ng-invalid.ng-touched:not(form) {
+          border: 2px solid #ff0400;
+        }
+        .form-error {
+          color: red;
+        }
+      }
+    }
   }
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  h2 {
-    font-size: 2rem;
-    align-self: center;
-  }
-  a {
-    align-self: center;
-    text-decoration: none;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: blue;
-  }
-  .form-control {
-    border: 1px solid rgb(234, 230, 230);
-    border-radius: 8px;
-    margin: 5px 0;
-    height: 1.5rem;
-    padding: 10px;
-    font-size: 1rem;
-    span {
-      color: red;
-    }
-  }
-  button {
+@media (max-width: 768px) {
+  .container .background-card {
     width: 100%;
-    align-self: end;
-    font-size: 1rem;
-    margin: 5px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .ng-invalid.ng-touched:not(form) {
-    border: 2px solid #ff0400;
-  }
-
-  .form-error {
-    color: red;
   }
 }

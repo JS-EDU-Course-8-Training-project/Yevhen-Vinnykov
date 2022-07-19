@@ -1,6 +1,6 @@
-<div>
-  <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()">
-    <mat-card class="card">
+<div class="container">
+  <mat-card class="background-card">
+    <form [formGroup]="settingsForm" (ngSubmit)="updateSettings()">
       <div class="form-group">
         <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
           {{ error }}
@@ -104,6 +104,6 @@
           mode="indeterminate"
         ></mat-progress-bar>
       </mat-card-footer>
-    </mat-card>
-  </form>
+    </form>
+  </mat-card>
 </div>

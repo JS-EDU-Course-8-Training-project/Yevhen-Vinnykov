@@ -1,6 +1,6 @@
-<div>
-  <form [formGroup]="articleForm" (ngSubmit)="handleArticleAction()">
-    <mat-card class="card">
+<div class="container">
+  <mat-card class="background-card">
+    <form [formGroup]="articleForm" (ngSubmit)="handleArticleAction()">
       <div class="form-group">
         <div *ngIf="error" class="form-error" [e2e]="TestAttributes.FormError">
           {{ error }}
@@ -15,7 +15,11 @@
           placeholder="Article Title"
           [e2e]="TestAttributes.ArticleTitleInput"
         />
-        <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('title')">
+        <span
+          class="form-error"
+          [e2e]="TestAttributes.FormError"
+          *ngIf="!checkIfValid('title')"
+        >
           This field is required
         </span>
         <input
@@ -31,6 +35,7 @@
         <span
           [e2e]="TestAttributes.FormError"
           *ngIf="!checkIfValid('description')"
+          class="form-error"
         >
           This field is required
         </span>
@@ -45,7 +50,11 @@
           [e2e]="TestAttributes.ArticleBodyInput"
         >
         </textarea>
-        <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('body')">
+        <span
+          [e2e]="TestAttributes.FormError"
+          class="form-error"
+          *ngIf="!checkIfValid('body')"
+        >
           This field is required
         </span>
         <input
@@ -58,7 +67,11 @@
           placeholder="Tags"
           [e2e]="TestAttributes.ArticleTagListInput"
         />
-        <span [e2e]="TestAttributes.FormError" *ngIf="!checkIfValid('tagList')">
+        <span
+          [e2e]="TestAttributes.FormError"
+          class="form-error"
+          *ngIf="!checkIfValid('tagList')"
+        >
           This field is required
         </span>
         <button
@@ -79,6 +92,6 @@
           mode="indeterminate"
         ></mat-progress-bar>
       </mat-card-footer>
-    </mat-card>
-  </form>
+    </form>
+  </mat-card>
 </div>
