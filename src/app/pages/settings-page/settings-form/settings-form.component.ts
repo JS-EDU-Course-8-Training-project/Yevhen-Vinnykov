@@ -85,7 +85,7 @@ export class SettingsFormComponent
       const formDataProp = formData[key as keyof IExistingUser];
       const authUserProp = this.authUser[key as keyof IExistingUser];
 
-      if (formDataProp !== authUserProp) {
+      if (formDataProp && formDataProp !== authUserProp) {
         updatedData[key as keyof IUpdateUser] =
           formData[key as keyof IUpdateUser];
       }
