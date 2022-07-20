@@ -13,6 +13,7 @@ class RouterMock {
 
 class AuthServiceMock {
   public isAuthorized$ = of(true);
+  public authUser$ = of({});
 }
 
 describe('NavbarComponent', () => {
