@@ -1,7 +1,52 @@
-.navbar-container {
+.full-screen-navbar-container {
   display: flex;
   flex-wrap: wrap;
   .selected {
     background-color: #ffffff17;
+  }
+}
+
+.burger {
+  display: none;
+}
+
+.open {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  height: fit-content;
+  background-color: #fff;
+  color: #000;
+  margin: 0;
+  padding: 0;
+  a {
+    height: 3rem;
+    border-bottom: 1px solid #cccccc;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 20px;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+      background-color: rgb(249, 247, 247);
+    }
+  }
+}
+
+.closed {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .full-screen-navbar-container {
+    display: none;
+  }
+  .burger {
+    display: block;
   }
 }

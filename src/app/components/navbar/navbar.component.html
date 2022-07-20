@@ -1,4 +1,4 @@
-<div class="navbar-container">
+<div class="full-screen-navbar-container">
   <a
     [class]="(url$ | async) === '/' ? 'selected' : ''"
     mat-button
@@ -47,4 +47,23 @@
     [url$]="url$"
     *ngIf="isAuthorized$ | async"
   ></app-navbar-user>
+</div>
+
+<div class="burger" (click)="toggleMenu()">
+  <mat-icon>{{ isMenuOpen ? "close" : "menu" }}</mat-icon>
+  <div [ngClass]="isMenuOpen ? 'open' : 'closed'">
+    <a routerLink="/">Home</a>
+
+    <a routerLink="/create-article" *ngIf="isAuthorized$ | async"
+      >New Article</a
+    >
+
+    <a routerLink="/settings" *ngIf="isAuthorized$ | async">Settings</a>
+
+    <a [routerLink]="" *ngIf="isAuthorized$ | async">User</a>
+
+    <a routerLink="/sign-in" *ngIf="!(isAuthorized$ | async)">Sign In</a>
+
+    <a routerLink="/sign-up" *ngIf="!(isAuthorized$ | async)">Sign Up</a>
+  </div>
 </div>

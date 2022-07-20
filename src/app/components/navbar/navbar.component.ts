@@ -14,6 +14,7 @@ export class NavbarComponent extends TestedComponent implements OnInit {
     this.authService.isAuthorized$;
   public url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
   private notifier: Subject<void> = new Subject<void>();
+  public isMenuOpen = false;
 
   constructor(
     private authService: AuthorizationService,
@@ -34,5 +35,9 @@ export class NavbarComponent extends TestedComponent implements OnInit {
   ngOnDestroy(): void {
     this.notifier.next();
     this.notifier.complete();
+  }
+
+  public toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }
