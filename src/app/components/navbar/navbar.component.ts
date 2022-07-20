@@ -1,6 +1,7 @@
+import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { BehaviorSubject, Subject, takeUntil, filter } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -14,7 +15,10 @@ export class NavbarComponent extends TestedComponent implements OnInit {
     this.authService.isAuthorized$;
   public url$: BehaviorSubject<string> = new BehaviorSubject<string>('/');
   private notifier: Subject<void> = new Subject<void>();
+  public authUser!: IExistingUser;
   public isMenuOpen = false;
+
+  @ViewChild('burger') burger!: ElementRef;
 
   constructor(
     private authService: AuthorizationService,
@@ -24,20 +28,38 @@ export class NavbarComponent extends TestedComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const isMobile = window.screen.width < 768;
+    if (isMobile) {
+      window.addEventListener('click', this.clickListener.bind(this));
+    }
+
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         takeUntil(this.notifier)
       )
       .subscribe(() => this.url$.next(this.router.url));
+
+    this.authService.authUser$
+      .pipe(takeUntil(this.notifier))
+      .subscribe((user) => (this.authUser = user));
   }
 
   ngOnDestroy(): void {
     this.notifier.next();
     this.notifier.complete();
+    window.removeEventListener('click', this.clickListener.bind(this));
   }
 
   public toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  private clickListener(e: Event): void {
+    const isClickOutsideBurger =
+      e.target !== this.burger.nativeElement.children[0];
+    if (isClickOutsideBurger) {
+      this.isMenuOpen = false;
+    }
   }
 }

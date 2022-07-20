@@ -1,4 +1,5 @@
 header {
+  box-sizing: border-box;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -20,4 +21,11 @@ h1 {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+@media (max-width: 768px) {
+  header {
+    justify-content: space-between;
+    padding: 20px;
+  }
 }

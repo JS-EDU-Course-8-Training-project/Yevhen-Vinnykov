@@ -43,13 +43,18 @@
   >
     Settings
   </a>
-  <app-navbar-user
-    [url$]="url$"
-    *ngIf="isAuthorized$ | async"
-  ></app-navbar-user>
+  <a
+    [class]="(url$ | async) === '/user/{{authUser.username}}' ? 'selected' : ''"
+    mat-button
+    routerLink="/user/{{ authUser?.username }}"
+    [e2e]="TestAttributes.NavUserPageLink"
+  >
+    {{ authUser?.username }}
+    <img [src]="authUser?.image" alt="" />
+  </a>
 </div>
 
-<div class="burger" (click)="toggleMenu()">
+<div class="burger" #burger (click)="toggleMenu()">
   <mat-icon>{{ isMenuOpen ? "close" : "menu" }}</mat-icon>
   <div [ngClass]="isMenuOpen ? 'open' : 'closed'">
     <a routerLink="/">Home</a>
@@ -60,7 +65,13 @@
 
     <a routerLink="/settings" *ngIf="isAuthorized$ | async">Settings</a>
 
-    <a [routerLink]="" *ngIf="isAuthorized$ | async">User</a>
+    <a
+      routerLink="/user/{{ authUser?.username }}"
+      *ngIf="isAuthorized$ | async"
+    >
+      {{ authUser?.username }}
+      <img [src]="authUser?.image" alt="" />
+    </a>
 
     <a routerLink="/sign-in" *ngIf="!(isAuthorized$ | async)">Sign In</a>
 

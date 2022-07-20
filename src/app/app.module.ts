@@ -7,8 +7,6 @@ import {
   NoopAnimationsModule,
 } from '@angular/platform-browser/animations';
 
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
 import { BannerModule } from './components/banner/banner.module';
 import { HomeModule } from './pages/home/home.module';
 import { ArticleListModule } from './components/article-list/article-list.module';
@@ -18,7 +16,6 @@ import { SignInModule } from './pages/sign-in/sign-in.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user.component';
 
 import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
 import { SharedModule } from './shared/modules/shared.module';
@@ -29,7 +26,6 @@ import { FooterComponent } from './components/footer/footer.component';
     AppComponent,
     HeaderComponent,
     NavbarComponent,
-    NavbarUserComponent,
     FooterComponent,
   ],
   imports: [
