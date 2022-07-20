@@ -13,8 +13,9 @@
 .container {
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   max-width: 70%;
+  min-height: calc(100vh - 165px - 13.5rem);
   p {
     padding: 10px;
   }

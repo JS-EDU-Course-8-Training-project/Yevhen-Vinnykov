@@ -22,6 +22,7 @@ import { NavbarUserComponent } from './components/navbar/navbar-user/navbar-user
 
 import { AuthorizationInterceptor } from './shared/interceptors/authorization.interceptor';
 import { SharedModule } from './shared/modules/shared.module';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { SharedModule } from './shared/modules/shared.module';
     HeaderComponent,
     NavbarComponent,
     NavbarUserComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

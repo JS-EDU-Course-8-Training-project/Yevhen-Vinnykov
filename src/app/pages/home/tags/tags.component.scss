@@ -2,14 +2,16 @@
   max-width: 300px;
   box-sizing: border-box;
   flex: 0 1 auto;
-  margin: 0 0 0 30px;
+  padding: 20px;
+  position: sticky;
+  top: 65px;
   .tags {
     text-align: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding: 15px;
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(246, 244, 244);
     border-radius: 8px;
     p {
       width: 100%;
@@ -17,7 +19,7 @@
       margin: 0 0 10px 0;
     }
     .tag-item {
-      background-color: rgb(202, 202, 202);
+      background-color: rgb(237, 236, 236);
       border-radius: 999999px;
       padding: 5px;
       margin: 5px;
@@ -28,7 +30,7 @@
         filter: brightness(0.9);
       }
       &.selected {
-        filter: brightness(0.7);
+        filter: brightness(0.9);
       }
     }
   }
