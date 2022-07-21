@@ -34,6 +34,7 @@ export class ArticlePageComponent
       this.slug = this.article.slug;
     });
     this.getAuthUser();
+    window.scrollTo(screenTop, 0);
   }
 
   ngOnDestroy(): void {

@@ -12,6 +12,9 @@
     background-color: rgb(238, 238, 238);
     padding: 10px;
     justify-content: space-between;
+    a {
+      text-decoration: none;
+    }
     div {
       display: flex;
       justify-content: center;
@@ -19,7 +22,7 @@
       color: rgb(141, 141, 141);
     }
     p {
-      margin: 0;
+      margin: 5px;
     }
     img {
       border-radius: 50%;

@@ -11,13 +11,15 @@
     flex: 1 1 auto;
     resize: none;
     height: 100px;
-    width: 97%;
     border-style: none;
     border-color: transparent;
     outline: none;
     border-radius: 8px;
     font-family: inherit;
-    padding-top: 10px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+
   }
   .footer {
     display: flex;

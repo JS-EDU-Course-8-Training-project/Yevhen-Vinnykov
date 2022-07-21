@@ -1,46 +1,48 @@
-<app-banner className="article-banner banner" [image]="article.image">
-  <div class="banner-container">
-    <mat-card-title>
-      <h2 class="banner-title" [e2e]="TestAttributes.ArticleTitle">
-        {{ article?.title }}
-      </h2>
-    </mat-card-title>
-    <div class="banner-actions" [e2e]="TestAttributes.BannerActions">
-      <a routerLink="/user/{{ article?.author?.username }}">
-        <img
-          src="{{ article?.author?.image }}"
-          alt=""
-          [e2e]="TestAttributes.ArticlePageAuthorImg"
-        />
-        <div>
-          <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
-            {{ article?.author?.username }}
-          </h3>
-          <p [e2e]="TestAttributes.ArticlePageDate">
-            {{ article?.createdAt | date }}
-          </p>
-        </div>
-      </a>
-      <app-article-page-buttons
-        [authUser]="authUser"
-        [article]="article"
-        [slug]="slug"
-      >
-      </app-article-page-buttons>
+<div class="container">
+  <app-banner className="article-banner banner" [image]="article.image">
+    <div class="banner-container">
+      <mat-card-title>
+        <h2 class="banner-title" [e2e]="TestAttributes.ArticleTitle">
+          {{ article?.title }}
+        </h2>
+      </mat-card-title>
+      <div class="banner-actions" [e2e]="TestAttributes.BannerActions">
+        <a routerLink="/user/{{ article?.author?.username }}">
+          <img
+            src="{{ article?.author?.image }}"
+            alt=""
+            [e2e]="TestAttributes.ArticlePageAuthorImg"
+          />
+          <div>
+            <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
+              {{ article?.author?.username }}
+            </h3>
+            <p [e2e]="TestAttributes.ArticlePageDate">
+              {{ article?.createdAt | date }}
+            </p>
+          </div>
+        </a>
+        <app-article-page-buttons
+          [authUser]="authUser"
+          [article]="article"
+          [slug]="slug"
+        >
+        </app-article-page-buttons>
+      </div>
     </div>
-  </div>
-</app-banner>
-<app-article-body [authUser]="authUser" [slug]="slug" [article]="article">
-</app-article-body>
-<app-comment-form
-  [image]="authUser?.image || ''"
-  (commentEventEmmiter)="reuestComments()"
-  [slug]="slug"
->
-</app-comment-form>
-<app-comments
-  [requestForComments$]="requestForComments$"
-  [authUser]="authUser"
-  [slug]="slug"
->
-</app-comments>
+  </app-banner>
+  <app-article-body [authUser]="authUser" [slug]="slug" [article]="article">
+  </app-article-body>
+  <app-comment-form
+    [image]="authUser?.image || ''"
+    (commentEventEmmiter)="reuestComments()"
+    [slug]="slug"
+  >
+  </app-comment-form>
+  <app-comments
+    [requestForComments$]="requestForComments$"
+    [authUser]="authUser"
+    [slug]="slug"
+  >
+  </app-comments>
+</div>

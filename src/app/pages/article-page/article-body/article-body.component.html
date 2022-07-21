@@ -16,19 +16,21 @@
 </div>
 <div class="article-actions-container">
   <div class="article-author">
-    <img
-      src="{{ article?.author?.image }}"
-      alt=""
-      [e2e]="TestAttributes.ArticlePageAuthorImg"
-    />
-    <div>
-      <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
-        {{ article?.author?.username }}
-      </h3>
-      <p [e2e]="TestAttributes.ArticlePageDate">
-        {{ article?.createdAt | date }}
-      </p>
-    </div>
+    <a [routerLink]="['/user/', article.author.username]">
+      <img
+        src="{{ article?.author?.image }}"
+        alt=""
+        [e2e]="TestAttributes.ArticlePageAuthorImg"
+      />
+      <div>
+        <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
+          {{ article?.author?.username }}
+        </h3>
+        <p [e2e]="TestAttributes.ArticlePageDate">
+          {{ article?.createdAt | date }}
+        </p>
+      </div>
+    </a>
   </div>
   <div class="article-actions">
     <app-article-page-buttons
