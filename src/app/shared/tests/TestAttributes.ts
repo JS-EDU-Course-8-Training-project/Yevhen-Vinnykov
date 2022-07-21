@@ -17,6 +17,7 @@ enum ArticleInputsAttributes {
   ArticleTitleInput = 'article-title-input',
   ArticleDescriptionInput = 'article-description-input',
   ArticleBodyInput = 'article-body-input',
+  ArticleImageInput = 'article-image-input',
   ArticleTagListInput = 'article-tag-list-input',
 }
 
@@ -94,6 +95,8 @@ enum HomePageAttributes {
 
 enum NewArticlePageAttributes {
   PublishBtn = 'publish-btn',
+  AddTagInputBtn = 'add-tag-input-btn',
+  DeleteTagInputBtn = 'delete-tag-input-btn',
 }
 
 enum SettingsAttributes {

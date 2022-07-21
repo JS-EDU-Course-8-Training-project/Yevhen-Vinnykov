@@ -57,6 +57,16 @@
         >
           This field is required
         </span>
+        <input
+          type="text"
+          class="form-control"
+          id="image"
+          name="image"
+          formControlName="image"
+          placeholder="Enter article image URL"
+          [e2e]="TestAttributes.ArticleImageInput"
+        />
+
         <div formArrayName="tagList">
           <div
             class="tag-input"
@@ -77,6 +87,7 @@
                 mat-icon-button
                 type="button"
                 (click)="onAddTag()"
+                [e2e]="TestAttributes.AddTagInputBtn"
               >
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
@@ -86,6 +97,7 @@
                 mat-icon-button
                 type="button"
                 (click)="onDeleteTag(i)"
+                [e2e]="TestAttributes.DeleteTagInputBtn"
               >
                 <mat-icon>clear</mat-icon>
               </button>

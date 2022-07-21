@@ -1,3 +1,6 @@
-<mat-card [class]="className">
+<mat-card
+  [class]="className"
+  style="background-image: url({{image}}); background-size: cover"
+>
   <ng-content></ng-content>
 </mat-card>

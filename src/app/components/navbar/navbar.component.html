@@ -44,9 +44,10 @@
     Settings
   </a>
   <a
-    [class]="(url$ | async) === '/user/{{authUser.username}}' ? 'selected' : ''"
+    [class]="(url$ | async) === '/user/' + authUser.username ? 'selected' : ''"
+    *ngIf="isAuthorized$ | async"
     mat-button
-    routerLink="/user/{{ authUser?.username }}"
+    routerLink="/user/{{authUser?.username}}"
     [e2e]="TestAttributes.NavUserPageLink"
   >
     {{ authUser?.username }}

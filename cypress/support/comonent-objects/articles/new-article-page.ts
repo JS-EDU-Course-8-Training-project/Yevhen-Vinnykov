@@ -13,6 +13,10 @@ class NewArticlePage {
     return cy.getByTestAttr(TestAttributes.ArticleBodyInput);
   }
 
+  get image() {
+    return cy.getByTestAttr(TestAttributes.ArticleImageInput);
+  }
+
   get tagList() {
     return cy.getByTestAttr(TestAttributes.ArticleTagListInput);
   }
@@ -23,6 +27,16 @@ class NewArticlePage {
 
   get publishButton() {
     return cy.getByTestAttr(TestAttributes.PublishBtn);
+  }
+
+  get addTagInputBtn() {
+    return cy.getByTestAttr(TestAttributes.AddTagInputBtn);
+  }
+
+  deleteTagInputBtn(index?: number) {
+    return typeof index === 'number'
+      ? cy.getByTestAttr(TestAttributes.DeleteTagInputBtn).eq(index)
+      : cy.getByTestAttr(TestAttributes.DeleteTagInputBtn);
   }
 }
 

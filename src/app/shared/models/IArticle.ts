@@ -11,6 +11,7 @@ export interface IArticle {
   title: string;
   description: string;
   body: string;
+  image: string;
   tagList: string[];
   createdAt: string;
   updatedAt: string;

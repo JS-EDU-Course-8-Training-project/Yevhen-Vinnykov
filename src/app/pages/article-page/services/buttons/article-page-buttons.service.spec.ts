@@ -9,6 +9,7 @@ const article: IArticle = {
   title: 'test-tile',
   description: 'test-description',
   body: 'test-body',
+  image: 'test-image',
   tagList: ['test-tag'],
   createdAt: Date.now().toLocaleString(),
   updatedAt: Date.now().toLocaleString(),

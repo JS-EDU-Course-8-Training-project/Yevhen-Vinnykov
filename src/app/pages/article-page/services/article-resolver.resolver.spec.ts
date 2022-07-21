@@ -12,6 +12,7 @@ const expectedData: IArticle = {
   title: 'test-title',
   description: 'test-description',
   body: 'test-body',
+  image: 'test-image',
   tagList: ['test-tag'],
   createdAt: Date.now().toString(),
   updatedAt: Date.now().toString(),

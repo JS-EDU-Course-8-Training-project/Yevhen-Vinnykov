@@ -33,16 +33,16 @@ export class NavbarComponent extends TestedComponent implements OnInit {
       window.addEventListener('click', this.clickListener.bind(this));
     }
 
+    this.authService.authUser$
+      .pipe(takeUntil(this.notifier))
+      .subscribe((user) => (this.authUser = user));
+
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         takeUntil(this.notifier)
       )
       .subscribe(() => this.url$.next(this.router.url));
-
-    this.authService.authUser$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((user) => (this.authUser = user));
   }
 
   ngOnDestroy(): void {

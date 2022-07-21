@@ -22,6 +22,7 @@ const article: IArticle = {
   title: '',
   description: '',
   body: '',
+  image: '',
   tagList: [],
   createdAt: '',
   updatedAt: '',

@@ -75,6 +75,7 @@ export class NewArticlePageComponent
         [Validators.required],
       ],
       body: [this.articleToEdit?.body || '', [Validators.required]],
+      image: [this.articleToEdit?.image || ''],
       tagList: this.initializeTagsFormArray(),
     });
   }

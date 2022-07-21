@@ -111,6 +111,7 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
       title: 'new-test-title',
       description: 'test-description',
       body: 'test-body',
+      image: 'test-image',
       tagList: [{ tag: 'test-tag' }],
     };
     const submitButton = fixture.debugElement.query(
@@ -142,6 +143,7 @@ describe('NEW ARTICLE PAGE > CREATE MODE', () => {
       title: 'new-test-title',
       description: 'test-description',
       body: 'test-body',
+      image: 'test-image',
       tagList: [{ tag: 'test-tag' }],
     };
 

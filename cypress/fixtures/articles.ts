@@ -10,6 +10,8 @@ export const dislikedArticle: IArticle = {
   description:
     'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
   body: 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_N_yhFY0deqp59EKyf_b54R2L4frKyKtNAQ&usqp=CAU',
   tagList: ['lorem'],
   createdAt: '1654009605136',
   updatedAt: '1656518693581',
@@ -31,6 +33,8 @@ export const likedArticle: IArticle = {
   description:
     'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
   body: 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_N_yhFY0deqp59EKyf_b54R2L4frKyKtNAQ&usqp=CAU',
   tagList: ['lorem'],
   createdAt: '1654009605136',
   updatedAt: '1656518693581',
@@ -52,6 +56,8 @@ export const ownArticle: IArticle = {
   description:
     'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
   body: 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_N_yhFY0deqp59EKyf_b54R2L4frKyKtNAQ&usqp=CAU',
   tagList: ['lorem'],
   createdAt: '1654009605136',
   updatedAt: '1656518693581',
@@ -73,6 +79,8 @@ export const notOwnArticle: IArticle = {
   description:
     'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
   body: 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_N_yhFY0deqp59EKyf_b54R2L4frKyKtNAQ&usqp=CAU',
   tagList: ['lorem'],
   createdAt: '1654009605136',
   updatedAt: '1656518693581',
@@ -94,6 +102,8 @@ export const articleOfFollowedUser: IArticle = {
   description:
     'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
   body: 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_N_yhFY0deqp59EKyf_b54R2L4frKyKtNAQ&usqp=CAU',
   tagList: ['lorem'],
   createdAt: '1654009605136',
   updatedAt: '1656518693581',
@@ -115,6 +125,8 @@ export const articleOfNotFollowedUser: IArticle = {
   description:
     'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
   body: 'Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u.Lorem ipsum dolor sit amet consectetur adip ex ea commodo consequ velit es u',
+  image:
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_N_yhFY0deqp59EKyf_b54R2L4frKyKtNAQ&usqp=CAU',
   tagList: ['lorem'],
   createdAt: '1654009605136',
   updatedAt: '1656518693581',
