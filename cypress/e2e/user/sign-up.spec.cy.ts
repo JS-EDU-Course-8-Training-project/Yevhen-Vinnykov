@@ -89,7 +89,7 @@ describe('SING UP PAGE', () => {
       it('should show an error if the username is taken', () => {
         interceptSignUpWithError('User with this username already exists');
 
-        signUp('John', 'johndoe@email.com', '111111');
+        signUp('John', 'johndoe@email.com', 'Password1');
 
         signUpPage.formError.should(
           'contain.text',
@@ -100,7 +100,7 @@ describe('SING UP PAGE', () => {
       it('should show an error if the email is taken', () => {
         interceptSignUpWithError('User with this email already exists');
 
-        signUp('Jack', 'john@example.com', '111111');
+        signUp('Jack', 'john@example.com', 'Password1');
 
         signUpPage.formError.should(
           'contain.text',
@@ -108,37 +108,26 @@ describe('SING UP PAGE', () => {
         );
       });
 
-      it('should show an error if the password does not contain at least one digit', () => {
-        interceptSignUpWithError('Password must contain at least one digit');
-
-        signUp('Joey', 'joey@email.com', 'password');
+      it('should show an error if the password does not contain at least one digit and/or one capital letter', () => {
+        fillInputs('Joey', 'joey@email.com', 'password');
 
         signUpPage.formError.should(
           'contain.text',
-          ' Password must contain at least one digit '
-        );
-      });
-
-      it('should show an error if the password does not contain at least one capital letter', () => {
-        interceptSignUpWithError(
-          'Password must contain at least one capital letter'
-        );
-
-        signUp('Joey', 'joey@email.com', 'password1');
-
-        signUpPage.formError.should(
-          'contain.text',
-          ' Password must contain at least one capital letter '
+          ' Password must be at least 6 characters long, contain at least one capital letter and a digit '
         );
       });
     });
   });
 });
 
-const signUp = (username: string, email: string, password: string) => {
+const fillInputs = (username: string, email: string, password: string) => {
   signUpPage.username.clear().type(username);
   signUpPage.email.clear().type(email);
   signUpPage.password.clear().type(password);
+};
+
+const signUp = (username: string, email: string, password: string) => {
+  fillInputs(username, email, password);
 
   signUpPage.signUpButton.click();
 };
