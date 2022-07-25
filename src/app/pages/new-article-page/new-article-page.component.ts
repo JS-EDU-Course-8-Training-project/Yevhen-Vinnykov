@@ -48,6 +48,7 @@ export class NewArticlePageComponent
     this.initializeForm();
 
     if (this.isEditMode) {
+      this.articleForm.disable();
       this.articlesService
         .fetchArticle(this.slug)
         .pipe(
@@ -56,6 +57,8 @@ export class NewArticlePageComponent
         )
         .subscribe((article: IArticle) => {
           this.articleToEdit = article;
+
+          this.articleForm.enable();
           this.initializeForm();
           this.articleForm.markAllAsTouched();
         });
@@ -82,7 +85,7 @@ export class NewArticlePageComponent
 
   private initializeTagsFormArray(): FormArray {
     const tagList = new FormArray([]);
-    
+
     if (!this.articleToEdit?.tagList?.length) {
       const tagForm = this.fb.group({ tag: [''] });
       tagList.push(tagForm);

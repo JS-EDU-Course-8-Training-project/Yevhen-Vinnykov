@@ -29,6 +29,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    &:disabled {
+      opacity: 0.5;
+    }
     span {
       padding: 3px;
       color: black;
