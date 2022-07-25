@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // apiURL: 'https://api.realworld.io/api'
-  apiURL: 'http://localhost:3000/api',
+  apiURL: 'https://real-world-api-edu.herokuapp.com/api',
 };
 
 /*

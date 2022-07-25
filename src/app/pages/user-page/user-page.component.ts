@@ -56,8 +56,8 @@ export class UserPageComponent
   }
 
   private setUserData(): void {
-    this.urlUsername = this.router.url.split('/')[2];
-
+    this.urlUsername = this.router.url.split('/')[2].replace('%20', ' ');    
+    
     this.authService.authUser$
       .pipe(takeUntil(this.notifier))
       .subscribe((authUser) => {

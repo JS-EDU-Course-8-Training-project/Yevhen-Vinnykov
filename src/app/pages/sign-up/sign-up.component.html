@@ -62,10 +62,15 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('password')"
+          *ngIf="
+            !checkIfValid('password') ||
+            (signupForm.get('password')?.invalid &&
+              signupForm.get('password')?.dirty)
+          "
           [e2e]="TestAttributes.FormError"
         >
-          Password must be at least 6 characters long
+          Password must be at least 6 characters long, contain at least one
+          capital letter and a digit
         </span>
         <button
           [disabled]="!signupForm.valid || isPending"

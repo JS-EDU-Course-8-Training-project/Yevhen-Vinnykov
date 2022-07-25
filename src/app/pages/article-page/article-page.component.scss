@@ -39,12 +39,14 @@
 }
 
 @media (max-width: 768px) {
-  .banner-title {
-    text-align: center;
-  }
-  .banner-container {
-    margin: 0;
-    width: 100%;
-    box-sizing: border-box;
+  .container {
+    .banner-title {
+      text-align: center;
+    }
+    .banner-container {
+      margin: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 }
