@@ -29,7 +29,7 @@ export class ArticleListComponent
   public isLiked!: boolean;
   public isPending = false;
   public likesCount!: number;
-  private isAuthorized!: boolean;
+  private isAuth!: boolean;
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
@@ -48,7 +48,7 @@ export class ArticleListComponent
 
     this.authorizationService.isAuthorized$
       .pipe(takeUntil(this.notifier))
-      .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
+      .subscribe((isAuth) => (this.isAuth = isAuth));
   }
 
   ngOnDestroy(): void {
@@ -57,8 +57,7 @@ export class ArticleListComponent
   }
 
   public handleLikeDislike(slug: string): void {
-    if (!this.isAuthorized)
-      return this.redirectionService.redirectUnauthorized();
+    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
     this.isPending = true;
     if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
     if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
@@ -69,8 +68,10 @@ export class ArticleListComponent
     method: 'addToFavorites' | 'removeFromFavorites'
   ): void {
     this.articlesService[method](slug)
-      .pipe(takeUntil(this.notifier))
-      .pipe(catchError((err: string) => this.onCatchError(err)))
+      .pipe(
+        takeUntil(this.notifier),
+        catchError((err: string) => this.onCatchError(err))
+      )
       .subscribe(({ favorited, favoritesCount }: IArticle) => {
         this.isLiked = favorited;
         this.isPending = false;
