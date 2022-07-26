@@ -1,17 +1,9 @@
-import {
-  BehaviorSubject,
-  catchError,
-  Observable,
-  of,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import {
   Component,
   OnChanges,
   Input,
-  OnDestroy,
   ViewChildren,
   ElementRef,
   QueryList,
@@ -31,7 +23,7 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 })
 export class GlobalFeedComponent
   extends TestedComponent
-  implements OnChanges, OnDestroy, AfterViewInit
+  implements OnChanges, AfterViewInit
 {
   @ViewChildren('lastItem', { read: ElementRef })
   lastItem!: QueryList<ElementRef>;
@@ -82,36 +74,34 @@ export class GlobalFeedComponent
     });
   }
 
-  private getArticles(): void {
+  private async getArticles(): Promise<void> {
     this.error = '';
     this.isLoading = true;
     this.cdRef.detectChanges();
-    this.articlesService
-      .fetchArticles(this.offset, this.limit)
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((error: string) => this.onCatchError(error))
-      )
-      .subscribe((response: IArticleResponse) =>
-        this.setDataOnResponse(response)
+
+    try {
+      const articlesResponse = await this.articlesService.fetchArticles(
+        this.offset,
+        this.limit
       );
+      this.setDataOnResponse(articlesResponse);
+    } catch (error) {
+      this.error = error as string;
+    } finally {
+      this.isLoading = false;
+      this.cdRef.detectChanges();      
+    }
   }
 
-  private setDataOnResponse(response: IArticleResponse): void {
-    this.globalArticles = [...this.globalArticles, ...response.articles];
-    this.isLoading = false;
-    this.pagesTotalCount = Math.ceil(response.articlesCount / this.limit);
+  private setDataOnResponse(res: IArticleResponse): void {
+    this.globalArticles = [...this.globalArticles, ...res.articles];
+    this.pagesTotalCount = Math.ceil(res.articlesCount / this.limit);
     this.isFinished = this.currentPage === this.pagesTotalCount;
-    this.canLoad$.next(!this.isFinished && !this.isLoading);
-    this.nextPage();
-    this.cdRef.detectChanges();
-  }
 
-  private onCatchError(error: string): Observable<IArticleResponse> {
-    this.error = error;
-    this.isLoading = false;
+    this.canLoad$.next(!this.isFinished);
+    this.nextPage();
+
     this.cdRef.detectChanges();
-    return of({ articles: [], articlesCount: 0 });
   }
 
   private nextPage(): void {
