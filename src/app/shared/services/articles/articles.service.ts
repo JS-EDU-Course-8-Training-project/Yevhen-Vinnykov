@@ -2,7 +2,7 @@ import { IUpdateArticle } from '../../models/IUpdateArticle';
 import { IArticle, IArticleResponse } from '../../models/IArticle';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, pluck } from 'rxjs';
+import { firstValueFrom, Observable, pluck } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { INewArticle } from '../../models/INewArticle';
 
@@ -21,11 +21,13 @@ export class ArticlesService {
 
   constructor(private http: HttpClient) {}
 
-  public fetchArticles(offset = 0, limit = 5): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(
+  public async fetchArticles(offset = 0, limit = 5): Promise<IArticleResponse> {
+    const source$ = this.http.get<IArticleResponse>(
       `${this.baseURL}/?offset=${offset}&limit=${limit}`,
       httpOptions
     );
+
+    return await firstValueFrom(source$);
   }
 
   public fetchFollowedArticles(
