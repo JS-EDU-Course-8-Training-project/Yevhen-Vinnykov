@@ -1,31 +1,34 @@
-<p *ngIf="!globalArticles.length && !isLoading && !error.length">
-  No articles are here... yet.
+<p *ngIf="!store.articles.length && store.loadedAllArticles && !store.error">
+  No articles here... yet.
 </p>
-<p *ngIf="error.length">{{ error }}</p>
+
+<p *ngIf="store.error$ | async as error">{{ error }}</p>
+
 <ng-container>
-  <div *ngFor="let article of globalArticles; let i = index">
-    <app-article-list
-      [article]="article"
-      *ngIf="i + 1 !== globalArticles.length"
-    >
+  <div
+    *ngFor="let article of store.articles$ | async as articles; let i = index"
+  >
+    <app-article-list [article]="article" *ngIf="i + 1 !== articles.length">
     </app-article-list>
     <app-article-list
       [article]="article"
-      *ngIf="i + 1 === globalArticles.length"
+      *ngIf="i + 1 === articles.length"
       #lastItem
     >
     </app-article-list>
   </div>
+
   <mat-spinner
     [ngStyle]="{ margin: '10px auto' }"
-    *ngIf="isLoading"
+    *ngIf="store.isLoading$ | async"
     diameter="50"
     [e2e]="TestAttributes.LoadingSpinner"
   >
   </mat-spinner>
+
   <div
     class="finished"
-    *ngIf="isFinished"
+    *ngIf="store.loadedAllArticles$ | async"
     [e2e]="TestAttributes.AllArticlesLoaded"
   >
     <div>No more articles for now...</div>
