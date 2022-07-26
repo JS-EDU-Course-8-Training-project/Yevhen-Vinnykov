@@ -1,4 +1,4 @@
-import { take } from 'rxjs';
+import { first } from 'rxjs';
 import { Component } from '@angular/core';
 import { AuthorizationService } from './shared/services/authorization/authorization.service';
 
@@ -8,9 +8,7 @@ import { AuthorizationService } from './shared/services/authorization/authorizat
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(
-    private authService: AuthorizationService
-  ) {}
+  constructor(private authService: AuthorizationService) {}
 
   ngOnInit() {
     this.initialize();
@@ -19,15 +17,10 @@ export class AppComponent {
   private initialize(): void {
     this.authService.checkIfAuthorized();
 
-    this.authService.isAuthorized$
-      .pipe(take(1))
-      .subscribe((isAuthorized) => {
-        if (
-          isAuthorized &&
-          !this.authService.authUser$.getValue().username
-        ) {
-          this.authService.fetchAuthUser().pipe(take(1)).subscribe();
-        }
-      });
+    const isAuth = this.authService.isAuthorized$.getValue();
+    const { username } = this.authService.authUser$.getValue();
+
+    if (isAuth && !username)
+      this.authService.fetchAuthUser().pipe(first()).subscribe();
   }
 }
