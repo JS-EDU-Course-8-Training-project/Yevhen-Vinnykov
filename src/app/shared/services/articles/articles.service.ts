@@ -50,11 +50,8 @@ export class ArticlesService {
       .pipe(pluck('article'));
   }
 
-  public deleteArticle(slug: string): Observable<Record<string, never>> {
-    return this.http.delete<Record<string, never>>(
-      `${this.baseURL}/${slug}`,
-      httpOptions
-    );
+  public deleteArticle(slug: string): Observable<{}> {
+    return this.http.delete<{}>(`${this.baseURL}/${slug}`, httpOptions);
   }
 
   public updateArticle(
