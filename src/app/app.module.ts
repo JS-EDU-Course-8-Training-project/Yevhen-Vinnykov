@@ -9,7 +9,7 @@ import {
 
 import { BannerModule } from './components/banner/banner.module';
 import { HomeModule } from './pages/home/home.module';
-import { ArticleListModule } from './components/article-list/article-list.module';
+//import { ArticleCardModule } from './components/article-card/article-card.module';
 import { AppRoutingModule } from './app-routing.module';
 import { SignInModule } from './pages/sign-in/sign-in.module';
 
@@ -38,7 +38,6 @@ import { FooterComponent } from './components/footer/footer.component';
     SignUpModule,
     SignInModule,
     HomeModule,
-    ArticleListModule,
     SharedModule,
   ],
   providers: [

@@ -1,89 +1,61 @@
-import { MatDialog } from '@angular/material/dialog';
-import { catchError, Observable, of, Subject, takeUntil } from 'rxjs';
-import { IArticle } from '../../shared/models/IArticle';
+import { Subject, takeUntil } from 'rxjs';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   Input,
-  OnDestroy,
+  ViewChildren,
+  ElementRef,
+  QueryList,
+  AfterViewInit,
+  ChangeDetectionStrategy,
   OnInit,
 } from '@angular/core';
-import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
-import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
-import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/new-infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { IArticle } from 'src/app/shared/models/IArticle';
 
 @Component({
   selector: 'app-article-list',
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.scss'],
+  providers: [InfiniteScrollService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleListComponent
   extends TestedComponent
-  implements OnInit, OnDestroy
+  implements OnInit, AfterViewInit
 {
-  @Input() article!: IArticle;
-  public isLiked!: boolean;
-  public isPending = false;
-  public likesCount!: number;
-  private isAuth!: boolean;
+  @ViewChildren('lastItem', { read: ElementRef })
+  lastItem!: QueryList<ElementRef>;
+  @Input() tabIndex!: number;
+  @Input() isAuthorized!: boolean;
+  @Input() selectedTag!: string | null;
+  @Input() articles!: IArticle[];
+  @Input() error!: string;
+  @Input() loadedAllArticles!: boolean;
+  @Input() isLoading!: boolean;
+  @Input() cb!: () => void;
+
   private notifier: Subject<void> = new Subject<void>();
 
-  constructor(
-    private articlesService: ArticlesService,
-    private redirectionService: RedirectionService,
-    private authorizationService: AuthorizationService,
-    private cdRef: ChangeDetectorRef,
-    private dialog: MatDialog
-  ) {
+  constructor(private scrollService: InfiniteScrollService) {
     super();
   }
 
   ngOnInit(): void {
-    this.likesCount = this.article.favoritesCount;
-    this.isLiked = this.article.favorited;
+    this.scrollService.initObserver(this.cb);
+  }
 
-    this.authorizationService.isAuthorized$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((isAuth) => (this.isAuth = isAuth));
+  ngAfterViewInit(): void {
+    this.lastItem.changes.pipe(takeUntil(this.notifier)).subscribe((change) => {
+      if (change.last && !this.loadedAllArticles) {
+        this.scrollService.observer.observe(change.last.nativeElement);
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.notifier.next();
     this.notifier.complete();
-  }
-
-  public handleLikeDislike(slug: string): void {
-    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
-    this.isPending = true;
-    if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
-    if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
-  }
-
-  private likeHandler(
-    slug: string,
-    method: 'addToFavorites' | 'removeFromFavorites'
-  ): void {
-    this.articlesService[method](slug)
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((err: string) => this.onCatchError(err))
-      )
-      .subscribe(({ favorited, favoritesCount }: IArticle) => {
-        this.isLiked = favorited;
-        this.isPending = false;
-        this.likesCount = favoritesCount;
-        this.cdRef.detectChanges();
-      });
-  }
-
-  private onCatchError(error: string): Observable<IArticle> {
-    this.isPending = false;
-    this.dialog.open(ErrorDialogComponent, { data: error });
-
-    return of(this.article);
+    this.scrollService.observer?.disconnect();
   }
 }

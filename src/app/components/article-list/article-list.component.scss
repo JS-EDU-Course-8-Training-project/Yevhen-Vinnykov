@@ -1,86 +1,12 @@
-.card-container {
-  margin: 10px;
-  header {
-    display: flex;
-    justify-content: space-between;
-  }
-  h3 {
-    margin: 0;
-  }
-
-  img {
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
-    margin: 0 10px 0 0;
-    align-self: center;
-  }
-  .info {
-    display: flex;
-    a {
-      text-decoration: none;
-      color: inherit;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-  button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &:disabled {
-      opacity: 0.5;
-    }
-    span {
-      padding: 3px;
-      color: black;
-      font-size: 16px;
-    }
-  }
-  .card-content {
-    p {
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    h2 {
-      margin: 0;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-  }
-  .text-secondary {
-    color: rgb(197, 197, 197);
-    font-weight: 300;
-    font-size: 0.8rem;
-    text-decoration: none;
-    margin: 0;
-    color: rgb(144, 144, 144);
-    align-self: center;
-  }
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    .tags {
-      display: flex;
-      flex: 1 1 auto;
-      justify-content: end;
-      flex-wrap: nowrap;
-      overflow: hidden;
-      .tag {
-        border: 1px solid rgb(240, 239, 239);
-        color: rgb(202, 202, 202);
-        border-radius: 999999px;
-        margin: 5px;
-        padding: 3px;
-        font-size: 0.8rem;
-        min-width: 50px;
-        text-align: center;
-      }
-    }
-  }
+p {
+  padding: 10px;
+}
+.finished {
+  height: 80px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  font-weight: 300;
 }

@@ -1,235 +1,136 @@
-import { AuthorizationService } from './../../shared/services/authorization/authorization.service';
-import { RedirectionService } from './../../shared/services/redirection/redirection.service';
-import { ArticlesService } from './../../shared/services/articles/articles.service';
-import { of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ArticlesService } from '../../shared/services/articles/articles.service';
+import { IArticleResponse } from '../../shared/models/IArticle';
+import { catchError, of, throwError } from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ArticleListComponent } from './article-list.component';
-import { IArticle } from './../../shared/models/IArticle';
-import { MatIcon } from '@angular/material/icon';
-import { MatCard } from '@angular/material/card';
-import { By } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
-import {
-  MatDialog,
-  MatDialogModule,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
 
-const article: IArticle = {
-  id: '1',
-  slug: 'test-slug',
-  title: '',
-  description: '',
-  body: '',
-  image: '',
-  tagList: [],
-  createdAt: '',
-  updatedAt: '',
-  favorited: false,
-  favoritesCount: 2,
-  author: {
-    username: 'test',
-    bio: 'test-bio',
-    image: '',
-    following: false,
-  },
+import { ArticleListComponent } from './article-list.component';
+import { InfiniteScrollService } from '../../shared/services/infinite-scroll/infinite-scroll.service';
+import { ElementRef, NO_ERRORS_SCHEMA, QueryList } from '@angular/core';
+
+const expectedData: IArticleResponse = {
+  articles: [
+    {
+      id: '1',
+      slug: 'test-slug',
+      title: 'test-title',
+      description: 'test-description',
+      body: 'test-body',
+      image: 'test-image',
+      tagList: ['test-tag'],
+      createdAt: Date.now().toString(),
+      updatedAt: Date.now().toString(),
+      favorited: false,
+      favoritesCount: 2,
+      author: {
+        username: 'test-author',
+        bio: 'test-bio',
+        image: 'test-image',
+        following: false,
+      },
+    },
+  ],
+  articlesCount: 10,
 };
 
-class AricleServiceMock {
-  public addToFavorites = () =>
-    of({
-      ...article,
-      favorited: true,
-      favoritesCount: article.favoritesCount + 1,
-    });
-
-  public removeFromFavorites = () =>
-    of({
-      ...article,
-      favorited: false,
-      favoritesCount: article.favoritesCount - 1,
-    });
+class ArticlesServiceMock {
+  public fetchArticles = () => of(expectedData);
 }
 
-class RedirectionServiceMock {
-  public redirectUnauthorized = () =>
-    new Promise<boolean>((resolve) => resolve(true));
+class ArticlesServiceMockWithError {
+  public fetchArticles = () => throwError(() => HttpErrorResponse);
 }
 
-class AuthorizationServiceAuthorizedMock {
-  public isAuthorized$ = of(true);
+class InfiniteScrollServiceMock {
+  public observeIntersection = () => of([]);
+  public observer = { observe: () => ({}) };
 }
 
-class AuthorizationServiceNotAuthorizedMock {
-  public isAuthorized$ = of(false);
-}
+describe('GLOBAL FEED COMPONENT', () => {
+  describe('WHEN NO ERROR IS THROWN', () => {
+    let component: ArticleListComponent;
+    let fixture: ComponentFixture<ArticleListComponent>;
 
-describe('ARTICLE COMPONENT', () => {
-  let component: ArticleListComponent;
-  let fixture: ComponentFixture<ArticleListComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        ArticleListComponent,
-        MatIcon,
-        MatCard,
-        ErrorDialogComponent,
-      ],
-      imports: [MatDialogModule],
-      providers: [
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: { data: { error: 'Something went wrong :(' } },
-        },
-        { provide: ArticlesService, useClass: AricleServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock },
-        {
-          provide: AuthorizationService,
-          useClass: AuthorizationServiceAuthorizedMock,
-        },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ArticleListComponent);
-    component = fixture.componentInstance;
-    const inputArticle: IArticle = article;
-    component.article = inputArticle;
-    fixture.detectChanges();
-  });
-
-  it('should create', async () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should initialize correctly', async () => {
-    expect(component.likesCount).toBe(2);
-  });
-});
-
-describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
-  let component: ArticleListComponent;
-  let fixture: ComponentFixture<ArticleListComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        ArticleListComponent,
-        MatIcon,
-        MatCard,
-        ErrorDialogComponent,
-      ],
-      imports: [MatDialogModule],
-      providers: [
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: { data: { error: 'Something went wrong :(' } },
-        },
-        { provide: ArticlesService, useClass: AricleServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock },
-        {
-          provide: AuthorizationService,
-          useClass: AuthorizationServiceAuthorizedMock,
-        },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ArticleListComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should be invoked on button click and dislike', waitForAsync(() => {
-    const inputArticle: IArticle = { ...article, favorited: true };
-    component.article = inputArticle;
-    fixture.detectChanges();
-
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
-
-    const buttonElement = fixture.debugElement.query(By.css('button'));
-    buttonElement.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      expect(component.likesCount).toBe(1);
-      expect(component.isLiked).toBe(false);
-      expect(spy).toHaveBeenCalledWith('test-slug', 'removeFromFavorites');
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        declarations: [ArticleListComponent],
+        providers: [
+          { provide: ArticlesService, useClass: ArticlesServiceMock },
+          {
+            provide: InfiniteScrollService,
+            useClass: InfiniteScrollServiceMock,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     });
-  }));
 
-  it('should be invoked on button click and like', waitForAsync(() => {
-    const inputArticle: IArticle = { ...article, favorited: false };
-    component.article = inputArticle;
-    fixture.detectChanges();
-
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
-
-    const buttonElement = fixture.debugElement.query(By.css('button'));
-    buttonElement.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      expect(component.likesCount).toBe(3);
-      expect(component.isLiked).toBe(true);
-      expect(spy).toHaveBeenCalledWith('test-slug', 'addToFavorites');
+    beforeEach(() => {
+      fixture = TestBed.createComponent(ArticleListComponent);
+      component = fixture.componentInstance;
+      component.tabIndex = 1;
+      component.isAuthorized = true;
+      fixture.detectChanges();
+      component.ngOnChanges();
     });
-  }));
-});
 
-describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => {
-  let component: ArticleListComponent;
-  let fixture: ComponentFixture<ArticleListComponent>;
+    it('setDataOnResponse should be called because tabIndex is 1', waitForAsync(() => {
+      const service = TestBed.inject(ArticlesService);
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        ArticleListComponent,
-        MatIcon,
-        MatCard,
-        ErrorDialogComponent,
-      ],
-      imports: [MatDialogModule],
-      providers: [
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: { data: { error: 'Something went wrong :(' } },
-        },
-        { provide: ArticlesService, useClass: AricleServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock },
-        {
-          provide: AuthorizationService,
-          useClass: AuthorizationServiceNotAuthorizedMock,
-        },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-    }).compileComponents();
+      service.fetchArticles().subscribe((data: IArticleResponse) => {
+        expect(data.articles).toEqual(expectedData.articles);
+      });
+    }));
+
+    it('setDataOnResponse should be called because is Authorized is false', waitForAsync(() => {
+      component.isAuthorized = false;
+      component.tabIndex = 0;
+
+      const service = TestBed.inject(ArticlesService);
+
+      service.fetchArticles().subscribe((data: IArticleResponse) => {
+        expect(data.articles).toEqual(expectedData.articles);
+      });
+    }));
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ArticleListComponent);
-    component = fixture.componentInstance;
-  });
+  describe('WHEN ERROR IS THROWN', () => {
+    let component: ArticleListComponent;
+    let fixture: ComponentFixture<ArticleListComponent>;
 
-  it('should not be invoked on button because unauthorized', waitForAsync(() => {
-    const inputArticle: IArticle = { ...article };
-    component.article = inputArticle;
-
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
-
-    const buttonElement = fixture.debugElement.query(By.css('button'));
-    buttonElement.triggerEventHandler('click', null);
-    fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      expect(component.likesCount).toBe(2);
-      expect(component.isLiked).toBe(false);
-      expect(spy).not.toHaveBeenCalled();
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        declarations: [ArticleListComponent],
+        providers: [
+          { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
+          {
+            provide: InfiniteScrollService,
+            useClass: InfiniteScrollServiceMock,
+          },
+        ],
+        schemas: [NO_ERRORS_SCHEMA],
+      }).compileComponents();
     });
-  }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(ArticleListComponent);
+      component = fixture.componentInstance;
+      component.tabIndex = 1;
+      component.isAuthorized = false;
+      component.lastItem = new QueryList<ElementRef<any>>();
+      fixture.detectChanges();
+      component.ngOnChanges();
+    });
+
+    it('onCatchError should be called', waitForAsync(() => {
+      const service = TestBed.inject(ArticlesService);
+
+      service.fetchArticles().pipe(
+        catchError(() => {
+          expect(component.error).toBe('Something went wrong :(');
+          return of('');
+        })
+      );
+    }));
+  });
 });

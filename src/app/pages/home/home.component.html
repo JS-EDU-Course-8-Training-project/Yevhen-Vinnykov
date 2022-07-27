@@ -14,24 +14,46 @@
       [selectedIndex]="tabIndex"
     >
       <mat-tab *ngIf="isAuthorized" label="Your Feed">
-        <app-your-feed [tabIndex]="tabIndex" [e2e]="TestAttributes.YourFeed">
-        </app-your-feed>
-      </mat-tab>
-      <mat-tab label="Global Feed">
-        <app-global-feed
+        <app-article-list
           [isAuthorized]="isAuthorized"
           [tabIndex]="tabIndex"
+          [selectedTag]="selectedTag"
           [e2e]="TestAttributes.GlobalFeed"
+          [articles]="store.articles"
+          [error]="store.error"
+          [loadedAllArticles]="store.loadedAllArticles"
+          [isLoading]="store.isLoading$.getValue()"
+          [cb]="store.getArticles.bind(store)"
         >
-        </app-global-feed>
+        </app-article-list>
       </mat-tab>
-      <mat-tab *ngIf="selectedTag" label="#{{ selectedTag }}">
-        <app-tagged-articles
+      <mat-tab label="Global Feed">
+        <app-article-list
+          [isAuthorized]="isAuthorized"
           [tabIndex]="tabIndex"
           [selectedTag]="selectedTag"
-          [e2e]="TestAttributes.TaggedArticles"
+          [e2e]="TestAttributes.GlobalFeed"
+          [articles]="store.articles"
+          [error]="store.error"
+          [loadedAllArticles]="store.loadedAllArticles"
+          [isLoading]="store.isLoading$.getValue()"
+          [cb]="store.getArticles.bind(store)"
         >
-        </app-tagged-articles>
+        </app-article-list>
+      </mat-tab>
+      <mat-tab *ngIf="selectedTag" label="#{{ selectedTag }}">
+        <app-article-list
+          [isAuthorized]="isAuthorized"
+          [tabIndex]="tabIndex"
+          [selectedTag]="selectedTag"
+          [e2e]="TestAttributes.GlobalFeed"
+          [articles]="store.articles"
+          [error]="store.error"
+          [loadedAllArticles]="store.loadedAllArticles"
+          [isLoading]="store.isLoading$.getValue()"
+          [cb]="store.getArticles.bind(store)"
+        >
+        </app-article-list>
       </mat-tab>
     </mat-tab-group>
   </section>

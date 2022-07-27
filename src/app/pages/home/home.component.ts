@@ -1,35 +1,41 @@
-import { Subscription } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { ArticlesStore } from '../../shared/services/articles/articles.store';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  providers: [ArticlesStore],
 })
-export class HomeComponent
-  extends TestedComponent
-  implements OnInit, OnDestroy
-{
-  public isLoading = false;
-  public tabIndex = 0;
-  public isAuthorized = false;
+export class HomeComponent extends TestedComponent implements OnInit {
+  public isAuthorized = this.authService.isAuthorized$.getValue();
   public selectedTag!: string | null;
-  private authSubscription!: Subscription;
+  public tabIndex = 0;
 
-  constructor(private authService: AuthorizationService) {
+  constructor(
+    private authService: AuthorizationService,
+    public store: ArticlesStore
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.authSubscription = this.authService.isAuthorized$.subscribe(
-      (isAuthorized) => (this.isAuthorized = isAuthorized)
-    );
+    this.initStore();
   }
 
-  ngOnDestroy(): void {
-    this.authSubscription.unsubscribe();
+  private initStore() {
+    if (this.tabIndex === 1 || !this.isAuthorized) {
+      this.store.useForArticles({ global: true });
+    }
+    if (this.tabIndex === 0 && this.isAuthorized) {
+      this.store.useForArticles({ followed: true });
+    }
+    if (this.tabIndex === 2 && this.selectedTag) {
+      this.store.useForArticles({ tag: this.selectedTag });
+    }
+    this.store.getArticles();
   }
 
   public handleSelectTag(tag: string) {
@@ -39,6 +45,7 @@ export class HomeComponent
 
   public handleTabChange(index: number): void {
     this.tabIndex = index;
+    this.initStore();
     if (index !== 2) {
       this.selectedTag = null;
     }

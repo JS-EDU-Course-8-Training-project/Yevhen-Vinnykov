@@ -4,12 +4,14 @@
     [e2e]="TestAttributes.UserPageBanner"
   >
     <div class="user-info">
-      <img [src]="user.image" alt="" [e2e]="TestAttributes.UserPageImg" />
+      <img [src]="user?.image" alt="" [e2e]="TestAttributes.UserPageImg" />
+
       <mat-card-title class="banner-title">
-        <h3 [e2e]="TestAttributes.UserPageUsername">{{ user.username }}</h3>
+        <h3 [e2e]="TestAttributes.UserPageUsername">{{ user?.username }}</h3>
       </mat-card-title>
+
       <mat-card-content class="banner-subtitle">
-        <p [e2e]="TestAttributes.UserPageBio">{{ user.bio }}</p>
+        <p [e2e]="TestAttributes.UserPageBio">{{ user?.bio }}</p>
       </mat-card-content>
     </div>
     <div class="button-container">
@@ -21,30 +23,39 @@
       >
         <a routerLink="/settings">Update Profile Settings</a>
       </button>
+
       <button
         [disabled]="followingInProgress"
         (click)="handleFollowUnfollow(user.username)"
-        *ngIf="!isMyself"
+        *ngIf="!isMyself && user?.username"
         mat-raised-button
         color="primary"
         [e2e]="TestAttributes.UserPageFollowBtn"
       >
-        {{ isFollowed ? "Unfollow" : "Follow" }} {{ user.username }}
+        {{ isFollowed ? "Unfollow" : "Follow" }} {{ user?.username }}
       </button>
     </div>
   </app-banner>
+
   <section>
     <mat-tab-group
-      (focusChange)="this.tabIndex = $event.index"
+      (focusChange)="handleTabChange($event.index)"
       [selectedIndex]="tabIndex"
     >
-      <mat-tab label="My Articles">
-        <app-my-articles [tabIndex]="tabIndex" [username]="urlUsername">
-        </app-my-articles>
-      </mat-tab>
-      <mat-tab label="Favorited Articles">
-        <app-favorited-articles [tabIndex]="tabIndex" [username]="urlUsername">
-        </app-favorited-articles>
+      <mat-tab
+        *ngFor="let label of ['My Articles', 'Followed Articles']"
+        label="{{ label }}"
+      >
+        <app-article-list
+          [tabIndex]="tabIndex"
+          [e2e]="TestAttributes.GlobalFeed"
+          [articles]="store.articles"
+          [error]="store.error"
+          [loadedAllArticles]="store.loadedAllArticles"
+          [isLoading]="store.isLoading$.getValue()"
+          [cb]="store.getArticles.bind(store)"
+        >
+        </app-article-list>
       </mat-tab>
     </mat-tab-group>
   </section>

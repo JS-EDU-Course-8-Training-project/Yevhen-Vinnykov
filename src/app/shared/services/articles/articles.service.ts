@@ -30,14 +30,16 @@ export class ArticlesService {
     return await firstValueFrom(source$);
   }
 
-  public fetchFollowedArticles(
+  public async fetchFollowedArticles(
     offset = 0,
     limit = 5
-  ): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(
+  ): Promise<IArticleResponse> {
+    const source$ = this.http.get<IArticleResponse>(
       `${this.baseURL}/feed/?offset=${offset}&limit=${limit}`,
       httpOptions
     );
+
+    return await firstValueFrom(source$);
   }
 
   public fetchArticle(slug: string): Observable<IArticle> {
@@ -78,37 +80,43 @@ export class ArticlesService {
       .pipe(pluck('tags'));
   }
 
-  public fetchArticlesByTag(
+  public async fetchArticlesByTag(
     tag: string,
     offset = 0,
     limit = 5
-  ): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(
+  ): Promise<IArticleResponse> {
+    const source$ = this.http.get<IArticleResponse>(
       `${this.baseURL}?tag=${tag}&limit=${limit}&offset=${offset}`,
       httpOptions
     );
+
+    return await firstValueFrom(source$);
   }
 
-  public fetchUserArticles(
+  public async fetchUserArticles(
     username: string,
-    limit = 20,
-    offset = 0
-  ): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(
+    offset = 0,
+    limit = 20
+  ): Promise<IArticleResponse> {
+    const source$ = this.http.get<IArticleResponse>(
       `${this.baseURL}?author=${username}&limit=${limit}&offset=${offset}`,
       httpOptions
     );
+
+    return await firstValueFrom(source$);
   }
 
-  public fetchFavoritedArticles(
+  public async fetchFavoritedArticles(
     username: string,
-    limit = 20,
-    offset = 0
-  ): Observable<IArticleResponse> {
-    return this.http.get<IArticleResponse>(
+    offset = 0,
+    limit = 20
+  ): Promise<IArticleResponse> {
+    const source$ = this.http.get<IArticleResponse>(
       `${this.baseURL}?favorited=${username}&limit=${limit}&offset=${offset}`,
       httpOptions
     );
+
+    return await firstValueFrom(source$);
   }
 
   public addToFavorites(slug: string): Observable<IArticle> {

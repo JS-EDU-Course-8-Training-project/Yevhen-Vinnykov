@@ -1,19 +1,22 @@
+import { IArticleResponse } from '../../models/IArticle';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
-import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
+import { IOptions, StoreConfigurator } from './store-config';
 
 @Injectable()
-export class GlobalArticlesStore {
+export class ArticlesStore {
   readonly articles$ = new BehaviorSubject<IArticle[]>([]);
   readonly isLoading$ = new BehaviorSubject<boolean>(false);
   readonly loadedAllArticles$ = new BehaviorSubject<boolean>(false);
   readonly error$ = new BehaviorSubject<string>('');
 
-  private offset = 0;
+  public offset = 0;
+  public limit = 5;
   private currentPage = 1;
   private pagesTotalCount = 1;
-  private limit = 5;
+
+  public useArticlesService!: () => Promise<IArticleResponse>;
 
   get articles(): IArticle[] {
     return this.articles$.getValue();
@@ -27,7 +30,12 @@ export class GlobalArticlesStore {
     return this.error$.getValue();
   }
 
-  constructor(private articlesService: ArticlesService) {}
+  constructor(private storeConfig: StoreConfigurator) {}
+
+  public useForArticles(options: IOptions) {
+    this.reset();
+    this.storeConfig.configure(this, options);
+  }
 
   public async getArticles(): Promise<void> {
     if (this.loadedAllArticles) return;
@@ -36,9 +44,7 @@ export class GlobalArticlesStore {
     this.isLoading$.next(true);
 
     try {
-      const { articles, articlesCount } =
-        await this.articlesService.fetchArticles(this.offset, this.limit);
-
+      const { articles, articlesCount } = await this.useArticlesService();
       this.handleResponse(articles, articlesCount);
     } catch (error) {
       this.error$.next(error as string);
@@ -48,7 +54,7 @@ export class GlobalArticlesStore {
   }
 
   private handleResponse(articles: IArticle[], articlesCount: number): void {
-    this.pagesTotalCount = Math.ceil(articlesCount / this.limit);
+    this.pagesTotalCount = Math.ceil(articlesCount / this.limit) || 1;
     this.articles$.next([...this.articles$.getValue(), ...articles]);
 
     if (this.currentPage === this.pagesTotalCount) {
