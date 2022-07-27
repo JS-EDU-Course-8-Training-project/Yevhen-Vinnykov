@@ -30,7 +30,7 @@ export class GlobalArticlesStore {
   constructor(private articlesService: ArticlesService) {}
 
   public async getArticles(): Promise<void> {
-    if (this.loadedAllArticles$.getValue()) return;
+    if (this.loadedAllArticles) return;
 
     this.error$.next('');
     this.isLoading$.next(true);
