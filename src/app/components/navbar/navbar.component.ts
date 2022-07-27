@@ -1,6 +1,13 @@
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
-import { BehaviorSubject, Subject, takeUntil, filter } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  takeUntil,
+  filter,
+  tap,
+  switchMap,
+} from 'rxjs';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
@@ -34,11 +41,9 @@ export class NavbarComponent extends TestedComponent implements OnInit {
     }
 
     this.authService.authUser$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((user) => (this.authUser = user));
-
-    this.router.events
       .pipe(
+        tap((user) => (this.authUser = user)),
+        switchMap(() => this.router.events),
         filter((event) => event instanceof NavigationEnd),
         takeUntil(this.notifier)
       )

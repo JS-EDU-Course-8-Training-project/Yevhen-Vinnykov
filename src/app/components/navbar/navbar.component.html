@@ -1,6 +1,6 @@
 <div class="full-screen-navbar-container">
   <a
-    [class]="(url$ | async) === '/' ? 'selected' : ''"
+    [ngClass]="{ selected: (url$ | async) === '/' }"
     mat-button
     routerLink="/"
     [e2e]="TestAttributes.NavHomeLink"
@@ -8,7 +8,7 @@
     Home
   </a>
   <a
-    [class]="(url$ | async) === '/sign-in' ? 'selected' : ''"
+    [ngClass]="{ selected: (url$ | async) === '/sign-in' }"
     *ngIf="!(isAuthorized$ | async)"
     mat-button
     routerLink="/sign-in"
@@ -17,7 +17,7 @@
     Sign in
   </a>
   <a
-    [class]="(url$ | async) === '/sign-up' ? 'selected' : ''"
+    [ngClass]="{ selected: (url$ | async) === '/sign-up' }"
     *ngIf="!(isAuthorized$ | async)"
     mat-button
     routerLink="/sign-up"
@@ -26,7 +26,7 @@
     Sign up
   </a>
   <a
-    [class]="(url$ | async) === '/create-article' ? 'selected' : ''"
+    [ngClass]="{ selected: (url$ | async) === '/create-article' }"
     *ngIf="isAuthorized$ | async"
     mat-button
     routerLink="/create-article"
@@ -35,7 +35,7 @@
     New Article
   </a>
   <a
-    [class]="(url$ | async) === '/settings' ? 'selected' : ''"
+    [ngClass]="{ selected: (url$ | async) === '/settings' }"
     *ngIf="isAuthorized$ | async"
     mat-button
     routerLink="/settings"
@@ -44,10 +44,10 @@
     Settings
   </a>
   <a
-    [class]="(url$ | async) === '/user/' + authUser.username ? 'selected' : ''"
+    [ngClass]="{ selected: (url$ | async) === '/user/' + authUser.username }"
     *ngIf="isAuthorized$ | async"
     mat-button
-    routerLink="/user/{{authUser?.username}}"
+    routerLink="/user/{{ authUser?.username }}"
     [e2e]="TestAttributes.NavUserPageLink"
   >
     {{ authUser?.username }}
