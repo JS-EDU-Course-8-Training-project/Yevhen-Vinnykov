@@ -1,10 +1,8 @@
-import { IProfile } from './../../../shared/models/IProfile';
 import { Subject, takeUntil } from 'rxjs';
 import {
   ArticlePageButtonsService,
   IButtonsState,
 } from '../services/buttons/article-page-buttons.service';
-import { AuthorizationService } from '../../../shared/services/authorization/authorization.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -33,13 +31,12 @@ export class ArticlePageButtonsComponent
   public isFollowed!: boolean;
   public username!: string;
   public isAuthor!: boolean;
-  private isAuthorized!: boolean;
+  private isAuth!: boolean;
   private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private articlesService: ArticlesService,
     private profilesService: ProfilesService,
-    private authorizationService: AuthorizationService,
     private buttonsService: ArticlePageButtonsService,
     private redirectionService: RedirectionService
   ) {
@@ -56,6 +53,7 @@ export class ArticlePageButtonsComponent
   }
 
   private initialize(): void {
+    this.isAuth = !!this.authUser.token;
     this.username = this.article?.author?.username;
     this.isAuthor = this.article?.author?.username === this.authUser?.username;
 
@@ -65,10 +63,6 @@ export class ArticlePageButtonsComponent
         .pipe(takeUntil(this.notifier))
         .subscribe((state) => this.setDataOnResponse(state));
     }
-
-    this.authorizationService.isAuthorized$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
   }
 
   private setDataOnResponse(state: IButtonsState) {
@@ -79,56 +73,61 @@ export class ArticlePageButtonsComponent
     this.likesCount = state.likesCount;
   }
 
-  public handleLikeDislike(slug: string): void {
-    if (!this.isAuthorized)
-      return this.redirectionService.redirectUnauthorized();
+  public async like(slug: string): Promise<void> {
+    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
 
     this.buttonsService.updateState('favoriteInProgress', true);
 
-    if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
-    if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
+    const { favorited, favoritesCount } =
+      await this.articlesService.addToFavorites(slug);
+    this.buttonsService.updateState('isLiked', favorited);
+    this.buttonsService.updateState('likesCount', favoritesCount);
+
+    this.buttonsService.updateState('favoriteInProgress', false);
   }
 
-  public handleFollowUnfollow(username: string): void {
-    if (!this.isAuthorized)
-      return this.redirectionService.redirectUnauthorized();
+  public async dislike(slug: string): Promise<void> {
+    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
+
+    this.buttonsService.updateState('favoriteInProgress', true);
+
+    const { favorited, favoritesCount } =
+      await this.articlesService.removeFromFavorites(slug);
+    this.buttonsService.updateState('isLiked', favorited);
+    this.buttonsService.updateState('likesCount', favoritesCount);
+
+    this.buttonsService.updateState('favoriteInProgress', false);
+  }
+
+  public async follow(username: string): Promise<void> {
+    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
 
     this.buttonsService.updateState('followingInProgress', true);
 
-    if (this.isFollowed) return this.followingHandler(username, 'unfollow');
-    if (!this.isFollowed) return this.followingHandler(username, 'follow');
+    const { following } = await this.profilesService.follow(username);
+    this.buttonsService.updateState('isFollowed', following);
+
+    this.buttonsService.updateState('followingInProgress', false);
   }
 
-  private likeHandler(
-    slug: string,
-    method: 'addToFavorites' | 'removeFromFavorites'
-  ): void {
-    this.articlesService[method](slug)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(({ favorited, favoritesCount }: IArticle) => {
-        this.buttonsService.updateState('isLiked', favorited);
-        this.buttonsService.updateState('likesCount', favoritesCount);
-        this.buttonsService.updateState('favoriteInProgress', false);
-      });
+  public async unfollow(username: string): Promise<void> {
+    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
+
+    this.buttonsService.updateState('followingInProgress', true);
+
+    const { following } = await this.profilesService.unfollow(username);
+    this.buttonsService.updateState('isFollowed', following);
+
+    this.buttonsService.updateState('followingInProgress', false);
   }
 
-  private followingHandler(
-    username: string,
-    method: 'follow' | 'unfollow'
-  ): void {
-    this.profilesService[method](username)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(({ following }: IProfile) => {
-        this.buttonsService.updateState('isFollowed', following);
-        this.buttonsService.updateState('followingInProgress', false);
-      });
-  }
-
-  public deleteArticle(slug: string): void {
-    this.articlesService
-      .deleteArticle(slug)
-      .pipe(takeUntil(this.notifier))
-      .subscribe(() => this.redirectionService.redirectHome());
+  public async deleteArticle(slug: string): Promise<void> {
+    try {
+      await this.articlesService.deleteArticle(slug);
+      this.redirectionService.redirectHome();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public redirectToEditArticle(slug: string): void {

@@ -1,12 +1,10 @@
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, Observable, of, Subject, takeUntil } from 'rxjs';
 import { IArticle } from '../../shared/models/IArticle';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   Input,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -21,16 +19,13 @@ import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
   styleUrls: ['./article-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArticleCardComponent
-  extends TestedComponent
-  implements OnInit, OnDestroy
-{
+export class ArticleCardComponent extends TestedComponent implements OnInit {
   @Input() article!: IArticle;
+  
   public isLiked!: boolean;
-  public isPending = false;
+  public isLoading = false;
   public likesCount!: number;
   private isAuth!: boolean;
-  private notifier: Subject<void> = new Subject<void>();
 
   constructor(
     private articlesService: ArticlesService,
@@ -45,45 +40,47 @@ export class ArticleCardComponent
   ngOnInit(): void {
     this.likesCount = this.article.favoritesCount;
     this.isLiked = this.article.favorited;
-
-    this.authorizationService.isAuthorized$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((isAuth) => (this.isAuth = isAuth));
+    this.isAuth = this.authorizationService.isAuthorized$.getValue();
   }
 
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
-  }
-
-  public handleLikeDislike(slug: string): void {
+  public async like(slug: string) {
     if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
-    this.isPending = true;
-    if (this.isLiked) return this.likeHandler(slug, 'removeFromFavorites');
-    if (!this.isLiked) return this.likeHandler(slug, 'addToFavorites');
+
+    this.isLoading = true;
+    try {
+      const { favorited, favoritesCount } =
+        await this.articlesService.addToFavorites(slug);
+
+      this.isLiked = favorited;
+      this.likesCount = favoritesCount;
+      this.isLoading = false;
+
+      this.cdRef.detectChanges();
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private likeHandler(
-    slug: string,
-    method: 'addToFavorites' | 'removeFromFavorites'
-  ): void {
-    this.articlesService[method](slug)
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((err: string) => this.onCatchError(err))
-      )
-      .subscribe(({ favorited, favoritesCount }: IArticle) => {
-        this.isLiked = favorited;
-        this.isPending = false;
-        this.likesCount = favoritesCount;
-        this.cdRef.detectChanges();
-      });
+  public async dislike(slug: string) {
+    if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
+
+    this.isLoading = true;
+    try {
+      const { favorited, favoritesCount } =
+        await this.articlesService.removeFromFavorites(slug);
+
+      this.isLiked = favorited;
+      this.likesCount = favoritesCount;
+      this.isLoading = false;
+
+      this.cdRef.detectChanges();
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private onCatchError(error: string): Observable<IArticle> {
-    this.isPending = false;
+  private onCatchError(error: string): void {
+    this.isLoading = false;
     this.dialog.open(ErrorDialogComponent, { data: error });
-
-    return of(this.article);
   }
 }

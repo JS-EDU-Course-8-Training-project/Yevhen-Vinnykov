@@ -45,6 +45,11 @@ export class UserPageComponent
       .subscribe(() => this.setUserData());
   }
 
+  ngOnDestroy(): void {
+    this.notifier.next();
+    this.notifier.complete();
+  }
+
   private initStore() {
     if (this.tabIndex === 0) {
       this.store.useForArticles({ createdBy: this.user.username });
@@ -56,47 +61,35 @@ export class UserPageComponent
     this.store.getArticles();
   }
 
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
-  }
-
-  private setUserData(): void {
+  private async setUserData(): Promise<void> {
     const authUser = this.authService.authUser$.getValue();
     const urlUsername = this.router.url.split('/')[2].replace('%20', ' ');
     this.isMyself = authUser.username === urlUsername;
 
-    if (this.isMyself) {
-      this.user = authUser;
-      this.initStore();
-      return;
-    }
+    this.user = this.isMyself
+      ? authUser
+      : await this.profilesService.fetchUser(urlUsername);
+    this.isFollowed = !this.isMyself && (this.user as IProfile).following;
 
-    this.profilesService
-      .fetchUser(urlUsername)
-      .pipe(takeUntil(this.notifier))
-      .subscribe((profile: IProfile) => {
-        this.user = profile;
-        this.isFollowed = profile.following;
-        this.initStore();
-      });
+    this.initStore();
   }
 
-  public handleFollowUnfollow(username: string): void {
+  public async follow(username: string): Promise<void> {
     this.followingInProgress = true;
 
-    if (this.isFollowed) return this.followingHandler(username, 'unfollow');
-    if (!this.isFollowed) return this.followingHandler(username, 'follow');
+    const { following } = await this.profilesService.follow(username);
+    this.isFollowed = following;
+
+    this.followingInProgress = false;
   }
 
-  private followingHandler(
-    username: string,
-    method: 'follow' | 'unfollow'
-  ): void {
-    this.profilesService[method](username).subscribe((profile: IProfile) => {
-      this.isFollowed = profile.following;
-      this.followingInProgress = false;
-    });
+  public async unfollow(username: string): Promise<void> {
+    this.followingInProgress = true;
+
+    const { following } = await this.profilesService.unfollow(username);
+    this.isFollowed = following;
+
+    this.followingInProgress = false;
   }
 
   public handleTabChange(index: number): void {

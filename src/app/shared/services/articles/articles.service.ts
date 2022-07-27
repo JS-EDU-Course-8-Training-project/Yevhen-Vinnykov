@@ -54,8 +54,13 @@ export class ArticlesService {
       .pipe(pluck('article'));
   }
 
-  public deleteArticle(slug: string): Observable<{}> {
-    return this.http.delete<{}>(`${this.baseURL}/${slug}`, httpOptions);
+  public async deleteArticle(slug: string): Promise<{}> {
+    const source$ = this.http.delete<{}>(
+      `${this.baseURL}/${slug}`,
+      httpOptions
+    );
+
+    return await firstValueFrom(source$);
   }
 
   public updateArticle(
@@ -119,22 +124,26 @@ export class ArticlesService {
     return await firstValueFrom(source$);
   }
 
-  public addToFavorites(slug: string): Observable<IArticle> {
-    return this.http
+  public async addToFavorites(slug: string): Promise<IArticle> {
+    const source$ = this.http
       .post<{ article: IArticle }>(
         `${this.baseURL}/${slug}/favorite`,
         null,
         httpOptions
       )
       .pipe(pluck('article'));
+
+    return firstValueFrom(source$);
   }
 
-  public removeFromFavorites(slug: string): Observable<IArticle> {
-    return this.http
+  public async removeFromFavorites(slug: string): Promise<IArticle> {
+    const source$ = this.http
       .delete<{ article: IArticle }>(
         `${this.baseURL}/${slug}/favorite`,
         httpOptions
       )
       .pipe(pluck('article'));
+
+    return firstValueFrom(source$);
   }
 }

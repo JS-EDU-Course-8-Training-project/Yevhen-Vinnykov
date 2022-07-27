@@ -23,7 +23,7 @@
     class="btn"
     *ngIf="!isAuthor"
     [disabled]="followingInProgress"
-    (click)="handleFollowUnfollow(username)"
+    (click)="isFollowed ? unfollow(username) : follow(username)"
     mat-flat-button
     color="primary"
     [e2e]="TestAttributes.ArticleFollowBtn"
@@ -34,7 +34,7 @@
     class="btn"
     *ngIf="!isAuthor"
     [disabled]="favoriteInProgress"
-    (click)="handleLikeDislike(slug)"
+    (click)="isLiked ? dislike(slug) : like(slug)"
     mat-flat-button
     color="primary"
     [e2e]="TestAttributes.ArticleLikeBtn"
@@ -69,7 +69,7 @@
       mat-icon-button
       [e2e]="TestAttributes.ArticleLikeIcon"
       *ngIf="!isAuthor"
-      (click)="handleLikeDislike(slug)"
+      (click)="isLiked ? dislike(slug) : like(slug)"
       [disabled]="favoriteInProgress"
     >
       <mat-icon [color]="isLiked && 'warn'"> favorite </mat-icon>
@@ -79,7 +79,7 @@
       mat-icon-button
       *ngIf="!isAuthor"
       [disabled]="followingInProgress"
-      (click)="handleFollowUnfollow(username)"
+      (click)="isFollowed ? unfollow(username) : follow(username)"
       [e2e]="TestAttributes.ArticleFollowBtn"
     >
       <mat-icon *ngIf="!isFollowed">turned_in</mat-icon>

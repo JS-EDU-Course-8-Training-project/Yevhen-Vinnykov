@@ -1,5 +1,5 @@
 import { IProfile } from '../../models/IProfile';
-import { Observable, pluck } from 'rxjs';
+import { firstValueFrom, pluck } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -18,31 +18,37 @@ export class ProfilesService {
 
   constructor(private http: HttpClient) {}
 
-  public follow(username: string): Observable<IProfile> {
-    return this.http
+  public async follow(username: string): Promise<IProfile> {
+    const source$ = this.http
       .post<{ profile: IProfile }>(
         `${this.baseURL}/profiles/${username}/follow`,
         null,
         httpOptions
       )
       .pipe(pluck('profile'));
+
+    return firstValueFrom(source$);
   }
 
-  public unfollow(username: string): Observable<IProfile> {
-    return this.http
+  public async unfollow(username: string): Promise<IProfile> {
+    const source$ = this.http
       .delete<{ profile: IProfile }>(
         `${this.baseURL}/profiles/${username}/follow`,
         httpOptions
       )
       .pipe(pluck('profile'));
+
+    return firstValueFrom(source$);
   }
 
-  public fetchUser(username: string): Observable<IProfile> {
-    return this.http
+  public async fetchUser(username: string): Promise<IProfile> {
+    const source$ = this.http
       .get<{ profile: IProfile }>(
         `${this.baseURL}/profiles/${username}`,
         httpOptions
       )
       .pipe(pluck('profile'));
+
+    return firstValueFrom(source$);
   }
 }

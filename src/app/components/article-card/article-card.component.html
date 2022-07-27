@@ -20,8 +20,8 @@
       </div>
     </div>
     <button
-      [disabled]="isPending"
-      (click)="handleLikeDislike(article.slug)"
+      [disabled]="isLoading"
+      (click)="isLiked ? dislike(article.slug) : like(article.slug)"
       mat-icon-button
       [e2e]="TestAttributes.ArticleCardLikeBtn"
     >

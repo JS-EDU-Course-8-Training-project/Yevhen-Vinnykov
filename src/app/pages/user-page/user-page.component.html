@@ -26,7 +26,7 @@
 
       <button
         [disabled]="followingInProgress"
-        (click)="handleFollowUnfollow(user.username)"
+        (click)="isFollowed ? unfollow(user.username) : follow(user.username)"
         *ngIf="!isMyself && user?.username"
         mat-raised-button
         color="primary"
