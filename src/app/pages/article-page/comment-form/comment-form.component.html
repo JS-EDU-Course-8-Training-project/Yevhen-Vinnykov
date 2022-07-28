@@ -1,4 +1,4 @@
-<div *ngIf="isAuthorized" class="container">
+<div *ngIf="isAuth" class="container">
   <form
     [formGroup]="commentForm"
     (ngSubmit)="addComment()"

@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { ActivatedRoute, Data } from '@angular/router';
@@ -46,7 +46,7 @@ export class ArticlePageComponent
     this.notifier.complete();
   }
 
-  public reuestComments(): void {
+  public requestComments(): void {
     this.requestForComments$.next();
   }
 }

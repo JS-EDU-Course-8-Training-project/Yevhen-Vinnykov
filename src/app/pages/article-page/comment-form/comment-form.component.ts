@@ -14,10 +14,10 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 export class CommentFormComponent extends TestedComponent implements OnInit {
   @Input() slug!: string;
   @Input() image!: string;
-  @Output() commentEventEmmiter: EventEmitter<any> = new EventEmitter();
+  @Output() commentEventEmmiter: EventEmitter<void> = new EventEmitter();
 
   public commentForm!: FormGroup;
-  public isAuthorized!: boolean;
+  public isAuth!: boolean;
   private notifier: Subject<void> = new Subject<void>();
   public isLoading = false;
 
@@ -30,9 +30,8 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authorizationService.isAuthorized$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((isAuthorized) => (this.isAuthorized = isAuthorized));
+    this.isAuth = this.authorizationService.isAuthorized$.getValue();
+    
     this.commentForm = this.fb.group({
       body: ['', [Validators.required]],
     });
