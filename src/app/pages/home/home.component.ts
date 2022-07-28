@@ -32,7 +32,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
     if (this.tabIndex === 0 && this.isAuthorized) {
       this.store.useForArticles({ followed: true });
     }
-    if (this.tabIndex === 2 && this.selectedTag) {
+    if (this.tabIndex === 2) {
       this.store.useForArticles({ tag: this.selectedTag });
     }
     this.store.getArticles();
@@ -40,12 +40,14 @@ export class HomeComponent extends TestedComponent implements OnInit {
 
   public handleSelectTag(tag: string) {
     this.selectedTag = tag;
-    this.tabIndex = 2;
+    this.handleTabChange(2);
   }
 
   public handleTabChange(index: number): void {
     this.tabIndex = index;
+
     this.initStore();
+    
     if (index !== 2) {
       this.selectedTag = null;
     }
