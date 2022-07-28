@@ -1,10 +1,11 @@
 .tags-container {
   max-width: 300px;
   box-sizing: border-box;
-  flex: 0 1 auto;
   padding: 20px;
+  position: -webkit-sticky;
   position: sticky;
-  top: 65px;
+  top: 70px;
+
   .tags {
     text-align: center;
     display: flex;
