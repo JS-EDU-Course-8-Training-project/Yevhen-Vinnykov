@@ -3,7 +3,7 @@
   <button
     mat-stroked-button
     *ngIf="store.isLiked$ | async"
-    (click)="dislike(article.slug)"
+    (click)="dislike()"
     [disabled]="store.isLoading$ | async"
   >
     Unfavorite
@@ -14,7 +14,7 @@
   <button
     mat-stroked-button
     *ngIf="!(store.isLiked$ | async)"
-    (click)="like(article.slug)"
+    (click)="like()"
     [disabled]="store.isLoading$ | async"
   >
     Favorite
@@ -28,7 +28,7 @@
   <button
     mat-icon-button
     *ngIf="store.isLiked$ | async"
-    (click)="dislike(article.slug)"
+    (click)="dislike()"
     [disabled]="store.isLoading$ | async"
   >
     <mat-icon color="warn"> favorite </mat-icon>
@@ -38,7 +38,7 @@
   <button
     mat-icon-button
     *ngIf="!(store.isLiked$ | async)"
-    (click)="like(article.slug)"
+    (click)="like()"
     [disabled]="store.isLoading$ | async"
   >
     <mat-icon> favorite </mat-icon>

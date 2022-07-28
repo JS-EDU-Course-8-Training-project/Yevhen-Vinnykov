@@ -24,26 +24,26 @@ export class LikeButtonComponent implements OnInit {
     this.store.likesCount$.next(this.article.favoritesCount);
   }
 
-  public async like(slug: string): Promise<void> {
+  public async like(): Promise<void> {
     if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
 
     this.store.isLoading$.next(true);
 
     const { favorited, favoritesCount } =
-      await this.articlesService.addToFavorites(slug);
+      await this.articlesService.addToFavorites(this.article.slug);
     this.store.isLiked$.next(favorited);
     this.store.likesCount$.next(favoritesCount);
 
     this.store.isLoading$.next(false);
   }
 
-  public async dislike(slug: string): Promise<void> {
+  public async dislike(): Promise<void> {
     if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
 
     this.store.isLoading$.next(true);
 
     const { favorited, favoritesCount } =
-      await this.articlesService.removeFromFavorites(slug);
+      await this.articlesService.removeFromFavorites(this.article.slug);
     this.store.isLiked$.next(favorited);
     this.store.likesCount$.next(favoritesCount);
 

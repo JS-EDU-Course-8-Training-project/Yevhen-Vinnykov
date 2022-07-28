@@ -3,7 +3,7 @@
   <button
     mat-stroked-button
     *ngIf="store.isFollowed$ | async"
-    (click)="unfollow(username)"
+    (click)="unfollow()"
     [disabled]="store.isLoading$ | async"
   >
     Unfollow
@@ -13,7 +13,7 @@
   <button
     mat-stroked-button
     *ngIf="!(store.isFollowed$ | async)"
-    (click)="follow(username)"
+    (click)="follow()"
     [disabled]="store.isLoading$ | async"
   >
     Follow
@@ -27,7 +27,7 @@
     mat-icon-button
     *ngIf="store.isFollowed$ | async"
     [disabled]="store.isLoading$ | async"
-    (click)="unfollow(username)"
+    (click)="unfollow()"
   >
     <mat-icon>bookmark_added</mat-icon>
   </button>
@@ -36,7 +36,7 @@
     mat-icon-button
     *ngIf="!(store.isFollowed$ | async)"
     [disabled]="store.isLoading$ | async"
-    (click)="follow(username)"
+    (click)="follow()"
   >
     <mat-icon>turned_in</mat-icon>
   </button>

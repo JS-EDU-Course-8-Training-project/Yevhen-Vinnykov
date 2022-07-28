@@ -23,23 +23,23 @@ export class FollowButtonComponent implements OnInit {
     this.store.isFollowed$.next(this.isFollowed);
   }
 
-  public async follow(username: string): Promise<void> {
+  public async follow(): Promise<void> {
     if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
 
     this.store.isLoading$.next(true);
 
-    const { following } = await this.profilesService.follow(username);
+    const { following } = await this.profilesService.follow(this.username);
     this.store.isFollowed$.next(following);
 
     this.store.isLoading$.next(false);
   }
 
-  public async unfollow(username: string): Promise<void> {
+  public async unfollow(): Promise<void> {
     if (!this.isAuth) return this.redirectionService.redirectUnauthorized();
 
     this.store.isLoading$.next(true);
 
-    const { following } = await this.profilesService.unfollow(username);
+    const { following } = await this.profilesService.unfollow(this.username);
     this.store.isFollowed$.next(following);
 
     this.store.isLoading$.next(false);
