@@ -58,7 +58,7 @@ export class UserPageComponent
       this.store.useForArticles({ favoritedBy: this.user.username });
     }
 
-    this.store.getArticles();
+    this.store.requestArticles();
   }
 
   private async setUserData(): Promise<void> {

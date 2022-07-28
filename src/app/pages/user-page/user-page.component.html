@@ -23,7 +23,7 @@
           [error]="store.error"
           [loadedAllArticles]="store.loadedAllArticles"
           [isLoading]="store.isLoading$.getValue()"
-          [cb]="store.getArticles.bind(store)"
+          [cb]="store.requestArticles.bind(store)"
         >
         </app-article-list>
       </mat-tab>

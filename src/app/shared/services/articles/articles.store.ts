@@ -39,7 +39,7 @@ export class ArticlesStore {
     // will get specified articles (global, favorited, etc.)
   }
 
-  public async getArticles(): Promise<void> {
+  public async requestArticles(): Promise<void> {
     if (this.loadedAllArticles) return;
 
     this.error$.next('');

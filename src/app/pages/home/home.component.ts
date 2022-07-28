@@ -35,7 +35,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
     if (this.tabIndex === 2) {
       this.store.useForArticles({ tag: this.selectedTag });
     }
-    this.store.getArticles();
+    this.store.requestArticles();
   }
 
   public handleSelectTag(tag: string) {
