@@ -9,7 +9,7 @@ import {
   ChangeDetectionStrategy,
   OnInit,
 } from '@angular/core';
-import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/new-infinite-scroll.service';
+import { InfiniteScrollService } from 'src/app/shared/services/infinite-scroll/infinite-scroll.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { IArticle } from 'src/app/shared/models/IArticle';
 

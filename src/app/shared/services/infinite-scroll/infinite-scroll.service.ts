@@ -1,29 +1,17 @@
-import { BehaviorSubject, first } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-interface IObserverData {
-  canLoad: BehaviorSubject<boolean>;
-  callback(): void;
-}
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class InfiniteScrollService {
   public observer!: IntersectionObserver;
 
-  public observeIntersection(data: IObserverData) {
+  public initObserver(callback: () => void): void {
     const options = {
       root: null,
       rootMargin: '0px',
       threshold: 0.5,
     };
     this.observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        data.canLoad.pipe(first()).subscribe((canLoad) => {
-          if (canLoad) data.callback();
-        });
-      }
+      if (entries[0].isIntersecting) callback();
     }, options);
   }
 }
