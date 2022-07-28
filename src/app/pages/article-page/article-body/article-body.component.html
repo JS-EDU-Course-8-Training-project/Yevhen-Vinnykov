@@ -2,6 +2,7 @@
   <div class="article-body" [e2e]="TestAttributes.ArticlePageBody">
     <p>{{ article?.body }}</p>
   </div>
+
   <mat-chip-list>
     <mat-chip
       class="tag"
@@ -12,6 +13,7 @@
       {{ tag }}
     </mat-chip>
   </mat-chip-list>
+
   <mat-divider class="devider"></mat-divider>
 </div>
 <div class="article-actions-container">
@@ -32,12 +34,20 @@
       </div>
     </a>
   </div>
+
   <div class="article-actions">
-    <app-article-page-buttons
-      [authUser]="authUser"
-      [article]="article"
-      [slug]="slug"
-    >
-    </app-article-page-buttons>
+    <ng-container *ngIf="!isMyself">
+      <app-like-button [isAuth]="isAuth" [article]="article"> </app-like-button>
+      <app-follow-button
+        [isAuth]="isAuth"
+        [username]="article.author.username"
+        [isFollowed]="article.author.following"
+      >
+      </app-follow-button>
+    </ng-container>
+    <ng-container *ngIf="isMyself">
+      <app-delete-button [slug]="article.slug"> </app-delete-button>
+      <app-edit-button [slug]="article.slug"></app-edit-button>
+    </ng-container>
   </div>
 </div>

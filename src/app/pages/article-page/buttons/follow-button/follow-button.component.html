@@ -1,0 +1,43 @@
+<!-- BUTTONS FOR BIGGER SCREENS -->
+<div class="button">
+  <button
+    mat-stroked-button
+    *ngIf="store.isFollowed$ | async"
+    (click)="unfollow(username)"
+    [disabled]="store.isLoading$ | async"
+  >
+    Unfollow
+    {{ username }}
+  </button>
+
+  <button
+    mat-stroked-button
+    *ngIf="!(store.isFollowed$ | async)"
+    (click)="follow(username)"
+    [disabled]="store.isLoading$ | async"
+  >
+    Follow
+    {{ username }}
+  </button>
+</div>
+
+<!-- BUTTONS FOR SMALLER SCREENS -->
+<div class="icon-button">
+  <button
+    mat-icon-button
+    *ngIf="store.isFollowed$ | async"
+    [disabled]="store.isLoading$ | async"
+    (click)="unfollow(username)"
+  >
+    <mat-icon>bookmark_added</mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    *ngIf="!(store.isFollowed$ | async)"
+    [disabled]="store.isLoading$ | async"
+    (click)="follow(username)"
+  >
+    <mat-icon>turned_in</mat-icon>
+  </button>
+</div>

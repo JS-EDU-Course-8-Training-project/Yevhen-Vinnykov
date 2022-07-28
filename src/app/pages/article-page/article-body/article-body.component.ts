@@ -1,6 +1,5 @@
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { Component, Input } from '@angular/core';
-import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
@@ -11,7 +10,8 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 export class ArticleBodyComponent extends TestedComponent {
   @Input() article!: IArticle;
   @Input() slug!: string;
-  @Input() authUser!: IExistingUser;
+  @Input() isAuth!: boolean;
+  @Input() isMyself!: boolean;
 
   constructor() {
     super();

@@ -1,0 +1,47 @@
+<!-- BUTTONS FOR BIGGER SCREENS -->
+<div class="button">
+  <button
+    mat-stroked-button
+    *ngIf="store.isLiked$ | async"
+    (click)="dislike(article.slug)"
+    [disabled]="store.isLoading$ | async"
+  >
+    Unfavorite
+    {{ store.likesCount$ | async }}
+    <mat-icon color="warn"> favorite </mat-icon>
+  </button>
+
+  <button
+    mat-stroked-button
+    *ngIf="!(store.isLiked$ | async)"
+    (click)="like(article.slug)"
+    [disabled]="store.isLoading$ | async"
+  >
+    Favorite
+    {{ store.likesCount$ | async }}
+    <mat-icon> favorite </mat-icon>
+  </button>
+</div>
+
+<!-- BUTTONS FOR SMALLER SCREENS -->
+<div class="icon-button">
+  <button
+    mat-icon-button
+    *ngIf="store.isLiked$ | async"
+    (click)="dislike(article.slug)"
+    [disabled]="store.isLoading$ | async"
+  >
+    <mat-icon color="warn"> favorite </mat-icon>
+    {{ store.likesCount$ | async }}
+  </button>
+
+  <button
+    mat-icon-button
+    *ngIf="!(store.isLiked$ | async)"
+    (click)="like(article.slug)"
+    [disabled]="store.isLoading$ | async"
+  >
+    <mat-icon> favorite </mat-icon>
+    {{ store.likesCount$ | async }}
+  </button>
+</div>

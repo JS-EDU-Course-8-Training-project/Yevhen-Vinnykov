@@ -1,0 +1,21 @@
+<!-- BUTTONS FOR BIGGER SCREENS -->
+<div class="button">
+  <button
+    mat-stroked-button
+    (click)="deleteArticle()"
+    [disabled]="store.isLoading$ | async"
+  >
+    Delete
+  </button>
+</div>
+
+<!-- BUTTONS FOR SMALLER SCREENS -->
+<div class="icon-button">
+  <button
+    mat-icon-button
+    (click)="deleteArticle()"
+    [disabled]="store.isLoading$ | async"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>

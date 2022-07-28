@@ -18,6 +18,7 @@ export class ArticlePageComponent
   public slug!: string;
   public article!: IArticle;
   public authUser!: IExistingUser;
+  public isMyself!: boolean;
   private notifier: Subject<void> = new Subject<void>();
   public requestForComments$: Subject<void> = new Subject<void>();
 
@@ -33,7 +34,10 @@ export class ArticlePageComponent
       this.article = data['article'];
       this.slug = this.article.slug;
     });
-    this.getAuthUser();
+
+    this.authUser = this.authService.authUser$.getValue();
+    this.isMyself = this.authUser.username === this.article.author.username;
+
     window.scrollTo(screenTop, 0);
   }
 
@@ -44,11 +48,5 @@ export class ArticlePageComponent
 
   public reuestComments(): void {
     this.requestForComments$.next();
-  }
-
-  private getAuthUser(): void {
-    this.authService.authUser$
-      .pipe(takeUntil(this.notifier))
-      .subscribe((user) => (this.authUser = user));
   }
 }

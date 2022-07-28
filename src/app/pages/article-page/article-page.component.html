@@ -6,6 +6,7 @@
           {{ article?.title }}
         </h2>
       </mat-card-title>
+
       <div class="banner-actions" [e2e]="TestAttributes.BannerActions">
         <a routerLink="/user/{{ article?.author?.username }}">
           <img
@@ -13,32 +14,52 @@
             alt=""
             [e2e]="TestAttributes.ArticlePageAuthorImg"
           />
+
           <div>
             <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
               {{ article?.author?.username }}
             </h3>
+
             <p [e2e]="TestAttributes.ArticlePageDate">
               {{ article?.createdAt | date }}
             </p>
           </div>
         </a>
-        <app-article-page-buttons
-          [authUser]="authUser"
-          [article]="article"
-          [slug]="slug"
-        >
-        </app-article-page-buttons>
+        <ng-container *ngIf="!isMyself">
+          <app-like-button
+            [isAuth]="!!authUser.token"
+            [article]="article"
+          ></app-like-button>
+          <app-follow-button
+            [isAuth]="!!authUser.token"
+            [username]="article.author.username"
+            [isFollowed]="article.author.following"
+          >
+          </app-follow-button>
+        </ng-container>
+        <ng-container *ngIf="isMyself">
+          <app-delete-button [slug]="article.slug"> </app-delete-button>
+          <app-edit-button [slug]="article.slug"></app-edit-button>
+        </ng-container>
       </div>
     </div>
   </app-banner>
-  <app-article-body [authUser]="authUser" [slug]="slug" [article]="article">
+
+  <app-article-body
+    [isMyself]="isMyself"
+    [isAuth]="!!authUser.token"
+    [slug]="slug"
+    [article]="article"
+  >
   </app-article-body>
+
   <app-comment-form
     [image]="authUser?.image || ''"
     (commentEventEmmiter)="reuestComments()"
     [slug]="slug"
   >
   </app-comment-form>
+  
   <app-comments
     [requestForComments$]="requestForComments$"
     [authUser]="authUser"

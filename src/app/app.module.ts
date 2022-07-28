@@ -8,9 +8,7 @@ import {
 } from '@angular/platform-browser/animations';
 
 import { BannerModule } from './components/banner/banner.module';
-import { HomeModule } from './pages/home/home.module';
-//import { ArticleCardModule } from './components/article-card/article-card.module';
-import { AppRoutingModule } from './app-routing.module';
+import { HomeModule } from './pages/home/home.module';import { AppRoutingModule } from './app-routing.module';
 import { SignInModule } from './pages/sign-in/sign-in.module';
 
 import { AppComponent } from './app.component';

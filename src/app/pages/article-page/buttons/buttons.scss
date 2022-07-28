@@ -1,0 +1,18 @@
+.button {
+    margin: 0 5px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.icon-button {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .button {
+        display: none;
+    }
+    .icon-button {
+        display: block;
+    }
+}
