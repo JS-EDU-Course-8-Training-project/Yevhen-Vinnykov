@@ -57,7 +57,7 @@ export class ArticlesStore {
 
   private handleResponse(articles: IArticle[], articlesCount: number): void {
     this.pagesTotalCount = Math.ceil(articlesCount / this.limit) || 1;
-    this.articles$.next([...this.articles$.getValue(), ...articles]);
+    this.articles$.next([...this.articles, ...articles]);
 
     if (this.currentPage === this.pagesTotalCount) {
       this.loadedAllArticles$.next(true);
