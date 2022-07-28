@@ -1,4 +1,4 @@
-import { takeUntil, Subject, Observable, of, catchError } from 'rxjs';
+import { takeUntil, Subject } from 'rxjs';
 import { IComment } from 'src/app/shared/models/IComment';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommentsService } from '../services/comments/comments.service';
@@ -44,39 +44,33 @@ export class CommentsComponent
     this.notifier.complete();
   }
 
-  public getComments(): void {
+  public async getComments(): Promise<void> {
     this.isLoading = true;
-    this.commentsService
-      .fetchArticleComments(this.slug)
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((err: string) => this.onCatchError(err))
-      )
-      .subscribe((comments: IComment[]) => {
-        this.comments = comments;
-        this.isLoading = false;
-      });
+    try {
+      const comments = await this.commentsService.fetchArticleComments(
+        this.slug
+      );
+      this.comments = comments;
+      this.isLoading = false;
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  public deleteComment(id: string): void {
+  public async deleteComment(id: string): Promise<void> {
     this.commentsBeingDeletedIds.push(id);
-
-    this.commentsService
-      .removeComment(this.slug, id)
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((err: string) => this.onCatchError(err))
-      )
-      .subscribe(() => {
-        this.getComments();
-        this.commentsBeingDeletedIds.pop();
-      });
+    try {
+      await this.commentsService.removeComment(this.slug, id);
+      this.getComments();
+    } catch (error) {
+      this.onCatchError(error as string);
+    } finally {
+      this.commentsBeingDeletedIds.pop();
+    }
   }
 
-  private onCatchError(error: string): Observable<IComment[]> {
+  private onCatchError(error: string): void {
     this.isLoading = false;
     this.dialog.open(ErrorDialogComponent, { data: error });
-
-    return of([]);
   }
 }

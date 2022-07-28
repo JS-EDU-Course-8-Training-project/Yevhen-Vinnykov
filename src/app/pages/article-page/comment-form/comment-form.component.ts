@@ -1,10 +1,11 @@
-import { Subject, takeUntil } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { CommentsService } from 'src/app/pages/article-page/services/comments/comments.service';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
+import { ErrorDialogComponent } from 'src/app/components/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-comment-form',
@@ -18,46 +19,44 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
 
   public commentForm!: FormGroup;
   public isAuth!: boolean;
-  private notifier: Subject<void> = new Subject<void>();
   public isLoading = false;
 
   constructor(
     private commentsService: CommentsService,
     private fb: FormBuilder,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private dialog: MatDialog
   ) {
     super();
   }
 
   ngOnInit(): void {
     this.isAuth = this.authorizationService.isAuthorized$.getValue();
-    
+
     this.commentForm = this.fb.group({
       body: ['', [Validators.required]],
     });
   }
 
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
-  }
-
-  private createCommentData(): { body: string } {
-    return { body: this.commentForm.getRawValue().body };
-  }
-
-  public addComment(): void {
+  public async addComment(): Promise<void> {
     this.isLoading = true;
     this.commentForm.disable();
+    const comment = this.commentForm.getRawValue().body;
 
-    this.commentsService
-      .createComment(this.slug, this.createCommentData())
-      .pipe(takeUntil(this.notifier))
-      .subscribe(() => {
-        this.commentEventEmmiter.emit();
-        this.commentForm.reset();
-        this.isLoading = false;
-        this.commentForm.enable();
-      });
+    try {
+      await this.commentsService.createComment(this.slug, comment);
+
+      this.commentEventEmmiter.emit();
+      this.commentForm.reset();
+      this.commentForm.enable();
+      this.isLoading = false;
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
+  }
+  
+  private onCatchError(error: string): void {
+    this.isLoading = false;
+    this.dialog.open(ErrorDialogComponent, { data: error });
   }
 }

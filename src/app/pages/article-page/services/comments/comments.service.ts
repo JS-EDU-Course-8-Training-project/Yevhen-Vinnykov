@@ -1,4 +1,4 @@
-import { Observable, pluck } from 'rxjs';
+import { firstValueFrom, pluck } from 'rxjs';
 import { IComment } from '../../../../shared/models/IComment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -22,30 +22,36 @@ export class CommentsService {
   private baseURL: string = environment.apiURL;
   constructor(private http: HttpClient) {}
 
-  public fetchArticleComments(slug: string): Observable<IComment[]> {
-    return this.http
+  public async fetchArticleComments(slug: string): Promise<IComment[]> {
+    const source$ = this.http
       .get<{ comments: IComment[] }>(
         `${this.baseURL}/articles/${slug}/comments`,
         httpOptions
       )
       .pipe(pluck('comments'));
+
+    return firstValueFrom(source$);
   }
 
-  public createComment(
+  public async createComment(
     slug: string,
     comment: INewComment
-  ): Observable<IComment> {
-    return this.http.post<IComment>(
+  ): Promise<IComment> {
+    const source$ = this.http.post<IComment>(
       `${this.baseURL}/articles/${slug}/comments`,
       { comment },
       httpOptions
     );
+
+    return firstValueFrom(source$);
   }
 
-  public removeComment(slug: string, id: string): Observable<IComment> {
-    return this.http.delete<IComment>(
+  public removeComment(slug: string, id: string): Promise<IComment> {
+    const source$ = this.http.delete<IComment>(
       `${this.baseURL}/articles/${slug}/comments/${id}`,
       httpOptions
     );
+
+    return firstValueFrom(source$);
   }
 }

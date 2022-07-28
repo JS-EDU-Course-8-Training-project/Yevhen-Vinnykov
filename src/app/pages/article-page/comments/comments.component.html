@@ -7,14 +7,16 @@
     <mat-card-content>
       <p>{{ comment?.body }}</p>
     </mat-card-content>
+
     <mat-card-footer class="footer">
       <a [routerLink]="['/user/', comment.author.username]">
-        <img src="{{ comment?.author?.image }}" alt="" />
+        <img [src]="comment?.author?.image" alt="" />
         <div>
           <p>{{ comment?.author?.username }}</p>
           <p>{{ comment?.createdAt | date }}</p>
         </div>
       </a>
+
       <mat-icon
         (click)="deleteComment(comment.id)"
         *ngIf="comment?.author?.username === authUser?.username"
