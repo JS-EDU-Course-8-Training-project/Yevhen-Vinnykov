@@ -2,36 +2,42 @@
   className="banner user-banner"
   [e2e]="TestAttributes.UserPageBanner"
 >
+  <!-- USER IMAGE, NAME AND BIO -->
   <div class="user-info">
     <img [src]="user.image" alt="" [e2e]="TestAttributes.UserPageImg" />
 
     <mat-card-title class="banner-title">
       <h3 [e2e]="TestAttributes.UserPageUsername">{{ user.username }}</h3>
+
+      <!-- MOBILE BUTTONS -->
+      <div class="icon-button-container">
+        <app-follow-button
+          *ngIf="!isMyself"
+          [isAuth]="true"
+          [username]="user.username"
+          [isFollowed]="isFollowed"
+        >
+        </app-follow-button>
+
+        <app-settings-button *ngIf="isMyself"></app-settings-button>
+      </div>
     </mat-card-title>
 
     <mat-card-content class="banner-subtitle">
-      <p [e2e]="TestAttributes.UserPageBio">{{ user.bio }}</p>
+      <p [e2e]="TestAttributes.UserPageBio">{{ user.bio || "Just a user" }}</p>
     </mat-card-content>
   </div>
-  <div class="button-container">
-    <button
-      *ngIf="isMyself"
-      mat-raised-button
-      color="primary"
-      [e2e]="TestAttributes.UserPageUpdateBtn"
-    >
-      <a routerLink="/settings">Update Profile Settings</a>
-    </button>
 
-    <button
-      [disabled]="followingInProgress"
-      (click)="isFollowed ? unfollow(user.username) : follow(user.username)"
-      *ngIf="!isMyself && user?.username"
-      mat-raised-button
-      color="primary"
-      [e2e]="TestAttributes.UserPageFollowBtn"
+  <!-- DESKTOP AND TABLET BUTTONS -->
+  <div class="button-container">
+    <app-settings-button *ngIf="isMyself"></app-settings-button>
+
+    <app-follow-button
+      *ngIf="!isMyself"
+      [isAuth]="true"
+      [username]="user.username"
+      [isFollowed]="isFollowed"
     >
-      {{ isFollowed ? "Unfollow" : "Follow" }} {{ user.username }}
-    </button>
+    </app-follow-button>
   </div>
 </app-banner>

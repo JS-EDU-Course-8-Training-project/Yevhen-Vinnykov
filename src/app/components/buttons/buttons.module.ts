@@ -6,6 +6,7 @@ import { FollowButtonComponent } from './follow-button/follow-button.component';
 import { LikeButtonComponent } from './like-button/like-button.component';
 import { SharedModule } from 'src/app/shared/modules/shared.module';
 import { RouterModule } from '@angular/router';
+import { SettingsButtonComponent } from './settings-button/settings-button.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { RouterModule } from '@angular/router';
     EditButtonComponent,
     LikeButtonComponent,
     FollowButtonComponent,
+    SettingsButtonComponent,
   ],
   imports: [CommonModule, SharedModule, RouterModule],
   exports: [
@@ -20,6 +22,7 @@ import { RouterModule } from '@angular/router';
     EditButtonComponent,
     LikeButtonComponent,
     FollowButtonComponent,
+    SettingsButtonComponent,
   ],
 })
 export class ButtonsModule {}

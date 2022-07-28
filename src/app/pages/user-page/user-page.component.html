@@ -3,7 +3,6 @@
   <app-user-page-banner
     [user]="user"
     [isMyself]="isMyself"
-    [followingInProgress]="followingInProgress"
     [isFollowed]="isFollowed"
   ></app-user-page-banner>
 
@@ -14,7 +13,7 @@
       [selectedIndex]="tabIndex"
     >
       <mat-tab
-        *ngFor="let label of ['My Articles', 'Followed Articles']"
+        *ngFor="let label of ['My Articles', 'Favorited Articles']"
         label="{{ label }}"
       >
         <app-article-list

@@ -14,20 +14,31 @@
         height: 150px;
         margin-bottom: 15px;
     }
+    .icon-button-container {
+        display: none;
+    }
 }
+
 .button-container {
     width: 60%;
     height: 40px;
     display: flex;
     justify-content: end;
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
 }
 
 @media (max-width: 768px) {
     .button-container {
-        justify-content: center;
+        display: none;
+    }
+    .banner-title {
+        display: flex;
+        justify-content: flex-end;
+        .icon-button-container {
+            display: block;
+        }
+        h3 {
+            padding-top: 5px;
+            margin: 0;
+        }
     }
 }
