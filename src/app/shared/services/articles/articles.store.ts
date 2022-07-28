@@ -35,6 +35,8 @@ export class ArticlesStore {
   public useForArticles(options: IOptions) {
     this.reset();
     this.storeConfig.configure(this, options);
+    // After configuration this.useArticlesService
+    // will get specified articles (global, favorited, etc.)
   }
 
   public async getArticles(): Promise<void> {
