@@ -74,23 +74,23 @@ export class UserPageComponent
     this.initStore();
   }
 
-  public async follow(username: string): Promise<void> {
-    this.followingInProgress = true;
+  // public async follow(username: string): Promise<void> {
+  //   this.followingInProgress = true;
 
-    const { following } = await this.profilesService.follow(username);
-    this.isFollowed = following;
+  //   const { following } = await this.profilesService.follow(username);
+  //   this.isFollowed = following;
 
-    this.followingInProgress = false;
-  }
+  //   this.followingInProgress = false;
+  // }
 
-  public async unfollow(username: string): Promise<void> {
-    this.followingInProgress = true;
+  // public async unfollow(username: string): Promise<void> {
+  //   this.followingInProgress = true;
 
-    const { following } = await this.profilesService.unfollow(username);
-    this.isFollowed = following;
+  //   const { following } = await this.profilesService.unfollow(username);
+  //   this.isFollowed = following;
 
-    this.followingInProgress = false;
-  }
+  //   this.followingInProgress = false;
+  // }
 
   public handleTabChange(index: number): void {
     this.tabIndex = index;

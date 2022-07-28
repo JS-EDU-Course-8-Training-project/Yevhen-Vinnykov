@@ -1,0 +1,37 @@
+<app-banner
+  className="banner user-banner"
+  [e2e]="TestAttributes.UserPageBanner"
+>
+  <div class="user-info">
+    <img [src]="user.image" alt="" [e2e]="TestAttributes.UserPageImg" />
+
+    <mat-card-title class="banner-title">
+      <h3 [e2e]="TestAttributes.UserPageUsername">{{ user.username }}</h3>
+    </mat-card-title>
+
+    <mat-card-content class="banner-subtitle">
+      <p [e2e]="TestAttributes.UserPageBio">{{ user.bio }}</p>
+    </mat-card-content>
+  </div>
+  <div class="button-container">
+    <button
+      *ngIf="isMyself"
+      mat-raised-button
+      color="primary"
+      [e2e]="TestAttributes.UserPageUpdateBtn"
+    >
+      <a routerLink="/settings">Update Profile Settings</a>
+    </button>
+
+    <button
+      [disabled]="followingInProgress"
+      (click)="isFollowed ? unfollow(user.username) : follow(user.username)"
+      *ngIf="!isMyself && user?.username"
+      mat-raised-button
+      color="primary"
+      [e2e]="TestAttributes.UserPageFollowBtn"
+    >
+      {{ isFollowed ? "Unfollow" : "Follow" }} {{ user.username }}
+    </button>
+  </div>
+</app-banner>
