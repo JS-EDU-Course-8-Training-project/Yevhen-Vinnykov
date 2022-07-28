@@ -1,45 +1,55 @@
 <app-banner className="article-banner banner" [image]="article.image">
-    <div class="banner-container">
-      <mat-card-title>
-        <h2 class="banner-title" [e2e]="TestAttributes.ArticleTitle">
-          {{ article?.title }}
-        </h2>
-      </mat-card-title>
+  <div class="banner-container">
+    <!-- ARTICLE TITLE -->
+    <mat-card-title>
+      <h2 class="banner-title" [e2e]="TestAttributes.ArticleTitle">
+        {{ article.title }}
+      </h2>
+    </mat-card-title>
 
-      <div class="banner-actions" [e2e]="TestAttributes.BannerActions">
-        <a routerLink="/user/{{ article?.author?.username }}">
-          <img
-            src="{{ article?.author?.image }}"
-            alt=""
-            [e2e]="TestAttributes.ArticlePageAuthorImg"
-          />
+    <mat-card-content>
+      <div class="banner-content">
+        <!-- USER INFO AND CREATED AT DATE -->
+        <div class="info">
+          <a [routerLink]="['/user/', article.author.username]">
+            <img
+              [src]="article.author.image"
+              alt=""
+              [e2e]="TestAttributes.ArticlePageAuthorImg"
+            />
+            <div>
+              <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
+                {{ article.author.username }}
+              </h3>
+              <span [e2e]="TestAttributes.ArticlePageDate">
+                {{ article.createdAt | date }}
+              </span>
+            </div>
+          </a>
+        </div>
 
-          <div>
-            <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
-              {{ article?.author?.username }}
-            </h3>
+        <mat-card-actions class="banner-actions">
+          <!-- NOT OWN ARTICLE ACTIONS -->
+          <ng-container *ngIf="!isMyself">
+            <app-like-button
+              [isAuth]="isAuth"
+              [article]="article"
+            ></app-like-button>
+            <app-follow-button
+              [isAuth]="isAuth"
+              [username]="article.author.username"
+              [isFollowed]="article.author.following"
+            >
+            </app-follow-button>
 
-            <p [e2e]="TestAttributes.ArticlePageDate">
-              {{ article?.createdAt | date }}
-            </p>
-          </div>
-        </a>
-        <ng-container *ngIf="!isMyself">
-          <app-like-button
-            [isAuth]="isAuth"
-            [article]="article"
-          ></app-like-button>
-          <app-follow-button
-            [isAuth]="isAuth"
-            [username]="article.author.username"
-            [isFollowed]="article.author.following"
-          >
-          </app-follow-button>
-        </ng-container>
-        <ng-container *ngIf="isMyself">
-          <app-delete-button [slug]="article.slug"> </app-delete-button>
-          <app-edit-button [slug]="article.slug"></app-edit-button>
-        </ng-container>
+            <!-- OWN ARTICLE ACTIONS -->
+          </ng-container>
+          <ng-container *ngIf="isMyself">
+            <app-delete-button [slug]="article.slug"></app-delete-button>
+            <app-edit-button [slug]="article.slug"></app-edit-button>
+          </ng-container>
+        </mat-card-actions>
       </div>
-    </div>
-  </app-banner>
+    </mat-card-content>
+  </div>
+</app-banner>

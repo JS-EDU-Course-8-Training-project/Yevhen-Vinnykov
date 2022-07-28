@@ -15,40 +15,37 @@
     display: flex;
     justify-content: center;
   }
-}
-
-.article-actions-container {
-  display: flex;
-  justify-content: space-between;
-  min-height: 3rem;
-  margin: 0 auto;
-  width: 50%;
-  margin-bottom: 40px;
-  .article-author {
-    a {
+  .article-actions-container {
+    display: flex;
+    .article-author {
+      display: flex;
+      align-items: center;
+      flex: 1 0 auto;
+      a {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+      }
+      h3 {
+        margin: 0;
+      }
+      img {
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        margin: 0 10px 0 0;
+      }
+    }
+    .article-actions {
       display: flex;
       justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      color: inherit;
-      margin-right: 30px;
+      flex-wrap: wrap;
+      button {
+        padding: 20px;
+      }
     }
-    h3 {
-      margin: 0;
-    }
-    img {
-      border-radius: 50%;
-      height: 30px;
-      width: 30px;
-      margin: 0 10px 0 0;
-    }
-    p {
-      margin: 0;
-    }
-  }
-  .article-actions {
-    display: flex;
-    justify-content: start;
   }
 }
 

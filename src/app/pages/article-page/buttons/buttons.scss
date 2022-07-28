@@ -1,7 +1,11 @@
 .button {
     margin: 0 5px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    padding: 5px;
+    button {
+        min-width: 190px;
+    }
 }
 
 .icon-button {

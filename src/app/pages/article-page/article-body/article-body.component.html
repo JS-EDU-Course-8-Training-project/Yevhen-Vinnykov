@@ -1,13 +1,15 @@
 <div class="article-body-container">
+  <!-- BODY -->
   <div class="article-body" [e2e]="TestAttributes.ArticlePageBody">
-    <p>{{ article?.body }}</p>
+    <p>{{ article.body }}</p>
   </div>
 
+  <!-- TAGS -->
   <mat-chip-list>
     <mat-chip
       class="tag"
       [e2e]="TestAttributes.Tag"
-      *ngFor="let tag of article?.tagList"
+      *ngFor="let tag of article.tagList"
       [value]="tag"
     >
       {{ tag }}
@@ -15,39 +17,47 @@
   </mat-chip-list>
 
   <mat-divider class="devider"></mat-divider>
-</div>
-<div class="article-actions-container">
-  <div class="article-author">
-    <a [routerLink]="['/user/', article.author.username]">
-      <img
-        src="{{ article?.author?.image }}"
-        alt=""
-        [e2e]="TestAttributes.ArticlePageAuthorImg"
-      />
-      <div>
-        <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
-          {{ article?.author?.username }}
-        </h3>
-        <p [e2e]="TestAttributes.ArticlePageDate">
-          {{ article?.createdAt | date }}
-        </p>
-      </div>
-    </a>
-  </div>
 
-  <div class="article-actions">
-    <ng-container *ngIf="!isMyself">
-      <app-like-button [isAuth]="isAuth" [article]="article"> </app-like-button>
-      <app-follow-button
-        [isAuth]="isAuth"
-        [username]="article.author.username"
-        [isFollowed]="article.author.following"
-      >
-      </app-follow-button>
-    </ng-container>
-    <ng-container *ngIf="isMyself">
-      <app-delete-button [slug]="article.slug"> </app-delete-button>
-      <app-edit-button [slug]="article.slug"></app-edit-button>
-    </ng-container>
+  <div class="article-actions-container">
+    <!-- ARTICLE AUTHOR INFO AND CREATED AT DATE -->
+    <div class="article-author">
+      <a [routerLink]="['/user/', article.author.username]">
+        <img
+          [src]="article.author.image"
+          alt=""
+          [e2e]="TestAttributes.ArticlePageAuthorImg"
+        />
+        <div>
+          <h3 [e2e]="TestAttributes.ArticlePageAuthorName">
+            {{ article.author.username }}
+          </h3>
+          <span [e2e]="TestAttributes.ArticlePageDate">
+            {{ article?.createdAt | date }}
+          </span>
+        </div>
+      </a>
+    </div>
+
+    <div class="article-actions">
+      <!-- NOT OWN ARTICLE BUTTONS -->
+      <ng-container *ngIf="!isMyself">
+        <app-like-button
+          [isAuth]="isAuth"
+          [article]="article"
+        ></app-like-button>
+        <app-follow-button
+          [isAuth]="isAuth"
+          [username]="article.author.username"
+          [isFollowed]="article.author.following"
+        >
+        </app-follow-button>
+      </ng-container>
+
+      <!-- OWN ARTICLE BUTTONS -->
+      <ng-container *ngIf="isMyself">
+        <app-delete-button [slug]="article.slug"> </app-delete-button>
+        <app-edit-button [slug]="article.slug"></app-edit-button>
+      </ng-container>
+    </div>
   </div>
 </div>
