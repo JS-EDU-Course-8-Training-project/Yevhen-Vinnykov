@@ -28,7 +28,16 @@ export class ConfirmationGuard implements CanDeactivate<ISavedData> {
     | boolean
     | UrlTree {
     if (!component.isDataSaved()) {
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+      const dailogData = {
+        title: 'Are you sure you want to leave?',
+        subtitle: 'Your data will be lost :(',
+        confirmButtonText: 'Leave',
+        cancelButtonText: 'Stay',
+      };
+
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: dailogData,
+      });
       return dialogRef.afterClosed();
     }
     return of(true);
