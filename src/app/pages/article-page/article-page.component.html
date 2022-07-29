@@ -15,17 +15,8 @@
   >
   </app-article-body>
 
-  <app-comment-form
-    [image]="authUser?.image || ''"
-    (commentEventEmmiter)="requestComments()"
-    [slug]="slug"
-  >
+  <app-comment-form [image]="authUser.image" [slug]="slug">
   </app-comment-form>
 
-  <app-comments
-    [requestForComments$]="requestForComments$"
-    [authUser]="authUser"
-    [slug]="slug"
-  >
-  </app-comments>
+  <app-comments [authUser]="authUser" [slug]="slug"> </app-comments>
 </div>

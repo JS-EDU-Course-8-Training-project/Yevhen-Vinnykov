@@ -1,31 +1,30 @@
 <section class="article-comments">
   <mat-card
     class="comment"
-    *ngFor="let comment of comments"
+    *ngFor="let comment of store.comments$ | async"
     [e2e]="TestAttributes.Comment"
   >
     <mat-card-content>
-      <p>{{ comment?.body }}</p>
+      <p>{{ comment.body }}</p>
     </mat-card-content>
 
     <mat-card-footer class="footer">
       <a [routerLink]="['/user/', comment.author.username]">
-        <img [src]="comment?.author?.image" alt="" />
+        <img [src]="comment.author.image" alt="" />
         <div>
-          <p>{{ comment?.author?.username }}</p>
-          <p>{{ comment?.createdAt | date }}</p>
+          <p>{{ comment.author.username }}</p>
+          <p>{{ comment.createdAt | date }}</p>
         </div>
       </a>
 
       <mat-icon
         (click)="deleteComment(comment.id)"
-        *ngIf="comment?.author?.username === authUser?.username"
+        *ngIf="comment.author.username === authUser?.username"
         class="delete-icon"
-        color="primary"
         [e2e]="TestAttributes.CommentDeleteBtn"
       >
         <span *ngIf="!commentsBeingDeletedIds.includes(comment.id)">
-          delete
+          delete_outline
         </span>
         <mat-spinner
           diameter="25"

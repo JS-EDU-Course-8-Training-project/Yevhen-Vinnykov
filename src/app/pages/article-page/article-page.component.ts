@@ -20,7 +20,6 @@ export class ArticlePageComponent
   public authUser!: IExistingUser;
   public isMyself!: boolean;
   private notifier: Subject<void> = new Subject<void>();
-  public requestForComments$: Subject<void> = new Subject<void>();
 
   constructor(
     private authService: AuthorizationService,
@@ -44,9 +43,5 @@ export class ArticlePageComponent
   ngOnDestroy(): void {
     this.notifier.next();
     this.notifier.complete();
-  }
-
-  public requestComments(): void {
-    this.requestForComments$.next();
   }
 }

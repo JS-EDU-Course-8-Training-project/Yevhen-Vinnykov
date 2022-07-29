@@ -18,23 +18,32 @@
       </textarea>
       <div class="footer">
         <img [src]="image" />
+        <!-- BUTTON FOR BIGGER SCREENS -->
         <button
+          class="button"
           [disabled]="!commentForm.valid"
-          align="end"
           type="submit"
-          mat-raised-button
-          color="primary"
+          mat-stroked-button
           [e2e]="TestAttributes.CommentPostBtn"
         >
-          <span *ngIf="!isLoading">Add</span>
-          <mat-spinner
-            *ngIf="isLoading"
-            diameter="25"
-            [e2e]="TestAttributes.LoadingSpinner"
-          >
-          </mat-spinner>
+          <span>Add</span>
+        </button>
+
+        <!-- BUTTON FOR SMALLER SCREENS -->
+        <button
+          class="icon-button"
+          [disabled]="!commentForm.valid"
+          type="submit"
+          mat-icon-button
+          [e2e]="TestAttributes.CommentPostBtn"
+        >
+          <mat-icon>send</mat-icon>
         </button>
       </div>
+      <mat-progress-bar
+        *ngIf="isLoading"
+        mode="indeterminate"
+      ></mat-progress-bar>
     </div>
   </form>
 </div>
