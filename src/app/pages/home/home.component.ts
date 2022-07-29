@@ -5,6 +5,8 @@ import { ArticlesService } from 'src/app/shared/services/articles/articles.servi
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { ArticlesStore } from '../../shared/services/articles/articles.store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarComponent } from 'src/app/components/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +19,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
 
   public selectedTag!: string;
   public tabIndex = 0;
-  
+
   public isLoading!: boolean;
   public currentPage = 0;
   public pagesTotalCount = 0;
@@ -28,7 +30,8 @@ export class HomeComponent extends TestedComponent implements OnInit {
   constructor(
     private authService: AuthorizationService,
     public store: ArticlesStore,
-    private articlesService: ArticlesService
+    private articlesService: ArticlesService,
+    private snackbar: MatSnackBar
   ) {
     super();
   }
@@ -81,9 +84,14 @@ export class HomeComponent extends TestedComponent implements OnInit {
     this.pagesTotalCount = Math.ceil(articlesCount / this.limit) || 1;
     this.store.articles$.next([...this.store.articles, ...articles]);
 
-    if (this.currentPage === this.pagesTotalCount) return;
-    this.currentPage++;
-    this.offset += this.limit;
+    if (this.currentPage < this.pagesTotalCount) {
+      this.currentPage++;
+      this.offset += this.limit;
+    }
+
+    if (this.store.articles.length === articlesCount) {
+      this.onLoadedAllArticles();
+    }
   }
 
   private onCatchError(error: string): void {
@@ -112,5 +120,12 @@ export class HomeComponent extends TestedComponent implements OnInit {
     this.offset = 0;
     this.currentPage = 0;
     this.pagesTotalCount = 0;
+  }
+
+  private onLoadedAllArticles(): void {
+    this.snackbar.openFromComponent(SnackbarComponent, {
+      data: `These are all articles for now`,
+      duration: 2500,
+    });
   }
 }

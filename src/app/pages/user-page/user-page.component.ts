@@ -9,6 +9,8 @@ import { AuthorizationService } from 'src/app/shared/services/authorization/auth
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { ArticlesStore } from 'src/app/shared/services/articles/articles.store';
+import { SnackbarComponent } from 'src/app/components/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-page',
@@ -39,7 +41,8 @@ export class UserPageComponent
     private router: Router,
     private authService: AuthorizationService,
     public store: ArticlesStore,
-    private articlesService: ArticlesService
+    private articlesService: ArticlesService,
+    private snackbar: MatSnackBar
   ) {
     super();
   }
@@ -110,9 +113,14 @@ export class UserPageComponent
     this.pagesTotalCount = Math.ceil(articlesCount / this.limit) || 1;
     this.store.articles$.next([...this.store.articles, ...articles]);
 
-    if (this.currentPage === this.pagesTotalCount) return;
-    this.currentPage++;
-    this.offset += this.limit;
+    if (this.currentPage < this.pagesTotalCount) {
+      this.currentPage++;
+      this.offset += this.limit;
+    }
+
+    if (this.store.articles.length === articlesCount) {
+      this.onLoadedAllArticles();
+    }
   }
 
   private onCatchError(error: string): void {
@@ -132,5 +140,12 @@ export class UserPageComponent
     this.offset = 0;
     this.currentPage = 0;
     this.pagesTotalCount = 0;
+  }
+
+  private onLoadedAllArticles(): void {
+    this.snackbar.openFromComponent(SnackbarComponent, {
+      data: `These are all articles for now`,
+      duration: 2500,
+    });
   }
 }

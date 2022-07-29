@@ -7,14 +7,7 @@ import { HomeComponent } from './home.component';
 import { ArticleListModule } from 'src/app/components/article-list/article-list.module';
 
 @NgModule({
-  declarations: [
-    HomeComponent,
-    TagsComponent,
-  ],
-  imports: [
-    BannerModule,
-    SharedModule,
-    ArticleListModule
-  ],
+  declarations: [HomeComponent, TagsComponent],
+  imports: [BannerModule, SharedModule, ArticleListModule],
 })
 export class HomeModule {}

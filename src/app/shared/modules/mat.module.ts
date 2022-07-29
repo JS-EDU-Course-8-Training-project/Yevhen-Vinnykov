@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -22,10 +23,12 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatProgressSpinnerModule,
     MatDividerModule,
     MatProgressBarModule,
+    MatSnackBarModule
   ],
   exports: [
     MatButtonModule,
     MatDialogModule,
+    MatSnackBarModule,
     MatCardModule,
     MatIconModule,
     MatTabsModule,

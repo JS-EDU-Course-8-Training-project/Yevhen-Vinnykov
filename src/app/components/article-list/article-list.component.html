@@ -1,13 +1,9 @@
-<p *ngIf="!articles.length && isLastPage && !error">
-  No articles here... yet.
-</p>
+<p *ngIf="!articles.length && isLastPage && !error">No articles here... yet.</p>
 
 <p *ngIf="error">{{ error }}</p>
 
 <ng-container>
-  <div
-    *ngFor="let article of articles; let i = index"
-  >
+  <div *ngFor="let article of articles; let i = index">
     <app-article-card [article]="article" *ngIf="i + 1 !== articles.length">
     </app-article-card>
     <app-article-card
@@ -25,12 +21,4 @@
     [e2e]="TestAttributes.LoadingSpinner"
   >
   </mat-spinner>
-
-  <div
-    class="finished"
-    *ngIf="isLastPage && articles.length"
-    [e2e]="TestAttributes.AllArticlesLoaded"
-  >
-    <div>No more articles for now...</div>
-  </div>
 </ng-container>
