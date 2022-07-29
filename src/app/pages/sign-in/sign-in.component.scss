@@ -61,7 +61,14 @@
 }
 
 @media (max-width: 768px) {
-  .container .background-card {
+  .container {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    .background-card {
+      width: 100%;
+    }
   }
 }
