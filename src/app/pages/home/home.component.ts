@@ -89,7 +89,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
       this.offset += this.limit;
     }
 
-    if (this.store.articles.length === articlesCount) {
+    if (articlesCount && this.store.articles.length === articlesCount) {
       this.onLoadedAllArticles();
     }
   }
