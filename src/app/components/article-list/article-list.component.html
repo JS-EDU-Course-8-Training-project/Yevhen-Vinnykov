@@ -1,4 +1,4 @@
-<p *ngIf="!articles.length && loadedAllArticles && !error">
+<p *ngIf="!articles.length && isLastPage && !error">
   No articles here... yet.
 </p>
 
@@ -28,7 +28,7 @@
 
   <div
     class="finished"
-    *ngIf="loadedAllArticles && articles.length"
+    *ngIf="isLastPage && articles.length"
     [e2e]="TestAttributes.AllArticlesLoaded"
   >
     <div>No more articles for now...</div>

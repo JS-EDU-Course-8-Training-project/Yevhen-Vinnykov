@@ -31,7 +31,7 @@ export class ArticleListComponent
   @Input() selectedTag!: string | null;
   @Input() articles!: IArticle[];
   @Input() error!: string;
-  @Input() loadedAllArticles!: boolean;
+  @Input() isLastPage!: boolean;
   @Input() isLoading!: boolean;
   @Input() cb!: () => void;
 
@@ -47,7 +47,7 @@ export class ArticleListComponent
 
   ngAfterViewInit(): void {
     this.lastItem.changes.pipe(takeUntil(this.notifier)).subscribe((change) => {
-      if (change.last && !this.loadedAllArticles) {
+      if (change.last && !this.isLastPage) {
         this.scrollService.observer.observe(change.last.nativeElement);
       }
     });

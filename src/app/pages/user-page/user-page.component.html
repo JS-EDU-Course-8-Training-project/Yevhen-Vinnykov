@@ -20,10 +20,10 @@
           [tabIndex]="tabIndex"
           [e2e]="TestAttributes.GlobalFeed"
           [articles]="store.articles"
-          [error]="store.error"
-          [loadedAllArticles]="store.loadedAllArticles"
-          [isLoading]="store.isLoading$.getValue()"
-          [cb]="store.requestArticles.bind(store)"
+          [error]="error"
+          [isLastPage]="currentPage === pagesTotalCount"
+          [isLoading]="isLoading"
+          [cb]="loadArticles.bind(this)"
         >
         </app-article-list>
       </mat-tab>
