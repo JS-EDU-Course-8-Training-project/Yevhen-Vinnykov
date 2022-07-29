@@ -1,4 +1,4 @@
-<p *ngIf="!articles.length && isLastPage && !error">No articles here... yet.</p>
+<p *ngIf="!articles.length && !isLoading && !error">No articles here... yet.</p>
 
 <p *ngIf="error">{{ error }}</p>
 
