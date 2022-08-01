@@ -60,19 +60,19 @@ export class HomeComponent extends TestedComponent implements OnInit {
     }
   }
 
-  private async getGlobalFeed(): Promise<IArticleResponse> {
-    return await this.articlesService.fetchArticles(this.offset, this.limit);
+  private getGlobalFeed(): Promise<IArticleResponse> {
+    return this.articlesService.fetchArticles(this.offset, this.limit);
   }
 
-  private async getYourFeed(): Promise<IArticleResponse> {
-    return await this.articlesService.fetchFollowedArticles(
+  private getYourFeed(): Promise<IArticleResponse> {
+    return this.articlesService.fetchFollowedArticles(
       this.offset,
       this.limit
     );
   }
 
-  private async getTaggedArticles(): Promise<IArticleResponse> {
-    return await this.articlesService.fetchArticlesByTag(
+  private getTaggedArticles(): Promise<IArticleResponse> {
+    return this.articlesService.fetchArticlesByTag(
       this.selectedTag,
       this.offset,
       this.limit

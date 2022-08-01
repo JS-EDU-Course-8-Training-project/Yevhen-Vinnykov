@@ -1,4 +1,3 @@
-import { Subject, takeUntil } from 'rxjs';
 import {
   Component,
   Input,
@@ -6,7 +5,6 @@ import {
   Output,
   EventEmitter,
   OnChanges,
-  OnDestroy,
 } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
@@ -18,7 +16,7 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 })
 export class TagsComponent
   extends TestedComponent
-  implements OnInit, OnChanges, OnDestroy
+  implements OnInit, OnChanges
 {
   @Input() tabIndex!: number;
   @Output() selectedTagEmmiter: EventEmitter<string> = new EventEmitter();
@@ -26,32 +24,25 @@ export class TagsComponent
   public tags: string[] = [];
   public isLoading = false;
   public selectedTag!: string | null;
-  private notifier: Subject<void> = new Subject<void>();
 
   constructor(private articlesService: ArticlesService) {
     super();
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.articlesService
-      .fetchTags()
-      .pipe(takeUntil(this.notifier))
-      .subscribe((tags: string[]) => {
-        this.tags = tags;
-        this.isLoading = false;
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
+    this.setTags();
   }
 
   ngOnChanges() {
     if (this.tabIndex !== 2) {
       this.selectedTag = null;
     }
+  }
+
+  private async setTags(): Promise<void> {
+    this.isLoading = true;
+    this.tags = await this.articlesService.fetchTags();
+    this.isLoading = false;
   }
 
   public selectTag(tag: string): void {

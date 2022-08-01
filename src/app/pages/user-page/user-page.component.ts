@@ -92,16 +92,16 @@ export class UserPageComponent
     }
   }
 
-  private async getMyArticles(): Promise<IArticleResponse> {
-    return await this.articlesService.fetchUserArticles(
+  private getMyArticles(): Promise<IArticleResponse> {
+    return this.articlesService.fetchUserArticles(
       this.user.username,
       this.offset,
       this.limit
     );
   }
 
-  private async getFavoritedArticles(): Promise<IArticleResponse> {
-    return await this.articlesService.fetchFavoritedArticles(
+  private getFavoritedArticles(): Promise<IArticleResponse> {
+    return this.articlesService.fetchFavoritedArticles(
       this.user.username,
       this.offset,
       this.limit
@@ -140,6 +140,7 @@ export class UserPageComponent
     this.offset = 0;
     this.currentPage = 0;
     this.pagesTotalCount = 0;
+    this.error = '';
   }
 
   private onLoadedAllArticles(): void {

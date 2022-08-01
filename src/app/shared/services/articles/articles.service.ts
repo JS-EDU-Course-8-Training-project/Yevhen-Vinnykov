@@ -2,7 +2,7 @@ import { IUpdateArticle } from '../../models/IUpdateArticle';
 import { IArticle, IArticleResponse } from '../../models/IArticle';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { firstValueFrom, Observable, pluck } from 'rxjs';
+import { firstValueFrom, pluck } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { INewArticle } from '../../models/INewArticle';
 
@@ -82,13 +82,15 @@ export class ArticlesService {
     return firstValueFrom(source$);
   }
 
-  public fetchTags(): Observable<string[]> {
-    return this.http
+  public fetchTags(): Promise<string[]> {
+    const source$ = this.http
       .get<{ tags: string[] }>(
         this.baseURL.replace('articles', 'tags'),
         httpOptions
       )
       .pipe(pluck('tags'));
+
+    return firstValueFrom(source$);
   }
 
   public fetchArticlesByTag(

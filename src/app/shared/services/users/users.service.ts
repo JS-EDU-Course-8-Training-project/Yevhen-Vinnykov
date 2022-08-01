@@ -1,7 +1,7 @@
 import { IUpdateUser } from './../../models/IUpdateUser';
 import { environment } from '../../../../environments/environment';
 import { IExistingUser } from '../../models/IExistingUser';
-import { Observable, pluck, map, firstValueFrom } from 'rxjs';
+import { pluck, map, firstValueFrom } from 'rxjs';
 import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -24,22 +24,6 @@ export class UsersService {
     private http: HttpClient,
     private authorizationService: AuthorizationService
   ) {}
-
-  // public createUser(user: INewUser): Observable<IExistingUser> {
-  //   return this.http
-  //     .post<{ user: IExistingUser }>(
-  //       `${this.baseURL}/users/signup`,
-  //       { user },
-  //       httpOptions
-  //     )
-  //     .pipe(
-  //       pluck('user'),
-  //       map((user) => {
-  //         this.authorizationService.authorize(user);
-  //         return user;
-  //       })
-  //     );
-  // }
 
   public createUser(user: INewUser): Promise<IExistingUser> {
     const source$ = this.http

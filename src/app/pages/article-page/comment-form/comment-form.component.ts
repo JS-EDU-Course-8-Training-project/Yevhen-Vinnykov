@@ -41,9 +41,9 @@ export class CommentFormComponent extends TestedComponent implements OnInit {
   public async addComment(): Promise<void> {
     this.isLoading = true;
     this.commentForm.disable();
-    const body = this.commentForm.getRawValue().body;
 
     try {
+      const body = this.commentForm.getRawValue().body;
       await this.commentsService.createComment(this.slug, { body });
 
       const comments = await this.commentsService.fetchArticleComments(
