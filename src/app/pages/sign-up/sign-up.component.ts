@@ -1,9 +1,7 @@
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
-import { catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/shared/services/users/users.service';
-import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { INewUser } from 'src/app/shared/models/INewUser';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
@@ -15,10 +13,9 @@ type TSignupControls = 'username' | 'email' | 'password';
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent extends TestedComponent implements OnInit {
-  public signupForm!: FormGroup;
+  public signUpForm!: FormGroup;
   public error!: string;
-  public isPending = false;
-  private notifier: Subject<void> = new Subject<void>();
+  public isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -29,7 +26,7 @@ export class SignUpComponent extends TestedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signupForm = this.fb.group({
+    this.signUpForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: [
@@ -42,49 +39,32 @@ export class SignUpComponent extends TestedComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
-  }
-
   public checkIfValid(formControl: TSignupControls): boolean {
     return !(
-      this.signupForm.controls[formControl].touched &&
-      this.signupForm.controls[formControl].invalid
+      this.signUpForm.controls[formControl].touched &&
+      this.signUpForm.controls[formControl].invalid
     );
   }
 
-  private createUserData(): INewUser {
-    return this.signupForm.getRawValue();
-  }
-
-  private onSubmit(): void {
-    this.signupForm.disable();
-    this.isPending = true;
+  public async handleSignUp(): Promise<void> {
+    this.signUpForm.disable();
+    this.isLoading = true;
     this.error = '';
+
+    try {
+      const signUpData: INewUser = this.signUpForm.getRawValue();
+      await this.usersService.createUser(signUpData);
+      this.isLoading = false;
+      this.redirectionService.redirectHome();
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private onCatchError(error: string): Observable<IExistingUser> {
+  private onCatchError(error: string): void {
     this.error = error;
-    this.isPending = false;
-    this.signupForm.enable();
-    this.signupForm.markAsUntouched();
-
-    return of({} as IExistingUser);
-  }
-
-  public handleSignup(): void {
-    this.onSubmit();
-
-    this.usersService
-      .createUser(this.createUserData())
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((error: string) => this.onCatchError(error))
-      )
-      .subscribe(() => {
-        this.isPending = false;
-        if (!this.error) this.redirectionService.redirectHome();
-      });
+    this.isLoading = false;
+    this.signUpForm.enable();
+    this.signUpForm.markAsUntouched();
   }
 }

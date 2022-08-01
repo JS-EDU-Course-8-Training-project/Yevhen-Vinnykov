@@ -1,6 +1,6 @@
 <div class="container">
   <mat-card class="background-card">
-    <form [formGroup]="signupForm" (ngSubmit)="handleSignup()">
+    <form [formGroup]="signUpForm" (ngSubmit)="handleSignUp()">
       <div class="form-group">
         <h2 [e2e]="TestAttributes.FormTitle">Sign Up</h2>
         <a routerLink="/sign-in" [e2e]="TestAttributes.SignInLink">
@@ -38,14 +38,14 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('email') && !signupForm.get('email')?.value"
+          *ngIf="!checkIfValid('email') && !signUpForm.get('email')?.value"
           [e2e]="TestAttributes.FormError"
         >
           This field is required
         </span>
         <span
           class="form-error"
-          *ngIf="signupForm.get('email')?.errors?.['email']"
+          *ngIf="signUpForm.get('email')?.errors?.['email']"
           [e2e]="TestAttributes.FormError"
         >
           Enter a valid email
@@ -64,8 +64,8 @@
           class="form-error"
           *ngIf="
             !checkIfValid('password') ||
-            (signupForm.get('password')?.invalid &&
-              signupForm.get('password')?.dirty)
+            (signUpForm.get('password')?.invalid &&
+              signUpForm.get('password')?.dirty)
           "
           [e2e]="TestAttributes.FormError"
         >
@@ -73,7 +73,7 @@
           capital letter and a digit
         </span>
         <button
-          [disabled]="!signupForm.valid || isPending"
+          [disabled]="!signUpForm.valid || isLoading"
           type="submit"
           mat-raised-button
           color="primary"
@@ -84,7 +84,7 @@
       </div>
       <mat-card-footer>
         <mat-progress-bar
-          *ngIf="isPending"
+          *ngIf="isLoading"
           mode="indeterminate"
         ></mat-progress-bar>
       </mat-card-footer>

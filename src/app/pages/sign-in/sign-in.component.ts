@@ -13,7 +13,7 @@ type TSigninControls = 'email' | 'password';
   styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent extends TestedComponent implements OnInit {
-  public signinForm!: FormGroup;
+  public signInForm!: FormGroup;
   public error!: string;
   public isLoading = false;
 
@@ -26,7 +26,7 @@ export class SignInComponent extends TestedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signinForm = this.fb.group({
+    this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
@@ -34,18 +34,18 @@ export class SignInComponent extends TestedComponent implements OnInit {
 
   public checkIfValid(formControl: TSigninControls): boolean {
     return !(
-      this.signinForm.controls[formControl].touched &&
-      this.signinForm.controls[formControl].invalid
+      this.signInForm.controls[formControl].touched &&
+      this.signInForm.controls[formControl].invalid
     );
   }
 
   public async handleSignin(): Promise<void> {
-    this.signinForm.disable();
+    this.signInForm.disable();
     this.error = '';
     this.isLoading = true;
 
     try {
-      const signInData: IUserData = this.signinForm.getRawValue();
+      const signInData: IUserData = this.signInForm.getRawValue();
       await this.authService.signIn(signInData);
       this.isLoading = false;
       this.redirectionService.redirectHome();
@@ -57,7 +57,7 @@ export class SignInComponent extends TestedComponent implements OnInit {
   private onCatchError(error: string): void {
     this.error = error;
     this.isLoading = false;
-    this.signinForm.enable();
-    this.signinForm.markAsUntouched();
+    this.signInForm.enable();
+    this.signInForm.markAsUntouched();
   }
 }

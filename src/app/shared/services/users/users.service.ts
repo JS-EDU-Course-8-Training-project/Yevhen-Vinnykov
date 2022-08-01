@@ -25,8 +25,24 @@ export class UsersService {
     private authorizationService: AuthorizationService
   ) {}
 
-  public createUser(user: INewUser): Observable<IExistingUser> {
-    return this.http
+  // public createUser(user: INewUser): Observable<IExistingUser> {
+  //   return this.http
+  //     .post<{ user: IExistingUser }>(
+  //       `${this.baseURL}/users/signup`,
+  //       { user },
+  //       httpOptions
+  //     )
+  //     .pipe(
+  //       pluck('user'),
+  //       map((user) => {
+  //         this.authorizationService.authorize(user);
+  //         return user;
+  //       })
+  //     );
+  // }
+
+  public createUser(user: INewUser): Promise<IExistingUser> {
+    const source$ = this.http
       .post<{ user: IExistingUser }>(
         `${this.baseURL}/users/signup`,
         { user },
@@ -39,9 +55,11 @@ export class UsersService {
           return user;
         })
       );
+
+    return firstValueFrom(source$);
   }
 
-  public async updateUser(user: IUpdateUser): Promise<IExistingUser> {
+  public updateUser(user: IUpdateUser): Promise<IExistingUser> {
     const source$ = this.http
       .put<{ user: IExistingUser }>(
         `${this.baseURL}/users`,

@@ -1,6 +1,6 @@
 <div class="container">
   <mat-card class="background-card">
-    <form [formGroup]="signinForm" (ngSubmit)="handleSignin()">
+    <form [formGroup]="signInForm" (ngSubmit)="handleSignin()">
       <div class="form-group">
         <h2 [e2e]="TestAttributes.FormTitle">Sign In</h2>
         <a routerLink="/sign-up" [e2e]="TestAttributes.SignUpLink">
@@ -21,14 +21,14 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('email') && !signinForm.get('email')?.value"
+          *ngIf="!checkIfValid('email') && !signInForm.get('email')?.value"
           [e2e]="TestAttributes.FormError"
         >
           This field is required
         </span>
         <span
           class="form-error"
-          *ngIf="signinForm.get('email')?.errors?.['email']"
+          *ngIf="signInForm.get('email')?.errors?.['email']"
           [e2e]="TestAttributes.FormError"
         >
           Enter a valid email
@@ -51,7 +51,7 @@
           Password must be at least 6 characters long
         </span>
         <button
-          [disabled]="!signinForm.valid || isLoading"
+          [disabled]="!signInForm.valid || isLoading"
           align="end"
           type="submit"
           mat-raised-button

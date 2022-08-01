@@ -18,7 +18,7 @@ export class ProfilesService {
 
   constructor(private http: HttpClient) {}
 
-  public async follow(username: string): Promise<IProfile> {
+  public follow(username: string): Promise<IProfile> {
     const source$ = this.http
       .post<{ profile: IProfile }>(
         `${this.baseURL}/profiles/${username}/follow`,
@@ -30,7 +30,7 @@ export class ProfilesService {
     return firstValueFrom(source$);
   }
 
-  public async unfollow(username: string): Promise<IProfile> {
+  public unfollow(username: string): Promise<IProfile> {
     const source$ = this.http
       .delete<{ profile: IProfile }>(
         `${this.baseURL}/profiles/${username}/follow`,
@@ -41,7 +41,7 @@ export class ProfilesService {
     return firstValueFrom(source$);
   }
 
-  public async fetchUser(username: string): Promise<IProfile> {
+  public fetchUser(username: string): Promise<IProfile> {
     const source$ = this.http
       .get<{ profile: IProfile }>(
         `${this.baseURL}/profiles/${username}`,

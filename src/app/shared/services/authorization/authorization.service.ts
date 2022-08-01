@@ -34,7 +34,7 @@ export class AuthorizationService {
       image: '',
     });
 
-  public async signIn(user: IUserData): Promise<IExistingUser> {
+  public signIn(user: IUserData): Promise<IExistingUser> {
     const source$ = this.http
       .post<{ user: IExistingUser }>(
         `${this.baseURL}/users/login`,

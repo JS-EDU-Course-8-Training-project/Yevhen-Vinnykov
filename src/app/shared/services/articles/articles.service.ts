@@ -21,16 +21,16 @@ export class ArticlesService {
 
   constructor(private http: HttpClient) {}
 
-  public async fetchArticles(offset = 0, limit = 5): Promise<IArticleResponse> {
+  public fetchArticles(offset = 0, limit = 5): Promise<IArticleResponse> {
     const source$ = this.http.get<IArticleResponse>(
       `${this.baseURL}/?offset=${offset}&limit=${limit}`,
       httpOptions
     );
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async fetchFollowedArticles(
+  public fetchFollowedArticles(
     offset = 0,
     limit = 5
   ): Promise<IArticleResponse> {
@@ -39,35 +39,35 @@ export class ArticlesService {
       httpOptions
     );
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async fetchArticle(slug: string): Promise<IArticle> {
+  public fetchArticle(slug: string): Promise<IArticle> {
     const source$ = this.http
       .get<{ article: IArticle }>(`${this.baseURL}/${slug}`, httpOptions)
       .pipe(pluck('article'));
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async createArticle(article: INewArticle): Promise<IArticle> {
+  public createArticle(article: INewArticle): Promise<IArticle> {
     const source$ = this.http
       .post<{ article: IArticle }>(this.baseURL, { article }, httpOptions)
       .pipe(pluck('article'));
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async deleteArticle(slug: string): Promise<{}> {
+  public deleteArticle(slug: string): Promise<{}> {
     const source$ = this.http.delete<{}>(
       `${this.baseURL}/${slug}`,
       httpOptions
     );
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async updateArticle(
+  public updateArticle(
     slug: string,
     article: IUpdateArticle
   ): Promise<IArticle> {
@@ -79,7 +79,7 @@ export class ArticlesService {
       )
       .pipe(pluck('article'));
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
   public fetchTags(): Observable<string[]> {
@@ -91,7 +91,7 @@ export class ArticlesService {
       .pipe(pluck('tags'));
   }
 
-  public async fetchArticlesByTag(
+  public fetchArticlesByTag(
     tag: string,
     offset = 0,
     limit = 5
@@ -101,10 +101,10 @@ export class ArticlesService {
       httpOptions
     );
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async fetchUserArticles(
+  public fetchUserArticles(
     username: string,
     offset = 0,
     limit = 20
@@ -114,10 +114,10 @@ export class ArticlesService {
       httpOptions
     );
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async fetchFavoritedArticles(
+  public fetchFavoritedArticles(
     username: string,
     offset = 0,
     limit = 20
@@ -127,10 +127,10 @@ export class ArticlesService {
       httpOptions
     );
 
-    return await firstValueFrom(source$);
+    return firstValueFrom(source$);
   }
 
-  public async addToFavorites(slug: string): Promise<IArticle> {
+  public addToFavorites(slug: string): Promise<IArticle> {
     const source$ = this.http
       .post<{ article: IArticle }>(
         `${this.baseURL}/${slug}/favorite`,
@@ -142,7 +142,7 @@ export class ArticlesService {
     return firstValueFrom(source$);
   }
 
-  public async removeFromFavorites(slug: string): Promise<IArticle> {
+  public removeFromFavorites(slug: string): Promise<IArticle> {
     const source$ = this.http
       .delete<{ article: IArticle }>(
         `${this.baseURL}/${slug}/favorite`,
