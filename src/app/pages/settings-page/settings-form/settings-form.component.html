@@ -81,7 +81,7 @@
           <button
             mat-flat-button
             color="primary"
-            [disabled]="isPending"
+            [disabled]="isLoading"
             type="submit"
             [e2e]="TestAttributes.SettingsUpdateBtn"
           >
@@ -100,7 +100,7 @@
       </div>
       <mat-card-footer>
         <mat-progress-bar
-          *ngIf="isPending"
+          *ngIf="isLoading"
           mode="indeterminate"
         ></mat-progress-bar>
       </mat-card-footer>

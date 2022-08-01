@@ -1,14 +1,7 @@
 import { IUpdateUser } from './../../../shared/models/IUpdateUser';
-import {
-  Subject,
-  takeUntil,
-  BehaviorSubject,
-  catchError,
-  of,
-  Observable,
-} from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject } from 'rxjs';
 import { UsersService } from 'src/app/shared/services/users/users.service';
-import { Component, Input, OnDestroy, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
@@ -24,13 +17,13 @@ type TSettingsControls = 'image' | 'username' | 'bio' | 'email' | 'password';
 })
 export class SettingsFormComponent
   extends TestedComponent
-  implements OnChanges, OnDestroy, OnInit
+  implements OnDestroy, OnInit
 {
   @Input() authUser!: IExistingUser;
   @Input() isModified$!: BehaviorSubject<boolean>;
 
   public error!: string;
-  public isPending!: boolean;
+  public isLoading!: boolean;
   public settingsForm!: FormGroup;
   private notifier: Subject<void> = new Subject<void>();
 
@@ -41,10 +34,6 @@ export class SettingsFormComponent
     private authService: AuthorizationService
   ) {
     super();
-  }
-
-  ngOnChanges(): void {
-    this.initializeForm();
   }
 
   ngOnInit(): void {
@@ -93,36 +82,27 @@ export class SettingsFormComponent
     return updatedData;
   }
 
-  private onSubmit(): void {
-    this.isPending = true;
+  public async updateSettings(): Promise<void> {
+    this.isLoading = true;
     this.settingsForm.disable();
     this.error = '';
+
+    try {
+      const { username } = await this.usersService.updateUser(
+        this.createUserData()
+      );
+      this.isModified$.next(false);
+      this.redirectionService.redirectByUrl(`user/${username}`);
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private onCatchError(error: string): Observable<IExistingUser> {
+  private onCatchError(error: string): void {
     this.error = error;
-    this.isPending = false;
+    this.isLoading = false;
     this.settingsForm.enable();
     this.settingsForm.markAsUntouched();
-
-    return of({} as IExistingUser);
-  }
-
-  public updateSettings(): void {
-    this.onSubmit();
-
-    this.usersService
-      .updateUser(this.createUserData())
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((error: string) => this.onCatchError(error))
-      )
-      .subscribe(({ username }: IExistingUser) => {
-        this.isModified$.next(false);
-        if (!this.error) {
-          this.redirectionService.redirectByUrl(`user/${username}`);
-        }
-      });
   }
 
   public logout(): void {

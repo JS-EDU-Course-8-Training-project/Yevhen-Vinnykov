@@ -1,7 +1,7 @@
 import { IUpdateUser } from './../../models/IUpdateUser';
 import { environment } from '../../../../environments/environment';
 import { IExistingUser } from '../../models/IExistingUser';
-import { Observable, pluck, map } from 'rxjs';
+import { Observable, pluck, map, firstValueFrom } from 'rxjs';
 import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -41,11 +41,11 @@ export class UsersService {
       );
   }
 
-  public updateUser(settings: IUpdateUser): Observable<IExistingUser> {
-    return this.http
+  public async updateUser(user: IUpdateUser): Promise<IExistingUser> {
+    const source$ = this.http
       .put<{ user: IExistingUser }>(
         `${this.baseURL}/users`,
-        { user: { ...settings } },
+        { user },
         httpOptions
       )
       .pipe(
@@ -55,5 +55,7 @@ export class UsersService {
           return user;
         })
       );
+
+    return firstValueFrom(source$);
   }
 }
