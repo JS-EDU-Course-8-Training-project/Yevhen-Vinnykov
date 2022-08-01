@@ -5,13 +5,14 @@ import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dia
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { DeleteButtonStore } from './delete-button.store';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
 @Component({
   selector: 'app-delete-button',
   templateUrl: './delete-button.component.html',
   styleUrls: ['./delete-button.component.scss', '../buttons.scss'],
 })
-export class DeleteButtonComponent {
+export class DeleteButtonComponent extends TestedComponent {
   @Input() slug!: string;
 
   constructor(
@@ -19,7 +20,9 @@ export class DeleteButtonComponent {
     private articlesService: ArticlesService,
     private matDialog: MatDialog,
     public store: DeleteButtonStore
-  ) {}
+  ) {
+    super();
+  }
 
   public async deleteArticle(): Promise<void> {
     const shouldDelete = await this.confirm();

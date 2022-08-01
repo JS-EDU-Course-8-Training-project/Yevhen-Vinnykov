@@ -4,6 +4,7 @@
     mat-stroked-button
     (click)="deleteArticle()"
     [disabled]="store.isLoading$ | async"
+    [e2e]="TestAttributes.ArticleDeleteBtn"
   >
     Delete
   </button>

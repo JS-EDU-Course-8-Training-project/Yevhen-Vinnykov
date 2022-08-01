@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { LikeButtonStore } from './like-button.store';
 
 @Component({
@@ -9,7 +10,7 @@ import { LikeButtonStore } from './like-button.store';
   templateUrl: './like-button.component.html',
   styleUrls: ['./like-button.component.scss', '../buttons.scss'],
 })
-export class LikeButtonComponent implements OnInit {
+export class LikeButtonComponent extends TestedComponent implements OnInit {
   @Input() isAuth!: boolean;
   @Input() article!: IArticle;
 
@@ -17,7 +18,9 @@ export class LikeButtonComponent implements OnInit {
     private redirectionService: RedirectionService,
     private articlesService: ArticlesService,
     public store: LikeButtonStore
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store.isLiked$.next(this.article.favorited);

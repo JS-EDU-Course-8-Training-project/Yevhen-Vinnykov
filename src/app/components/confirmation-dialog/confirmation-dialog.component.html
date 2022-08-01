@@ -2,11 +2,19 @@
 <mat-dialog-content class="mat-typography">
   <h3>{{ data.subtitle }}</h3>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="false">
+<mat-dialog-actions>
+  <button
+    mat-button
+    [mat-dialog-close]="false"
+    [e2e]="TestAttributes.ConfirmDialogNoBtn"
+  >
     {{ data.cancelButtonText }}
   </button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>
+  <button
+    mat-button
+    [mat-dialog-close]="true"
+    [e2e]="TestAttributes.ConfirmDialogYesBtn"
+  >
     {{ data.confirmButtonText }}
   </button>
 </mat-dialog-actions>

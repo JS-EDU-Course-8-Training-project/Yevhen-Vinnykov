@@ -2,11 +2,13 @@ import { apiBaseUrl } from 'cypress/support/apiBaseUrl';
 import { newArticlePage as editArticlePage } from '../../support/comonent-objects/articles/new-article-page';
 
 import { ownArticle } from 'cypress/fixtures/articles';
+import { user } from 'cypress/fixtures/user';
 
 describe('NEW ARTICLE PAGE', () => {
   beforeEach(() => {
     cy.addTokenToLocalStorage();
     cy.intercept('GET', `${apiBaseUrl}articles/Lorem`, { article: ownArticle });
+    cy.intercept('GET', `${apiBaseUrl}users`, { user });
     cy.visit('/edit-article/Lorem');
   });
 

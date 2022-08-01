@@ -86,9 +86,6 @@ enum CommentsAttributes {
 }
 
 enum HomePageAttributes {
-  YourFeed = 'your-feed',
-  GlobalFeed = 'global-feed',
-  TaggedArticles = 'tagged-articles',
   TagsContainer = 'tags-container',
   Tag = 'tag',
 }
@@ -116,7 +113,10 @@ enum CommonAttributes {
   Header = 'header',
   AppTitle = 'app-title',
   LoadingSpinner = 'loading-spinner',
-  AllArticlesLoaded = 'all-articles-loaded',
+  SnackbarAlert = 'snackbar-alert',
+  ArticleList = 'article-list',
+  ConfirmDialogYesBtn = 'confirm-dialog-yes-btn',
+  ConfirmDialogNoBtn = 'confirm-dialog-no-btn',
 }
 
 export const TestAttributes = {

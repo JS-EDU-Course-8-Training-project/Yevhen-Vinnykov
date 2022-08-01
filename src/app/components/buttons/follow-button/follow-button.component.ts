@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
+import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { FollowButtonStore } from './follow-button.store';
 
 @Component({
@@ -8,7 +9,7 @@ import { FollowButtonStore } from './follow-button.store';
   templateUrl: './follow-button.component.html',
   styleUrls: ['./follow-button.component.scss', '../buttons.scss'],
 })
-export class FollowButtonComponent implements OnInit {
+export class FollowButtonComponent extends TestedComponent implements OnInit {
   @Input() isAuth!: boolean;
   @Input() isFollowed!: boolean;
   @Input() username!: string;
@@ -17,7 +18,9 @@ export class FollowButtonComponent implements OnInit {
     public store: FollowButtonStore,
     private redirectionService: RedirectionService,
     private profilesService: ProfilesService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store.isFollowed$.next(this.isFollowed);

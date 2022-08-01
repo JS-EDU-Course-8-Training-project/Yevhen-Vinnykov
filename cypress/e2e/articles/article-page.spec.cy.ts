@@ -43,8 +43,7 @@ describe('ARTICLE PAGE', () => {
         });
 
         articlePage.likeButton.click();
-        articlePage.likeButton.should('include.text', 'Favorite Article (1)');
-        articlePage.likeIcon.should('have.css', 'color', 'rgb(244, 67, 54)');
+        articlePage.likeButton.should('contain.text', 'Unfavorite 1');
       });
 
       it('should dislike an article', () => {
@@ -58,8 +57,7 @@ describe('ARTICLE PAGE', () => {
         });
 
         articlePage.likeButton.click();
-        articlePage.likeButton.should('include.text', 'Favorite Article (0)');
-        articlePage.likeIcon.should('have.css', 'color', 'rgb(255, 255, 255)');
+        articlePage.likeButton.should('contain.text', 'Favorite 0');
       });
 
       it('should follow a user', () => {
@@ -111,6 +109,8 @@ describe('ARTICLE PAGE', () => {
         cy.intercept('DELETE', `${apiBaseUrl}articles/Lorem`, {});
 
         articlePage.deleteButton.should('contain', 'Delete').click();
+
+        articlePage.confirmationButton.click();
 
         cy.location('pathname').should('eq', '/');
       });

@@ -50,7 +50,7 @@ class ArticlePage {
   }
 
   get commentPostButton() {
-    return cy.getByTestAttr(TestAttributes.CommentPostBtn);
+    return cy.getByTestAttr(TestAttributes.CommentPostBtn).eq(0);
   }
 
   get commentForm() {
@@ -67,6 +67,10 @@ class ArticlePage {
 
   get loadingSpinner() {
     return cy.getByTestAttr(TestAttributes.LoadingSpinner);
+  }
+
+  get confirmationButton() {
+    return cy.getByTestAttr(TestAttributes.ConfirmDialogYesBtn);
   }
 }
 

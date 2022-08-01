@@ -1,6 +1,6 @@
 <!-- BUTTONS FOR BIGGER SCREENS -->
 <div class="button">
-  <button mat-stroked-button>
+  <button mat-stroked-button [e2e]="TestAttributes.ArticleEditBtn">
     <a [routerLink]="['/edit-article', slug]">Edit</a>
   </button>
 </div>
@@ -8,6 +8,6 @@
 <!-- BUTTONS FOR SMALLER SCREENS -->
 <div class="icon-button">
   <button mat-icon-button [routerLink]="['/edit-article', slug]">
-     <a [routerLink]="['/edit-article', slug]"><mat-icon>edit_note</mat-icon></a>
+    <a [routerLink]="['/edit-article', slug]"><mat-icon>edit_note</mat-icon></a>
   </button>
 </div>

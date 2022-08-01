@@ -33,16 +33,8 @@ class HomePage {
     return cy.getByTestAttr(TestAttributes.Tag);
   }
 
-  get globalFeed() {
-    return cy.getByTestAttr(TestAttributes.GlobalFeed);
-  }
-
-  get yourFeed() {
-    return cy.getByTestAttr(TestAttributes.YourFeed);
-  }
-
-  get taggedArticles() {
-    return cy.getByTestAttr(TestAttributes.TaggedArticles);
+  get articleList() {
+    return cy.getByTestAttr(TestAttributes.ArticleList);
   }
 }
 

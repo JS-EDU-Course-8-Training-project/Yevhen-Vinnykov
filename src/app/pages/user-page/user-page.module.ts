@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/shared/modules/shared.module';
 import { ArticleListModule } from 'src/app/components/article-list/article-list.module';
 import { UserPageBannerComponent } from './user-page-banner/user-page-banner.component';
 import { ButtonsModule } from 'src/app/components/buttons/buttons.module';
+import { SnackbarModule } from 'src/app/components/snackbar/snackbar.module';
 
 @NgModule({
   declarations: [UserPageComponent, UserPageBannerComponent],
@@ -16,6 +17,7 @@ import { ButtonsModule } from 'src/app/components/buttons/buttons.module';
     ArticleListModule,
     SharedModule,
     ButtonsModule,
+    SnackbarModule,
   ],
 })
 export class UserPageModule {}

@@ -25,10 +25,10 @@ describe('USER PAGE', () => {
     userPage.myArticlesTab.click().should('have.class', 'mat-tab-label-active');
   });
 
-  it('if all articles have been loaded, articles-loaded div should be visible', () => {
-    cy.scrollTo('bottom');
-    userPage.articlesLoadedDiv.should('be.visible');
-  });
+  // it('if all articles have been loaded, articles-loaded div should be visible', () => {
+  //   cy.scrollTo('bottom');
+  //   userPage.articlesLoadedDiv.should('be.visible');
+  // });
 
   describe('BANNER', () => {
     it('should have a user image, name and bio', () => {

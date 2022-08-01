@@ -27,12 +27,6 @@ describe('HOME PAGE', () => {
 
     homepage.loadingSpinner.should('not.exist');
 
-    cy.scrollTo('bottom');
-
-    cy.getByTestAttr('all-articles-loaded').should(
-      'contain.text',
-      'No more articles for now...'
-    );
   });
 
   it('should redirect to article page once an article card is clicked', () => {
@@ -60,7 +54,6 @@ describe('HOME PAGE', () => {
 
   it('your feed tab should not exist when the user is not authorized', () => {
     homepage.yourFeedTab.should('not.exist');
-    homepage.yourFeed.should('not.exist');
   });
 
   describe('AUTHORIZED', () => {
@@ -73,7 +66,7 @@ describe('HOME PAGE', () => {
 
     it('your feed tab should exist', () => {
       homepage.yourFeedTab.should('contain.text', 'Your Feed');
-      homepage.yourFeed.should('be.visible');
+      homepage.articleList.should('be.visible');
     });
   });
 });

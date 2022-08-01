@@ -5,6 +5,7 @@
     *ngIf="store.isFollowed$ | async"
     (click)="unfollow()"
     [disabled]="store.isLoading$ | async"
+    [e2e]="TestAttributes.ArticleFollowBtn"
   >
     Unfollow
     {{ username }}
@@ -15,6 +16,7 @@
     *ngIf="!(store.isFollowed$ | async)"
     (click)="follow()"
     [disabled]="store.isLoading$ | async"
+    [e2e]="TestAttributes.ArticleFollowBtn"
   >
     Follow
     {{ username }}

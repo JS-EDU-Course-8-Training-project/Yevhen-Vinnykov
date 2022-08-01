@@ -5,6 +5,7 @@
     *ngIf="store.isLiked$ | async"
     (click)="dislike()"
     [disabled]="store.isLoading$ | async"
+    [e2e]="TestAttributes.ArticleLikeBtn"
   >
     Unfavorite
     {{ store.likesCount$ | async }}
@@ -16,6 +17,7 @@
     *ngIf="!(store.isLiked$ | async)"
     (click)="like()"
     [disabled]="store.isLoading$ | async"
+    [e2e]="TestAttributes.ArticleLikeBtn"
   >
     Favorite
     {{ store.likesCount$ | async }}

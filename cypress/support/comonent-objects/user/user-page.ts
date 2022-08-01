@@ -22,15 +22,15 @@ class UserPage {
   }
 
   get updateButton() {
-    return cy.getByTestAttr(TestAttributes.UserPageUpdateBtn);
+    return cy.getByTestAttr(TestAttributes.UserPageUpdateBtn).eq(1);
   }
 
   get banner() {
     return cy.getByTestAttr('user-page-banner');
   }
 
-  get articlesLoadedDiv() {
-    return cy.getByTestAttr('all-articles-loaded');
+  get articlesLoadedSnackbar() {
+    return cy.getByTestAttr('snackbar-alert');
   }
 }
 
