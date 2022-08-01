@@ -1,9 +1,7 @@
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
-import { catchError, Subject, takeUntil, of, Observable } from 'rxjs';
 import { IUserData } from '../../shared/models/IUserData';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IExistingUser } from 'src/app/shared/models/IExistingUser';
+import { Component, OnInit } from '@angular/core';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
@@ -14,14 +12,10 @@ type TSigninControls = 'email' | 'password';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
 })
-export class SignInComponent
-  extends TestedComponent
-  implements OnInit, OnDestroy
-{
+export class SignInComponent extends TestedComponent implements OnInit {
   public signinForm!: FormGroup;
   public error!: string;
-  public isPending = false;
-  private notifier: Subject<void> = new Subject<void>();
+  public isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -38,11 +32,6 @@ export class SignInComponent
     });
   }
 
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
-  }
-
   public checkIfValid(formControl: TSigninControls): boolean {
     return !(
       this.signinForm.controls[formControl].touched &&
@@ -50,37 +39,25 @@ export class SignInComponent
     );
   }
 
-  private createUserData(): IUserData {
-    return this.signinForm.getRawValue();
-  }
-
-  private onSubmit(): void {
+  public async handleSignin(): Promise<void> {
     this.signinForm.disable();
     this.error = '';
-    this.isPending = true;
+    this.isLoading = true;
+
+    try {
+      const signInData: IUserData = this.signinForm.getRawValue();
+      await this.authService.signIn(signInData);
+      this.isLoading = false;
+      this.redirectionService.redirectHome();
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private onCatchError(error: string): Observable<IExistingUser> {
+  private onCatchError(error: string): void {
     this.error = error;
-    this.isPending = false;
+    this.isLoading = false;
     this.signinForm.enable();
     this.signinForm.markAsUntouched();
-
-    return of({} as IExistingUser);
-  }
-
-  public handleSignin(): void {
-    this.onSubmit();
-
-    this.authService
-      .signIn(this.createUserData())
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((error: string) => this.onCatchError(error))
-      )
-      .subscribe(() => {
-        this.isPending = false;
-        if (!this.error) this.redirectionService.redirectHome();
-      });
   }
 }

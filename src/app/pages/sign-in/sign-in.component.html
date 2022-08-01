@@ -51,7 +51,7 @@
           Password must be at least 6 characters long
         </span>
         <button
-          [disabled]="!signinForm.valid || isPending"
+          [disabled]="!signinForm.valid || isLoading"
           align="end"
           type="submit"
           mat-raised-button
@@ -63,7 +63,7 @@
       </div>
       <mat-card-footer>
         <mat-progress-bar
-          *ngIf="isPending"
+          *ngIf="isLoading"
           mode="indeterminate"
         ></mat-progress-bar>
       </mat-card-footer>

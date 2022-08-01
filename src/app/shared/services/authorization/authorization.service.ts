@@ -1,6 +1,6 @@
 import { IUserData } from 'src/app/shared/models/IUserData';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { BehaviorSubject, Observable, pluck, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, pluck, tap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -34,8 +34,8 @@ export class AuthorizationService {
       image: '',
     });
 
-  public signIn(user: IUserData): Observable<IExistingUser> {
-    return this.http
+  public async signIn(user: IUserData): Promise<IExistingUser> {
+    const source$ = this.http
       .post<{ user: IExistingUser }>(
         `${this.baseURL}/users/login`,
         { user },
@@ -48,6 +48,8 @@ export class AuthorizationService {
           return user;
         })
       );
+
+    return firstValueFrom(source$);
   }
 
   public fetchAuthUser(): Observable<IExistingUser> {
@@ -89,7 +91,7 @@ export class AuthorizationService {
 
   public authorize(user: IExistingUser): void {
     if (!user.token) return;
-    
+
     localStorage.setItem('authorized', 'true');
     localStorage.setItem('token', user.token);
 
