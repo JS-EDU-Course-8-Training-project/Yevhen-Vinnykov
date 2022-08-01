@@ -42,16 +42,20 @@ export class ArticlesService {
     return await firstValueFrom(source$);
   }
 
-  public fetchArticle(slug: string): Observable<IArticle> {
-    return this.http
+  public async fetchArticle(slug: string): Promise<IArticle> {
+    const source$ = this.http
       .get<{ article: IArticle }>(`${this.baseURL}/${slug}`, httpOptions)
       .pipe(pluck('article'));
+
+    return await firstValueFrom(source$);
   }
 
-  public createArticle(article: INewArticle): Observable<IArticle> {
-    return this.http
+  public async createArticle(article: INewArticle): Promise<IArticle> {
+    const source$ = this.http
       .post<{ article: IArticle }>(this.baseURL, { article }, httpOptions)
       .pipe(pluck('article'));
+
+    return await firstValueFrom(source$);
   }
 
   public async deleteArticle(slug: string): Promise<{}> {
@@ -63,17 +67,19 @@ export class ArticlesService {
     return await firstValueFrom(source$);
   }
 
-  public updateArticle(
+  public async updateArticle(
     slug: string,
     article: IUpdateArticle
-  ): Observable<IArticle> {
-    return this.http
+  ): Promise<IArticle> {
+    const source$ = this.http
       .put<{ article: IArticle }>(
         `${this.baseURL}/${slug}`,
         { article },
         httpOptions
       )
       .pipe(pluck('article'));
+
+    return await firstValueFrom(source$);
   }
 
   public fetchTags(): Observable<string[]> {

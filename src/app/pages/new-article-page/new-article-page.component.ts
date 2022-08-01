@@ -1,6 +1,5 @@
 import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
-import { Subject, takeUntil, Observable, catchError, of } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { Validators } from '@angular/forms';
@@ -18,15 +17,15 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 })
 export class NewArticlePageComponent
   extends TestedComponent
-  implements OnInit, OnDestroy, ISavedData
+  implements OnInit, ISavedData
 {
   public articleForm!: FormGroup;
   public error!: string;
   public isLoading = false;
-  public isEditMode!: boolean;
+
   public articleToEdit!: IArticle | null;
-  public slug!: string;
-  private notifier: Subject<void> = new Subject<void>();
+  public isEditMode = this.router.url !== '/create-article';
+  public slug = this.isEditMode ? this.router.url.split('/')[2] : '';
 
   constructor(
     private articlesService: ArticlesService,
@@ -42,32 +41,12 @@ export class NewArticlePageComponent
   }
 
   ngOnInit(): void {
-    this.isEditMode = this.router.url !== '/create-article';
-    this.slug = this.router.url.split('/')[2];
-
-    this.initializeForm();
-
-    if (this.isEditMode) {
-      this.articleForm.disable();
-      this.articlesService
-        .fetchArticle(this.slug)
-        .pipe(
-          takeUntil(this.notifier),
-          catchError((err: string) => this.onCatchError(err))
-        )
-        .subscribe((article: IArticle) => {
-          this.articleToEdit = article;
-
-          this.articleForm.enable();
-          this.initializeForm();
-          this.articleForm.markAllAsTouched();
-        });
+    if (!this.isEditMode) {
+      this.initializeForm();
+      return;
     }
-  }
 
-  ngOnDestroy(): void {
-    this.notifier.next();
-    this.notifier.complete();
+    this.setArticleData();
   }
 
   private initializeForm(): void {
@@ -81,6 +60,19 @@ export class NewArticlePageComponent
       image: [this.articleToEdit?.image || ''],
       tagList: this.initializeTagsFormArray(),
     });
+  }
+
+  private async setArticleData(): Promise<void> {
+    try {
+      this.articleForm.disable();
+      this.articleToEdit = await this.articlesService.fetchArticle(this.slug);
+      this.articleForm.enable();
+
+      this.initializeForm();
+      this.articleForm.markAllAsTouched();
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
   private initializeTagsFormArray(): FormArray {
@@ -110,12 +102,6 @@ export class NewArticlePageComponent
     (<FormArray>this.articleForm.get('tagList')).removeAt(i);
   }
 
-  private onSubmit(): void {
-    this.error = '';
-    this.articleForm.disable();
-    this.isLoading = true;
-  }
-
   public checkIfValid(formControl: string): boolean {
     return !(
       this.articleForm.controls[formControl].touched &&
@@ -123,7 +109,20 @@ export class NewArticlePageComponent
     );
   }
 
-  private prepareDataForSubmit(): INewArticle | IUpdateArticle {
+  public handleSubmit(): void {
+    this.error = '';
+    this.articleForm.disable();
+    this.isLoading = true;
+
+    if (this.isEditMode) {
+      this.updateArticle(this.getDataForSubmit() as IUpdateArticle);
+      return;
+    }
+
+    this.createArticle(this.getDataForSubmit() as INewArticle);
+  }
+
+  private getDataForSubmit(): INewArticle | IUpdateArticle {
     const formData = this.articleForm.getRawValue();
 
     formData.tagList = formData.tagList
@@ -143,44 +142,35 @@ export class NewArticlePageComponent
     return submitData;
   }
 
-  public handleArticleAction(): void {
-    this.onSubmit();
-    this.articleAction(this.slug, this.prepareDataForSubmit());
+  private async createArticle(articleData: INewArticle): Promise<void> {
+    try {
+      const { slug } = await this.articlesService.createArticle(articleData);
+
+      this.articleForm.reset();
+      this.redirectionService.redirectByUrl(`article/${slug}`);
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private articleAction(
-    slug: string,
-    newArticle: INewArticle | IUpdateArticle
-  ) {
-    const subscription: Observable<IArticle> = this.isEditMode
-      ? this.articlesService.updateArticle(slug, newArticle as IUpdateArticle)
-      : this.articlesService.createArticle(newArticle as INewArticle);
+  private async updateArticle(articleData: IUpdateArticle): Promise<void> {
+    try {
+      const { slug } = await this.articlesService.updateArticle(
+        this.slug,
+        articleData
+      );
 
-    subscription
-      .pipe(
-        takeUntil(this.notifier),
-        catchError((err: string) => this.onCatchError(err))
-      )
-      .subscribe(({ slug }: IArticle) => {
-        if (!this.error) {
-          this.articleForm.reset();
-          this.redirectionService.redirectByUrl(`article/${slug}`);
-        }
-      });
+      this.articleForm.reset();
+      this.redirectionService.redirectByUrl(`article/${slug}`);
+    } catch (error) {
+      this.onCatchError(error as string);
+    }
   }
 
-  private onCatchError(error: string): Observable<IArticle> {
+  private onCatchError(error: string): void {
     this.error = error;
     this.isLoading = false;
     this.articleForm.enable();
-
-    if (error === 'Article with this title already exists') {
-      this.articleForm.controls['title'].setErrors({
-        notUnique: true,
-      });
-    }
-
-    return of({} as IArticle);
   }
 
   public isDataSaved(): boolean {

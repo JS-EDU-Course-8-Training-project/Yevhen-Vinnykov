@@ -7,7 +7,6 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +17,7 @@ export class ArticleResolver implements Resolve<IArticle> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<IArticle> {
+  ): Promise<IArticle> {
     return this.articlesService.fetchArticle(route.params['slug']);
   }
 }
