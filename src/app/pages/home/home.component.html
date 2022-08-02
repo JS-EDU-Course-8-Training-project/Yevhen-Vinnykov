@@ -50,10 +50,10 @@
     [tabIndex]="tabIndex"
     [selectedTag]="selectedTag"
     [e2e]="TestAttributes.ArticleList"
-    [articles]="store.articles"
+    [articles]="(store.articles$ | async) || []"
     [error]="error"
     [isLastPage]="currentPage === pagesTotalCount"
-    [isLoading]="isLoading"
+    [isLoading]="(isLoading$ | async) || false"
     [cb]="loadArticles.bind(this)"
   >
   </app-article-list>

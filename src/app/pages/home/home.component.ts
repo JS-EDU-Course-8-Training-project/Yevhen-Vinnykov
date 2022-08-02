@@ -1,6 +1,7 @@
+import { BehaviorSubject } from 'rxjs';
 import { IArticle } from './../../shared/models/IArticle';
 import { IArticleResponse } from 'src/app/shared/models/IArticle';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
@@ -13,6 +14,7 @@ import { SnackbarComponent } from 'src/app/components/snackbar/snackbar.componen
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [ArticlesStore],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent extends TestedComponent implements OnInit {
   public isAuthorized = this.authService.isAuthorized$.getValue();
@@ -20,7 +22,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
   public selectedTag!: string;
   public tabIndex = 0;
 
-  public isLoading!: boolean;
+  public isLoading$ = new BehaviorSubject<boolean>(false);
   public currentPage = 0;
   public pagesTotalCount = 0;
   private offset = 0;
@@ -41,7 +43,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
   }
 
   public async loadArticles(): Promise<void> {
-    this.isLoading = true;
+    this.isLoading$.next(true);
     try {
       let response!: IArticleResponse;
       if (this.tabIndex === 1 || !this.isAuthorized) {
@@ -65,10 +67,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
   }
 
   private getYourFeed(): Promise<IArticleResponse> {
-    return this.articlesService.fetchFollowedArticles(
-      this.offset,
-      this.limit
-    );
+    return this.articlesService.fetchFollowedArticles(this.offset, this.limit);
   }
 
   private getTaggedArticles(): Promise<IArticleResponse> {
@@ -80,7 +79,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
   }
 
   private onResponse(articles: IArticle[], articlesCount: number): void {
-    this.isLoading = false;
+    this.isLoading$.next(false);
     this.pagesTotalCount = Math.ceil(articlesCount / this.limit) || 1;
     this.store.articles$.next([...this.store.articles, ...articles]);
 
@@ -95,7 +94,7 @@ export class HomeComponent extends TestedComponent implements OnInit {
   }
 
   private onCatchError(error: string): void {
-    this.isLoading = false;
+    this.isLoading$.next(false);
     this.error = error;
   }
 
