@@ -5,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
-type TSigninControls = 'email' | 'password';
 
 @Component({
   selector: 'app-sign-in',
@@ -26,20 +25,18 @@ export class SignInComponent extends TestedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signInForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
-
-  public checkIfValid(formControl: TSigninControls): boolean {
-    return !(
-      this.signInForm.controls[formControl].touched &&
-      this.signInForm.controls[formControl].invalid
+    this.signInForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+      },
+      { updateOn: 'blur' }
     );
   }
 
   public async handleSignin(): Promise<void> {
+    if(this.signInForm.invalid) return;
+
     this.signInForm.disable();
     this.error = '';
     this.isLoading = true;

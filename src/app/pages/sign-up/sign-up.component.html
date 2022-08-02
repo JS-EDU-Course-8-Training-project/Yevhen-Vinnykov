@@ -1,6 +1,6 @@
 <div class="container">
   <mat-card class="background-card">
-    <form [formGroup]="signUpForm" (ngSubmit)="handleSignUp()">
+    <form [formGroup]="signUpForm" (ngSubmit)="handleSignUp()" #form="ngForm">
       <div class="form-group">
         <h2 [e2e]="TestAttributes.FormTitle">Sign Up</h2>
         <a routerLink="/sign-in" [e2e]="TestAttributes.SignInLink">
@@ -21,7 +21,10 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('username')"
+          *ngIf="
+            !signUpForm.controls['username'].value.length &&
+            (signUpForm.controls['username'].touched || form.submitted)
+          "
           [e2e]="TestAttributes.FormError"
         >
           This field is required
@@ -38,14 +41,12 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('email') && !signUpForm.get('email')?.value"
-          [e2e]="TestAttributes.FormError"
-        >
-          This field is required
-        </span>
-        <span
-          class="form-error"
-          *ngIf="signUpForm.get('email')?.errors?.['email']"
+          *ngIf="
+            (signUpForm.controls['email'].dirty ||
+              signUpForm.controls['email'].touched ||
+              form.submitted) &&
+            signUpForm.controls['email'].invalid
+          "
           [e2e]="TestAttributes.FormError"
         >
           Enter a valid email
@@ -63,9 +64,10 @@
         <span
           class="form-error"
           *ngIf="
-            !checkIfValid('password') ||
-            (signUpForm.get('password')?.invalid &&
-              signUpForm.get('password')?.dirty)
+            (signUpForm.controls['password'].dirty ||
+              signUpForm.controls['password'].touched ||
+              form.submitted) &&
+            signUpForm.controls['password'].invalid
           "
           [e2e]="TestAttributes.FormError"
         >
@@ -73,7 +75,6 @@
           capital letter and a digit
         </span>
         <button
-          [disabled]="!signUpForm.valid || isLoading"
           type="submit"
           mat-raised-button
           color="primary"
@@ -84,6 +85,7 @@
       </div>
       <mat-card-footer>
         <mat-progress-bar
+          style="position: absolute; right: 3px; border-radius: 8px; width: 99%;"
           *ngIf="isLoading"
           mode="indeterminate"
         ></mat-progress-bar>

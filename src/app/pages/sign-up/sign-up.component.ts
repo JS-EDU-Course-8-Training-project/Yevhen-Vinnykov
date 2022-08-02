@@ -5,8 +5,6 @@ import { UsersService } from 'src/app/shared/services/users/users.service';
 import { INewUser } from 'src/app/shared/models/INewUser';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 
-type TSignupControls = 'username' | 'email' | 'password';
-
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
@@ -16,6 +14,7 @@ export class SignUpComponent extends TestedComponent implements OnInit {
   public signUpForm!: FormGroup;
   public error!: string;
   public isLoading = false;
+  private passwordPattern = /^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/;
 
   constructor(
     private fb: FormBuilder,
@@ -26,27 +25,22 @@ export class SignUpComponent extends TestedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signUpForm = this.fb.group({
-      username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/),
+    this.signUpForm = this.fb.group(
+      {
+        username: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [Validators.required, Validators.pattern(this.passwordPattern)],
         ],
-      ],
-    });
-  }
-
-  public checkIfValid(formControl: TSignupControls): boolean {
-    return !(
-      this.signUpForm.controls[formControl].touched &&
-      this.signUpForm.controls[formControl].invalid
+      },
+      { updateOn: 'blur' }
     );
   }
 
   public async handleSignUp(): Promise<void> {
+    if (this.signUpForm.invalid) return;
+
     this.signUpForm.disable();
     this.isLoading = true;
     this.error = '';
@@ -65,6 +59,5 @@ export class SignUpComponent extends TestedComponent implements OnInit {
     this.error = error;
     this.isLoading = false;
     this.signUpForm.enable();
-    this.signUpForm.markAsUntouched();
   }
 }

@@ -1,6 +1,6 @@
 <div class="container">
   <mat-card class="background-card">
-    <form [formGroup]="signInForm" (ngSubmit)="handleSignin()">
+    <form [formGroup]="signInForm" (ngSubmit)="handleSignin()" #form="ngForm">
       <div class="form-group">
         <h2 [e2e]="TestAttributes.FormTitle">Sign In</h2>
         <a routerLink="/sign-up" [e2e]="TestAttributes.SignUpLink">
@@ -21,14 +21,12 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('email') && !signInForm.get('email')?.value"
-          [e2e]="TestAttributes.FormError"
-        >
-          This field is required
-        </span>
-        <span
-          class="form-error"
-          *ngIf="signInForm.get('email')?.errors?.['email']"
+          *ngIf="
+            (signInForm.controls['email'].dirty ||
+              signInForm.controls['email'].touched ||
+              form.submitted) &&
+            signInForm.controls['email'].invalid
+          "
           [e2e]="TestAttributes.FormError"
         >
           Enter a valid email
@@ -45,14 +43,17 @@
         />
         <span
           class="form-error"
-          *ngIf="!checkIfValid('password')"
+          *ngIf="
+            (signInForm.controls['password'].dirty ||
+              signInForm.controls['password'].touched ||
+              form.submitted) &&
+            signInForm.controls['password'].invalid
+          "
           [e2e]="TestAttributes.FormError"
         >
           Password must be at least 6 characters long
         </span>
         <button
-          [disabled]="!signInForm.valid || isLoading"
-          align="end"
           type="submit"
           mat-raised-button
           color="primary"
@@ -63,6 +64,7 @@
       </div>
       <mat-card-footer>
         <mat-progress-bar
+          style="position: absolute; right: 3px; border-radius: 8px; width: 99%"
           *ngIf="isLoading"
           mode="indeterminate"
         ></mat-progress-bar>
