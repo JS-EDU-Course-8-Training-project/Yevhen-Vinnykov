@@ -1,7 +1,7 @@
 import { IUpdateUser } from './../../models/IUpdateUser';
 import { environment } from '../../../../environments/environment';
 import { IExistingUser } from '../../models/IExistingUser';
-import { pluck, map, firstValueFrom } from 'rxjs';
+import { pluck, firstValueFrom, tap } from 'rxjs';
 import { INewUser } from '../../models/INewUser';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -34,10 +34,7 @@ export class UsersService {
       )
       .pipe(
         pluck('user'),
-        map((user) => {
-          this.authorizationService.authorize(user);
-          return user;
-        })
+        tap((user) => this.authorizationService.authorize(user))
       );
 
     return firstValueFrom(source$);
@@ -52,10 +49,7 @@ export class UsersService {
       )
       .pipe(
         pluck('user'),
-        map((user) => {
-          this.authorizationService.authorize(user);
-          return user;
-        })
+        tap((user) => this.authorizationService.authorize(user))
       );
 
     return firstValueFrom(source$);

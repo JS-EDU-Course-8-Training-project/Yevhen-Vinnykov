@@ -43,10 +43,7 @@ export class AuthorizationService {
       )
       .pipe(
         pluck('user'),
-        tap((user) => {
-          this.authorize(user);
-          return user;
-        })
+        tap((user) => this.authorize(user))
       );
 
     return firstValueFrom(source$);
@@ -57,10 +54,7 @@ export class AuthorizationService {
       .get<{ user: IExistingUser }>(`${this.baseURL}/users`, httpOptions)
       .pipe(
         pluck('user'),
-        tap((user) => {
-          this.authorize(user);
-          return user;
-        })
+        tap((user) => this.authorize(user))
       );
   }
 
