@@ -14,15 +14,15 @@
     >
       <mat-tab
         *ngFor="let label of ['My Articles', 'Favorited Articles']"
-        label="{{ label }}"
+        [label]="label"
       >
         <app-article-list
           [tabIndex]="tabIndex"
           [e2e]="TestAttributes.ArticleList"
-          [articles]="store.articles"
+          [articles]="(store.articles$ | async) || []"
           [error]="error"
           [isLastPage]="currentPage === pagesTotalCount"
-          [isLoading]="isLoading"
+          [isLoading]="(isLoading$ | async) || false"
           [cb]="loadArticles.bind(this)"
         >
         </app-article-list>

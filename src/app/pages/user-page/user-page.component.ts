@@ -2,9 +2,14 @@ import { IArticle, IArticleResponse } from 'src/app/shared/models/IArticle';
 import { IProfile } from '../../shared/models/IProfile';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { Subject, takeUntil, filter } from 'rxjs';
+import { Subject, takeUntil, filter, BehaviorSubject } from 'rxjs';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
@@ -17,6 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.scss'],
   providers: [ArticlesStore],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserPageComponent
   extends TestedComponent
@@ -27,7 +33,7 @@ export class UserPageComponent
   public isFollowed!: boolean;
 
   public tabIndex = 0;
-  public isLoading!: boolean;
+  public isLoading$ = new BehaviorSubject<boolean>(false);
   public currentPage = 0;
   public pagesTotalCount = 0;
   private offset = 0;
@@ -80,7 +86,7 @@ export class UserPageComponent
   }
 
   public async loadArticles(): Promise<void> {
-    this.isLoading = true;
+    this.isLoading$.next(true);
     try {
       const { articles, articlesCount } =
         this.tabIndex === 0
@@ -109,7 +115,7 @@ export class UserPageComponent
   }
 
   private onResponse(articles: IArticle[], articlesCount: number): void {
-    this.isLoading = false;
+    this.isLoading$.next(false);
     this.pagesTotalCount = Math.ceil(articlesCount / this.limit) || 1;
     this.store.articles$.next([...this.store.articles, ...articles]);
 
@@ -124,7 +130,7 @@ export class UserPageComponent
   }
 
   private onCatchError(error: string): void {
-    this.isLoading = false;
+    this.isLoading$.next(false);
     this.error = error;
   }
 
