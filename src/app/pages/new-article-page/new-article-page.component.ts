@@ -41,12 +41,11 @@ export class NewArticlePageComponent
   }
 
   ngOnInit(): void {
-    if (!this.isEditMode) {
-      this.initializeForm();
-      return;
-    }
+    this.initializeForm();
 
-    this.setArticleData();
+    if (this.isEditMode) {
+      this.setArticleData();
+    }
   }
 
   private initializeForm(): void {
