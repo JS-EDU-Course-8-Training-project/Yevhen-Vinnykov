@@ -3,7 +3,7 @@ import {
   HttpHeaders,
   HttpEventType,
 } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { IUserData } from 'src/app/shared/models/IUserData';
 
@@ -42,8 +42,4 @@ export class RedirectionServiceMock {
 
 export class AuthServiceMock {
   public signIn = () => of(userMock);
-}
-
-export class AuthServiceMockWithError {
-  public signIn = () => throwError(() => 'Email is wrong');
 }
