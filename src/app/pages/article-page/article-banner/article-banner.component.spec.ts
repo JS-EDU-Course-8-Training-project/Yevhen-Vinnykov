@@ -1,21 +1,46 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { IArticle } from 'src/app/shared/models/IArticle';
 
-import { BannerComponent } from './article-banner.component';
+import { ArticleBannerComponent } from './article-banner.component';
 
-describe('BannerComponent', () => {
-  let component: BannerComponent;
-  let fixture: ComponentFixture<BannerComponent>;
+const articleMock: IArticle = {
+  id: '1',
+  slug: 'test-slug',
+  title: '',
+  description: '',
+  body: '',
+  image: '',
+  tagList: [],
+  createdAt: '',
+  updatedAt: '',
+  favorited: false,
+  favoritesCount: 2,
+  author: {
+    username: 'test',
+    bio: 'test-bio',
+    image: '',
+    following: false,
+  },
+};
+
+describe('ARTICLE BANNER COMPONENT', () => {
+  let component: ArticleBannerComponent;
+  let fixture: ComponentFixture<ArticleBannerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BannerComponent ]
-    })
-    .compileComponents();
+      declarations: [ArticleBannerComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BannerComponent);
+    fixture = TestBed.createComponent(ArticleBannerComponent);
     component = fixture.componentInstance;
+    component.isAuth = true;
+    component.isMyself = true;
+    component.article = articleMock;
     fixture.detectChanges();
   });
 

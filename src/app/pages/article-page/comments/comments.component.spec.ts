@@ -1,9 +1,9 @@
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { IExistingUser } from './../../../shared/models/IExistingUser';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { IComment } from './../../../shared/models/IComment';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CommentsComponent } from './comments.component';
 import { CommentsService } from '../services/comments/comments.service';
@@ -12,6 +12,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestAttributes } from 'src/app/shared/tests/TestAttributes';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CommentsStore } from '../services/comments/comments.store';
 
 const comments: IComment[] = [
   {
@@ -29,6 +30,10 @@ const comments: IComment[] = [
   },
 ];
 
+class CommentsStoreMock {
+  public comments$ = new BehaviorSubject<IComment[]>([]);
+}
+
 const authUser: IExistingUser = {
   id: '1',
   email: 'test@example.com',
@@ -40,8 +45,9 @@ const authUser: IExistingUser = {
 };
 
 class CommentsServiceMock {
-  public fetchArticleComments = (): Observable<IComment[]> => of(comments);
-  public removeComment = (): Observable<IComment> => of(comments[0]);
+  public fetchArticleComments = () =>
+    new Promise((resolve) => resolve(comments));
+  public removeComment = () => new Promise<void>((resolve) => resolve());
 }
 
 describe('COMMENTS COMPONENT', () => {
@@ -52,7 +58,10 @@ describe('COMMENTS COMPONENT', () => {
     await TestBed.configureTestingModule({
       declarations: [CommentsComponent, TestAttributeDirective],
       imports: [MatCardModule, MatIconModule, MatDialogModule],
-      providers: [{ provide: CommentsService, useClass: CommentsServiceMock }],
+      providers: [
+        { provide: CommentsService, useClass: CommentsServiceMock },
+        { provide: CommentsStore, useClass: CommentsStoreMock },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });
@@ -62,30 +71,32 @@ describe('COMMENTS COMPONENT', () => {
     component = fixture.componentInstance;
     component.slug = 'test-slug';
     component.authUser = authUser;
-    component.requestForComments$ = new Subject<void>();
     fixture.detectChanges();
   });
 
-  it('should delete comment', () => {
+  it('deleteComment() should be invoked on click', waitForAsync(() => {
     const spy = spyOn(component, 'deleteComment').and.callThrough();
 
-    const deleteIcon = fixture.debugElement.query(
-      By.css(`[data-test=${TestAttributes.CommentDeleteBtn}]`)
-    );
-    deleteIcon.triggerEventHandler('click', null);
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
 
-    expect(spy).toHaveBeenCalledWith('1');
-  });
+      const deleteIcon = fixture.debugElement.query(
+        By.css(`[data-test=${TestAttributes.CommentDeleteBtn}]`)
+      );
 
-  it('should not delete a comment that does not exist', () => {
-    const spy = spyOn(component, 'deleteComment').and.callThrough();
-    component.deleteComment('1000');
-    expect(spy).toHaveBeenCalledWith('1000');
-  });
+      deleteIcon.triggerEventHandler('click', null);
 
-  it('requestForComments$ should trigger getComments', () => {
+      expect(spy).toHaveBeenCalledWith('1');
+    });
+  }));
+
+  it('getComments() should be invoked on click', waitForAsync(() => {
     const spy = spyOn(component, 'getComments').and.callThrough();
-    component.requestForComments$.next();
-    expect(spy).toHaveBeenCalledTimes(1);
-  });
+    component.ngOnInit();
+
+    fixture.whenStable().then(() => {
+      expect(spy).toHaveBeenCalled();
+      expect(component.store.comments$.getValue()).toEqual(comments);
+    });
+  }));
 });

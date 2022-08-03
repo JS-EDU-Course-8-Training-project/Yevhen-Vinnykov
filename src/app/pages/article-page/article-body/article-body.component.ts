@@ -9,7 +9,6 @@ import { TestedComponent } from 'src/app/shared/tests/TestedComponent';
 })
 export class ArticleBodyComponent extends TestedComponent {
   @Input() article!: IArticle;
-  @Input() slug!: string;
   @Input() isAuth!: boolean;
   @Input() isMyself!: boolean;
 

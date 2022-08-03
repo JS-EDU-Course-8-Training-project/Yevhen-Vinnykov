@@ -1,5 +1,4 @@
 <div class="container">
-
   <app-article-banner
     [article]="article"
     [isMyself]="isMyself"
@@ -10,13 +9,11 @@
   <app-article-body
     [isMyself]="isMyself"
     [isAuth]="!!authUser.token"
-    [slug]="slug"
     [article]="article"
   >
   </app-article-body>
 
-  <app-comment-form [image]="authUser.image" [slug]="slug">
-  </app-comment-form>
+  <app-comment-form [image]="authUser.image" [slug]="slug"> </app-comment-form>
 
   <app-comments [authUser]="authUser" [slug]="slug"> </app-comments>
 </div>

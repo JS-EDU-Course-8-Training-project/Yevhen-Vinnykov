@@ -1,4 +1,3 @@
-import { of } from 'rxjs';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { IArticle } from 'src/app/shared/models/IArticle';
@@ -27,7 +26,7 @@ const expectedData: IArticle = {
 };
 
 class ArticleServiceStub {
-  public fetchArticle = () => of(expectedData);
+  public fetchArticle = () => new Promise((resolve) => resolve(expectedData));
 }
 
 describe('ARTICLE RESOLVER', () => {
@@ -44,9 +43,8 @@ describe('ARTICLE RESOLVER', () => {
     route.params = { slug: 'test-slug' };
   });
 
-  it('should return correct data', () => {
-    resolver.resolve(route, routerState).subscribe((article) => {
-      expect(article).toEqual(expectedData);
-    });
+  it('should return correct data', async () => {
+    const article = await resolver.resolve(route, routerState);
+    expect(article).toEqual(expectedData);
   });
 });

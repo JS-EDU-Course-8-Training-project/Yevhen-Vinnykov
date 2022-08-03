@@ -19,7 +19,7 @@
 
       <mat-icon
         (click)="deleteComment(comment.id)"
-        *ngIf="comment.author.username === authUser?.username"
+        *ngIf="comment.author.username === authUser.username"
         class="delete-icon"
         [e2e]="TestAttributes.CommentDeleteBtn"
       >

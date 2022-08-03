@@ -1,7 +1,7 @@
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ArticlePageComponent } from './article-page.component';
@@ -9,13 +9,41 @@ import { IExistingUser } from 'src/app/shared/models/IExistingUser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { AuthorizationService } from 'src/app/shared/services/authorization/authorization.service';
 
+const userMock: IExistingUser = {
+  id: '1',
+  email: 'test-user@example.com',
+  password: 'test-password',
+  image: '',
+  username: 'test-username',
+};
+
+const articleMock: IArticle = {
+  id: '1',
+  slug: 'test-slug',
+  title: '',
+  description: '',
+  body: '',
+  image: '',
+  tagList: [],
+  createdAt: '',
+  updatedAt: '',
+  favorited: false,
+  favoritesCount: 2,
+  author: {
+    username: 'test',
+    bio: 'test-bio',
+    image: '',
+    following: false,
+  },
+};
+
 class AuthServiceMock {
-  public authUser$ = of({} as IExistingUser);
+  public authUser$ = new BehaviorSubject<IExistingUser>(userMock);
 }
 
 class ActivatedRouteMock {
   public data = of({
-    article: {} as IArticle,
+    article: articleMock,
   });
 }
 
@@ -43,11 +71,5 @@ describe('ArticlePageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('requestForComments$ should emit', () => {
-    const spy = spyOn(component.requestForComments$, 'next');
-    component.reuestComments();
-    expect(spy).toHaveBeenCalled();
   });
 });

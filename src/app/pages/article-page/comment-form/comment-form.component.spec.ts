@@ -8,8 +8,9 @@ import { AuthorizationService } from 'src/app/shared/services/authorization/auth
 import { CommentsService } from '../services/comments/comments.service';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
-const returnComment: IComment = {
+const commentMock: IComment = {
   id: '1',
   createdAt: Date.now().toLocaleString(),
   updatedAt: Date.now().toLocaleString(),
@@ -24,11 +25,11 @@ const returnComment: IComment = {
 };
 
 class CommentsServiceMock {
-  public createComment = (): Observable<IComment> => of(returnComment);
+  public createComment = (): Observable<IComment> => of(commentMock);
 }
 
 class AuthorizationServiceMock {
-  public isAuthorized$ = of(true);
+  public isAuthorized$ = { getValue: () => true };
 }
 
 describe('COMMENT FORM COMPONENT', () => {
@@ -39,7 +40,7 @@ describe('COMMENT FORM COMPONENT', () => {
     await TestBed.configureTestingModule({
       declarations: [CommentFormComponent],
       providers: [FormBuilder],
-      imports: [ReactiveFormsModule, FormsModule],
+      imports: [ReactiveFormsModule, FormsModule, MatDialogModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     })
       .overrideComponent(CommentFormComponent, {
@@ -63,7 +64,7 @@ describe('COMMENT FORM COMPONENT', () => {
     fixture.detectChanges();
   });
 
-  it('AddComment method should not be called because the form is empty', () => {
+  it('addComment() should not be called because the form is empty', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
     component.commentForm.controls['body'].setValue('');
 
@@ -75,12 +76,8 @@ describe('COMMENT FORM COMPONENT', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('AddComment method should be called', () => {
+  it('addComment() should be called', () => {
     const spy = spyOn(component, 'addComment').and.callThrough();
-    const spyCreateCommentData = spyOn<any>(
-      component,
-      'createCommentData'
-    ).and.callThrough();
 
     component.commentForm.controls['body'].setValue('test-comment');
     fixture.detectChanges();
@@ -93,12 +90,8 @@ describe('COMMENT FORM COMPONENT', () => {
     button.click();
     fixture.detectChanges();
 
-    expect(component.commentForm.getRawValue().body).toBe(null);
     expect(component.commentForm.valid).toBe(false);
-
     expect(button.disabled).toBe(true);
-
     expect(spy).toHaveBeenCalled();
-    expect(spyCreateCommentData).toHaveBeenCalled();
   });
 });

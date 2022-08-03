@@ -1,10 +1,12 @@
+import { of } from 'rxjs';
 import { IComment } from './../../../../shared/models/IComment';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CommentsService } from './comments.service';
+import { HttpClient } from '@angular/common/http';
 
-const expectedData: IComment[] = [
+const commentsMock: IComment[] = [
   {
     id: '1',
     createdAt: Date.now().toString(),
@@ -20,45 +22,38 @@ const expectedData: IComment[] = [
   },
 ];
 
+class HttpClientMock {
+  public get = () => of({ comments: commentsMock });
+  public post = () => of(commentsMock[0]);
+  public delete = () => of(commentsMock[0]);
+}
+
 describe('COMMENTS SERVICE', () => {
   let service: CommentsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [{ provide: HttpClient, useClass: HttpClientMock }],
     });
     service = TestBed.inject(CommentsService);
   });
 
-  it('fetch correct comments', () => {
-    const spy = spyOn(service, 'fetchArticleComments').and.callThrough();
-
-    service.fetchArticleComments('test-slug').subscribe((comments) => {
-      expect(comments).toEqual(expectedData);
-    });
-
-    expect(spy).toHaveBeenCalled();
+  it('fetch correct comments', async () => {
+    const comments = await service.fetchArticleComments('test-slug');
+    expect(comments).toEqual(commentsMock);
   });
 
-  it('should create comment', () => {
-    const spy = spyOn(service, 'createComment').and.callThrough();
-
-    service
-      .createComment('test-slug', { body: 'test-comment' })
-      .subscribe((comments) => {
-        expect(comments).toEqual(expectedData[0]);
-      });
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('should delete comment', waitForAsync(() => {
-    const spy = spyOn(service, 'removeComment').and.callThrough();
-
-    service.removeComment('test-slug', '1').subscribe((comment) => {
-      expect(comment).toEqual(expectedData[0]);
+  it('should create comment', async () => {
+    const comment = await service.createComment('test-slug', {
+      body: 'test-comment',
     });
 
-    expect(spy).toHaveBeenCalled();
-  }));
+    expect(comment).toEqual(commentsMock[0]);
+  });
+
+  it('should delete comment', async () => {
+    const comment = await service.removeComment('test-slug', '1');
+    expect(comment).toEqual(commentsMock[0]);
+  });
 });
