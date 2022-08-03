@@ -1,3 +1,4 @@
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -10,6 +11,7 @@ describe('ConfirmationDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ConfirmationDialogComponent],
+      providers: [{ provide: MAT_DIALOG_DATA, useValue: { data: '' } }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

@@ -1,14 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { ArticlesService } from '../../shared/services/articles/articles.service';
 import { IArticleResponse } from '../../shared/models/IArticle';
-import { catchError, of, throwError } from 'rxjs';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArticleListComponent } from './article-list.component';
 import { InfiniteScrollService } from '../../shared/services/infinite-scroll/infinite-scroll.service';
-import { ElementRef, NO_ERRORS_SCHEMA, QueryList } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-const expectedData: IArticleResponse = {
+const dataMock: IArticleResponse = {
   articles: [
     {
       id: '1',
@@ -33,16 +29,8 @@ const expectedData: IArticleResponse = {
   articlesCount: 10,
 };
 
-class ArticlesServiceMock {
-  public fetchArticles = () => of(expectedData);
-}
-
-class ArticlesServiceMockWithError {
-  public fetchArticles = () => throwError(() => HttpErrorResponse);
-}
-
 class InfiniteScrollServiceMock {
-  public observeIntersection = () => of([]);
+  public initObserver = () => ({});
   public observer = { observe: () => ({}) };
 }
 
@@ -55,7 +43,6 @@ describe('GLOBAL FEED COMPONENT', () => {
       await TestBed.configureTestingModule({
         declarations: [ArticleListComponent],
         providers: [
-          { provide: ArticlesService, useClass: ArticlesServiceMock },
           {
             provide: InfiniteScrollService,
             useClass: InfiniteScrollServiceMock,
@@ -70,67 +57,17 @@ describe('GLOBAL FEED COMPONENT', () => {
       component = fixture.componentInstance;
       component.tabIndex = 1;
       component.isAuthorized = true;
+      component.selectedTag = 'test-tag';
+      component.articles = dataMock.articles;
+      component.error = '';
+      component.isLastPage = false;
+      component.isLoading = false;
+      component.cb = () => ({});
       fixture.detectChanges();
-      component.ngOnChanges();
     });
 
-    it('setDataOnResponse should be called because tabIndex is 1', waitForAsync(() => {
-      const service = TestBed.inject(ArticlesService);
-
-      service.fetchArticles().subscribe((data: IArticleResponse) => {
-        expect(data.articles).toEqual(expectedData.articles);
-      });
-    }));
-
-    it('setDataOnResponse should be called because is Authorized is false', waitForAsync(() => {
-      component.isAuthorized = false;
-      component.tabIndex = 0;
-
-      const service = TestBed.inject(ArticlesService);
-
-      service.fetchArticles().subscribe((data: IArticleResponse) => {
-        expect(data.articles).toEqual(expectedData.articles);
-      });
-    }));
-  });
-
-  describe('WHEN ERROR IS THROWN', () => {
-    let component: ArticleListComponent;
-    let fixture: ComponentFixture<ArticleListComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        declarations: [ArticleListComponent],
-        providers: [
-          { provide: ArticlesService, useClass: ArticlesServiceMockWithError },
-          {
-            provide: InfiniteScrollService,
-            useClass: InfiniteScrollServiceMock,
-          },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
+    it('should create', () => {
+      expect(component).toBeTruthy();
     });
-
-    beforeEach(() => {
-      fixture = TestBed.createComponent(ArticleListComponent);
-      component = fixture.componentInstance;
-      component.tabIndex = 1;
-      component.isAuthorized = false;
-      component.lastItem = new QueryList<ElementRef<any>>();
-      fixture.detectChanges();
-      component.ngOnChanges();
-    });
-
-    it('onCatchError should be called', waitForAsync(() => {
-      const service = TestBed.inject(ArticlesService);
-
-      service.fetchArticles().pipe(
-        catchError(() => {
-          expect(component.error).toBe('Something went wrong :(');
-          return of('');
-        })
-      );
-    }));
   });
 });

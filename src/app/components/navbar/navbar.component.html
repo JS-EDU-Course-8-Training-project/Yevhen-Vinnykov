@@ -47,11 +47,11 @@
     [ngClass]="{ selected: (url$ | async) === '/user/' + authUser.username }"
     *ngIf="isAuthorized$ | async"
     mat-button
-    routerLink="/user/{{ authUser?.username }}"
+    [routerLink]="['/user/', authUser.username]"
     [e2e]="TestAttributes.NavUserPageLink"
   >
-    {{ authUser?.username }}
-    <img [src]="authUser?.image" alt="" />
+    {{ authUser.username }}
+    <img [src]="authUser.image" alt="" />
   </a>
 </div>
 
@@ -67,11 +67,11 @@
     <a routerLink="/settings" *ngIf="isAuthorized$ | async">Settings</a>
 
     <a
-      routerLink="/user/{{ authUser?.username }}"
+      [routerLink]="['/user/', authUser.username]"
       *ngIf="isAuthorized$ | async"
     >
-      {{ authUser?.username }}
-      <img [src]="authUser?.image" alt="" />
+      {{ authUser.username }}
+      <img [src]="authUser.image" alt="" />
     </a>
 
     <a routerLink="/sign-in" *ngIf="!(isAuthorized$ | async)">Sign In</a>

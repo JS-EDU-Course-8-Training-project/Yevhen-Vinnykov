@@ -1,7 +1,6 @@
 import { AuthorizationService } from '../../shared/services/authorization/authorization.service';
 import { RedirectionService } from '../../shared/services/redirection/redirection.service';
 import { ArticlesService } from '../../shared/services/articles/articles.service';
-import { of } from 'rxjs';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ArticleCardComponent } from './article-card.component';
 import { IArticle } from '../../shared/models/IArticle';
@@ -10,12 +9,9 @@ import { MatCard } from '@angular/material/card';
 import { By } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
-import {
-  MatDialogModule,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-const article: IArticle = {
+const articleMock: IArticle = {
   id: '1',
   slug: 'test-slug',
   title: '',
@@ -37,17 +33,17 @@ const article: IArticle = {
 
 class AricleServiceMock {
   public addToFavorites = () =>
-    of({
-      ...article,
+    Promise.resolve({
+      ...articleMock,
       favorited: true,
-      favoritesCount: article.favoritesCount + 1,
+      favoritesCount: articleMock.favoritesCount + 1,
     });
 
   public removeFromFavorites = () =>
-    of({
-      ...article,
+    Promise.resolve({
+      ...articleMock,
       favorited: false,
-      favoritesCount: article.favoritesCount - 1,
+      favoritesCount: articleMock.favoritesCount - 1,
     });
 }
 
@@ -57,14 +53,14 @@ class RedirectionServiceMock {
 }
 
 class AuthorizationServiceAuthorizedMock {
-  public isAuthorized$ = of(true);
+  public isAuthorized$ = { getValue: () => true };
 }
 
 class AuthorizationServiceNotAuthorizedMock {
-  public isAuthorized$ = of(false);
+  public isAuthorized$ = { getValue: () => false };
 }
 
-describe('ARTICLE COMPONENT', () => {
+describe('ARTICLE CARD COMPONENT', () => {
   let component: ArticleCardComponent;
   let fixture: ComponentFixture<ArticleCardComponent>;
 
@@ -96,60 +92,21 @@ describe('ARTICLE COMPONENT', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ArticleCardComponent);
     component = fixture.componentInstance;
-    const inputArticle: IArticle = article;
-    component.article = inputArticle;
-    fixture.detectChanges();
-  });
-
-  it('should create', async () => {
-    expect(component).toBeTruthy();
   });
 
   it('should initialize correctly', async () => {
-    expect(component.likesCount).toBe(2);
-  });
-});
-
-describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
-  let component: ArticleCardComponent;
-  let fixture: ComponentFixture<ArticleCardComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        ArticleCardComponent,
-        MatIcon,
-        MatCard,
-        ErrorDialogComponent,
-      ],
-      imports: [MatDialogModule],
-      providers: [
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: { data: { error: 'Something went wrong :(' } },
-        },
-        { provide: ArticlesService, useClass: AricleServiceMock },
-        { provide: RedirectionService, useClass: RedirectionServiceMock },
-        {
-          provide: AuthorizationService,
-          useClass: AuthorizationServiceAuthorizedMock,
-        },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-    }).compileComponents();
+    const inputArticle: IArticle = articleMock;
+    component.article = inputArticle;
+    fixture.detectChanges();
+    expect(component.likesCount).toBe(articleMock.favoritesCount);
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ArticleCardComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should be invoked on button click and dislike', waitForAsync(() => {
-    const inputArticle: IArticle = { ...article, favorited: true };
+  it('dislike() should be invoked on button click and dislike', waitForAsync(() => {
+    const inputArticle: IArticle = { ...articleMock, favorited: true };
     component.article = inputArticle;
     fixture.detectChanges();
 
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+    const spy = spyOn(component, 'dislike').and.callThrough();
 
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
@@ -158,16 +115,16 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
     fixture.whenStable().then(() => {
       expect(component.likesCount).toBe(1);
       expect(component.isLiked).toBe(false);
-      expect(spy).toHaveBeenCalledWith('test-slug', 'removeFromFavorites');
+      expect(spy).toHaveBeenCalledWith(inputArticle.slug);
     });
   }));
 
-  it('should be invoked on button click and like', waitForAsync(() => {
-    const inputArticle: IArticle = { ...article, favorited: false };
+  it('like() should be invoked on button click and like', waitForAsync(() => {
+    const inputArticle: IArticle = { ...articleMock, favorited: false };
     component.article = inputArticle;
     fixture.detectChanges();
 
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
+    const spy = spyOn(component, 'like').and.callThrough();
 
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
@@ -176,12 +133,12 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > AUTHORIZED', () => {
     fixture.whenStable().then(() => {
       expect(component.likesCount).toBe(3);
       expect(component.isLiked).toBe(true);
-      expect(spy).toHaveBeenCalledWith('test-slug', 'addToFavorites');
+      expect(spy).toHaveBeenCalledWith(inputArticle.slug);
     });
   }));
 });
 
-describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => {
+describe('ARTICLE CARD COMPONENT > UNAUTHORIZED', () => {
   let component: ArticleCardComponent;
   let fixture: ComponentFixture<ArticleCardComponent>;
 
@@ -213,22 +170,18 @@ describe('ARTICLE COMPONENT > HANDLE LIKE DISLIKE METHOD > UNAUTHORIZED', () => 
   beforeEach(() => {
     fixture = TestBed.createComponent(ArticleCardComponent);
     component = fixture.componentInstance;
+    component.article = articleMock;
+    fixture.detectChanges();
   });
 
-  it('should not be invoked on button because unauthorized', waitForAsync(() => {
-    const inputArticle: IArticle = { ...article };
-    component.article = inputArticle;
-
-    const spy = spyOn<any>(component, 'likeHandler').and.callThrough();
-
+  it('should not like because unothorized', waitForAsync(() => {
     const buttonElement = fixture.debugElement.query(By.css('button'));
     buttonElement.triggerEventHandler('click', null);
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      expect(component.likesCount).toBe(2);
-      expect(component.isLiked).toBe(false);
-      expect(spy).not.toHaveBeenCalled();
+      expect(component.likesCount).toBe(articleMock.favoritesCount);
+      expect(component.isLiked).toBe(articleMock.favorited);
     });
   }));
 });

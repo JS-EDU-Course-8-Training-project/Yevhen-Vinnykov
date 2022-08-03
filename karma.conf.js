@@ -30,7 +30,7 @@ module.exports = function (config) {
         "./coverage/js-edu-course-8-training-project"
       ),
       subdir: ".",
-      reporters: [{ type: "html" }, { type: "text-summary" }],
+      reporters: [{ type: "html" }, { type: "text-summary" }, { type: "lcov"}],
     },
     reporters: ["progress", "kjhtml"],
     port: 9876,
