@@ -1,5 +1,4 @@
 import { INewArticle } from '../../shared/models/INewArticle';
-import { Observable, of, throwError } from 'rxjs';
 import { IArticle } from 'src/app/shared/models/IArticle';
 import { IUpdateArticle } from 'src/app/shared/models/IUpdateArticle';
 
@@ -23,41 +22,29 @@ export const expectedData: IArticle = {
   },
 };
 
-export const mockNewArticle: INewArticle = {
-  title: 'test-title',
-  description: 'test-description',
-  body: 'test-body',
-  tagList: ['test-tag'],
-};
-
 export class ArticlesServiceMock {
-  public fetchArticle = (slug: string): Observable<IArticle> =>
-    of(expectedData);
+  public fetchArticle = () => new Promise((resolve) => resolve(expectedData));
 
-  public createArticle = (newArticle: INewArticle): Observable<IArticle> =>
-    of({
-      ...expectedData,
-      title: newArticle.title,
-      description: newArticle.description,
-      body: newArticle.body,
-      tagList: [...newArticle.tagList],
-    });
+  public createArticle = (newArticle: INewArticle) =>
+    new Promise((resolve) =>
+      resolve({
+        ...expectedData,
+        title: newArticle.title,
+        description: newArticle.description,
+        body: newArticle.body,
+        tagList: [...newArticle.tagList],
+      })
+    );
 
-  public updateArticle = (
-    slug: string,
-    article: IUpdateArticle
-  ): Observable<IArticle> =>
-    of({
-      ...expectedData,
-      title: article.title || expectedData.title,
-      description: article.description || expectedData.description,
-      body: article.body || expectedData.body,
-    });
-}
-
-export class ArticlesServiceMockWithError {
-  public fetchArticle = (slug: string) =>
-    throwError(() => 'Fetching articles failed');
+  public updateArticle = (slug: string, article: IUpdateArticle) =>
+    new Promise((resolve) =>
+      resolve({
+        ...expectedData,
+        title: article.title || expectedData.title,
+        description: article.description || expectedData.description,
+        body: article.body || expectedData.body,
+      })
+    );
 }
 
 export class RouterMockEditMode {
