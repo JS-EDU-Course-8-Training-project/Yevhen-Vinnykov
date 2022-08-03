@@ -25,6 +25,6 @@ getTestBed().initTestEnvironment(
 );
 
 // Then we find all the tests.
-const context = require.context('./app/components/snackbar', false, /snackbar\.component\.spec\.ts$/);
+const context = require.context('./app/pages/settings-page', false, /settings-page\.component\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);

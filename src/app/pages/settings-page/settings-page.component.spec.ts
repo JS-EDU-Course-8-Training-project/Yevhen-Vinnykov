@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { IExistingUser } from './../../shared/models/IExistingUser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -18,7 +18,7 @@ const mockUser: IExistingUser = {
 };
 
 class AuthServiceMock {
-  public authUser$ = of(mockUser);
+  public authUser$ = new BehaviorSubject(mockUser);
 }
 
 describe('SETTINGS PAGE COMPONENT', () => {
@@ -29,9 +29,7 @@ describe('SETTINGS PAGE COMPONENT', () => {
     await TestBed.configureTestingModule({
       declarations: [SettingsPageComponent],
       imports: [ReactiveFormsModule, FormsModule],
-      providers: [
-        { provide: AuthorizationService, useClass: AuthServiceMock },
-      ],
+      providers: [{ provide: AuthorizationService, useClass: AuthServiceMock }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     }).compileComponents();
   });

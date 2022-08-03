@@ -1,5 +1,5 @@
 import { UsersService } from './../../../shared/services/users/users.service';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IExistingUser } from 'src/app/shared/models/IExistingUser';
@@ -17,10 +17,6 @@ const settingsMock: IExistingUser = {
   username: 'test-username',
   image: 'test-image',
 };
-
-class UsersServiceMockWithError {
-  public updateUser = () => throwError(() => 'Fetching articles failed');
-}
 
 class UsersServiceMock {
   public updateUser = () =>
@@ -67,13 +63,11 @@ describe('SETTINGS FORM COMPONENT', () => {
     );
   });
 
-  it('should update correctly', () => {
+  it('should update', () => {
     const spyUpdateSettings = spyOn(
       component,
       'updateSettings'
     ).and.callThrough();
-    const spyCreateUserData = spyOn<any>(component, 'createUserData');
-    const spyOnSubmit = spyOn<any>(component, 'onSubmit');
 
     const updateButton = fixture.debugElement.query(
       By.css('[type="submit"]')
@@ -83,8 +77,6 @@ describe('SETTINGS FORM COMPONENT', () => {
     fixture.detectChanges();
 
     expect(spyUpdateSettings).toHaveBeenCalled();
-    expect(spyCreateUserData).toHaveBeenCalled();
-    expect(spyOnSubmit).toHaveBeenCalled();
   });
 
   it('should logout', () => {
@@ -106,42 +98,5 @@ describe('SETTINGS FORM COMPONENT', () => {
 
     expect(spyCheckIfValid).toHaveBeenCalledWith('email');
     expect(component.checkIfValid('email')).toBe(false);
-  });
-});
-
-describe('SETTINGS FORM COMPONENT > ON CATCH ERROR METHOD', () => {
-  let component: SettingsFormComponent;
-  let fixture: ComponentFixture<SettingsFormComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [SettingsFormComponent],
-      imports: [ReactiveFormsModule, FormsModule, MatProgressSpinnerModule],
-      providers: [
-        { provide: UsersService, useClass: UsersServiceMockWithError },
-        { provide: RedirectionService, useClass: RedirectionServiceMock },
-        { provide: AuthorizationService, useClass: AuthServiceMock },
-      ],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsFormComponent);
-    component = fixture.componentInstance;
-    component.authUser = settingsMock;
-    fixture.detectChanges();
-  });
-
-  it('should be invoked', () => {
-    const spy = spyOn<any>(component, 'onCatchError').and.callThrough();
-
-    const updateButton = fixture.debugElement.query(
-      By.css('[type="submit"]')
-    ).nativeElement;
-    updateButton.click();
-    fixture.detectChanges();
-
-    expect(spy).toHaveBeenCalledWith('Fetching articles failed');
-    expect(component.error).toEqual('Fetching articles failed');
   });
 });
