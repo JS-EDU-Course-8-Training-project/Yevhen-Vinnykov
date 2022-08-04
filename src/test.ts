@@ -25,6 +25,6 @@ getTestBed().initTestEnvironment(
 );
 
 // Then we find all the tests.
-const context = require.context('./app/pages/sign-up', false, /sign-up\.component\.spec\.ts$/);
+const context = require.context('./app/shared/services/articles', false, /articles\.service\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);

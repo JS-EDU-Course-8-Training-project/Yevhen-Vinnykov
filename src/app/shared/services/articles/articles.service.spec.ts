@@ -3,7 +3,6 @@ import { IArticleResponse } from './../../models/IArticle';
 import { HttpClient } from '@angular/common/http';
 
 import { ArticlesService } from './articles.service';
-import { INewArticle } from '../../models/INewArticle';
 import { IUpdateArticle } from '../../models/IUpdateArticle';
 
 const expectedData: IArticleResponse = {
@@ -38,55 +37,63 @@ describe('ARTICLES SERVICE > GET METHODS', () => {
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     articlesService = new ArticlesService(httpClientSpy);
-  });
-
-  it('getArticles methods should return expected data', () => {
     httpClientSpy.get.and.returnValue(of(expectedData));
-
-    articlesService.fetchArticles().subscribe((articles) => {
-      expect(articles).toEqual(expectedData);
-    });
-
-    articlesService.fetchFollowedArticles().subscribe((articles) => {
-      expect(articles).toEqual(expectedData);
-    });
-
-    articlesService.fetchArticlesByTag('test-tag').subscribe((articles) => {
-      expect(articles).toEqual(expectedData);
-    });
-
-    articlesService.fetchUserArticles('test-username').subscribe((articles) => {
-      expect(articles).toEqual(expectedData);
-    });
-
-    articlesService
-      .fetchFavoritedArticles('test-username')
-      .subscribe((articles) => {
-        expect(articles).toEqual(expectedData);
-      });
-
-    expect(httpClientSpy.get.calls.count()).toBe(5);
   });
 
-  it('fetchArticle method should return expected data', () => {
-    const expectedArticle = { article: expectedData.articles[0] };
-    httpClientSpy.get.and.returnValue(of(expectedArticle));
+  it('fetchArticles() should return expected data', async () => {
+    const allArticles = await articlesService.fetchArticles();
 
-    articlesService.fetchArticle('test-slug').subscribe((article) => {
-      expect(article).toEqual(expectedArticle.article);
-    });
-
+    expect(allArticles).toEqual(expectedData);
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
 
-  it('fetchTags methods should return expected data', () => {
+  it('fetchFollowedArticles() should return expected data', async () => {
+    const followedArticles = await articlesService.fetchFollowedArticles();
+
+    expect(followedArticles).toEqual(expectedData);
+    expect(httpClientSpy.get.calls.count()).toBe(1);
+  });
+
+  it('fetchArticlesByTag() should return expected data', async () => {
+    const taggedArticles = await articlesService.fetchArticlesByTag('test');
+
+    expect(taggedArticles).toEqual(expectedData);
+    expect(httpClientSpy.get.calls.count()).toBe(1);
+  });
+
+  it('fetchUserArticles() should return expected data', async () => {
+    const userArticles = await articlesService.fetchUserArticles('test');
+
+    expect(userArticles).toEqual(expectedData);
+    expect(httpClientSpy.get.calls.count()).toBe(1);
+  });
+
+  it('fetchFavoritedArticles() should return expected data', async () => {
+    const favoritedArticles = await articlesService.fetchFavoritedArticles(
+      'test'
+    );
+
+    expect(favoritedArticles).toEqual(expectedData);
+    expect(httpClientSpy.get.calls.count()).toBe(1);
+  });
+
+  it('fetchArticle() should return expected data', async () => {
+    const expectedArticle = { article: expectedData.articles[0] };
+    httpClientSpy.get.and.returnValue(of(expectedArticle));
+
+    const article = await articlesService.fetchArticle('test-slug');
+
+    expect(article).toEqual(expectedArticle.article);
+    expect(httpClientSpy.get.calls.count()).toBe(1);
+  });
+
+  it('fetchTags() should return expected data', async () => {
     const expectedTags = { tags: ['test-tag'] };
     httpClientSpy.get.and.returnValue(of(expectedTags));
 
-    articlesService.fetchTags().subscribe((tags) => {
-      expect(tags).toEqual(expectedTags.tags);
-    });
+    const tags = await articlesService.fetchTags();
 
+    expect(tags).toEqual(expectedTags.tags);
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
 });
@@ -100,32 +107,23 @@ describe('ARTICLES SERVICE > POST METHODS', () => {
     articlesService = new ArticlesService(httpClientSpy);
   });
 
-  it('createArticle should create an article and return correct data', () => {
+  it('createArticle() should create an article and return correct data', async () => {
     const expectedArticle = expectedData.articles[0];
-    const newArticleMock: INewArticle = {
-      title: 'test-title',
-      description: 'test-description',
-      body: 'test-body',
-      tagList: ['test-tag'],
-    };
+    httpClientSpy.post.and.returnValue(of({ article: expectedArticle }));
 
-    httpClientSpy.post.and.returnValue(of({article: expectedArticle}));
+    const article = await articlesService.createArticle(expectedArticle);
 
-    articlesService.createArticle(newArticleMock).subscribe((article) => {
-      expect(article).toEqual(expectedArticle);
-    });
-
+    expect(article).toEqual(expectedArticle);
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
 
-  it('addToFavorites should return correct data', () => {
+  it('addToFavorites() should return correct data', async () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.post.and.returnValue(of(expectedArticle));
 
-    articlesService.addToFavorites('test-slug').subscribe((article) => {
-      expect(article).toEqual(expectedArticle.article);
-    });
+    const article = await articlesService.addToFavorites('test');
 
+    expect(article).toEqual(expectedArticle.article);
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
 });
@@ -139,9 +137,9 @@ describe('ARTICLES SERVICE > PUT METHODS', () => {
     articlesService = new ArticlesService(httpClientSpy);
   });
 
-  it('updateArticle should update an article and return correct data', () => {
+  it('updateArticle() should update an article and return correct data', async () => {
     const expectedArticle = expectedData.articles[0];
-    httpClientSpy.put.and.returnValue(of({article: expectedArticle}));
+    httpClientSpy.put.and.returnValue(of({ article: expectedArticle }));
 
     const updateArticleMock: IUpdateArticle = {
       title: 'test-title',
@@ -149,12 +147,12 @@ describe('ARTICLES SERVICE > PUT METHODS', () => {
       body: 'test-body',
     };
 
-    articlesService
-      .updateArticle('test-slug', updateArticleMock)
-      .subscribe((article) => {
-        expect(article).toEqual(expectedArticle);
-      });
+    const updateArticle = await articlesService.updateArticle(
+      'test-slug',
+      updateArticleMock
+    );
 
+    expect(updateArticle).toEqual(expectedArticle);
     expect(httpClientSpy.put.calls.count()).toBe(1);
   });
 });
@@ -168,24 +166,22 @@ describe('ARTICLES SERVICE > DELETE METHODS', () => {
     articlesService = new ArticlesService(httpClientSpy);
   });
 
-  it('deleteArticle should delete an article and return empty object', () => {
+  it('deleteArticle() should delete an article and return an empty object', async () => {
     httpClientSpy.delete.and.returnValue(of({}));
 
-    articlesService.deleteArticle('test-slug').subscribe((res) => {
-      expect(res).toEqual({});
-    });
+    const response = await articlesService.deleteArticle('test-slug');
 
+    expect(response).toEqual({});
     expect(httpClientSpy.delete.calls.count()).toBe(1);
   });
 
-  it('removeFromFavorites should return correct data', () => {
+  it('removeFromFavorites() should return correct data', async () => {
     const expectedArticle = { article: expectedData.articles[0] };
     httpClientSpy.delete.and.returnValue(of(expectedArticle));
 
-    articlesService.removeFromFavorites('test-slug').subscribe((article) => {
-      expect(article).toEqual(expectedArticle.article);
-    });
+    const article = await articlesService.removeFromFavorites('test');
 
+    expect(article).toEqual(expectedArticle.article);
     expect(httpClientSpy.delete.calls.count()).toBe(1);
   });
 });
