@@ -25,6 +25,6 @@ getTestBed().initTestEnvironment(
 );
 
 // Then we find all the tests.
-const context = require.context('./app/shared/services/authorization', false, /authorization\.service\.spec\.ts$/);
+const context = require.context('./app/shared/services/infinite-scroll', false, /infinite-scroll\.service\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
