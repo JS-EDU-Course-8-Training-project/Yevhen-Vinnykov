@@ -28,7 +28,7 @@ describe('AUTHORIZATION SERVICE', () => {
     localStorage.clear();
   });
 
-  it('checkIfAuthorized should make isAuthorized$ emit false ', () => {
+  it('checkIfAuthorized() should make isAuthorized$ emit false ', () => {
     const spy = spyOn(service.isAuthorized$, 'next');
 
     service.checkIfAuthorized();
@@ -36,7 +36,7 @@ describe('AUTHORIZATION SERVICE', () => {
     expect(spy).toHaveBeenCalledWith(false);
   });
 
-  it('checkIfAuthorized should make isAuthorized$ emit true ', () => {
+  it('checkIfAuthorized() should make isAuthorized$ emit true ', () => {
     const spy = spyOn(service.isAuthorized$, 'next');
 
     localStorage.setItem('authorized', 'true');
@@ -45,7 +45,7 @@ describe('AUTHORIZATION SERVICE', () => {
     expect(spy).toHaveBeenCalledWith(true);
   });
 
-  it('authorize method should make isAuthorized$ emit true ', () => {
+  it('authorize() should make isAuthorized$ emit true ', () => {
     const spy = spyOn(service.isAuthorized$, 'next');
 
     service.authorize(userMock);
@@ -53,7 +53,7 @@ describe('AUTHORIZATION SERVICE', () => {
     expect(spy).toHaveBeenCalledWith(true);
   });
 
-  it('removeAuthorization method should make isAuthorized$ emit false ', () => {
+  it('removeAuthorization() should make isAuthorized$ emit false ', () => {
     const spy = spyOn(service.isAuthorized$, 'next');
 
     service.removeAuthorization();
@@ -61,19 +61,20 @@ describe('AUTHORIZATION SERVICE', () => {
     expect(spy).toHaveBeenCalledWith(false);
   });
 
-  it('signIn method should authorize the user', () => {
+  it('signIn() should authorize the user', async () => {
     const spy = spyOn(service, 'authorize').and.callThrough();
     httpClientSpy.post.and.returnValue(of({ user: userMock }));
 
-    service
-      .signIn({ email: 'user@example.com', password: 'Password1' })
-      .subscribe((user) => {
-        expect(user).toEqual(userMock);
-        expect(spy).toHaveBeenCalledWith(user);
-      });
+    const user = await service.signIn({
+      email: 'user@example.com',
+      password: 'Password1',
+    });
+
+    expect(user).toEqual(userMock);
+    expect(spy).toHaveBeenCalledWith(user);
   });
 
-  it('fetchAuthUser method should authorize the user', () => {
+  it('fetchAuthUser() should authorize the user', () => {
     const spy = spyOn(service, 'authorize');
     httpClientSpy.get.and.returnValue(of({ user: userMock }));
 
@@ -83,20 +84,11 @@ describe('AUTHORIZATION SERVICE', () => {
     });
   });
 
-  it('signOut method should remove authorization', () => {
+  it('signOut() should remove authorization', () => {
     const spy = spyOn(service, 'removeAuthorization');
 
     service.signOut();
 
     expect(spy).toHaveBeenCalled();
   });
-
-    it('signOut method should reset the autoSignOut timer', () => {
-      
-      const spy = spyOn(service, 'removeAuthorization');
-
-      service.signOut();
-
-      expect(spy).toHaveBeenCalled();
-    });
 });
