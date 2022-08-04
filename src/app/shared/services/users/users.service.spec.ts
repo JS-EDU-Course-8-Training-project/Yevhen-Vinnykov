@@ -34,23 +34,21 @@ describe('USERS SERVICE', () => {
     service = new UsersService(httpClientSpy, authorizationServiceSpy);
   });
 
-  it('createUser should create a user and return correct data', () => {
+  it('createUser() should create a user and return correct data', async () => {
     httpClientSpy.post.and.returnValue(of({ user: mockUser }));
 
-    service.createUser(mockNewUser).subscribe((newUser) => {
-      expect(newUser).toEqual(mockUser);
-    });
+    const user = await service.createUser(mockNewUser);
 
+    expect(user).toEqual(mockUser);
     expect(authorizationServiceSpy.authorize.calls.count()).toBe(1);
   });
 
-  it('updateUser should return correct data and emit user', () => {
+  it('updateUser() should return correct data and emit user', async () => {
     httpClientSpy.put.and.returnValue(of({ user: mockUser }));
 
-    service.updateUser(mockUser).subscribe((user) => {
-      expect(user).toEqual(mockUser);
-    });
+    const updatedUser = await service.updateUser(mockUser);
 
+    expect(updatedUser).toEqual(mockUser);
     expect(authorizationServiceSpy.authorize.calls.count()).toBe(1);
   });
 });
