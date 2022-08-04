@@ -11,78 +11,46 @@ const mockProfile: IProfile = {
   following: false,
 };
 
-describe('PROFILES SERVICE > GET', () => {
+describe('PROFILES SERVICE', () => {
   let service: ProfilesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+    httpClientSpy = jasmine.createSpyObj('HttpClient', [
+      'get',
+      'post',
+      'delete',
+    ]);
     service = new ProfilesService(httpClientSpy);
   });
 
-  it('fetchUser methods should return expected data', (done: DoneFn) => {
+  it('fetchUser() should return expected data', async () => {
     httpClientSpy.get.and.returnValue(of({ profile: mockProfile }));
 
-    service.fetchUser('test-username').subscribe({
-      next: (user) => {
-        expect(user).toEqual(mockProfile);
-        done();
-      },
-      error: done.fail,
-    });
+    const user = await service.fetchUser('test-username');
 
+    expect(user).toEqual(mockProfile);
     expect(httpClientSpy.get.calls.count()).toBe(1);
   });
-});
 
-describe('PROFILES SERVICE > POST', () => {
-  let service: ProfilesService;
-  let httpClientSpy: jasmine.SpyObj<HttpClient>;
-
-  beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
-    service = new ProfilesService(httpClientSpy);
-  });
-
-  it('follow methods should return expected data', (done: DoneFn) => {
+  it('follow() should return expected data', async () => {
     httpClientSpy.post.and.returnValue(
       of({ profile: { ...mockProfile, following: true } })
     );
 
-    service.follow('test-username').subscribe({
-      next: (user) => {
-        expect(user).toEqual({ ...mockProfile, following: true });
-        done();
-      },
-      error: done.fail,
-    });
+    const profile = await service.follow('test-username');
 
+    expect(profile).toEqual({ ...mockProfile, following: true });
     expect(httpClientSpy.post.calls.count()).toBe(1);
   });
-});
 
-describe('PROFILES SERVICE > DELETE', () => {
-  let service: ProfilesService;
-  let httpClientSpy: jasmine.SpyObj<HttpClient>;
-
-  beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['delete']);
-    service = new ProfilesService(httpClientSpy);
-  });
-
-  it('unfollow methods should return expected data', (done: DoneFn) => {
+  it('unfollow methods should return expected data', async () => {
     httpClientSpy.delete.and.returnValue(
       of({ profile: { ...mockProfile, following: false } })
     );
+    const profile = await service.unfollow('test-username');
 
-    service.unfollow('test-username').subscribe({
-      next: (user) => {
-        expect(user).toEqual({ ...mockProfile, following: false });
-        done();
-      },
-      error: done.fail,
-    });
-
+    expect(profile).toEqual({ ...mockProfile, following: false });
     expect(httpClientSpy.delete.calls.count()).toBe(1);
   });
 });
