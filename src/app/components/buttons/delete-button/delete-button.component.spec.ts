@@ -1,8 +1,13 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BehaviorSubject, of } from 'rxjs';
 import { ArticlesService } from 'src/app/shared/services/articles/articles.service';
 import { RedirectionService } from 'src/app/shared/services/redirection/redirection.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
@@ -19,7 +24,11 @@ class ArticlesServiceMock {
 }
 
 class DeleteButtonStoreMock {
-  public isLoading$ = { next: () => ({}) };
+  public isLoading$ = new BehaviorSubject<boolean>(false);
+}
+
+class MatDialogMock {
+  open = () => ({ afterClosed: () => of({ action: true }) });
 }
 
 describe('DELETE BUTTON COMPONENT', () => {
@@ -45,8 +54,9 @@ describe('DELETE BUTTON COMPONENT', () => {
         { provide: RedirectionService, useClass: RedirectionServiceMock },
         { provide: ArticlesService, useClass: ArticlesServiceMock },
         { provide: DeleteButtonStore, useClass: DeleteButtonStoreMock },
+        { provide: MatDialog, useClass: MatDialogMock },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 

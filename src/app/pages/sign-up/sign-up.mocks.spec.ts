@@ -4,7 +4,7 @@ import { INewUser } from 'src/app/shared/models/INewUser';
 
 export const dataMock: INewUser = {
   email: 'test-user@example.com',
-  password: 'test-password',
+  password: 'Test-password1',
   username: 'test-username',
 };
 

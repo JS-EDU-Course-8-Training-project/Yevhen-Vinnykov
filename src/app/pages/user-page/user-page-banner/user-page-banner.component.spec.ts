@@ -6,6 +6,7 @@ import { AuthorizationService } from 'src/app/shared/services/authorization/auth
 import { UserPageBannerComponent } from './user-page-banner.component';
 import { of } from 'rxjs';
 import { ProfilesService } from 'src/app/shared/services/profiles/profiles.service';
+import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const userMock: IExistingUser = {
   id: '1',
@@ -44,6 +45,7 @@ describe('UserPageBannerComponent', () => {
         { provide: ActivatedRoute, useClass: RouteMock },
         { provide: ProfilesService, useClass: ProfilesServiceMock },
       ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 

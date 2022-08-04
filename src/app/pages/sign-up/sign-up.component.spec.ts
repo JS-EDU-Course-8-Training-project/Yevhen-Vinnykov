@@ -34,7 +34,7 @@ describe('SIGN UP COMPONENT', () => {
     fixture.detectChanges();
   });
 
-  it('should sign up', () => {
+  it('should call handleSignUp and sign up', () => {
     const signinButton = fixture.debugElement.query(
       By.css('button')
     ).nativeElement;
@@ -42,6 +42,17 @@ describe('SIGN UP COMPONENT', () => {
 
     component.signUpForm.setValue(dataMock);
     fixture.detectChanges();
+    signinButton.click();
+
+    expect(spyHandleSignUp).toHaveBeenCalled();
+  });
+
+  it('should call handleSignUp but not sign up because the form is empty', () => {
+    const signinButton = fixture.debugElement.query(
+      By.css('button')
+    ).nativeElement;
+    const spyHandleSignUp = spyOn(component, 'handleSignUp').and.callThrough();
+
     signinButton.click();
 
     expect(spyHandleSignUp).toHaveBeenCalled();

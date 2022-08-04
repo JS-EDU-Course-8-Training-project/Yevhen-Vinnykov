@@ -13,6 +13,12 @@ describe('INFINITE SCROLL SERVICE', () => {
   });
 
   it('should be created', () => {
+    service.initObserver(() => ({}));
+
+    const mockElement = document.createElement('div');
+    document.body.appendChild(mockElement);
+    service.observer.observe(mockElement);
+
     expect(service).toBeTruthy();
   });
 });

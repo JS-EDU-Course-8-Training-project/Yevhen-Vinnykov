@@ -2,7 +2,7 @@ import { IArticleResponse } from '../../shared/models/IArticle';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ArticleListComponent } from './article-list.component';
 import { InfiniteScrollService } from '../../shared/services/infinite-scroll/infinite-scroll.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 const dataMock: IArticleResponse = {
   articles: [
@@ -34,40 +34,38 @@ class InfiniteScrollServiceMock {
   public observer = { observe: () => ({}) };
 }
 
-describe('GLOBAL FEED COMPONENT', () => {
-  describe('WHEN NO ERROR IS THROWN', () => {
-    let component: ArticleListComponent;
-    let fixture: ComponentFixture<ArticleListComponent>;
+describe('ARTICLE LIST COMPONENT', () => {
+  let component: ArticleListComponent;
+  let fixture: ComponentFixture<ArticleListComponent>;
 
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        declarations: [ArticleListComponent],
-        providers: [
-          {
-            provide: InfiniteScrollService,
-            useClass: InfiniteScrollServiceMock,
-          },
-        ],
-        schemas: [NO_ERRORS_SCHEMA],
-      }).compileComponents();
-    });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ArticleListComponent],
+      providers: [
+        {
+          provide: InfiniteScrollService,
+          useClass: InfiniteScrollServiceMock,
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
+  });
 
-    beforeEach(() => {
-      fixture = TestBed.createComponent(ArticleListComponent);
-      component = fixture.componentInstance;
-      component.tabIndex = 1;
-      component.isAuthorized = true;
-      component.selectedTag = 'test-tag';
-      component.articles = dataMock.articles;
-      component.error = '';
-      component.isLastPage = false;
-      component.isLoading = false;
-      component.cb = () => ({});
-      fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ArticleListComponent);
+    component = fixture.componentInstance;
+    component.tabIndex = 1;
+    component.isAuthorized = true;
+    component.selectedTag = 'test-tag';
+    component.articles = dataMock.articles;
+    component.error = '';
+    component.isLastPage = false;
+    component.isLoading = false;
+    component.cb = () => ({});
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

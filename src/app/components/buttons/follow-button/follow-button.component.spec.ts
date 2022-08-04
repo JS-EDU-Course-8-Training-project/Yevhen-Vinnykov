@@ -7,7 +7,7 @@ import { FollowButtonComponent } from './follow-button.component';
 import { FollowButtonStore } from './follow-button.store';
 import { By } from '@angular/platform-browser';
 import { TestAttributeDirective } from 'src/app/shared/tests/test-attribute.directive';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 class RedirectionServiceMock {
   public redirectUnauthorized = () =>
@@ -36,7 +36,7 @@ describe('FOLLOW BUTTON COMPONENT', () => {
         { provide: ProfilesService, useClass: ProfilesServiceMock },
         { provide: FollowButtonStore, useClass: FollowButtonStoreMock },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
 
